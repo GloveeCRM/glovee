@@ -1,9 +1,13 @@
-export default function RegisterPage() {
+export default function RegisterForm() {
   return (
     <form action="">
       <div>
-        <label htmlFor="name">Name</label>
-        <input type="text" id="name" />
+        <label htmlFor="first-name">First Name</label>
+        <input type="text" id="first-name" />
+      </div>
+      <div>
+        <label htmlFor="last-name">Last Name</label>
+        <input type="text" id="last-name" />
       </div>
       <div>
         <label htmlFor="email">Email</label>
