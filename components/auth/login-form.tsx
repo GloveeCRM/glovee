@@ -1,6 +1,6 @@
 export default function LoginForm() {
   return (
-    <form action="" className="bg-gray-500">
+    <form action="">
       <div>
         <label htmlFor="email">Email</label>
         <input type="text" id="email" placeholder="hi" />
