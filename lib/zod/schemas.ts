@@ -15,20 +15,12 @@ export const LoginSchema = z.object({
 })
 
 export const RegisterSchema = z.object({
-  // firstName: z
-  //   .string({
-  //     required_error: 'First Name is required',
-  //     invalid_type_error: 'First Name is not valid',
-  //   })
-  //   .min(1, {
-  //     message: 'Firstname is required',
-  //   }),
   name: z
     .string({
-      required_error: 'Last Name is required',
-      invalid_type_error: 'Last Name is not valid',
+      required_error: 'Name is required',
+      invalid_type_error: 'Name is not valid',
     })
-    .min(1, { message: 'Lastname is required' }),
+    .min(1, { message: 'Name is required' }),
   email: z
     .string()
     .min(1, {

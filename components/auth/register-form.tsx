@@ -12,15 +12,10 @@ export default function RegisterForm() {
     <form action={dispatch}>
       {formState?.success}
       {formState?.error}
-      {/* <div>
-        <label htmlFor="first-name">First Name</label>
-        {formState?.errors?.firstName && <p>{formState.errors.firstName[0]}</p>}
-        <input type="text" id="firstName" name="firstName" />
-      </div> */}
       <div>
-        <label htmlFor="last-name">name</label>
+        <label htmlFor="name">name</label>
         {formState?.errors?.name && <p>{formState.errors.name[0]}</p>}
-        <input type="text" id="lastName" name="lastName" />
+        <input type="text" id="name" name="name" />
       </div>
       <div>
         <label htmlFor="email">Email</label>

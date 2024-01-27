@@ -46,8 +46,6 @@ export async function login(prevState: any | undefined, formData: FormData) {
 
 export async function register(prevState: any | undefined, formData: FormData) {
   const validatedFields = RegisterSchema.safeParse({
-    // firstName: formData.get('firstName'),
-    // lastName: formData.get('lastName'),
     name: formData.get('name'),
     email: formData.get('email'),
     password: formData.get('password'),
@@ -58,7 +56,7 @@ export async function register(prevState: any | undefined, formData: FormData) {
       errors: validatedFields.error.flatten().fieldErrors,
     }
   }
-  // const { email, password, firstName, lastName } = validatedFields.data
+
   const { email, password, name } = validatedFields.data
 
   const hashedPassword = await bcrypt.hash(password, 10)
@@ -72,8 +70,6 @@ export async function register(prevState: any | undefined, formData: FormData) {
 
   await prisma.user.create({
     data: {
-      // firstName,
-      // lastName,
       name,
       email,
       password: hashedPassword,
