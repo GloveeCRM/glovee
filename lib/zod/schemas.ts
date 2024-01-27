@@ -3,15 +3,9 @@ import { z } from 'zod'
 export const LoginSchema = z.object({
   email: z
     .string()
-    .min(1, {
-      message: 'Email is required',
-    })
-    .email({
-      message: 'Email is not valid',
-    }),
-  password: z.string().min(1, {
-    message: 'Password is required',
-  }),
+    .min(1, { message: 'Email is required' })
+    .email({ message: 'Email is not valid' }),
+  password: z.string().min(1, { message: 'Password is required' }),
 })
 
 export const RegisterSchema = z.object({
@@ -23,13 +17,7 @@ export const RegisterSchema = z.object({
     .min(1, { message: 'Name is required' }),
   email: z
     .string()
-    .min(1, {
-      message: 'Email is required',
-    })
-    .email({
-      message: 'Email is not valid',
-    }),
-  password: z.string().min(6, {
-    message: 'Password is required',
-  }),
+    .min(1, { message: 'Email is required' })
+    .email({ message: 'Email is not valid' }),
+  password: z.string().min(6, { message: 'Password is required' }),
 })

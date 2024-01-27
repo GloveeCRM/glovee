@@ -1,12 +1,11 @@
 'use server'
 
-import { z } from 'zod'
 import bcrypt from 'bcryptjs'
 import { AuthError } from 'next-auth'
 
 import { prisma } from '@/prisma/prisma'
-import { LoginSchema, RegisterSchema } from '../zod/schemas'
-import { getUserByEmail } from '../data/user'
+import { LoginSchema, RegisterSchema } from '@/lib/zod/schemas'
+import { getUserByEmail } from '@/lib/data/user'
 import { signIn } from '@/auth'
 import { DEFAULT_LOGIN_REDIRECT } from '@/routes'
 
@@ -52,9 +51,7 @@ export async function register(prevState: any | undefined, formData: FormData) {
   })
 
   if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-    }
+    return { errors: validatedFields.error.flatten().fieldErrors }
   }
 
   const { email, password, name } = validatedFields.data
@@ -64,7 +61,6 @@ export async function register(prevState: any | undefined, formData: FormData) {
   const existingUser = await getUserByEmail(email)
 
   if (existingUser) {
-    console.log('exists')
     return { error: 'Email already in use!' }
   }
 
@@ -76,5 +72,5 @@ export async function register(prevState: any | undefined, formData: FormData) {
     },
   })
 
-  return { success: 'User Created!' }
+  return { success: 'Registration Successful!' }
 }

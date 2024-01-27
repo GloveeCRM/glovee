@@ -5,16 +5,16 @@ import { FcGoogle } from 'react-icons/fc'
 
 import { DEFAULT_LOGIN_REDIRECT } from '@/routes'
 
-export function Social() {
-  const onClick = (provider: 'google') => {
-    signIn(provider, {
+export default function GoogleSignInButton() {
+  const handleClick = () => {
+    signIn('google', {
       callbackUrl: DEFAULT_LOGIN_REDIRECT,
     })
   }
 
   return (
     <div>
-      <FcGoogle onClick={() => onClick('google')} />
+      <FcGoogle onClick={handleClick} />
     </div>
   )
 }
