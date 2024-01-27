@@ -4,7 +4,7 @@ import { z } from 'zod'
 import bcrypt from 'bcryptjs'
 import { AuthError } from 'next-auth'
 
-import { prisma } from '@/lib/db/prisma'
+import { prisma } from '@/prisma/prisma'
 import { LoginSchema, RegisterSchema } from '../zod/schemas'
 import { getUserByEmail } from '../data/user'
 import { signIn } from '@/auth'

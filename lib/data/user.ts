@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/db/prisma'
+import { prisma } from '@/prisma/prisma'
 
 export async function getUserByEmail(email: string) {
   try {
