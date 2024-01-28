@@ -28,7 +28,10 @@ export default function Modal({
   }
 
   return (
-    <dialog ref={dialogRef} className="left-[20px] right-[20px] max-w-[600px] rounded-md p-[12px]">
+    <dialog
+      ref={dialogRef}
+      className="backdrop:bg-n-800/50 left-[20px] right-[20px] max-w-[600px] rounded-md p-[12px]"
+    >
       <div className="flex items-start justify-between gap-[8px]">
         {title && <p className="mb-[8px] text-[20px] font-bold">{title}</p>}
         <button
