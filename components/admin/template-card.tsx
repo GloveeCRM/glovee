@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { FiMoreHorizontal } from 'react-icons/fi'
+import { HiOutlinePencilSquare } from 'react-icons/hi2'
 
 export default function TemplateCard({
   title,
@@ -20,9 +21,20 @@ export default function TemplateCard({
       </div>
       <div>
         <p className="text-n-600 mb-[10px] line-clamp-3 text-[14px]">{description}</p>
-        <Link href={`/admin/templates/${id}`}>
-          <button className="bg-n-600 text-n-100 h-[36px] w-full rounded">View</button>
-        </Link>
+        <div className="flex gap-[8px]">
+          <Link
+            href={`/admin/templates/${id}/preview`}
+            className="bg-n-600 text-n-100 flex h-[36px] w-full items-center justify-center rounded"
+          >
+            View
+          </Link>
+          <Link
+            href={`/admin/templates/${id}/edit`}
+            className="bg-n-600 text-n-100 flex h-[36px] w-1/5 items-center justify-center rounded"
+          >
+            <HiOutlinePencilSquare className="h-[20px] w-[20px]" />
+          </Link>
+        </div>
       </div>
     </div>
   )
