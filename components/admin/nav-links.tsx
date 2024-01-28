@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 const links = [
   { name: 'Templates', path: '/admin/templates' },
   { name: 'Applications', path: '/admin/applications' },
+  { name: 'Tickets', path: '/admin/tickets' },
 ]
 export default function NavLinks() {
   const pathname = usePathname()
