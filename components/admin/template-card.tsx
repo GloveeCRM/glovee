@@ -1,10 +1,9 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
 import { FiMoreHorizontal } from 'react-icons/fi'
 import { HiOutlinePencilSquare } from 'react-icons/hi2'
-import Dialog from '../ui/dialog'
+import Popover, { PopoverContent, PopoverTrigger } from '../ui/popover'
 
 export default function TemplateCard({
   title,
@@ -15,27 +14,26 @@ export default function TemplateCard({
   description: string
   id: number
 }>) {
-  const [showDialog, setShowDialog] = useState(false)
-
-  const handleClickShowMore = (e: any) => {
-    setShowDialog(!showDialog)
-  }
-
   return (
     <div key={id} className="border-n-600 flex flex-col justify-between rounded-md border p-[8px]">
       <div className="mb-[8px] flex justify-between gap-[10px]">
         <p className="text-n-700 text-[16px] font-bold">{title}</p>
-        <span>
-          <FiMoreHorizontal
-            className="h-[22px] w-[22px] cursor-pointer"
-            onClick={handleClickShowMore}
-          />
-        </span>
-        <Dialog showDialog={showDialog}>
-          <ul>
-            <li className="text-red-500">delete</li>
-          </ul>
-        </Dialog>
+        <div>
+          <Popover>
+            <PopoverTrigger>
+              <button>
+                <FiMoreHorizontal className="h-[22px] w-[22px] cursor-pointer" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent className={'bg-n-300 rounded-sm'}>
+              <div>
+                <ul>
+                  <li className="text-red-500">Delete</li>
+                </ul>
+              </div>
+            </PopoverContent>
+          </Popover>
+        </div>
       </div>
       <div>
         <p className="text-n-600 mb-[10px] line-clamp-3 text-[14px]">{description}</p>
