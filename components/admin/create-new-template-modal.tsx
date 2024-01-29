@@ -1,14 +1,14 @@
 import Modal from '../ui/modal'
 
 export default function CreateNewTemplateModal({
-  showModal,
+  isOpen,
   onClose,
 }: {
-  showModal: boolean
+  isOpen: boolean
   onClose: () => void
 }) {
   return (
-    <Modal showModal={showModal} title="Create a new template" onClose={onClose}>
+    <Modal isOpen={isOpen} title="Create a new template" onClose={onClose}>
       <form className="w-[85vw] max-w-[570px]">
         <div className="mb-[12px]">
           <label className="text-n-700 mb-[4px] block text-[14px]" htmlFor="title">

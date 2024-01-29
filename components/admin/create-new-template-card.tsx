@@ -14,7 +14,7 @@ export default function CreateNewTemplateCard() {
     >
       <AiOutlineFileAdd className="h-[26px] w-[26px]" />
       <span>Create a new template</span>
-      <CreateNewTemplateModal showModal={showModal} onClose={() => setShowModal(false)} />
+      <CreateNewTemplateModal isOpen={showModal} onClose={() => setShowModal(false)} />
     </div>
   )
 }
