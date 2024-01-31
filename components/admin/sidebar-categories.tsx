@@ -1,5 +1,6 @@
 import { fetchCategoriesByTemplateId } from '@/lib/data/template'
 import { FiPlus } from 'react-icons/fi'
+import SidebarCategoryCard from './sidebar-category-card'
 
 export default async function SidebarCategories({
   className,
@@ -11,8 +12,10 @@ export default async function SidebarCategories({
   const categories = (await fetchCategoriesByTemplateId(templateId)) as any
   return (
     <div id="sidebarCategories" className={`${className}`}>
-      <p>Categories:</p>
-      {categories?.map((category: any) => <div key={category.id}>{category.name}</div>)}
+      <p className="text-[14px] text-n-100">Categories:</p>
+      {categories?.map((category: any) => (
+        <SidebarCategoryCard key={category.id} category={category} />
+      ))}
       <div className="flex items-center">
         <FiPlus className="h-[20px] w-[20px]" />
         {categories?.length > 0 ? (

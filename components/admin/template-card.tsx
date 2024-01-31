@@ -15,17 +15,17 @@ export default function TemplateCard({
   id: number
 }>) {
   return (
-    <div key={id} className="border-n-600 flex flex-col justify-between rounded-md border p-[8px]">
+    <div key={id} className="flex flex-col justify-between rounded-md border border-n-600 p-[8px]">
       <div className="mb-[8px] flex justify-between gap-[10px]">
-        <p className="text-n-700 text-[16px] font-bold">{title}</p>
+        <p className="text-[16px] font-bold text-n-700">{title}</p>
         <div>
           <Popover>
             <PopoverTrigger>
               <button>
-                <FiMoreHorizontal className="h-[22px] w-[22px] cursor-pointer" />
+                <FiMoreHorizontal className="h-[22px] w-[22px]" />
               </button>
             </PopoverTrigger>
-            <PopoverContent className={'bg-n-300 rounded-sm'}>
+            <PopoverContent className={'rounded-sm bg-n-300'}>
               <div>
                 <ul>
                   <li className="text-red-500">Delete</li>
@@ -36,17 +36,17 @@ export default function TemplateCard({
         </div>
       </div>
       <div>
-        <p className="text-n-600 mb-[10px] line-clamp-3 text-[14px]">{description}</p>
+        <p className="mb-[10px] line-clamp-3 text-[14px] text-n-600">{description}</p>
         <div className="flex gap-[8px]">
           <Link
             href={`/admin/templates/${id}/preview`}
-            className="bg-n-600 text-n-100 flex h-[36px] w-full items-center justify-center rounded"
+            className="flex h-[36px] w-full items-center justify-center rounded bg-n-600 text-n-100"
           >
             View
           </Link>
           <Link
             href={`/admin/templates/${id}/edit`}
-            className="bg-n-600 text-n-100 flex h-[36px] w-1/5 items-center justify-center rounded"
+            className="flex h-[36px] w-1/5 items-center justify-center rounded bg-n-600 text-n-100"
           >
             <HiOutlinePencilSquare className="h-[20px] w-[20px]" />
           </Link>

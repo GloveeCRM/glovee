@@ -55,17 +55,56 @@ export async function fetchCategoriesByTemplateId(id: string | number) {
     {
       id: 1,
       name: 'Category 1',
-      description: 'Category 1 description',
+      subCategories: [
+        {
+          id: 1,
+          name: 'Sub Category 1',
+        },
+        {
+          id: 2,
+          name: 'Sub Category 2',
+        },
+        {
+          id: 3,
+          name: 'Sub Category 3',
+        },
+      ],
     },
     {
       id: 2,
       name: 'Category 2',
-      description: 'Category 2 description',
+      subCategories: [
+        {
+          id: 1,
+          name: 'Sub Category 1',
+        },
+        {
+          id: 2,
+          name: 'Sub Category 2',
+        },
+        {
+          id: 3,
+          name: 'Sub Category 3',
+        },
+      ],
     },
     {
       id: 3,
       name: 'Category 3',
-      description: 'Category 3 description',
+      subCategories: [
+        {
+          id: 1,
+          name: 'Sub Category 1',
+        },
+        {
+          id: 2,
+          name: 'Sub Category 2',
+        },
+        {
+          id: 3,
+          name: 'Sub Category 3',
+        },
+      ],
     },
   ]
 
