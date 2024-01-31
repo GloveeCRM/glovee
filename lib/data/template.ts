@@ -40,7 +40,38 @@ export function fetchTemplates() {
   return templates
 }
 
-export function fetchTemplateById(id: string | number) {
+export async function fetchTemplateById(id: string | number) {
   const templates = fetchTemplates()
-  return templates.find((template) => template.id === id)
+
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(templates.find((template) => template.id === id))
+    }, 2000)
+  })
+}
+
+export async function fetchCategoriesByTemplateId(id: string | number) {
+  const categories = [
+    {
+      id: 1,
+      name: 'Category 1',
+      description: 'Category 1 description',
+    },
+    {
+      id: 2,
+      name: 'Category 2',
+      description: 'Category 2 description',
+    },
+    {
+      id: 3,
+      name: 'Category 3',
+      description: 'Category 3 description',
+    },
+  ]
+
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(categories)
+    }, 2000)
+  })
 }

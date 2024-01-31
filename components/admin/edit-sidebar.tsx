@@ -2,21 +2,20 @@ import Link from 'next/link'
 import { IoChevronBackOutline } from 'react-icons/io5'
 import { fetchTemplateById } from '@/lib/data/template'
 import TemplateInfoCard from './template-info-card'
+import SidebarCategories from './sidebar-categories'
 
-export default function EditSidebar() {
-  const template = fetchTemplateById(1)
+export default async function EditSidebar() {
+  const template = await fetchTemplateById(1)
   return (
-    <div className="sticky top-0 flex h-screen w-[180px] flex-col bg-n-700 text-white">
-      <div className="flex p-[8px]">
-        <IoChevronBackOutline className="h-[26px] w-[26px]" />
-        <Link href={'/admin/templates'}>
-          <span className="text-[12px]">Back</span>
+    <div className="sticky top-0 flex h-screen w-[240px] flex-col bg-n-700 text-white">
+      <div className="flex items-center gap-[4px] p-[8px]">
+        <IoChevronBackOutline className="h-[20px] w-[20px]" />
+        <Link href={`/admin/templates/`}>
+          <span className="text-[16px]">Back</span>
         </Link>
       </div>
-      <div>
-        <TemplateInfoCard template={template} />
-      </div>
-      <div>Create a Category</div>
+      <TemplateInfoCard template={template} className="mx-[8px]" />
+      <SidebarCategories templateId={1} />
     </div>
   )
 }
