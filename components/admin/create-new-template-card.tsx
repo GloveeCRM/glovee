@@ -9,7 +9,7 @@ export default function CreateNewTemplateCard() {
 
   return (
     <div
-      className="border-n-600 text-n-700 flex h-full cursor-pointer flex-col items-center justify-center rounded-md border border-dashed p-[8px] text-[16px]"
+      className="flex h-full cursor-pointer flex-col items-center justify-center rounded-md border border-dashed border-n-600 p-[8px] text-[16px] text-n-700"
       onClick={() => setShowModal(true)}
     >
       <AiOutlineFileAdd className="h-[26px] w-[26px]" />
