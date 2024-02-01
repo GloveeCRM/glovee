@@ -2,34 +2,38 @@ import NextAuth from 'next-auth'
 
 import authConfig from '@/auth.config'
 import { DEFAULT_LOGIN_REDIRECT, apiAuthPrefix, authRoutes, publicRoutes } from '@/routes'
+import { NextRequest, NextResponse } from 'next/server'
 
-const { auth } = NextAuth(authConfig)
+export async function middleware(request: NextRequest) {
+  const session = await NextAuth(authConfig).auth()
 
-export default auth((req) => {
-  const { nextUrl } = req
-  const isLoggedIn = !!req.auth
+  const { nextUrl } = request
+  const isLoggedIn = !!session
+
+  let response = NextResponse.next()
+  response.headers.set('pathname', nextUrl.pathname)
 
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix)
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname)
   const isAuthRoute = authRoutes.includes(nextUrl.pathname)
 
   if (isApiAuthRoute) {
-    return null
+    return response
   }
 
   if (isAuthRoute) {
     if (isLoggedIn) {
-      return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl))
+      response = NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl))
     }
-    return null
+    return response
   }
 
   if (!isLoggedIn && !isPublicRoute) {
-    return Response.redirect(new URL('/login', nextUrl))
+    response = NextResponse.redirect(new URL('/login', nextUrl))
   }
 
-  return null
-})
+  return response
+}
 
 export const config = {
   matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
