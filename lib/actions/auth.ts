@@ -7,7 +7,7 @@ import { prisma } from '@/prisma/prisma'
 import { LoginSchema, RegisterSchema } from '@/lib/zod/schemas'
 import { getUserByEmail } from '@/lib/data/user'
 import { signIn } from '@/auth'
-import { DEFAULT_LOGIN_REDIRECT } from '@/routes'
+import { DEFAULT_ADMIN_LOGIN_REDIRECT } from '@/lib/constants/routes'
 
 export async function login(prevState: any | undefined, formData: FormData) {
   const validatedFields = LoginSchema.safeParse({
@@ -26,7 +26,7 @@ export async function login(prevState: any | undefined, formData: FormData) {
     await signIn('credentials', {
       email,
       password,
-      redirectTo: DEFAULT_LOGIN_REDIRECT,
+      redirectTo: DEFAULT_ADMIN_LOGIN_REDIRECT,
     })
     return { success: 'Login Successful!' }
   } catch (error) {

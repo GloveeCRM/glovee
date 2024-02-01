@@ -3,12 +3,12 @@
 import { signIn } from 'next-auth/react'
 import { FcGoogle } from 'react-icons/fc'
 
-import { DEFAULT_LOGIN_REDIRECT } from '@/routes'
+import { DEFAULT_ADMIN_LOGIN_REDIRECT } from '@/lib/constants/routes'
 
 export default function GoogleSignInButton() {
   const handleClick = () => {
     signIn('google', {
-      callbackUrl: DEFAULT_LOGIN_REDIRECT,
+      callbackUrl: DEFAULT_ADMIN_LOGIN_REDIRECT,
     })
   }
 
