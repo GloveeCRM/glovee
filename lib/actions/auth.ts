@@ -5,11 +5,11 @@ import { AuthError } from 'next-auth'
 
 import { prisma } from '@/prisma/prisma'
 import { LoginSchema, RegisterSchema } from '@/lib/zod/schemas'
+import { signIn, signOut } from '@/auth'
 import { getUserByEmail } from '@/lib/data/user'
-import { signIn } from '@/auth'
 import { DEFAULT_ADMIN_LOGIN_REDIRECT } from '@/lib/constants/routes'
 
-export async function login(prevState: any | undefined, formData: FormData) {
+export async function login(prevState: any, formData: FormData) {
   const validatedFields = LoginSchema.safeParse({
     email: formData.get('email'),
     password: formData.get('password'),
@@ -20,6 +20,7 @@ export async function login(prevState: any | undefined, formData: FormData) {
       errors: validatedFields.error.flatten().fieldErrors,
     }
   }
+
   const { email, password } = validatedFields.data
 
   try {
@@ -28,6 +29,7 @@ export async function login(prevState: any | undefined, formData: FormData) {
       password,
       redirectTo: DEFAULT_ADMIN_LOGIN_REDIRECT,
     })
+
     return { success: 'Login Successful!' }
   } catch (error) {
     if (error instanceof AuthError) {
@@ -43,7 +45,7 @@ export async function login(prevState: any | undefined, formData: FormData) {
   }
 }
 
-export async function register(prevState: any | undefined, formData: FormData) {
+export async function register(prevState: any, formData: FormData) {
   const validatedFields = RegisterSchema.safeParse({
     name: formData.get('name'),
     email: formData.get('email'),
@@ -73,4 +75,8 @@ export async function register(prevState: any | undefined, formData: FormData) {
   })
 
   return { success: 'Registration Successful!' }
+}
+
+export async function logout() {
+  return await signOut()
 }

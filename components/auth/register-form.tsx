@@ -7,7 +7,7 @@ import { register } from '@/lib/actions/auth'
 import GoogleSignInButton from './google-sign-in-button'
 
 export default function RegisterForm() {
-  const [formState, dispatch] = useFormState(register, undefined)
+  const [formState, dispatch] = useFormState(register, {})
 
   return (
     <form action={dispatch}>

@@ -8,12 +8,13 @@ import { login } from '@/lib/actions/auth'
 import GoogleSignInButton from './google-sign-in-button'
 
 export default function LoginForm() {
+  const [formState, dispatch] = useFormState(login, {})
+
   const searchParams = useSearchParams()
   const urlError =
     searchParams.get('error') === 'OAuthAccountNotLinked'
       ? 'Email already in use with different provider!'
       : ''
-  const [formState, dispatch] = useFormState(login, undefined)
 
   return (
     <form action={dispatch}>
