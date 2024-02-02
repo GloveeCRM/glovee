@@ -5,7 +5,7 @@ import { FcGoogle } from 'react-icons/fc'
 
 import { DEFAULT_ADMIN_LOGIN_REDIRECT } from '@/lib/constants/routes'
 
-export default function GoogleSignInButton() {
+export default function GoogleSignInButton({ className }: { className?: string }) {
   const handleClick = () => {
     signIn('google', {
       callbackUrl: DEFAULT_ADMIN_LOGIN_REDIRECT,
@@ -13,8 +13,8 @@ export default function GoogleSignInButton() {
   }
 
   return (
-    <div>
-      <FcGoogle onClick={handleClick} />
+    <div className={` ${className} bg-sky-100`}>
+      <FcGoogle onClick={handleClick} className="mx-auto h-[20px] w-full cursor-pointer" />
     </div>
   )
 }

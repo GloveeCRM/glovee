@@ -13,10 +13,12 @@ export async function middleware(request: NextRequest) {
   let response = NextResponse.next()
   response.headers.set('pathname', nextUrl.pathname)
 
+  const isApiAuthRoute = nextUrl.pathname.startsWith('/api/auth')
   const isPublicRoute = PUBLIC_ROUTES.includes(nextUrl.pathname)
   const isAuthRoute = AUTH_ROUTES.includes(nextUrl.pathname)
-
-  if (isAuthRoute && isLoggedIn) {
+  if (isApiAuthRoute) {
+    return response
+  } else if (isAuthRoute && isLoggedIn) {
     return NextResponse.redirect(new URL(DEFAULT_ADMIN_LOGIN_REDIRECT, nextUrl))
   } else if (!isLoggedIn && !isPublicRoute && !isAuthRoute) {
     return NextResponse.redirect(new URL('/login', nextUrl))
