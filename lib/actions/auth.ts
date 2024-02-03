@@ -9,6 +9,8 @@ import { signIn, signOut } from '@/auth'
 import { getUserByEmail } from '@/lib/data/user'
 import { DEFAULT_ADMIN_LOGIN_REDIRECT } from '@/lib/constants/routes'
 import { generateVerificationToken } from '../token/tokens'
+import { sendVerificationEmail } from '../mail/mail'
+import { getVerificationTokenByToken } from '../data/verification-token'
 
 export async function login(prevState: any, formData: FormData) {
   const validatedFields = LoginSchema.safeParse({
@@ -32,6 +34,8 @@ export async function login(prevState: any, formData: FormData) {
 
   if (!existingUser.emailVerified) {
     const verificationToken = await generateVerificationToken(existingUser.email as any)
+
+    await sendVerificationEmail(verificationToken.email, verificationToken.token)
 
     return { success: 'Confirmation email sent!' }
   }
@@ -89,9 +93,45 @@ export async function register(prevState: any, formData: FormData) {
 
   const verificationToken = await generateVerificationToken(email)
 
+  await sendVerificationEmail(verificationToken.email, verificationToken.token)
+
   return { success: 'Confirmation email sent!' }
 }
 
 export async function logout() {
   return await signOut()
+}
+
+export const newVerification = async (token: string) => {
+  const existingToken = await getVerificationTokenByToken(token)
+
+  if (!existingToken) {
+    return { error: 'Token does not exist!' }
+  }
+
+  const hasExpired = new Date(existingToken.expires) < new Date()
+
+  if (hasExpired) {
+    return { error: 'Token has expired!' }
+  }
+
+  const existingUser = await getUserByEmail(existingToken.email)
+
+  if (!existingUser) {
+    return { error: 'Email does not exist!' }
+  }
+
+  await prisma.user.update({
+    where: { id: existingUser.id },
+    data: {
+      emailVerified: new Date(),
+      email: existingToken.email,
+    },
+  })
+
+  await prisma.verificationToken.delete({
+    where: { id: existingToken.id },
+  })
+
+  return { success: 'Email verified!' }
 }
