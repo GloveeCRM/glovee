@@ -8,6 +8,7 @@ import { LoginSchema, RegisterSchema } from '@/lib/zod/schemas'
 import { signIn, signOut } from '@/auth'
 import { getUserByEmail } from '@/lib/data/user'
 import { DEFAULT_ADMIN_LOGIN_REDIRECT } from '@/lib/constants/routes'
+import { generateVerificationToken } from '../token/tokens'
 
 export async function login(prevState: any, formData: FormData) {
   const validatedFields = LoginSchema.safeParse({
@@ -22,6 +23,18 @@ export async function login(prevState: any, formData: FormData) {
   }
 
   const { email, password } = validatedFields.data
+
+  const existingUser = await getUserByEmail(email)
+
+  if (!existingUser) {
+    return { error: 'Email does not exist!' }
+  }
+
+  if (!existingUser.emailVerified) {
+    const verificationToken = await generateVerificationToken(existingUser.email as any)
+
+    return { success: 'Confirmation email sent!' }
+  }
 
   try {
     await signIn('credentials', {
@@ -74,7 +87,9 @@ export async function register(prevState: any, formData: FormData) {
     },
   })
 
-  return { success: 'Registration Successful!' }
+  const verificationToken = await generateVerificationToken(email)
+
+  return { success: 'Confirmation email sent!' }
 }
 
 export async function logout() {
