@@ -3,18 +3,18 @@
 import { signIn } from 'next-auth/react'
 import { FcGoogle } from 'react-icons/fc'
 
-import { DEFAULT_LOGIN_REDIRECT } from '@/routes'
+import { DEFAULT_ADMIN_LOGIN_REDIRECT } from '@/lib/constants/routes'
 
-export default function GoogleSignInButton() {
+export default function GoogleSignInButton({ className }: { className?: string }) {
   const handleClick = () => {
     signIn('google', {
-      callbackUrl: DEFAULT_LOGIN_REDIRECT,
+      callbackUrl: DEFAULT_ADMIN_LOGIN_REDIRECT,
     })
   }
 
   return (
-    <div>
-      <FcGoogle onClick={handleClick} />
+    <div className={` ${className} bg-sky-100`}>
+      <FcGoogle onClick={handleClick} className="mx-auto h-[20px] w-full cursor-pointer" />
     </div>
   )
 }
