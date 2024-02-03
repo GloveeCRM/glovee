@@ -43,6 +43,9 @@ export default function LoginForm() {
       </div>
       {formState?.success}
       {formState?.error || urlError}
+      <Link href={'/reset'} className="cursor-pointer text-blue-400 hover:underline">
+        Forgot password?
+      </Link>
       <button type="submit" className="mt-[20px] w-full rounded bg-n-300 p-[8px]">
         Login
       </button>
