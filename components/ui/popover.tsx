@@ -1,79 +1,118 @@
-'use client'
-
-import React, { ReactElement } from 'react'
-
 import {
-  useState,
-  useRef,
-  useEffect,
-  useCallback,
+  Children,
+  ReactNode,
+  cloneElement,
   createContext,
   useContext,
-  cloneElement,
+  useEffect,
+  useRef,
+  useState,
 } from 'react'
 
-const PopoverContext = createContext({})
+interface PopoverContextType {
+  isOpen: boolean
+  toggle: () => void
+}
 
-export default function Popover({ children }: { children: React.ReactNode }) {
-  const [isVisible, setIsVisible] = useState(false)
-  const popoverRef = useRef(null)
+const PopoverContext = createContext<PopoverContextType>({
+  isOpen: false,
+  toggle: () => {},
+})
 
-  const show = useCallback(() => setIsVisible(true), [])
-  const hide = useCallback(() => setIsVisible(false), [])
+export function usePopover() {
+  const context = useContext(PopoverContext)
+  if (!context) {
+    throw new Error('usePopover must be used within a PopoverProvider')
+  }
+  return context
+}
+
+export function Popover({ children }: { children: ReactNode }) {
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  const toggle = () => {
+    setIsOpen(!isOpen)
+  }
 
   useEffect(() => {
-    const handleClickOutside = (event: any) => {
-      if (
-        popoverRef.current &&
-        (popoverRef.current as HTMLElement) &&
-        !(popoverRef.current as HTMLElement).contains(event.target)
-      ) {
-        setIsVisible(false)
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false)
       }
     }
 
-    if (isVisible) {
-      document.addEventListener('mousedown', handleClickOutside)
-    }
-
+    document.addEventListener('mousedown', handleClickOutside)
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [isVisible])
+  }, [containerRef])
 
   return (
-    <PopoverContext.Provider value={{ isVisible, show, hide, popoverRef }}>
-      {children}
+    <PopoverContext.Provider value={{ isOpen, toggle }}>
+      <div ref={containerRef} className="relative">
+        {Children.map(children, (child) => cloneElement(child as any, { isOpen, setIsOpen }))}
+      </div>
     </PopoverContext.Provider>
   )
 }
 
-export function PopoverTrigger({ children }: { children: React.ReactNode }) {
-  const { show } = useContext(PopoverContext) as { show: () => void }
+export function PopoverTrigger({
+  children,
+  className,
+  openClassName,
+}: {
+  children: ReactNode
+  className?: string
+  openClassName?: string
+}) {
+  const { toggle, isOpen } = usePopover()
+  return (
+    <div onClick={toggle} className={`cursor-pointer ${className} ${isOpen && openClassName}`}>
+      {children}
+    </div>
+  )
+}
 
-  return cloneElement(children as ReactElement<any>, {
-    onClick: show,
-  })
+const getPositionClasses = (position: string) => {
+  const baseClass = 'absolute z-10'
+  switch (position) {
+    case 'bottom-left':
+      return `${baseClass} right-0` // Align to left and just below the trigger
+    case 'bottom':
+      return `${baseClass} left-1/2 -translate-x-1/2` // Center below the trigger
+    case 'bottom-right':
+      return `${baseClass}` // Align to right and just below the trigger
+    case 'right':
+      return `${baseClass} left-full top-1/2 -translate-y-1/2` // Center to the right of the trigger
+    case 'left':
+      return `${baseClass} right-full top-1/2 -translate-y-1/2` // Center to the left of the trigger
+    case 'top-left':
+      return `${baseClass} right-0 bottom-full` // Align to left and just above the trigger
+    case 'top':
+      return `${baseClass} left-1/2 bottom-full -translate-x-1/2` // Center above the trigger
+    case 'top-right':
+      return `${baseClass} bottom-full` // Align to right and just above the trigger
+    default:
+      return baseClass
+  }
 }
 
 export function PopoverContent({
   children,
+  position = 'bottom',
   className,
 }: {
-  children: React.ReactNode
+  children: ReactNode
+  position?: string
   className?: string
 }) {
-  const { isVisible, popoverRef } = useContext(PopoverContext) as {
-    isVisible: boolean
-    popoverRef: React.RefObject<any>
-  }
-
-  if (!isVisible) {
-    return null
-  }
+  const { isOpen } = usePopover()
 
   return (
-    <div ref={popoverRef} className={`absolute ${className}`}>
+    <div
+      className={`${className} ${getPositionClasses(position)} ${isOpen ? 'opacity-100' : 'pointer-events-none opacity-0'} min-w-max`}
+    >
       {children}
     </div>
   )
