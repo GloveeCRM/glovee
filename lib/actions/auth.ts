@@ -4,12 +4,12 @@ import bcrypt from 'bcryptjs'
 import { AuthError } from 'next-auth'
 
 import { prisma } from '@/prisma/prisma'
-import { LoginSchema, RegisterSchema } from '@/lib/zod/schemas'
+import { LoginSchema, RegisterSchema, ResetSchema } from '@/lib/zod/schemas'
 import { signIn, signOut } from '@/auth'
 import { getUserByEmail } from '@/lib/data/user'
 import { DEFAULT_ADMIN_LOGIN_REDIRECT } from '@/lib/constants/routes'
-import { generateVerificationToken } from '../token/tokens'
-import { sendVerificationEmail } from '../mail/mail'
+import { generatePasswordResetToken, generateVerificationToken } from '../token/tokens'
+import { sendPasswordResetEmail, sendVerificationEmail } from '../mail/mail'
 import { getVerificationTokenByToken } from '../data/verification-token'
 
 export async function login(prevState: any, formData: FormData) {
@@ -102,7 +102,7 @@ export async function logout() {
   return await signOut()
 }
 
-export const newVerification = async (token: string) => {
+export async function newVerification(token: string) {
   const existingToken = await getVerificationTokenByToken(token)
 
   if (!existingToken) {
@@ -134,4 +134,30 @@ export const newVerification = async (token: string) => {
   })
 
   return { success: 'Email verified!' }
+}
+
+export async function reset(prevState: any, formData: FormData) {
+  const validatedFields = ResetSchema.safeParse({
+    email: formData.get('email'),
+  })
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+    }
+  }
+
+  const { email } = validatedFields.data
+
+  const existingUser = await getUserByEmail(email)
+
+  if (!existingUser) {
+    return { error: 'Email not found!' }
+  }
+
+  const passwordResetToken = await generatePasswordResetToken(email)
+
+  await sendPasswordResetEmail(passwordResetToken.email, passwordResetToken.token)
+
+  return { success: 'Reset email sent!' }
 }
