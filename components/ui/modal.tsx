@@ -1,4 +1,5 @@
 import { MouseEvent, useEffect } from 'react'
+
 import { IoClose } from 'react-icons/io5'
 
 export default function Modal({
@@ -42,7 +43,7 @@ export default function Modal({
   return (
     <div
       id="modal-overlay"
-      className="bg-n-800/50 fixed inset-0 flex cursor-default items-center justify-center p-[20px]"
+      className="fixed inset-0 flex cursor-default items-center justify-center bg-n-800/50 p-[20px]"
     >
       <div id="modal-area" className="w-full max-w-[600px] rounded-md bg-white p-[12px]">
         <div id="modal-header" className="flex items-start justify-between gap-[8px]">

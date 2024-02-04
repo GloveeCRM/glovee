@@ -1,10 +1,12 @@
 'use client'
 
 import Link from 'next/link'
+
+import { BiTrash } from 'react-icons/bi'
 import { FiMoreHorizontal } from 'react-icons/fi'
 import { HiOutlinePencilSquare } from 'react-icons/hi2'
+
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
-import { BiTrash } from 'react-icons/bi'
 
 export default function TemplateCard({
   title,
