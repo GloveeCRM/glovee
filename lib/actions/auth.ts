@@ -12,6 +12,8 @@ import { generatePasswordResetToken, generateVerificationToken } from '../token/
 import { sendPasswordResetEmail, sendVerificationEmail } from '../mail/mail'
 import { getVerificationTokenByToken } from '../data/verification-token'
 import { getPasswordResetTokenByToken } from '../data/password-reset-token'
+import { currentRole } from '../auth/user'
+import { UserRole } from '@prisma/client'
 
 export async function login(prevState: any, formData: FormData) {
   const validatedFields = LoginSchema.safeParse({
@@ -211,4 +213,14 @@ export async function newPassword(token: any, prevState: any, formData: FormData
   })
 
   return { success: 'Password Updated!' }
+}
+
+export async function admin() {
+  const role = await currentRole()
+
+  if (role === UserRole.ADMIN) {
+    return { success: 'Allowed!' }
+  }
+
+  return { error: 'Forbidden!' }
 }
