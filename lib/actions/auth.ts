@@ -4,15 +4,21 @@ import bcrypt from 'bcryptjs'
 import { AuthError } from 'next-auth'
 
 import { prisma } from '@/prisma/prisma'
-import { LoginSchema, NewPasswordSchema, RegisterSchema, ResetSchema } from '@/lib/zod/schemas'
+import {
+  LoginSchema,
+  NewPasswordSchema,
+  RegisterSchema,
+  ResetSchema,
+  SettingsSchema,
+} from '@/lib/zod/schemas'
 import { signIn, signOut } from '@/auth'
-import { getUserByEmail } from '@/lib/data/user'
+import { getUserByEmail, getUserById } from '@/lib/data/user'
 import { DEFAULT_ADMIN_LOGIN_REDIRECT } from '@/lib/constants/routes'
 import { generatePasswordResetToken, generateVerificationToken } from '../token/tokens'
 import { sendPasswordResetEmail, sendVerificationEmail } from '../mail/mail'
 import { getVerificationTokenByToken } from '../data/verification-token'
 import { getPasswordResetTokenByToken } from '../data/password-reset-token'
-import { currentRole } from '../auth/user'
+import { currentRole, currentUser } from '../auth/user'
 import { UserRole } from '@prisma/client'
 
 export async function login(prevState: any, formData: FormData) {
@@ -223,4 +229,77 @@ export async function admin() {
   }
 
   return { error: 'Forbidden!' }
+}
+
+export async function settings(prevState: any, formData: FormData) {
+  const validatedFields = SettingsSchema.safeParse({
+    name: formData.get('name'),
+    email: formData.get('email'),
+    password: formData.get('password'),
+    newPassword: formData.get('newPassword'),
+    role: formData.get('role'),
+  })
+  // Not sure if I should use this or not
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+    }
+  }
+
+  const user = await currentUser()
+
+  if (!user) {
+    return { error: 'Unauthorized' }
+  }
+
+  const dbUser = await getUserById(user.id!) // added ! to check if it's null or not
+
+  if (!dbUser) {
+    return { error: 'Unauthorized' }
+  }
+
+  let { name, email, password, newPassword, role } = validatedFields.data
+
+  // if (user.isOAuth) {
+  //   email = undefined;
+  //   password = undefined;
+  //   newPassword = undefined;
+  // }
+
+  if (email && email !== user.email) {
+    const existingUser = await getUserByEmail(email)
+
+    if (existingUser && existingUser.id !== user.id) {
+      return { error: 'Email already in use!' }
+    }
+
+    const verificationToken = await generateVerificationToken(email)
+    await sendVerificationEmail(verificationToken.email, verificationToken.token)
+
+    return { success: 'Confirmation email sent!' }
+  }
+
+  if (password && newPassword && dbUser.password) {
+    const passwordsMatch = await bcrypt.compare(password, dbUser.password)
+
+    if (!passwordsMatch) {
+      return { error: 'Icorrect Password!' }
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10)
+
+    password = hashedPassword
+    newPassword = undefined
+  }
+  await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      name,
+      email,
+      password,
+      role,
+    },
+  })
+
+  return { success: 'Settings Updated!' }
 }

@@ -7,6 +7,7 @@ const links = [
   { name: 'Templates', path: '/admin/templates' },
   { name: 'Applications', path: '/admin/applications' },
   { name: 'Tickets', path: '/admin/tickets' },
+  { name: 'Settings', path: '/admin/settings' },
 ]
 export default function NavLinks() {
   const pathname = usePathname()

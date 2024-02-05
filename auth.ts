@@ -4,6 +4,7 @@ import { PrismaAdapter } from '@auth/prisma-adapter'
 import authConfig from '@/auth.config'
 import { prisma } from '@/prisma/prisma'
 import { getUserById } from '@/lib/data/user'
+import { getAccountByUserId } from './lib/data/account'
 
 declare module 'next-auth' {
   interface User {
@@ -48,6 +49,13 @@ export const {
       if (token.role && session.user) {
         session.user.role = token.role
       }
+
+      if (session.user) {
+        session.user.name = token.name
+        session.user.email = token.email
+        session.user.isOAuth = token.isOAuth
+      }
+
       return session
     },
     async jwt({ token }) {
@@ -57,6 +65,11 @@ export const {
 
       if (!existingUser) return token
 
+      const existingAccount = await getAccountByUserId(existingUser.id)
+
+      token.isOAuth = !!existingAccount
+      token.name = existingUser.name
+      token.email = existingUser.email
       token.role = existingUser.role
 
       return token
