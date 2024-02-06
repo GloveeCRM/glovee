@@ -22,6 +22,7 @@ model User {
   password      String?
   role          UserRole @default(USER)
   accounts      Account[]
+  templates     Template[]
 }
 
 model Account {
@@ -58,4 +59,14 @@ model PasswordResetToken {
   expires DateTime
   
   @@unique([email, token])
+}
+
+model Template {
+  id      String @id @default(cuid())
+  userId  String
+  title   String @default("Untitled")
+  description String?
+  body    Json?
+
+  user    User @relation(fields: [userId], references: [id])
 }
