@@ -1,3 +1,9 @@
+import CreateNewApplicationCard from '@/components/admin/create-new-application-card'
+
 export default function ApplicationsPage() {
-  return <div>Applications Page</div>
+  return (
+    <div>
+      <CreateNewApplicationCard />
+    </div>
+  )
 }
