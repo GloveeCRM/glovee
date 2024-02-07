@@ -16,7 +16,13 @@ export default function CreateNewTemplateModal({
 
   return (
     <Modal isOpen={isOpen} title="Create a new template" onClose={onClose}>
-      <form action={dispatch} className="w-[85vw] max-w-[570px]">
+      <form
+        action={async (formData) => {
+          dispatch(formData)
+          onClose()
+        }}
+        className="w-[85vw] max-w-[570px]"
+      >
         <div className="mb-[12px]">
           <label className="mb-[4px] block text-[14px] text-n-700" htmlFor="title">
             Title
