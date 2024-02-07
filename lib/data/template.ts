@@ -1,53 +1,27 @@
-export function fetchTemplates() {
-  const templates = [
-    {
-      id: 1,
-      title: 'Template 1 - Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' +
-        ' Sed aliquam, quam id tincidunt tincidunt, nunc nisl consectetur' +
-        'nunc, non lacinia nisl ligula id nunc. Nulla facilisi. Sed euismod' +
-        'ligula a aliquam tincidunt, nunc nisl consectetur nunc, non lacinia' +
-        'nisl ligula id nunc. Nulla facilisi. Sed euismod, ligula a aliquam' +
-        'tincidunt, nunc nisl consectetur nunc, non lacinia nisl ligula id nunc.' +
-        'Nulla facilisi.',
-    },
-    {
-      id: 2,
-      title: 'Template 2 - foo bar baz sagfd',
-      description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' +
-        ' Sed aliquam, quam id tincidunt tincidunt, nunc nisl consectetur' +
-        'nunc, non lacinia nisl ligula id nunc. Nulla facilisi. Sed euismod' +
-        'ligula a aliquam tincidunt, nunc nisl consectetur nunc, non lacinia' +
-        'nisl ligula id nunc. Nulla facilisi. Sed euismod, ligula a aliquam' +
-        'tincidunt, nunc nisl consectetur nunc, non lacinia nisl ligula id nunc.' +
-        'Nulla facilisi.',
-    },
-    {
-      id: 3,
-      title: 'Template 3',
-      description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' +
-        ' Sed aliquam, quam id tincidunt tincidunt, nunc nisl consectetur' +
-        'nunc, non lacinia nisl ligula id nunc. Nulla facilisi. Sed euismod' +
-        'ligula a aliquam tincidunt, nunc nisl consectetur nunc, non lacinia' +
-        'nisl ligula id nunc. Nulla facilisi. Sed euismod, ligula a aliquam' +
-        'tincidunt, nunc nisl consectetur nunc, non lacinia nisl ligula id nunc.' +
-        'Nulla facilisi.',
-    },
-  ]
-  return templates
+import { prisma } from '@/prisma/prisma'
+
+export async function fetchTemplates() {
+  try {
+    const templates = await prisma.template.findMany()
+    return templates
+  } catch {
+    return null
+  }
 }
 
-export async function fetchTemplateById(id: string | number) {
-  const templates = fetchTemplates()
-
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(templates.find((template) => template.id === id))
-    }, 2000)
+export async function fetchTemplateById(id: string) {
+  return prisma.template.findUnique({
+    where: {
+      id: id,
+    },
   })
+  // const templates = fetchTemplates()
+
+  // return new Promise((resolve) => {
+  //   setTimeout(() => {
+  //     resolve(templates.find((template) => template.id === id))
+  //   }, 2000)
+  // })
 }
 
 export async function fetchCategoriesByTemplateId(id: string | number) {
