@@ -1,26 +1,45 @@
+'use client'
+
+import { createApplication } from '@/lib/actions/application'
 import Modal from '../ui/modal'
-import { TEMPLATES } from '@/lib/constants/applications'
 
 export default function CreateNewApplicationModal({
   isOpen,
   onClose,
+  templates,
 }: {
   isOpen: boolean
   onClose: () => void
+  templates: any[] | null
 }) {
+  async function handleCreateApplication(formData: FormData) {
+    createApplication(formData)
+      .then((data) => {
+        onClose()
+        if (data.success) {
+          alert('Application created successfully')
+        } else {
+          alert('Application creation failed')
+        }
+      })
+      .catch((err) => {
+        alert('Application creation failed miserably')
+      })
+  }
+
   return (
     <Modal isOpen={isOpen} title="Create a new Application" onClose={onClose}>
-      <form action="">
+      <form action={handleCreateApplication}>
         <div>
-          <label htmlFor="email">Add client email</label>
-          <input type="text" name="email" id="email" className=" border border-black" />
+          <label htmlFor="clientEmail">Add client email</label>
+          <input type="text" name="clientEmail" id="clientEmail" className=" border border-black" />
         </div>
         <div>
-          <label htmlFor="templates">Choose a template:</label>
-          <select name="templates" id="templates">
-            {TEMPLATES.map((template) => (
+          <label htmlFor="templateId">Choose a template:</label>
+          <select name="templateId" id="templateId">
+            {templates?.map((template) => (
               <option key={template.id} value={template.id}>
-                {template.name}
+                {template.title}
               </option>
             ))}
           </select>

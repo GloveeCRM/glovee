@@ -1,4 +1,8 @@
+'use client'
+
+import { createTemplate } from '@/lib/actions/template'
 import Modal from '../ui/modal'
+import { useFormState } from 'react-dom'
 
 export default function CreateNewTemplateModal({
   isOpen,
@@ -7,36 +11,49 @@ export default function CreateNewTemplateModal({
   isOpen: boolean
   onClose: () => void
 }) {
+  const [formState, dispatch] = useFormState(createTemplate, {})
+
   return (
     <Modal isOpen={isOpen} title="Create a new template" onClose={onClose}>
-      <form className="w-[85vw] max-w-[570px]">
+      <form
+        action={async (formData) => {
+          dispatch(formData)
+          onClose()
+        }}
+        className="w-[85vw] max-w-[570px]"
+      >
         <div className="mb-[12px]">
-          <label className="text-n-700 mb-[4px] block text-[14px]" htmlFor="title">
+          <label className="mb-[4px] block text-[14px] text-n-700" htmlFor="title">
             Title
           </label>
           <input
-            className="border-n-400 w-full rounded border px-[8px] py-[3px] text-[14px] leading-tight"
+            className="w-full rounded border border-n-400 px-[8px] py-[3px] text-[14px] leading-tight"
             placeholder="College Application"
             type="text"
             name="title"
             id="title"
           />
+          {formState.errors?.title && <div className="text-red-500">{formState.errors.title}</div>}
         </div>
         <div>
-          <label className="text-n-700 mb-[4px] block text-[14px]" htmlFor="description">
+          <label className="mb-[4px] block text-[14px] text-n-700" htmlFor="description">
             Description
           </label>
           <textarea
-            className="border-n-400 w-full rounded border px-[8px] py-[3px] text-[14px] leading-tight"
+            className="w-full rounded border border-n-400 px-[8px] py-[3px] text-[14px] leading-tight"
             placeholder="This template is for college applications."
             name="description"
             id="description"
             rows={5}
           />
+          {formState.errors?.description && (
+            <div className="text-red-500">{formState.errors.description}</div>
+          )}
         </div>
+        {formState.error && <div className="text-red-500">{formState.error}</div>}
         <div className="mt-[10px] flex justify-center gap-[8px]">
           <button
-            className="bg-n-200 hover:bg-n-400 text-n-700 w-full rounded-md px-[12px] py-[6px] text-[14px] font-bold transition"
+            className="w-full rounded-md bg-n-200 px-[12px] py-[6px] text-[14px] font-bold text-n-700 transition hover:bg-n-400"
             type="reset"
             onClick={(e) => {
               e.stopPropagation()
@@ -45,7 +62,10 @@ export default function CreateNewTemplateModal({
           >
             Cancel
           </button>
-          <button className="bg-n-600 hover:bg-n-700 w-full rounded-md px-[12px] py-[6px] text-[14px] font-bold text-white transition">
+          <button
+            type="submit"
+            className="w-full rounded-md bg-n-600 px-[12px] py-[6px] text-[14px] font-bold text-white transition hover:bg-n-700"
+          >
             Create
           </button>
         </div>

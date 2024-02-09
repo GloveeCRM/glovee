@@ -1,6 +1,23 @@
 import { UserRole } from '@prisma/client'
 import { z } from 'zod'
 
+export const ApplicationSchema = z.object({
+  clientEmail: z.string().email(),
+  templateId: z.string(),
+})
+
+export const TemplateSchema = z.object({
+  title: z
+    .string({
+      required_error: 'Title is required',
+      invalid_type_error: 'Title is not valid',
+    })
+    .min(3, {
+      message: 'Minimum 3 characters required',
+    }),
+  description: z.string(),
+})
+
 export const SettingsSchema = z
   .object({
     name: z.optional(z.string()),

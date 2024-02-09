@@ -7,6 +7,7 @@ import { FiMoreHorizontal } from 'react-icons/fi'
 import { HiOutlinePencilSquare } from 'react-icons/hi2'
 
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
+import { deleteTemplateById } from '@/lib/actions/template'
 
 export default function TemplateCard({
   title,
@@ -14,8 +15,8 @@ export default function TemplateCard({
   id,
 }: Readonly<{
   title: string
-  description: string
-  id: number
+  description: string | null
+  id: string
 }>) {
   return (
     <div key={id} className="flex flex-col justify-between rounded-md border border-n-600 p-[8px]">
@@ -36,7 +37,7 @@ export default function TemplateCard({
             <ul>
               <li
                 onClick={() => {
-                  console.log('delete')
+                  deleteTemplateById(id)
                 }}
                 className="flex cursor-pointer items-center gap-[4px] rounded-sm p-[6px] font-medium text-red-500 transition duration-100 hover:bg-n-600"
               >
