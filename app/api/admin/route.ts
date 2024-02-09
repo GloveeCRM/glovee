@@ -1,4 +1,4 @@
-import { currentRole } from '@/lib/auth/user'
+import { currentRole } from '@/lib/utils/user'
 import { UserRole } from '@prisma/client'
 import { NextResponse } from 'next/server'
 

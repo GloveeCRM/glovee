@@ -54,7 +54,7 @@ export const LoginSchema = z.object({
   password: z.string().min(1, { message: 'Password is required' }),
 })
 
-export const RegisterSchema = z.object({
+export const SignUpSchema = z.object({
   name: z
     .string({
       required_error: 'Name is required',

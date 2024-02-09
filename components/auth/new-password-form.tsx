@@ -1,6 +1,6 @@
 'use client'
 
-import { newPassword } from '@/lib/actions/auth'
+import { resetPassword } from '@/lib/actions/auth'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useFormState } from 'react-dom'
@@ -8,7 +8,7 @@ import { useFormState } from 'react-dom'
 export default function NewPasswordForm() {
   const searchParams = useSearchParams()
   const token = searchParams.get('token')
-  const newPasswordWithToken = newPassword.bind(null, token)
+  const newPasswordWithToken = resetPassword.bind(null, token)
   const [formState, dispatch] = useFormState(newPasswordWithToken, {})
   return (
     <form action={dispatch}>

@@ -1,6 +1,6 @@
 'use client'
 
-import { newVerification } from '@/lib/actions/auth'
+import { verifyUserEmail } from '@/lib/actions/auth'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
@@ -21,7 +21,7 @@ export function NewVerificationForm() {
       return
     }
 
-    newVerification(token)
+    verifyUserEmail(token)
       .then((data) => {
         if (data?.error) {
           setError(data.error)

@@ -3,7 +3,7 @@ import { PrismaAdapter } from '@auth/prisma-adapter'
 
 import authConfig from '@/auth.config'
 import { prisma } from '@/prisma/prisma'
-import { getUserById } from '@/lib/data/user'
+import { fetchUserById } from '@/lib/data/user'
 import { getAccountByUserId } from './lib/data/account'
 
 declare module 'next-auth' {
@@ -34,7 +34,7 @@ export const {
     async signIn({ user, account }: any) {
       if (account?.provider !== 'credentials') return true
 
-      const existingUser = await getUserById(user.id)
+      const existingUser = await fetchUserById(user.id)
 
       if (!existingUser?.emailVerified) return false
 
@@ -61,7 +61,7 @@ export const {
     async jwt({ token }) {
       if (!token.sub) return token
 
-      const existingUser = await getUserById(token.sub)
+      const existingUser = await fetchUserById(token.sub)
 
       if (!existingUser) return token
 

@@ -4,38 +4,34 @@ import bcrypt from 'bcryptjs'
 import { AuthError } from 'next-auth'
 
 import { prisma } from '@/prisma/prisma'
+import { UserRole } from '@prisma/client'
+import { signIn, signOut } from '@/auth'
 import {
   LoginSchema,
   NewPasswordSchema,
-  RegisterSchema,
+  SignUpSchema,
   ResetSchema,
   SettingsSchema,
 } from '@/lib/zod/schemas'
-import { signIn, signOut } from '@/auth'
-import { getUserByEmail, getUserById } from '@/lib/data/user'
+import { fetchUserByEmail, fetchUserById } from '@/lib/data/user'
 import { DEFAULT_ADMIN_LOGIN_REDIRECT } from '@/lib/constants/routes'
 import { generatePasswordResetToken, generateVerificationToken } from '../token/tokens'
 import { sendPasswordResetEmail, sendVerificationEmail } from '../mail/mail'
 import { getVerificationTokenByToken } from '../data/verification-token'
 import { getPasswordResetTokenByToken } from '../data/password-reset-token'
-import { currentRole, currentUser } from '../auth/user'
-import { UserRole } from '@prisma/client'
+import { currentRole, currentUser } from '../utils/user'
+import { validateFormDataAgainstSchema } from '../utils/validation'
 
 export async function login(prevState: any, formData: FormData) {
-  const validatedFields = LoginSchema.safeParse({
-    email: formData.get('email'),
-    password: formData.get('password'),
-  })
+  const { data, errors } = await validateFormDataAgainstSchema(LoginSchema, formData)
 
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-    }
+  if (errors) {
+    return { errors }
   }
 
-  const { email, password } = validatedFields.data
+  const { email, password } = data
 
-  const existingUser = await getUserByEmail(email)
+  const existingUser = await fetchUserByEmail(email)
 
   if (!existingUser) {
     return { error: 'Email does not exist!' }
@@ -71,22 +67,14 @@ export async function login(prevState: any, formData: FormData) {
   }
 }
 
-export async function register(prevState: any, formData: FormData) {
-  const validatedFields = RegisterSchema.safeParse({
-    name: formData.get('name'),
-    email: formData.get('email'),
-    password: formData.get('password'),
-  })
-
-  if (!validatedFields.success) {
-    return { errors: validatedFields.error.flatten().fieldErrors }
-  }
+export async function signUp(prevState: any, formData: FormData) {
+  const validatedFields = await validateFormDataAgainstSchema(SignUpSchema, formData)
 
   const { email, password, name } = validatedFields.data
 
-  const hashedPassword = await bcrypt.hash(password, 10)
+  const existingUser = await fetchUserByEmail(email)
 
-  const existingUser = await getUserByEmail(email)
+  const hashedPassword = await bcrypt.hash(password, 10)
 
   if (existingUser) {
     return { error: 'Email already in use!' }
@@ -111,7 +99,7 @@ export async function logout() {
   return await signOut()
 }
 
-export async function newVerification(token: string) {
+export async function verifyUserEmail(token: string) {
   const existingToken = await getVerificationTokenByToken(token)
 
   if (!existingToken) {
@@ -124,7 +112,7 @@ export async function newVerification(token: string) {
     return { error: 'Token has expired!' }
   }
 
-  const existingUser = await getUserByEmail(existingToken.email)
+  const existingUser = await fetchUserByEmail(existingToken.email)
 
   if (!existingUser) {
     return { error: 'Email does not exist!' }
@@ -145,20 +133,12 @@ export async function newVerification(token: string) {
   return { success: 'Email verified!' }
 }
 
-export async function reset(prevState: any, formData: FormData) {
-  const validatedFields = ResetSchema.safeParse({
-    email: formData.get('email'),
-  })
-
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-    }
-  }
+export async function sendResetPasswordEmail(prevState: any, formData: FormData) {
+  const validatedFields = await validateFormDataAgainstSchema(ResetSchema, formData)
 
   const { email } = validatedFields.data
 
-  const existingUser = await getUserByEmail(email)
+  const existingUser = await fetchUserByEmail(email)
 
   if (!existingUser) {
     return { error: 'Email not found!' }
@@ -171,19 +151,12 @@ export async function reset(prevState: any, formData: FormData) {
   return { success: 'Reset email sent!' }
 }
 
-export async function newPassword(token: any, prevState: any, formData: FormData) {
-  const validatedFields = NewPasswordSchema.safeParse({
-    password: formData.get('password'),
-  })
+export async function resetPassword(token: any, prevState: any, formData: FormData) {
   if (!token) {
     return { error: 'Missing token!' }
   }
 
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-    }
-  }
+  const validatedFields = await validateFormDataAgainstSchema(NewPasswordSchema, formData)
 
   const { password } = validatedFields.data
 
@@ -199,7 +172,7 @@ export async function newPassword(token: any, prevState: any, formData: FormData
     return { error: 'Token has expired!' }
   }
 
-  const existingUser = await getUserByEmail(existingToken.email)
+  const existingUser = await fetchUserByEmail(existingToken.email)
 
   if (!existingUser) {
     return { error: 'Email does not exist!' }
@@ -232,19 +205,7 @@ export async function admin() {
 }
 
 export async function settings(prevState: any, formData: FormData) {
-  const validatedFields = SettingsSchema.safeParse({
-    name: formData.get('name'),
-    email: formData.get('email'),
-    password: formData.get('password'),
-    newPassword: formData.get('newPassword'),
-    role: formData.get('role'),
-  })
-  // Not sure if I should use this or not
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-    }
-  }
+  const validatedFields = await validateFormDataAgainstSchema(SettingsSchema, formData)
 
   const user = await currentUser()
 
@@ -252,7 +213,7 @@ export async function settings(prevState: any, formData: FormData) {
     return { error: 'Unauthorized' }
   }
 
-  const dbUser = await getUserById(user.id!) // added ! to check if it's null or not
+  const dbUser = await fetchUserById(user.id!) // added ! to check if it's null or not
 
   if (!dbUser) {
     return { error: 'Unauthorized' }
@@ -260,14 +221,8 @@ export async function settings(prevState: any, formData: FormData) {
 
   let { name, email, password, newPassword, role } = validatedFields.data
 
-  // if (user.isOAuth) {
-  //   email = undefined;
-  //   password = undefined;
-  //   newPassword = undefined;
-  // }
-
   if (email && email !== user.email) {
-    const existingUser = await getUserByEmail(email)
+    const existingUser = await fetchUserByEmail(email)
 
     if (existingUser && existingUser.id !== user.id) {
       return { error: 'Email already in use!' }

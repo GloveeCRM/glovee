@@ -10,7 +10,7 @@ interface RoleGateProps {
   allowedRole: UserRole
 }
 
-export const RoleGate = ({ children, allowedRole }: RoleGateProps) => {
+export function RoleGate({ children, allowedRole }: RoleGateProps) {
   const role = useCurrentRole()
 
   if (role !== allowedRole) {

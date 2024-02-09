@@ -2,13 +2,13 @@
 
 import { useFormState } from 'react-dom'
 
-import { register } from '@/lib/actions/auth'
+import { signUp } from '@/lib/actions/auth'
 
 import GoogleSignInButton from './google-sign-in-button'
 import Link from 'next/link'
 
 export default function RegisterForm() {
-  const [formState, dispatch] = useFormState(register, {})
+  const [formState, dispatch] = useFormState(signUp, {})
 
   return (
     <>

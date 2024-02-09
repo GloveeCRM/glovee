@@ -1,11 +1,11 @@
 'use client'
 
 import Link from 'next/link'
-import { reset } from '@/lib/actions/auth'
+import { sendResetPasswordEmail } from '@/lib/actions/auth'
 import { useFormState } from 'react-dom'
 
 export function ResetForm() {
-  const [formState, dispatch] = useFormState(reset, {})
+  const [formState, dispatch] = useFormState(sendResetPasswordEmail, {})
 
   return (
     <form action={dispatch} className="space-y-6 bg-yellow-500">
