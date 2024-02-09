@@ -5,7 +5,7 @@ import TemplateInfoCard from './template-info-card'
 import SidebarCategories from './sidebar-categories'
 
 export default async function EditSidebar() {
-  const template = await fetchTemplateById(1)
+  const template = await fetchTemplateById('1')
   return (
     <div className="sticky top-0 flex h-screen w-[240px] flex-col bg-n-700 text-white">
       <div className="flex items-center gap-[4px] p-[8px]">

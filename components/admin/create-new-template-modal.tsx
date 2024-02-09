@@ -2,8 +2,7 @@
 
 import { createTemplate } from '@/lib/actions/template'
 import Modal from '../ui/modal'
-import { useFormState, useFormStatus } from 'react-dom'
-import { useEffect } from 'react'
+import { useFormState } from 'react-dom'
 
 export default function CreateNewTemplateModal({
   isOpen,

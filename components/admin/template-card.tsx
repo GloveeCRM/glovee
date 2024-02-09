@@ -37,7 +37,6 @@ export default function TemplateCard({
             <ul>
               <li
                 onClick={() => {
-                  console.log('delete')
                   deleteTemplateById(id)
                 }}
                 className="flex cursor-pointer items-center gap-[4px] rounded-sm p-[6px] font-medium text-red-500 transition duration-100 hover:bg-n-600"

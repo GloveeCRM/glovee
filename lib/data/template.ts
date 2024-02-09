@@ -5,23 +5,17 @@ export async function fetchTemplates() {
     const templates = await prisma.template.findMany()
     return templates
   } catch {
-    return null
+    return []
   }
 }
 
 export async function fetchTemplateById(id: string) {
-  return prisma.template.findUnique({
-    where: {
-      id: id,
-    },
-  })
-  // const templates = fetchTemplates()
-
-  // return new Promise((resolve) => {
-  //   setTimeout(() => {
-  //     resolve(templates.find((template) => template.id === id))
-  //   }, 2000)
-  // })
+  try {
+    const template = await prisma.template.findUnique({ where: { id } })
+    return template
+  } catch {
+    return null
+  }
 }
 
 export async function fetchCategoriesByTemplateId(id: string | number) {

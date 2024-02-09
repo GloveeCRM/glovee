@@ -13,6 +13,14 @@ enum UserRole{
   USER
 }
 
+enum ApplicationStatus {
+  CREATED
+  INPROGRESS
+  SUBMITTED
+  APPROVED
+  REJECTED
+}
+
 model User {
   id            String    @id @default(cuid())
   name          String?
@@ -23,6 +31,8 @@ model User {
   role          UserRole @default(USER)
   accounts      Account[]
   templates     Template[]
+  applications  Application[]
+  assignedClients Application[] @relation("AssignedClient")
 }
 
 model Account {
@@ -49,6 +59,7 @@ model VerificationToken {
   email String
   token String @unique
   expires DateTime
+
   @@unique([email, token])
 }
 
@@ -67,6 +78,17 @@ model Template {
   title   String @default("Untitled")
   description String?
   body    Json?
-
+  
   user    User @relation(fields: [userId], references: [id])
+}
+
+model Application {
+  id          String @id @default(cuid())
+  userId      String
+  clientId    String
+  status      ApplicationStatus @default(CREATED)
+  body        Json?
+
+  user        User   @relation(fields: [userId], references: [id])
+  client      User   @relation("AssignedClient", fields: [clientId], references: [id])
 }
