@@ -18,3 +18,17 @@ export async function fetchApplications() {
     return []
   }
 }
+
+export async function fetchApplicationByUserId(id: string) {
+  try {
+    const application = await prisma.application.findFirst({
+      where: {
+        clientId: id,
+      },
+    })
+
+    return application
+  } catch {
+    return null
+  }
+}
