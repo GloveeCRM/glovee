@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation'
 
 import { logout } from '@/lib/actions/auth'
 
-import NavLinks from './nav-links'
+import NavLinks from './admin-nav-links'
 
 export default function AdminSidebar() {
   const pathname = usePathname()
