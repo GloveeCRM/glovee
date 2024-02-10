@@ -1,4 +1,4 @@
-import { currentUser } from '@/lib/auth/user'
+import { currentUser } from '@/lib/utils/user'
 import { fetchApplicationByUserId } from '@/lib/data/application'
 
 export default async function ClientApplicationTable() {
