@@ -1,24 +1,21 @@
 'use client'
 
-import { createTemplate } from '@/lib/actions/template'
-import Modal from '../ui/modal'
+import { MouseEvent } from 'react'
 import { useFormState } from 'react-dom'
 
-export default function CreateNewTemplateModal({
-  isOpen,
-  onClose,
-}: {
-  isOpen: boolean
-  onClose: () => void
-}) {
+import { createTemplate } from '@/lib/actions/template'
+import { Modal, useModal } from '../ui/modal'
+
+export default function CreateNewTemplateModal() {
   const [formState, dispatch] = useFormState(createTemplate, {})
+  const { closeModal } = useModal()
 
   return (
-    <Modal isOpen={isOpen} title="Create a new template" onClose={onClose}>
+    <Modal title="Create a new template">
       <form
         action={async (formData) => {
           dispatch(formData)
-          onClose()
+          closeModal()
         }}
         className="w-[85vw] max-w-[570px]"
       >
@@ -55,9 +52,9 @@ export default function CreateNewTemplateModal({
           <button
             className="w-full rounded-md bg-n-200 px-[12px] py-[6px] text-[14px] font-bold text-n-700 transition hover:bg-n-400"
             type="reset"
-            onClick={(e) => {
+            onClick={(e: MouseEvent<HTMLButtonElement>) => {
               e.stopPropagation()
-              onClose()
+              closeModal()
             }}
           >
             Cancel

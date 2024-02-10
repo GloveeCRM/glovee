@@ -1,31 +1,47 @@
-import { MouseEvent, useEffect } from 'react'
+'use client'
+
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  ReactNode,
+  useEffect,
+  MouseEvent,
+} from 'react'
 
 import { IoClose } from 'react-icons/io5'
 
-export default function Modal({
-  isOpen,
-  title,
-  onClose,
-  children,
-}: {
-  isOpen: boolean
-  title?: string
-  onClose: () => void
-  children: React.ReactNode
-}) {
-  const handleClose = (e: MouseEvent) => {
-    e.stopPropagation()
-    onClose()
+interface ModalContextType {
+  isModalOpen: boolean
+  openModal: () => void
+  closeModal: () => void
+}
+
+export const ModalContext = createContext<ModalContextType | undefined>(undefined)
+
+export function useModal() {
+  const context = useContext(ModalContext)
+  if (!context) {
+    throw new Error('useModal must be used within a Modal')
   }
+  return context
+}
+
+export function ModalProvider({ children }: { children: ReactNode }) {
+  const [isModalOpen, setModalOpen] = useState(false)
+
+  const openModal = useCallback(() => setModalOpen(true), [])
+  const closeModal = useCallback(() => setModalOpen(false), [])
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        onClose()
+        closeModal()
       }
     }
 
-    if (isOpen) {
+    if (isModalOpen) {
       document.addEventListener('keydown', handleEscape)
     } else {
       document.removeEventListener('keydown', handleEscape)
@@ -34,9 +50,33 @@ export default function Modal({
     return () => {
       document.removeEventListener('keydown', handleEscape)
     }
-  }, [isOpen, onClose])
+  }, [isModalOpen, closeModal])
 
-  if (!isOpen) {
+  return (
+    <ModalContext.Provider value={{ isModalOpen, openModal, closeModal }}>
+      {children}
+    </ModalContext.Provider>
+  )
+}
+
+interface ModalTriggerProps {
+  children: ReactNode
+}
+
+export function ModalTrigger({ children }: ModalTriggerProps) {
+  const { openModal } = useModal()
+  return <div onClick={openModal}>{children}</div>
+}
+
+interface ModalProps {
+  title?: string
+  children: ReactNode
+}
+
+export function Modal({ title, children }: ModalProps) {
+  const { isModalOpen, closeModal } = useModal()
+
+  if (!isModalOpen) {
     return null
   }
 
@@ -45,10 +85,16 @@ export default function Modal({
       id="modal-overlay"
       className="fixed inset-0 z-[100] flex cursor-default items-center justify-center bg-n-800/50 p-[20px]"
     >
-      <div id="modal-area" className="w-full max-w-[600px] rounded-md bg-white p-[12px]">
+      <div id="modal-area" className="w-fit rounded-md bg-white p-[12px]">
         <div id="modal-header" className="flex items-start justify-between gap-[8px]">
-          {title && <p className="mb-[8px] text-[20px] font-bold">{title}</p>}
-          <button className="cursor-pointer pt-[4px]" onClick={handleClose}>
+          <p className="mb-[8px] text-[20px] font-bold">{title}</p>
+          <button
+            className="cursor-pointer pt-[4px]"
+            onClick={(e: MouseEvent<HTMLButtonElement>) => {
+              e.stopPropagation()
+              closeModal()
+            }}
+          >
             <IoClose className="h-[22px] w-[22px]" />
           </button>
         </div>

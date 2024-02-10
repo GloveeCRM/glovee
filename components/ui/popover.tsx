@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Children,
   ReactNode,
@@ -67,6 +69,7 @@ export function PopoverTrigger({
   openClassName?: string
 }) {
   const { toggle, isOpen } = usePopover()
+
   return (
     <div onClick={toggle} className={`cursor-pointer ${className} ${isOpen && openClassName}`}>
       {children}
