@@ -2,7 +2,7 @@
 
 import { prisma } from '@/prisma/prisma'
 import { TemplateSchema } from '../zod/schemas'
-import { currentUser } from '../auth/user'
+import { currentUser } from '../utils/user'
 import { revalidatePath } from 'next/cache'
 
 export async function createTemplate(prevState: any, formDara: FormData) {
@@ -56,8 +56,6 @@ export async function deleteTemplateById(id: string) {
       id,
     },
   })
-
-  // return { success: 'Template deleted!' }
 
   revalidatePath('/admin/templates')
 }

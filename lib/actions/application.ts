@@ -1,8 +1,8 @@
 'use server'
 
 import { prisma } from '@/prisma/prisma'
-import { currentUser } from '../auth/user'
-import { getUserByEmail } from '../data/user'
+import { currentUser } from '../utils/user'
+import { fetchUserByEmail } from '../data/user'
 import { ApplicationSchema } from '../zod/schemas'
 import { revalidatePath } from 'next/cache'
 import { fetchTemplateById } from '../data/template'
@@ -25,7 +25,7 @@ export async function createApplication(formData: FormData) {
 
   const { clientEmail, templateId } = validatedFields.data
 
-  const client = await getUserByEmail(clientEmail)
+  const client = await fetchUserByEmail(clientEmail)
 
   if (!client) {
     return { error: 'Client not found!' }
@@ -43,8 +43,8 @@ export async function createApplication(formData: FormData) {
 
   await prisma.application.create({
     data: {
-      clientId: client.id!,
-      userId: user.id!,
+      clientId: client.id!, // ! to check if it's null or not
+      userId: user.id!, // ! to check if it's null or not
       status: 'CREATED',
       body: template.body!,
     },

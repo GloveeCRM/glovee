@@ -1,8 +1,8 @@
 import { prisma } from '@/prisma/prisma'
 
-export async function fetchTemplates() {
+export async function fetchTemplatesByUserId(userId: string) {
   try {
-    const templates = await prisma.template.findMany()
+    const templates = await prisma.template.findMany({ where: { userId } })
     return templates
   } catch {
     return []

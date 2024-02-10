@@ -1,9 +1,11 @@
 import ApplicationsTable from '@/components/admin/applications-table'
 import CreateNewApplicationCard from '@/components/admin/create-new-application-card'
-import { fetchTemplates } from '@/lib/data/template'
+import { fetchTemplatesByUserId } from '@/lib/data/template'
+import { currentUser } from '@/lib/utils/user'
 
 export default async function ApplicationsPage() {
-  const templates = await fetchTemplates()
+  const user = await currentUser()
+  const templates = await fetchTemplatesByUserId(user?.id!)
 
   return (
     <div className="p-[8px]">

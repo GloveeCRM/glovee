@@ -213,7 +213,7 @@ export async function settings(prevState: any, formData: FormData) {
     return { error: 'Unauthorized' }
   }
 
-  const dbUser = await fetchUserById(user.id!) // added ! to check if it's null or not
+  const dbUser = await fetchUserById(user.id!) // ! to check if it's null or not
 
   if (!dbUser) {
     return { error: 'Unauthorized' }
