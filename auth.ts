@@ -5,10 +5,12 @@ import authConfig from '@/auth.config'
 import { prisma } from '@/prisma/prisma'
 import { fetchUserById } from '@/lib/data/user'
 import { getAccountByUserId } from './lib/data/account'
+import { UserRole } from '@prisma/client'
 
 declare module 'next-auth' {
   interface User {
-    role: 'ADMIN' | 'USER'
+    role: UserRole
+    organizationId: string | null
   }
 }
 
@@ -40,7 +42,6 @@ export const {
 
       return true
     },
-
     async session({ token, session }: any) {
       if (token.sub && session.user) {
         session.user.id = token.sub
@@ -54,6 +55,7 @@ export const {
         session.user.name = token.name
         session.user.email = token.email
         session.user.isOAuth = token.isOAuth
+        session.user.organizationId = token.organizationId
       }
 
       return session
@@ -71,6 +73,7 @@ export const {
       token.name = existingUser.name
       token.email = existingUser.email
       token.role = existingUser.role
+      token.organizationId = existingUser.organizationId
 
       return token
     },

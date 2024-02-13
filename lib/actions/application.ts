@@ -2,10 +2,13 @@
 
 import { prisma } from '@/prisma/prisma'
 import { currentUser } from '../utils/user'
-import { fetchUserByEmail } from '../data/user'
+import { fetchUserByEmailAndOrgName } from '../data/user'
 import { ApplicationSchema } from '../zod/schemas'
 import { revalidatePath } from 'next/cache'
 import { fetchTemplateById } from '../data/template'
+import { UserRole } from '@prisma/client'
+import { headers } from 'next/headers'
+import { extractSubdomainFromHostname } from '../utils/url'
 
 export async function createApplication(formData: FormData) {
   const validatedFields = ApplicationSchema.safeParse({
@@ -19,19 +22,23 @@ export async function createApplication(formData: FormData) {
 
   const user = await currentUser()
 
-  if (user?.role !== 'ADMIN') {
+  if (user?.role !== UserRole.ORG_ADMIN) {
     return { error: 'You are not authorized to create application!' }
   }
 
   const { clientEmail, templateId } = validatedFields.data
 
-  const client = await fetchUserByEmail(clientEmail)
+  const headerList = headers()
+  const hostname = headerList.get('host')
+  const subdomain = extractSubdomainFromHostname(hostname!) || ''
+
+  const client = await fetchUserByEmailAndOrgName(clientEmail, subdomain)
 
   if (!client) {
     return { error: 'Client not found!' }
   }
 
-  if (client.role !== 'USER') {
+  if (client.role !== UserRole.ORG_CLIENT) {
     return { error: 'Client is not a user!' }
   }
 

@@ -13,14 +13,16 @@ import {
   ResetSchema,
   SettingsSchema,
 } from '@/lib/zod/schemas'
-import { fetchUserByEmail, fetchUserById } from '@/lib/data/user'
-import { DEFAULT_ADMIN_LOGIN_REDIRECT } from '@/lib/constants/routes'
+import { fetchUserByEmailAndOrgName, fetchUserById } from '@/lib/data/user'
+import { DEFAULT_ADMIN_LOGIN_REDIRECT, DEFAULT_USER_LOGIN_REDIRECT } from '@/lib/constants/routes'
 import { generatePasswordResetToken, generateVerificationToken } from '../token/tokens'
 import { sendPasswordResetEmail, sendVerificationEmail } from '../mail/mail'
 import { getVerificationTokenByToken } from '../data/verification-token'
 import { getPasswordResetTokenByToken } from '../data/password-reset-token'
 import { currentRole, currentUser } from '../utils/user'
 import { validateFormDataAgainstSchema } from '../utils/validation'
+import { headers } from 'next/headers'
+import { extractSubdomainFromHostname } from '../utils/url'
 
 export async function login(prevState: any, formData: FormData) {
   const { data, errors } = await validateFormDataAgainstSchema(LoginSchema, formData)
@@ -31,10 +33,35 @@ export async function login(prevState: any, formData: FormData) {
 
   const { email, password } = data
 
-  const existingUser = await fetchUserByEmail(email)
+  // const existingUser = await fetchUserByEmail(email)
+
+  // if (!existingUser) {
+  //   return { error: 'Email does not exist!' }
+  // }
+
+  const headersList = headers()
+  const hostname = headersList.get('host')
+  const subdomain = extractSubdomainFromHostname(hostname!) || ''
+
+  const existingUser = await fetchUserByEmailAndOrgName(email, subdomain)
 
   if (!existingUser) {
     return { error: 'Email does not exist!' }
+  }
+
+  const organization = await prisma.organization.findFirst({
+    where: {
+      name: subdomain,
+      users: {
+        some: {
+          id: existingUser.id,
+        },
+      },
+    },
+  })
+
+  if (!organization) {
+    return { error: 'Not authorized to access this organization!' }
   }
 
   if (!existingUser.emailVerified) {
@@ -46,10 +73,17 @@ export async function login(prevState: any, formData: FormData) {
   }
 
   try {
+    const redirectLink =
+      existingUser.role === UserRole.ORG_ADMIN
+        ? DEFAULT_ADMIN_LOGIN_REDIRECT
+        : existingUser.role === UserRole.ORG_CLIENT
+          ? DEFAULT_USER_LOGIN_REDIRECT
+          : '/'
+
     await signIn('credentials', {
       email,
       password,
-      redirectTo: DEFAULT_ADMIN_LOGIN_REDIRECT,
+      redirectTo: redirectLink,
     })
 
     return { success: 'Login Successful!' }
@@ -72,12 +106,28 @@ export async function signUp(prevState: any, formData: FormData) {
 
   const { email, password, name } = validatedFields.data
 
-  const existingUser = await fetchUserByEmail(email)
+  // const existingUser = await fetchUserByEmail(email)
+  const headersList = headers()
+  const hostname = headersList.get('host')
+  const subdomain = extractSubdomainFromHostname(hostname!) || ''
+
+  const existingUser = await fetchUserByEmailAndOrgName(email, subdomain)
+
+  // if (existingUser) {
+  if (existingUser) {
+    return { error: 'Email already in use!' }
+  }
 
   const hashedPassword = await bcrypt.hash(password, 10)
 
-  if (existingUser) {
-    return { error: 'Email already in use!' }
+  const organization = await prisma.organization.findFirst({
+    where: {
+      name: subdomain,
+    },
+  })
+
+  if (!organization) {
+    throw new Error('Organization not found!')
   }
 
   await prisma.user.create({
@@ -85,6 +135,8 @@ export async function signUp(prevState: any, formData: FormData) {
       name,
       email,
       password: hashedPassword,
+      role: UserRole.ORG_CLIENT,
+      organizationId: organization.id,
     },
   })
 
@@ -96,7 +148,9 @@ export async function signUp(prevState: any, formData: FormData) {
 }
 
 export async function logout() {
-  return await signOut()
+  return await signOut({
+    redirectTo: '/login',
+  })
 }
 
 export async function verifyUserEmail(token: string) {
@@ -112,7 +166,24 @@ export async function verifyUserEmail(token: string) {
     return { error: 'Token has expired!' }
   }
 
-  const existingUser = await fetchUserByEmail(existingToken.email)
+  // const existingUser = await fetchUserByEmail(existingToken.email)
+
+  // if (!existingUser) {
+  //   return { error: 'Email does not exist!' }
+  // }
+
+  const headersList = headers()
+  const hostname = headersList.get('host')
+  const subdomain = extractSubdomainFromHostname(hostname!) || ''
+
+  const existingUser = await prisma.user.findFirst({
+    where: {
+      email: existingToken.email,
+      organization: {
+        name: subdomain,
+      },
+    },
+  })
 
   if (!existingUser) {
     return { error: 'Email does not exist!' }
@@ -138,7 +209,11 @@ export async function sendResetPasswordEmail(prevState: any, formData: FormData)
 
   const { email } = validatedFields.data
 
-  const existingUser = await fetchUserByEmail(email)
+  const headersList = headers()
+  const hostname = headersList.get('host')
+  const subdomain = extractSubdomainFromHostname(hostname!) || ''
+
+  const existingUser = await fetchUserByEmailAndOrgName(email, subdomain)
 
   if (!existingUser) {
     return { error: 'Email not found!' }
@@ -172,7 +247,11 @@ export async function resetPassword(token: any, prevState: any, formData: FormDa
     return { error: 'Token has expired!' }
   }
 
-  const existingUser = await fetchUserByEmail(existingToken.email)
+  const headersList = headers()
+  const hostname = headersList.get('host')
+  const subdomain = extractSubdomainFromHostname(hostname!) || ''
+
+  const existingUser = await fetchUserByEmailAndOrgName(existingToken.email, subdomain)
 
   if (!existingUser) {
     return { error: 'Email does not exist!' }
@@ -197,7 +276,7 @@ export async function resetPassword(token: any, prevState: any, formData: FormDa
 export async function admin() {
   const role = await currentRole()
 
-  if (role === UserRole.ADMIN) {
+  if (role === UserRole.ORG_ADMIN) {
     return { success: 'Allowed!' }
   }
 
@@ -222,7 +301,11 @@ export async function settings(prevState: any, formData: FormData) {
   let { name, email, password, newPassword, role } = validatedFields.data
 
   if (email && email !== user.email) {
-    const existingUser = await fetchUserByEmail(email)
+    const headersList = headers()
+    const hostname = headersList.get('host')
+    const subdomain = extractSubdomainFromHostname(hostname!) || ''
+
+    const existingUser = await fetchUserByEmailAndOrgName(email, subdomain)
 
     if (existingUser && existingUser.id !== user.id) {
       return { error: 'Email already in use!' }

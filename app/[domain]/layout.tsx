@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { SessionProvider } from 'next-auth/react'
 
 import { auth } from '@/auth'
-import './globals.css'
+import '../globals.css'
 
 export const metadata: Metadata = {
   title: 'Immigration CRM',
@@ -15,6 +15,7 @@ export default async function RootLayout({
   children: React.ReactNode
 }>) {
   const session = await auth()
+
   return (
     <SessionProvider session={session}>
       <html lang="en">

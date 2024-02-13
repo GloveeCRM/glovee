@@ -31,7 +31,7 @@ export default function AdminPage() {
     <div>
       <p>Admin</p>
       <div>
-        <RoleGate allowedRole={UserRole.ADMIN}>
+        <RoleGate allowedRole={UserRole.ORG_ADMIN}>
           <p>You are allowed to see this content!</p>
         </RoleGate>
       </div>
