@@ -32,3 +32,22 @@ export async function fetchApplicationByUserId(id: string) {
     return null
   }
 }
+
+interface Application {
+  clientId: string
+  body: any
+}
+
+export async function fetchApplicationById(id: string) {
+  try {
+    const application = (await prisma.application.findFirst({
+      where: {
+        id,
+      },
+    })) as Application
+
+    return application
+  } catch {
+    return null
+  }
+}

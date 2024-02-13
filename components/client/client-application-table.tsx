@@ -1,5 +1,6 @@
 import { currentUser } from '@/lib/utils/user'
 import { fetchApplicationByUserId } from '@/lib/data/application'
+import Link from 'next/link'
 
 export default async function ClientApplicationTable() {
   const client = await currentUser()
@@ -18,7 +19,15 @@ export default async function ClientApplicationTable() {
           </tr>
         ) : (
           <tr>
-            <td>{applications.id}</td>
+            <td>
+              <Link
+                className="cursor-pointer text-sky-500 underline"
+                href={`/applications/${applications.id}`}
+              >
+                {applications.id}
+              </Link>
+            </td>
+
             <td>{applications.status}</td>
           </tr>
         )}

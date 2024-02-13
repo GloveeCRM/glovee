@@ -1,6 +1,17 @@
+'use client'
+
+import { usePathname } from 'next/navigation'
 import NavLinks from './client-nav-links'
 
 export default function ClientSidebar() {
+  const pathname = usePathname()
+
+  const hideSidebarRegex = /\/applications\//
+  const isSidebarHidden = hideSidebarRegex.test(pathname)
+
+  if (isSidebarHidden) {
+    return null
+  }
   return (
     <div id="clientSidebar" className="sticky top-0 flex h-screen w-[220px] flex-col bg-gray-500">
       <div className="bg-yellow-500">
