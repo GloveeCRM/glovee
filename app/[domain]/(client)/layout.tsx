@@ -1,4 +1,4 @@
-import ClientSidebar from '@/components/client/client-sidebar'
+import ClientSidebar from '@/components/client/ClientSidebar'
 
 export default function ClientLayout({
   children,

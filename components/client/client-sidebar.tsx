@@ -1,3 +1,7 @@
+'use client'
+
+import { usePathname } from 'next/navigation'
+
 import { logout } from '@/lib/actions/auth'
 import NavLinks from './client-nav-links'
 
