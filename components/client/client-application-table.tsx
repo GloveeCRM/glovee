@@ -4,9 +4,8 @@ import Link from 'next/link'
 
 export default async function ClientApplicationTable() {
   const client = await currentUser()
-  console.log(client)
   const applications = await fetchApplicationByUserId(client?.id!)
-  console.log(applications)
+
   return (
     <table className="border-separate border-spacing-2 border border-n-700">
       <tbody>
