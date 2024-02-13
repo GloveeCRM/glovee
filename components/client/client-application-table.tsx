@@ -4,8 +4,9 @@ import Link from 'next/link'
 
 export default async function ClientApplicationTable() {
   const client = await currentUser()
+  console.log(client)
   const applications = await fetchApplicationByUserId(client?.id!)
-
+  console.log(applications)
   return (
     <table className="border-separate border-spacing-2 border border-n-700">
       <tbody>
@@ -18,18 +19,20 @@ export default async function ClientApplicationTable() {
             <td colSpan={2}>No applications found</td>
           </tr>
         ) : (
-          <tr>
-            <td>
-              <Link
-                className="cursor-pointer text-sky-500 underline"
-                href={`/applications/${applications.id}`}
-              >
-                {applications.id}
-              </Link>
-            </td>
+          applications.map((application) => (
+            <tr key={application.id}>
+              <td>
+                <Link
+                  className="cursor-pointer text-sky-500 underline"
+                  href={`/applications/${application.id}`}
+                >
+                  {application.id}
+                </Link>
+              </td>
 
-            <td>{applications.status}</td>
-          </tr>
+              <td>{application.status}</td>
+            </tr>
+          ))
         )}
       </tbody>
     </table>

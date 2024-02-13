@@ -27,8 +27,6 @@ export async function middleware(request: NextRequest) {
   const isAuthRoute = AUTH_ROUTES.includes(nextUrl.pathname)
   const isAdminRoute = nextUrl.pathname.startsWith(ADMIN_ROUTES_PREFIX)
 
-  console.log(session)
-
   if (isApiAuthRoute) {
     const searchParams = request.nextUrl.searchParams.toString()
     const pathWithSearchParams = `${nextUrl.pathname}${searchParams ? `?${searchParams}` : ''}`

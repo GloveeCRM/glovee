@@ -21,7 +21,7 @@ export async function fetchApplications() {
 
 export async function fetchApplicationByUserId(id: string) {
   try {
-    const application = await prisma.application.findFirst({
+    const application = await prisma.application.findMany({
       where: {
         clientId: id,
       },
