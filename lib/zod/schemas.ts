@@ -21,7 +21,7 @@ export const TemplateSchema = z.object({
 export const SettingsSchema = z
   .object({
     name: z.optional(z.string()),
-    role: z.enum([UserRole.ADMIN, UserRole.USER]),
+    role: z.enum([UserRole.ORG_ADMIN, UserRole.ORG_CLIENT]),
     email: z.optional(z.string().email()),
     password: z.optional(z.string().min(6)),
     newPassword: z.optional(z.string().min(6)),

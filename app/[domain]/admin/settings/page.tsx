@@ -31,8 +31,8 @@ export default function SettingsPage() {
         <div>
           <select name="role" id="role">
             Role
-            <option value={UserRole.ADMIN}>Admin</option>
-            <option value={UserRole.USER}>User</option>
+            <option value={UserRole.ORG_ADMIN}>Admin</option>
+            <option value={UserRole.ORG_CLIENT}>Client</option>
           </select>
         </div>
       </div>

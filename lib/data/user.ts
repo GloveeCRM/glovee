@@ -1,8 +1,16 @@
 import { prisma } from '@/prisma/prisma'
 
-export async function fetchUserByEmail(email: string) {
+export async function fetchUserByEmailAndOrgName(email: string, orgName: string) {
   try {
-    const user = await prisma.user.findUnique({ where: { email: email } })
+    const user = await prisma.user.findFirst({
+      where: {
+        email,
+        organization: {
+          name: orgName,
+        },
+      },
+    })
+
     return user
   } catch {
     return null

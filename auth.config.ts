@@ -4,7 +4,9 @@ import Credentials from 'next-auth/providers/credentials'
 import Google from 'next-auth/providers/google'
 
 import { LoginSchema } from '@/lib/zod/schemas'
-import { fetchUserByEmail } from '@/lib/data/user'
+import { fetchUserByEmailAndOrgName } from '@/lib/data/user'
+import { headers } from 'next/headers'
+import { extractSubdomainFromHostname } from './lib/utils/url'
 
 export default {
   providers: [
@@ -19,13 +21,18 @@ export default {
         if (validatedFields.success) {
           const { email, password } = validatedFields.data
 
-          const user = await fetchUserByEmail(email)
+          const headerList = headers()
+          const hostname = headerList.get('host')
+          const subdomain = extractSubdomainFromHostname(hostname!) || ''
+
+          const user = await fetchUserByEmailAndOrgName(email, subdomain)
           if (!user || !user.password) return null
 
           const passwordsMatch = await bcrypt.compare(password, user.password)
 
           if (passwordsMatch) return user
         }
+
         return null
       },
     }),

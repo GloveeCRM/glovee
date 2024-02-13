@@ -1,6 +1,4 @@
-'use client'
-
-import { usePathname } from 'next/navigation'
+import { logout } from '@/lib/actions/auth'
 import NavLinks from './client-nav-links'
 
 export default function ClientSidebar() {
@@ -21,7 +19,7 @@ export default function ClientSidebar() {
         <NavLinks />
       </div>
       <div className="bg-blue-300">
-        <form action="">
+        <form action={logout}>
           <button type="submit">Sign out</button>
         </form>
       </div>

@@ -8,9 +8,11 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
-enum UserRole{
-  ADMIN
-  USER
+enum UserRole {
+  SB_OWNER
+  ORG_OWNER
+  ORG_ADMIN
+  ORG_CLIENT
 }
 
 enum ApplicationStatus {
@@ -21,18 +23,30 @@ enum ApplicationStatus {
   REJECTED
 }
 
+model Organization {
+  id   String @id @default(cuid())
+  name String @unique
+
+  users User[]
+}
+
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  password      String?
-  role          UserRole @default(USER)
-  accounts      Account[]
-  templates     Template[]
-  applications  Application[]
+  id              String    @id @default(cuid())
+  organizationId  String?
+  name            String?
+  email           String?
+  emailVerified   DateTime?
+  image           String?
+  password        String?
+  role            UserRole @default(ORG_CLIENT)
+  
+  accounts        Account[]
+  organization    Organization? @relation(fields: [organizationId], references: [id])
+  templates       Template[]
+  applications    Application[]
   assignedClients Application[] @relation("AssignedClient")
+
+  @@unique([organizationId, email])
 }
 
 model Account {
