@@ -68,15 +68,35 @@ export async function fetchCategorieByApplicationId(id: string) {
   }
 }
 
-export async function fetchSectionsByCategoryId(id: string) {
+export async function fetchSectionsById(id: string) {
   try {
     const sections = await prisma.section.findMany({
       where: {
-        categoryId: id,
+        id: id,
+      },
+      include: {
+        questionSets: true,
       },
     })
 
     return sections
+  } catch {
+    return null
+  }
+}
+
+export async function fetchQuestionSetsBySectionId(id: string) {
+  try {
+    const questionSets = await prisma.questionSet.findMany({
+      where: {
+        sectionId: id,
+      },
+      include: {
+        questions: true,
+      },
+    })
+
+    return questionSets
   } catch {
     return null
   }
