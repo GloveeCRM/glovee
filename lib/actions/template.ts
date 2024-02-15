@@ -28,8 +28,117 @@ export async function createTemplate(prevState: any, formDara: FormData) {
       userId: user.id!,
       title,
       description,
+      categories: {
+        create: [
+          {
+            title: 'Category 1',
+            position: 1,
+            sections: {
+              create: [
+                {
+                  title: 'Section 1',
+                  position: 1,
+                  questionSets: {
+                    create: [
+                      {
+                        type: 'flat',
+                        position: 1,
+                        questions: {
+                          create: [
+                            {
+                              prompt: 'Question 1',
+                              position: 1,
+                              type: 'text',
+                            },
+                            {
+                              prompt: 'Question 2',
+                              position: 2,
+                              type: 'text',
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        type: 'flat',
+                        position: 2,
+                        questions: {
+                          create: [
+                            {
+                              prompt: 'Question 1',
+                              position: 1,
+                              type: 'text',
+                            },
+                            {
+                              prompt: 'Question 2',
+                              position: 2,
+                              type: 'text',
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            title: 'Category 2',
+            position: 2,
+            sections: {
+              create: [
+                {
+                  title: 'Section 1',
+                  position: 1,
+                  questionSets: {
+                    create: [
+                      {
+                        type: 'flat',
+                        position: 1,
+                        questions: {
+                          create: [
+                            {
+                              prompt: 'Question 1',
+                              position: 1,
+                              type: 'text',
+                            },
+                            {
+                              prompt: 'Question 2',
+                              position: 2,
+                              type: 'text',
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        type: 'flat',
+                        position: 2,
+                        questions: {
+                          create: [
+                            {
+                              prompt: 'Question 1',
+                              position: 1,
+                              type: 'text',
+                            },
+                            {
+                              prompt: 'Question 2',
+                              position: 2,
+                              type: 'text',
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
     },
   })
+
   revalidatePath('/admin/templates')
   return { success: 'Template created!', data: template }
 }

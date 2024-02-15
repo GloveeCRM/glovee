@@ -86,26 +86,16 @@ model PasswordResetToken {
   @@unique([email, token])
 }
 
-model Template {
-  id      String @id @default(cuid())
-  userId  String
-  title   String @default("Untitled")
-  description String?
-  body    Json?
-  
-  user    User @relation(fields: [userId], references: [id])
-}
-
 model Application {
   id          String @id @default(cuid())
   userId      String
   clientId    String
   status      ApplicationStatus @default(CREATED)
+
   categories Category[]
 
   user        User   @relation(fields: [userId], references: [id])
-  client      User   @relation("AssignedClient", fields: [clientId], references: [id])
-
+  client      User  @relation("AssignedClient", fields: [clientId], references: [id])
 }
 
 model Category {
@@ -113,6 +103,7 @@ model Category {
   title String @unique
   position Int
   applicationId String
+
   sections Section[]
 
   application Application @relation(fields: [applicationId], references: [id])
@@ -145,7 +136,60 @@ model Question {
   position    Int
   helperText  String?
   questionSetId String
-  
 
   questionSet QuestionSet @relation(fields: [questionSetId], references: [id])
+}
+
+model Template {
+  id      String @id @default(cuid())
+  userId  String
+  title   String @default("Untitled")
+  description String?
+  categories TemplateCategory[]
+  
+  user    User @relation(fields: [userId], references: [id])
+}
+
+model TemplateCategory {
+  id          String @id @default(cuid())
+  title       String
+  position    Int
+  templateId  String
+
+  sections    TemplateSection[]
+
+  template    Template @relation(fields: [templateId], references: [id])
+}
+
+model TemplateSection {
+  id          String @id @default(cuid())
+  title       String
+  position    Int
+  tempCategoryId  String
+
+  questionSets   TemplateQuestionSet[]
+
+  category    TemplateCategory @relation(fields: [tempCategoryId], references: [id])
+}
+
+model TemplateQuestionSet {
+  id          String @id @default(cuid())
+  type        String
+  position    Int
+  tempSectionId   String
+
+  questions   TemplateQuestion[]
+
+  section     TemplateSection @relation(fields: [tempSectionId], references: [id])
+}
+
+model TemplateQuestion {
+  id          String @id @default(cuid())
+  type        String
+  prompt      String
+  position    Int
+  helperText  String?
+  tempQuestionSetId String
+
+  questionSet TemplateQuestionSet @relation(fields: [tempQuestionSetId], references: [id])
 }
