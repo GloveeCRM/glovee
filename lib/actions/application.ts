@@ -53,7 +53,6 @@ export async function createApplication(formData: FormData) {
       clientId: client.id!, // ! to check if it's null or not
       userId: user.id!, // ! to check if it's null or not
       status: 'CREATED',
-      body: template.body!,
     },
   })
 

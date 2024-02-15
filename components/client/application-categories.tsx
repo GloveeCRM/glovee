@@ -1,5 +1,18 @@
-import { fetchApplicationById } from '@/lib/data/application'
+import { fetchCategorieByApplicationId } from '@/lib/data/application'
 import ApplicationCategoriesCardWrapper from './application-categories-card-wrapper'
+
+export interface Category {
+  id: string
+  title: string
+  position: number
+  sections: Section[]
+}
+
+export interface Section {
+  id: string
+  title: string
+  position: number
+}
 
 export default async function ApplicationCategories({
   applicationId,
@@ -8,8 +21,7 @@ export default async function ApplicationCategories({
   applicationId: string
   className?: string
 }) {
-  const application = await fetchApplicationById(applicationId)
-  const categories = application?.body?.categories
+  const categories = (await fetchCategorieByApplicationId(applicationId)) as Category[]
 
   return (
     <div className={`${className}`}>

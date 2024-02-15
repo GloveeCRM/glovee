@@ -1,32 +1,18 @@
 'use client'
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { IoMdArrowDropdown, IoMdArrowDropright } from 'react-icons/io'
+import ClientSidebarSectionCard from './client-application-section-card'
+import { Category } from './application-categories'
 
 export default function ClientSidebarCategoryCard({
   category,
   isExpanded,
   onClick,
 }: {
-  category: any
+  category: Category
   isExpanded: boolean
   onClick: (categoryId: string) => void
 }) {
-  const sections = category?.sections
-  const searchParams = useSearchParams()
-  const pathname = usePathname()
-  const { replace } = useRouter()
-
-  const handleClick = (term: string) => {
-    const params = new URLSearchParams(searchParams)
-    if (term) {
-      params.set('section', term)
-    } else {
-      params.delete('section')
-    }
-    replace(`${pathname}?${params.toString()}`)
-  }
-
   return (
     <div>
       <div className="flex items-center justify-between">
@@ -43,14 +29,9 @@ export default function ClientSidebarCategoryCard({
         </button>
       </div>
       {isExpanded &&
-        sections?.map((section: any) => (
-          <button key={section.id} onClick={() => handleClick(section.id)}>
-            {section.title}
-          </button>
+        category.sections?.map((section: any) => (
+          <ClientSidebarSectionCard key={section.id} section={section} />
         ))}
     </div>
   )
-}
-function useDebouncedCallback(term: any) {
-  throw new Error('Function not implemented.')
 }

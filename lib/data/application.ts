@@ -35,7 +35,6 @@ export async function fetchApplicationByUserId(id: string) {
 
 interface Application {
   clientId: string
-  body: any
 }
 
 export async function fetchApplicationById(id: string) {
@@ -47,6 +46,37 @@ export async function fetchApplicationById(id: string) {
     })) as Application
 
     return application
+  } catch {
+    return null
+  }
+}
+
+export async function fetchCategorieByApplicationId(id: string) {
+  try {
+    const category = await prisma.category.findMany({
+      where: {
+        applicationId: id,
+      },
+      include: {
+        sections: true,
+      },
+    })
+
+    return category
+  } catch {
+    return null
+  }
+}
+
+export async function fetchSectionsByCategoryId(id: string) {
+  try {
+    const sections = await prisma.section.findMany({
+      where: {
+        categoryId: id,
+      },
+    })
+
+    return sections
   } catch {
     return null
   }
