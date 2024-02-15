@@ -1,9 +1,11 @@
-'use client'
-import { fetchApplicationById } from '@/lib/data/application'
-import { useSearchParams } from 'next/navigation'
+export default function ClientApplicationPage({
+  params,
+  searchParams,
+}: {
+  params: { id: string }
+  searchParams: { [key: string]: string | string[] | undefined }
+}) {
+  const sectionId = searchParams.section
 
-export default function ClientApplicationPage({ params }: { params: { id: string } }) {
-  const searchParams = useSearchParams()
-
-  return <div>{searchParams.get('section')}</div>
+  return <div>{sectionId}</div>
 }
