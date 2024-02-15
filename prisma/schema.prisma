@@ -101,8 +101,51 @@ model Application {
   userId      String
   clientId    String
   status      ApplicationStatus @default(CREATED)
-  body        Json?
+  categories Category[]
 
   user        User   @relation(fields: [userId], references: [id])
   client      User   @relation("AssignedClient", fields: [clientId], references: [id])
+
+}
+
+model Category {
+  id    String @id @default(cuid())
+  title String @unique
+  position Int
+  applicationId String
+  sections Section[]
+
+  application Application @relation(fields: [applicationId], references: [id])
+}
+
+model Section {
+  id          String @id @default(cuid())
+  title       String
+  position    Int
+  categoryId  String
+  questionSets   QuestionSet[]
+
+  category    Category @relation(fields: [categoryId], references: [id])
+}
+
+model QuestionSet {
+  id          String @id @default(cuid())
+  type        String
+  position    Int
+  sectionId   String
+  questions   Question[]
+
+  section     Section @relation(fields: [sectionId], references: [id])
+}
+
+model Question {
+  id          String @id @default(cuid())
+  type        String
+  prompt      String
+  position    Int
+  helperText  String?
+  questionSetId String
+  
+
+  questionSet QuestionSet @relation(fields: [questionSetId], references: [id])
 }

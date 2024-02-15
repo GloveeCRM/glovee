@@ -2,8 +2,13 @@
 
 import { useState } from 'react'
 import ClientSidebarCategoryCard from './client-application-category-card'
+import { Category } from './application-categories'
 
-export default function ApplicationCategoriesCardWrapper({ categories }: { categories: any[] }) {
+export default function ApplicationCategoriesCardWrapper({
+  categories,
+}: {
+  categories: Category[]
+}) {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>(categories[0]?.id)
 
   const handleCategoryClick = (categoryId: string) => {
