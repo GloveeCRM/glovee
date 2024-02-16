@@ -31,47 +31,48 @@ export async function createTemplate(prevState: any, formDara: FormData) {
       templateCategories: {
         create: [
           {
-            title: 'Human Resources',
-            position: 1,
+            title: 'Personal Information',
+            position: 0,
             templateSections: {
               create: [
                 {
-                  title: 'Employee Onboarding',
-                  position: 1,
+                  title: 'Basic Information',
+                  position: 0,
                   templateQuestionSets: {
                     create: [
                       {
-                        type: 'grouped',
-                        position: 1,
+                        type: 'flat',
+                        position: 0,
                         templateQuestions: {
                           create: [
                             {
-                              prompt: 'Describe your previous job experience.',
-                              position: 1,
-                              type: 'long-text',
+                              prompt: 'What is your full name?',
+                              position: 0,
+                              type: 'text-input',
                             },
                             {
-                              prompt: 'What are your key strengths?',
-                              position: 2,
-                              type: 'text',
+                              prompt: 'What is your date of birth?',
+                              position: 1,
+                              type: 'text-input',
                             },
                           ],
                         },
                       },
                       {
-                        type: 'flat',
-                        position: 2,
+                        type: 'loop',
+                        position: 1,
                         templateQuestions: {
                           create: [
                             {
-                              prompt: 'Have you worked in a team environment before?',
-                              position: 1,
-                              type: 'boolean',
+                              prompt:
+                                'what is your address? (add any address you have lived in the past 10 years)',
+                              position: 0,
+                              type: 'text-input',
                             },
                             {
-                              prompt: 'Do you have any certifications relevant to your position?',
-                              position: 2,
-                              type: 'text',
+                              prompt: 'job position',
+                              position: 1,
+                              type: 'text-input',
                             },
                           ],
                         },
@@ -80,42 +81,42 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                   },
                 },
                 {
-                  title: 'Performance Reviews',
-                  position: 2,
+                  title: 'Contact Information',
+                  position: 1,
                   templateQuestionSets: {
                     create: [
                       {
-                        type: 'grouped',
-                        position: 1,
+                        type: 'flat',
+                        position: 0,
                         templateQuestions: {
                           create: [
                             {
-                              prompt: 'Rate your overall performance this quarter.',
-                              position: 1,
-                              type: 'scale',
+                              prompt: 'What is your email address?',
+                              position: 0,
+                              type: 'text-input',
                             },
                             {
-                              prompt: 'What challenges did you face?',
-                              position: 2,
-                              type: 'long-text',
+                              prompt: 'What is your phone number?',
+                              position: 1,
+                              type: 'text-input',
                             },
                           ],
                         },
                       },
                       {
                         type: 'flat',
-                        position: 2,
+                        position: 1,
                         templateQuestions: {
                           create: [
                             {
-                              prompt: 'List any achievements during this period.',
-                              position: 1,
-                              type: 'text',
+                              prompt: 'What is your emergency contact?',
+                              position: 0,
+                              type: 'text-input',
                             },
                             {
-                              prompt: 'How do you plan to address any challenges?',
-                              position: 2,
-                              type: 'long-text',
+                              prompt: 'What is your emergency contact phone number?',
+                              position: 1,
+                              type: 'text-input',
                             },
                           ],
                         },
@@ -127,47 +128,52 @@ export async function createTemplate(prevState: any, formDara: FormData) {
             },
           },
           {
-            title: 'Customer Feedback',
-            position: 2,
+            title: 'Family Information',
+            position: 1,
             templateSections: {
               create: [
                 {
-                  title: 'Product Satisfaction',
+                  title: 'Family Members',
                   position: 1,
                   templateQuestionSets: {
                     create: [
                       {
-                        type: 'flat',
+                        type: 'loop',
                         position: 1,
                         templateQuestions: {
                           create: [
                             {
-                              prompt: 'How satisfied are you with our product?',
-                              position: 1,
-                              type: 'scale',
+                              prompt: 'What is your family member name?',
+                              position: 0,
+                              type: 'text-input',
                             },
                             {
-                              prompt: 'What features do you use the most?',
+                              prompt: 'What is your family member date of birth?',
+                              position: 1,
+                              type: 'text-input',
+                            },
+                            {
+                              prompt: 'What is your family member occupation?',
                               position: 2,
-                              type: 'text',
+                              type: 'text-input',
                             },
                           ],
                         },
                       },
                       {
-                        type: 'grouped',
+                        type: 'loop',
                         position: 2,
                         templateQuestions: {
                           create: [
                             {
-                              prompt: 'What improvements would you suggest?',
+                              prompt: 'father side family members name',
                               position: 1,
-                              type: 'long-text',
+                              type: 'text-input',
                             },
                             {
-                              prompt: 'Would you recommend our product to others?',
+                              prompt: 'mother side family members name',
                               position: 2,
-                              type: 'boolean',
+                              type: 'text-input',
                             },
                           ],
                         },
@@ -176,7 +182,7 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                   },
                 },
                 {
-                  title: 'Support Experience',
+                  title: 'Family Health History',
                   position: 2,
                   templateQuestionSets: {
                     create: [
@@ -186,14 +192,9 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                         templateQuestions: {
                           create: [
                             {
-                              prompt: 'How would you rate our customer support?',
+                              prompt: 'What is your family member health history?',
                               position: 1,
-                              type: 'scale',
-                            },
-                            {
-                              prompt: 'How can we improve our support services?',
-                              position: 2,
-                              type: 'long-text',
+                              type: 'text-input',
                             },
                           ],
                         },
