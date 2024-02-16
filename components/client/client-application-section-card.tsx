@@ -16,5 +16,9 @@ export default function ClientSidebarSectionCard({ section }: { section: any }) 
     }
     replace(`${pathname}?${params.toString()}`)
   }
-  return <button onClick={() => handleClick(section.id)}>{section.title}</button>
+  return (
+    <div className="cursor-pointer " onClick={() => handleClick(section.id)}>
+      {section.title}
+    </div>
+  )
 }

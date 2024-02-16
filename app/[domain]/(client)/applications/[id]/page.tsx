@@ -10,8 +10,6 @@ export default async function ClientApplicationPage({
 }) {
   const sectionId = searchParams.section || ''
   const questionSet = await fetchQuestionSetsBySectionId(sectionId)
-  console.log(sectionId)
-  console.log(questionSet)
 
   return <div>{JSON.stringify(questionSet)}</div>
 }
