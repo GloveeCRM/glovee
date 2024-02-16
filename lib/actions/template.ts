@@ -31,27 +31,27 @@ export async function createTemplate(prevState: any, formDara: FormData) {
       categories: {
         create: [
           {
-            title: 'Category 1',
+            title: 'Human Resources',
             position: 1,
             sections: {
               create: [
                 {
-                  title: 'Section 1',
+                  title: 'Employee Onboarding',
                   position: 1,
                   questionSets: {
                     create: [
                       {
-                        type: 'flat',
+                        type: 'grouped',
                         position: 1,
                         questions: {
                           create: [
                             {
-                              prompt: 'Question 1',
+                              prompt: 'Describe your previous job experience.',
                               position: 1,
-                              type: 'text',
+                              type: 'long-text',
                             },
                             {
-                              prompt: 'Question 2',
+                              prompt: 'What are your key strengths?',
                               position: 2,
                               type: 'text',
                             },
@@ -64,14 +64,58 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                         questions: {
                           create: [
                             {
-                              prompt: 'Question 1',
+                              prompt: 'Have you worked in a team environment before?',
+                              position: 1,
+                              type: 'boolean',
+                            },
+                            {
+                              prompt: 'Do you have any certifications relevant to your position?',
+                              position: 2,
+                              type: 'text',
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  title: 'Performance Reviews',
+                  position: 2,
+                  questionSets: {
+                    create: [
+                      {
+                        type: 'grouped',
+                        position: 1,
+                        questions: {
+                          create: [
+                            {
+                              prompt: 'Rate your overall performance this quarter.',
+                              position: 1,
+                              type: 'scale',
+                            },
+                            {
+                              prompt: 'What challenges did you face?',
+                              position: 2,
+                              type: 'long-text',
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        type: 'flat',
+                        position: 2,
+                        questions: {
+                          create: [
+                            {
+                              prompt: 'List any achievements during this period.',
                               position: 1,
                               type: 'text',
                             },
                             {
-                              prompt: 'Question 2',
+                              prompt: 'How do you plan to address any challenges?',
                               position: 2,
-                              type: 'text',
+                              type: 'long-text',
                             },
                           ],
                         },
@@ -83,12 +127,12 @@ export async function createTemplate(prevState: any, formDara: FormData) {
             },
           },
           {
-            title: 'Category 2',
+            title: 'Customer Feedback',
             position: 2,
             sections: {
               create: [
                 {
-                  title: 'Section 1',
+                  title: 'Product Satisfaction',
                   position: 1,
                   questionSets: {
                     create: [
@@ -98,12 +142,12 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                         questions: {
                           create: [
                             {
-                              prompt: 'Question 1',
+                              prompt: 'How satisfied are you with our product?',
                               position: 1,
-                              type: 'text',
+                              type: 'scale',
                             },
                             {
-                              prompt: 'Question 2',
+                              prompt: 'What features do you use the most?',
                               position: 2,
                               type: 'text',
                             },
@@ -111,19 +155,45 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                         },
                       },
                       {
-                        type: 'flat',
+                        type: 'grouped',
                         position: 2,
                         questions: {
                           create: [
                             {
-                              prompt: 'Question 1',
+                              prompt: 'What improvements would you suggest?',
                               position: 1,
-                              type: 'text',
+                              type: 'long-text',
                             },
                             {
-                              prompt: 'Question 2',
+                              prompt: 'Would you recommend our product to others?',
                               position: 2,
-                              type: 'text',
+                              type: 'boolean',
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  title: 'Support Experience',
+                  position: 2,
+                  questionSets: {
+                    create: [
+                      {
+                        type: 'flat',
+                        position: 1,
+                        questions: {
+                          create: [
+                            {
+                              prompt: 'How would you rate our customer support?',
+                              position: 1,
+                              type: 'scale',
+                            },
+                            {
+                              prompt: 'How can we improve our support services?',
+                              position: 2,
+                              type: 'long-text',
                             },
                           ],
                         },

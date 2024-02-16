@@ -86,6 +86,10 @@ export async function fetchSectionsById(id: string) {
 }
 
 export async function fetchQuestionSetsBySectionId(id: string) {
+  if (!id) {
+    return []
+  }
+
   try {
     const questionSets = await prisma.questionSet.findMany({
       where: {

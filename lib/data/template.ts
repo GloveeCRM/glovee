@@ -11,7 +11,24 @@ export async function fetchTemplatesByUserId(userId: string) {
 
 export async function fetchTemplateById(id: string) {
   try {
-    const template = await prisma.template.findUnique({ where: { id } })
+    const template = await prisma.template.findUnique({
+      where: { id },
+      include: {
+        templateCategories: {
+          include: {
+            templateSections: {
+              include: {
+                templateQuestionSets: {
+                  include: {
+                    templateQuestions: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    })
     return template
   } catch {
     return null

@@ -100,7 +100,7 @@ model Application {
 
 model Category {
   id    String @id @default(cuid())
-  title String @unique
+  title String
   position Int
   applicationId String
 
@@ -145,9 +145,10 @@ model Template {
   userId  String
   title   String @default("Untitled")
   description String?
-  categories TemplateCategory[]
+
+  templateCategories TemplateCategory[]
   
-  user    User @relation(fields: [userId], references: [id])
+  user    User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model TemplateCategory {
@@ -156,9 +157,9 @@ model TemplateCategory {
   position    Int
   templateId  String
 
-  sections    TemplateSection[]
+  templateSections    TemplateSection[]
 
-  template    Template @relation(fields: [templateId], references: [id])
+  template    Template @relation(fields: [templateId], references: [id], onDelete: Cascade)
 }
 
 model TemplateSection {
@@ -167,9 +168,9 @@ model TemplateSection {
   position    Int
   tempCategoryId  String
 
-  questionSets   TemplateQuestionSet[]
+  templateQuestionSets   TemplateQuestionSet[]
 
-  category    TemplateCategory @relation(fields: [tempCategoryId], references: [id])
+  category    TemplateCategory @relation(fields: [tempCategoryId], references: [id], onDelete: Cascade)
 }
 
 model TemplateQuestionSet {
@@ -178,9 +179,9 @@ model TemplateQuestionSet {
   position    Int
   tempSectionId   String
 
-  questions   TemplateQuestion[]
+  templateQuestions   TemplateQuestion[]
 
-  section     TemplateSection @relation(fields: [tempSectionId], references: [id])
+  section     TemplateSection @relation(fields: [tempSectionId], references: [id], onDelete: Cascade)
 }
 
 model TemplateQuestion {
@@ -191,5 +192,5 @@ model TemplateQuestion {
   helperText  String?
   tempQuestionSetId String
 
-  questionSet TemplateQuestionSet @relation(fields: [tempQuestionSetId], references: [id])
+  questionSet TemplateQuestionSet @relation(fields: [tempQuestionSetId], references: [id], onDelete: Cascade)
 }
