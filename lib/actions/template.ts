@@ -28,22 +28,22 @@ export async function createTemplate(prevState: any, formDara: FormData) {
       userId: user.id!,
       title,
       description,
-      categories: {
+      templateCategories: {
         create: [
           {
             title: 'Human Resources',
             position: 1,
-            sections: {
+            templateSections: {
               create: [
                 {
                   title: 'Employee Onboarding',
                   position: 1,
-                  questionSets: {
+                  templateQuestionSets: {
                     create: [
                       {
                         type: 'grouped',
                         position: 1,
-                        questions: {
+                        templateQuestions: {
                           create: [
                             {
                               prompt: 'Describe your previous job experience.',
@@ -61,7 +61,7 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                       {
                         type: 'flat',
                         position: 2,
-                        questions: {
+                        templateQuestions: {
                           create: [
                             {
                               prompt: 'Have you worked in a team environment before?',
@@ -82,12 +82,12 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                 {
                   title: 'Performance Reviews',
                   position: 2,
-                  questionSets: {
+                  templateQuestionSets: {
                     create: [
                       {
                         type: 'grouped',
                         position: 1,
-                        questions: {
+                        templateQuestions: {
                           create: [
                             {
                               prompt: 'Rate your overall performance this quarter.',
@@ -105,7 +105,7 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                       {
                         type: 'flat',
                         position: 2,
-                        questions: {
+                        templateQuestions: {
                           create: [
                             {
                               prompt: 'List any achievements during this period.',
@@ -129,17 +129,17 @@ export async function createTemplate(prevState: any, formDara: FormData) {
           {
             title: 'Customer Feedback',
             position: 2,
-            sections: {
+            templateSections: {
               create: [
                 {
                   title: 'Product Satisfaction',
                   position: 1,
-                  questionSets: {
+                  templateQuestionSets: {
                     create: [
                       {
                         type: 'flat',
                         position: 1,
-                        questions: {
+                        templateQuestions: {
                           create: [
                             {
                               prompt: 'How satisfied are you with our product?',
@@ -157,7 +157,7 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                       {
                         type: 'grouped',
                         position: 2,
-                        questions: {
+                        templateQuestions: {
                           create: [
                             {
                               prompt: 'What improvements would you suggest?',
@@ -178,12 +178,12 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                 {
                   title: 'Support Experience',
                   position: 2,
-                  questionSets: {
+                  templateQuestionSets: {
                     create: [
                       {
                         type: 'flat',
                         position: 1,
-                        questions: {
+                        templateQuestions: {
                           create: [
                             {
                               prompt: 'How would you rate our customer support?',
