@@ -95,7 +95,7 @@ model Application {
   categories Category[]
 
   user        User   @relation(fields: [userId], references: [id])
-  client      User  @relation("AssignedClient", fields: [clientId], references: [id])
+  client      User  @relation("AssignedClient", fields: [clientId], references: [id], onDelete: Cascade)
 }
 
 model Category {
@@ -106,7 +106,7 @@ model Category {
 
   sections Section[]
 
-  application Application @relation(fields: [applicationId], references: [id])
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
 }
 
 model Section {
@@ -116,7 +116,7 @@ model Section {
   categoryId  String
   questionSets   QuestionSet[]
 
-  category    Category @relation(fields: [categoryId], references: [id])
+  category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 }
 
 model QuestionSet {
@@ -126,7 +126,7 @@ model QuestionSet {
   sectionId   String
   questions   Question[]
 
-  section     Section @relation(fields: [sectionId], references: [id])
+  section     Section @relation(fields: [sectionId], references: [id], onDelete: Cascade)
 }
 
 model Question {
@@ -137,7 +137,7 @@ model Question {
   helperText  String?
   questionSetId String
 
-  questionSet QuestionSet @relation(fields: [questionSetId], references: [id])
+  questionSet QuestionSet @relation(fields: [questionSetId], references: [id], onDelete: Cascade)
 }
 
 model Template {

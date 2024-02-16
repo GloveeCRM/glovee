@@ -1,15 +1,34 @@
+import FlatQuestionSet from '@/components/form/flat-question-set'
 import { fetchQuestionSetsBySectionId } from '@/lib/data/application'
-import { ReactNode } from 'react'
+
+export interface QuestionSet {
+  id: string
+  type: string
+  position: number
+  questions: Question[]
+}
+
+export interface Question {
+  id: string
+  prompt: string
+  helperText?: string
+  position: number
+  type: string
+}
 
 export default async function ClientApplicationPage({
-  params,
   searchParams,
 }: {
-  params: { id: string }
   searchParams: { section?: string }
 }) {
   const sectionId = searchParams.section || ''
-  const questionSet = await fetchQuestionSetsBySectionId(sectionId)
+  const questionSets = (await fetchQuestionSetsBySectionId(sectionId)) as QuestionSet[]
 
-  return <div>{JSON.stringify(questionSet)}</div>
+  return (
+    <div>
+      {questionSets.map((questionSet) => (
+        <FlatQuestionSet key={questionSet.id} questionSet={questionSet} />
+      ))}
+    </div>
+  )
 }
