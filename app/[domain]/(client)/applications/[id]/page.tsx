@@ -1,4 +1,5 @@
 import FlatQuestionSet from '@/components/form/flat-question-set'
+import LoopQuestionSet from '@/components/form/loop-question-set'
 import { fetchQuestionSetsBySectionId } from '@/lib/data/application'
 
 export interface QuestionSet {
@@ -26,9 +27,14 @@ export default async function ClientApplicationPage({
 
   return (
     <div>
-      {questionSets.map((questionSet) => (
-        <FlatQuestionSet key={questionSet.id} questionSet={questionSet} />
-      ))}
+      {questionSets.map((questionSet) => {
+        if (questionSet.type === 'loop') {
+          return <LoopQuestionSet key={questionSet.id} questionSet={questionSet} />
+        } else if (questionSet.type === 'flat') {
+          return <FlatQuestionSet key={questionSet.id} questionSet={questionSet} />
+        }
+        return null
+      })}
     </div>
   )
 }
