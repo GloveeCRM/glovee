@@ -4,6 +4,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 export default function ClientSidebarSectionCard({ section }: { section: any }) {
   const searchParams = useSearchParams()
+  const selectedSectionId = searchParams.get('section')
   const pathname = usePathname()
   const { replace } = useRouter()
 
@@ -16,8 +17,12 @@ export default function ClientSidebarSectionCard({ section }: { section: any }) 
     }
     replace(`${pathname}?${params.toString()}`)
   }
+
   return (
-    <div className="cursor-pointer " onClick={() => handleClick(section.id)}>
+    <div
+      className={`cursor-pointer ${selectedSectionId === section.id && 'bg-yellow-200'}`}
+      onClick={() => handleClick(section.id)}
+    >
       {section.title}
     </div>
   )
