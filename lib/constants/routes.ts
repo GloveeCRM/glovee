@@ -21,7 +21,7 @@ export const DEFAULT_ADMIN_LOGIN_REDIRECT = '/admin'
  * The default redirect path after logging in as a user
  * @type {string}
  */
-export const DEFAULT_USER_LOGIN_REDIRECT = '/applications'
+export const DEFAULT_CLIENT_LOGIN_REDIRECT = '/applications'
 
 /**
  * The default redirect path after logging out
