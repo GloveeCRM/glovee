@@ -14,7 +14,7 @@ import {
   SettingsSchema,
 } from '@/lib/zod/schemas'
 import { fetchUserByEmailAndOrgName, fetchUserById } from '@/lib/data/user'
-import { DEFAULT_ADMIN_LOGIN_REDIRECT, DEFAULT_USER_LOGIN_REDIRECT } from '@/lib/constants/routes'
+import { DEFAULT_ADMIN_LOGIN_REDIRECT, DEFAULT_CLIENT_LOGIN_REDIRECT } from '@/lib/constants/routes'
 import { generatePasswordResetToken, generateVerificationToken } from '../token/tokens'
 import { sendPasswordResetEmail, sendVerificationEmail } from '../mail/mail'
 import { getVerificationTokenByToken } from '../data/verification-token'
@@ -77,7 +77,7 @@ export async function login(prevState: any, formData: FormData) {
       existingUser.role === UserRole.ORG_ADMIN
         ? DEFAULT_ADMIN_LOGIN_REDIRECT
         : existingUser.role === UserRole.ORG_CLIENT
-          ? DEFAULT_USER_LOGIN_REDIRECT
+          ? DEFAULT_CLIENT_LOGIN_REDIRECT
           : '/'
 
     await signIn('credentials', {
