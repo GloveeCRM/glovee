@@ -14,11 +14,6 @@ export default function ClientApplicationSidebar({ applicationId }: { applicatio
         </Link>
       </div>
       <ApplicationCategories applicationId={applicationId} className="h-full" />
-      <div id="sidebarFooter" className="bg-blue-300">
-        <form action="">
-          <button type="submit">Sign out</button>
-        </form>
-      </div>
     </div>
   )
 }

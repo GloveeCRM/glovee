@@ -16,8 +16,8 @@ export default function ClientSidebarCategoryCard({
   return (
     <div>
       <div className="flex items-center justify-between">
-        <button
-          className="flex items-center text-[13px] text-n-300"
+        <div
+          className="flex cursor-pointer items-center text-[13px] text-n-300"
           onClick={() => onClick(category.id)}
         >
           {isExpanded ? (
@@ -26,7 +26,7 @@ export default function ClientSidebarCategoryCard({
             <IoMdArrowDropright className="h-[22px] w-[22px]" />
           )}
           <span>{category.title}</span>
-        </button>
+        </div>
       </div>
       {isExpanded &&
         category.sections?.map((section: any) => (
