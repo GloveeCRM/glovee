@@ -4,7 +4,7 @@ import { IoMdArrowDropdown, IoMdArrowDropright } from 'react-icons/io'
 import ClientSidebarSectionCard from './client-application-section-card'
 import { Category } from './application-categories'
 
-export default function ClientSidebarCategoryCard({
+export default function ClientApplicationCategoryCard({
   category,
   isExpanded,
   onClick,

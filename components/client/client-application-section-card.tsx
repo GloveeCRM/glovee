@@ -8,10 +8,10 @@ export default function ClientSidebarSectionCard({ section }: { section: any }) 
   const pathname = usePathname()
   const { replace } = useRouter()
 
-  const handleClick = (term: string) => {
+  const handleClick = (sectionId: string) => {
     const params = new URLSearchParams(searchParams)
-    if (term) {
-      params.set('section', term)
+    if (sectionId) {
+      params.set('section', sectionId)
     } else {
       params.delete('section')
     }
