@@ -1,9 +1,40 @@
-'use client'
-import { fetchApplicationById } from '@/lib/data/application'
-import { useSearchParams } from 'next/navigation'
+import FlatQuestionSet from '@/components/forms/questionSetType/flat-question-set'
+import LoopQuestionSet from '@/components/forms/questionSetType/loop-question-set'
+import { fetchQuestionSetsBySectionId } from '@/lib/data/application'
 
-export default function ClientApplicationPage({ params }: { params: { id: string } }) {
-  const searchParams = useSearchParams()
+export interface QuestionSet {
+  id: string
+  type: string
+  position: number
+  questions: Question[]
+}
 
-  return <div>{searchParams.get('section')}</div>
+export interface Question {
+  id: string
+  prompt: string
+  helperText?: string
+  position: number
+  type: string
+}
+
+export default async function ClientApplicationPage({
+  searchParams,
+}: {
+  searchParams: { section?: string }
+}) {
+  const sectionId = searchParams.section || ''
+  const questionSets = (await fetchQuestionSetsBySectionId(sectionId)) as QuestionSet[]
+
+  return (
+    <div>
+      {questionSets.map((questionSet) => {
+        if (questionSet.type === 'loop') {
+          return <LoopQuestionSet key={questionSet.id} questionSet={questionSet} />
+        } else if (questionSet.type === 'flat') {
+          return <FlatQuestionSet key={questionSet.id} questionSet={questionSet} />
+        }
+        return null
+      })}
+    </div>
+  )
 }

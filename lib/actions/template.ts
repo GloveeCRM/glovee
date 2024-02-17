@@ -28,8 +28,188 @@ export async function createTemplate(prevState: any, formDara: FormData) {
       userId: user.id!,
       title,
       description,
+      templateCategories: {
+        create: [
+          {
+            title: 'Personal Information',
+            position: 0,
+            templateSections: {
+              create: [
+                {
+                  title: 'Basic Information',
+                  position: 0,
+                  templateQuestionSets: {
+                    create: [
+                      {
+                        type: 'flat',
+                        position: 0,
+                        templateQuestions: {
+                          create: [
+                            {
+                              prompt: 'What is your full name?',
+                              position: 0,
+                              type: 'text-input',
+                            },
+                            {
+                              prompt: 'What is your date of birth?',
+                              position: 1,
+                              type: 'text-input',
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        type: 'loop',
+                        position: 1,
+                        templateQuestions: {
+                          create: [
+                            {
+                              prompt:
+                                'what is your address? (add any address you have lived in the past 10 years)',
+                              position: 0,
+                              type: 'text-input',
+                            },
+                            {
+                              prompt: 'job position',
+                              position: 1,
+                              type: 'text-input',
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  title: 'Contact Information',
+                  position: 1,
+                  templateQuestionSets: {
+                    create: [
+                      {
+                        type: 'flat',
+                        position: 0,
+                        templateQuestions: {
+                          create: [
+                            {
+                              prompt: 'What is your email address?',
+                              position: 0,
+                              type: 'text-input',
+                            },
+                            {
+                              prompt: 'What is your phone number?',
+                              position: 1,
+                              type: 'text-input',
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        type: 'flat',
+                        position: 1,
+                        templateQuestions: {
+                          create: [
+                            {
+                              prompt: 'What is your emergency contact?',
+                              position: 0,
+                              type: 'text-input',
+                            },
+                            {
+                              prompt: 'What is your emergency contact phone number?',
+                              position: 1,
+                              type: 'text-input',
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            title: 'Family Information',
+            position: 1,
+            templateSections: {
+              create: [
+                {
+                  title: 'Family Members',
+                  position: 1,
+                  templateQuestionSets: {
+                    create: [
+                      {
+                        type: 'loop',
+                        position: 1,
+                        templateQuestions: {
+                          create: [
+                            {
+                              prompt: 'What is your family member name?',
+                              position: 0,
+                              type: 'text-input',
+                            },
+                            {
+                              prompt: 'What is your family member date of birth?',
+                              position: 1,
+                              type: 'text-input',
+                            },
+                            {
+                              prompt: 'What is your family member occupation?',
+                              position: 2,
+                              type: 'text-input',
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        type: 'loop',
+                        position: 2,
+                        templateQuestions: {
+                          create: [
+                            {
+                              prompt: 'father side family members name',
+                              position: 1,
+                              type: 'text-input',
+                            },
+                            {
+                              prompt: 'mother side family members name',
+                              position: 2,
+                              type: 'text-input',
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  title: 'Family Health History',
+                  position: 2,
+                  templateQuestionSets: {
+                    create: [
+                      {
+                        type: 'flat',
+                        position: 1,
+                        templateQuestions: {
+                          create: [
+                            {
+                              prompt: 'What is your family member health history?',
+                              position: 1,
+                              type: 'text-input',
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
     },
   })
+
   revalidatePath('/admin/templates')
   return { success: 'Template created!', data: template }
 }

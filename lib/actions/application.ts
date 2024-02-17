@@ -48,13 +48,58 @@ export async function createApplication(formData: FormData) {
     return { error: 'Template not found!' }
   }
 
-  await prisma.application.create({
-    data: {
-      clientId: client.id!, // ! to check if it's null or not
-      userId: user.id!, // ! to check if it's null or not
-      status: 'CREATED',
-      body: template.body!,
-    },
+  const application = await prisma.$transaction(async (prisma) => {
+    const createdApplication = await prisma.application.create({
+      data: {
+        clientId: client.id,
+        userId: user.id!,
+        status: 'CREATED',
+      },
+    })
+
+    for (const category of template.templateCategories) {
+      const createdCategory = await prisma.category.create({
+        data: {
+          title: category.title,
+          position: category.position,
+          applicationId: createdApplication.id,
+        },
+      })
+
+      for (const section of category.templateSections) {
+        const createdSection = await prisma.section.create({
+          data: {
+            title: section.title,
+            position: section.position,
+            categoryId: createdCategory.id,
+          },
+        })
+
+        for (const questionSet of section.templateQuestionSets) {
+          const createdQuestionSet = await prisma.questionSet.create({
+            data: {
+              type: questionSet.type,
+              position: questionSet.position,
+              sectionId: createdSection.id,
+            },
+          })
+
+          for (const question of questionSet.templateQuestions) {
+            await prisma.question.create({
+              data: {
+                type: question.type,
+                prompt: question.prompt,
+                position: question.position,
+                helperText: question.helperText,
+                questionSetId: createdQuestionSet.id,
+              },
+            })
+          }
+        }
+      }
+    }
+
+    return createdApplication
   })
 
   revalidatePath('/admin/applications')
