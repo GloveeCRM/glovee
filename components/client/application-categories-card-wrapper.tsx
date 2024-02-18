@@ -41,7 +41,7 @@ export default function ApplicationCategoriesCardWrapper({
   }
 
   return (
-    <div className="flex flex-col">
+    <>
       {categories.map((category: any) => (
         <ClientApplicationCategoryCard
           key={category.id}
@@ -50,6 +50,6 @@ export default function ApplicationCategoriesCardWrapper({
           onClick={handleCategoryClick}
         />
       ))}
-    </div>
+    </>
   )
 }

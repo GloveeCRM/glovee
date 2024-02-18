@@ -18,7 +18,7 @@ export default async function ApplicationCategories({ applicationId }: { applica
   const categories = (await fetchCategorieByApplicationId(applicationId)) as Category[]
 
   return (
-    <div className="h-full">
+    <div className="mt-[6px] h-full px-[6px]">
       <ApplicationCategoriesCardWrapper categories={categories} />
     </div>
   )

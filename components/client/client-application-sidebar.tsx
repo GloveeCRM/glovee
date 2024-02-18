@@ -5,7 +5,7 @@ export default function ClientApplicationSidebar({ applicationId }: { applicatio
   return (
     <div
       id="clientApplicationSidebar"
-      className="sticky top-0 flex h-screen w-[220px] flex-col bg-gray-500"
+      className="sticky top-0 h-screen w-[240px] bg-n-700 text-white"
     >
       <div id="sidebarHeader" className="flex items-center gap-[4px] p-[8px]">
         <IoChevronBackOutline className="h-[20px] w-[20px]" />

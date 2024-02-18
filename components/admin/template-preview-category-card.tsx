@@ -1,7 +1,7 @@
 'use client'
 
 import { IoMdArrowDropdown, IoMdArrowDropright } from 'react-icons/io'
-import { TemplateCategory } from './template-preview-sidebar'
+import { TemplateCategory, TemplateSection } from './template-preview-categories'
 import TemplatePreviewSectionCard from './template-preview-section-card'
 
 export default function TemplatePreviewCategoryCard({
@@ -31,7 +31,7 @@ export default function TemplatePreviewCategoryCard({
         </div>
       </div>
       {isExpanded &&
-        templateCategory.templateSections?.map((section: any) => (
+        templateCategory.templateSections?.map((section: TemplateSection) => (
           <TemplatePreviewSectionCard key={section.id} templateSection={section} />
         ))}
     </div>

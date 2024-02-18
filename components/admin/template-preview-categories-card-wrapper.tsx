@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
-import { TemplateCategory } from './template-preview-sidebar'
+import { TemplateCategory } from './template-preview-categories'
 import TemplatePreviewCategoryCard from './template-preview-category-card'
 
 export default function TemplatePreviewCategoriesCardWrapper({
@@ -24,8 +24,8 @@ export default function TemplatePreviewCategoriesCardWrapper({
     if (!selectedSectionId && templateCategories.length > 0) {
       const params = new URLSearchParams(searchParams)
       const firstSectionId = templateCategories[0].templateSections[0]?.id
-      console.log('firstSectionId', firstSectionId)
       if (firstSectionId) {
+        params.set('section', firstSectionId)
         replace(`${pathname}?${params.toString()}`)
       }
     }
