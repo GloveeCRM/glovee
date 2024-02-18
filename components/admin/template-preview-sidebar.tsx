@@ -3,7 +3,7 @@ import { IoChevronBackOutline } from 'react-icons/io5'
 import { fetchTemplateById } from '@/lib/data/template'
 import TemplateInfoCard from './template-info-card'
 
-export default async function PreviewSidebar() {
+export default async function TemplatePreviewSidebar() {
   const template = await fetchTemplateById('1')
   return (
     <div className="sticky top-0 flex h-screen w-[240px] flex-col bg-n-700 text-white">

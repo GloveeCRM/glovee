@@ -1,4 +1,4 @@
-import PreviewSidebar from '@/components/admin/preview-sidebar'
+import TemplatePreviewSidebar from '@/components/admin/template-preview-sidebar'
 
 export default function TemplatePreviewLayout({
   children,
@@ -7,7 +7,7 @@ export default function TemplatePreviewLayout({
 }>) {
   return (
     <div id="templatePreviewLayout" className="flex">
-      <PreviewSidebar />
+      <TemplatePreviewSidebar />
       <div className="h-[1200px] w-full p-[8px]">{children}</div>
     </div>
   )
