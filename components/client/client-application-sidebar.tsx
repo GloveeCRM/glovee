@@ -13,7 +13,7 @@ export default function ClientApplicationSidebar({ applicationId }: { applicatio
           <span className="text-[16px]">Back</span>
         </Link>
       </div>
-      <ApplicationCategories applicationId={applicationId} className="h-full" />
+      <ApplicationCategories applicationId={applicationId} />
     </div>
   )
 }

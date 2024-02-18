@@ -1,4 +1,4 @@
-import { fetchCategoriesByTemplateId } from '@/lib/data/template'
+import { fetchTemplateCategoriesByTemplateId } from '@/lib/data/template'
 import { FiPlus } from 'react-icons/fi'
 import SidebarCategoryCard from './sidebar-category-card'
 
@@ -9,7 +9,7 @@ export default async function SidebarCategories({
   className?: string
   templateId: string
 }) {
-  const categories = (await fetchCategoriesByTemplateId(templateId)) as any
+  const categories = (await fetchTemplateCategoriesByTemplateId(templateId)) as any
   return (
     <div id="sidebarCategories" className={`${className}`}>
       <p className="text-[14px] text-n-100">Categories:</p>

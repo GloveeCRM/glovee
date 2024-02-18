@@ -14,17 +14,11 @@ export interface Section {
   position: number
 }
 
-export default async function ApplicationCategories({
-  applicationId,
-  className,
-}: {
-  applicationId: string
-  className?: string
-}) {
+export default async function ApplicationCategories({ applicationId }: { applicationId: string }) {
   const categories = (await fetchCategorieByApplicationId(applicationId)) as Category[]
 
   return (
-    <div className={`${className}`}>
+    <div className="h-full">
       <ApplicationCategoriesCardWrapper categories={categories} />
     </div>
   )

@@ -35,67 +35,13 @@ export async function fetchTemplateById(id: string) {
   }
 }
 
-export async function fetchCategoriesByTemplateId(id: string | number) {
-  const categories = [
-    {
-      id: 1,
-      name: 'Category 1',
-      subCategories: [
-        {
-          id: 1,
-          name: 'Sub Category 1',
-        },
-        {
-          id: 2,
-          name: 'Sub Category 2',
-        },
-        {
-          id: 3,
-          name: 'Sub Category 3',
-        },
-      ],
+export async function fetchTemplateCategoriesByTemplateId(id: string) {
+  const categories = await prisma.templateCategory.findMany({
+    where: { templateId: id },
+    include: {
+      templateSections: true,
     },
-    {
-      id: 2,
-      name: 'Category 2',
-      subCategories: [
-        {
-          id: 1,
-          name: 'Sub Category 1',
-        },
-        {
-          id: 2,
-          name: 'Sub Category 2',
-        },
-        {
-          id: 3,
-          name: 'Sub Category 3',
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: 'Category 3',
-      subCategories: [
-        {
-          id: 1,
-          name: 'Sub Category 1',
-        },
-        {
-          id: 2,
-          name: 'Sub Category 2',
-        },
-        {
-          id: 3,
-          name: 'Sub Category 3',
-        },
-      ],
-    },
-  ]
-
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(categories)
-    }, 2000)
   })
+
+  return categories
 }
