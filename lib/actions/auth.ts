@@ -33,12 +33,6 @@ export async function login(prevState: any, formData: FormData) {
 
   const { email, password } = data
 
-  // const existingUser = await fetchUserByEmail(email)
-
-  // if (!existingUser) {
-  //   return { error: 'Email does not exist!' }
-  // }
-
   const headersList = headers()
   const hostname = headersList.get('host')
   const subdomain = extractSubdomainFromHostname(hostname!) || ''
@@ -106,14 +100,12 @@ export async function signUp(prevState: any, formData: FormData) {
 
   const { email, password, name } = validatedFields.data
 
-  // const existingUser = await fetchUserByEmail(email)
   const headersList = headers()
   const hostname = headersList.get('host')
   const subdomain = extractSubdomainFromHostname(hostname!) || ''
 
   const existingUser = await fetchUserByEmailAndOrgName(email, subdomain)
 
-  // if (existingUser) {
   if (existingUser) {
     return { error: 'Email already in use!' }
   }
@@ -165,12 +157,6 @@ export async function verifyUserEmail(token: string) {
   if (hasExpired) {
     return { error: 'Token has expired!' }
   }
-
-  // const existingUser = await fetchUserByEmail(existingToken.email)
-
-  // if (!existingUser) {
-  //   return { error: 'Email does not exist!' }
-  // }
 
   const headersList = headers()
   const hostname = headersList.get('host')
