@@ -2,10 +2,10 @@ import NextAuth from 'next-auth'
 
 import authConfig from '@/auth.config'
 import {
-  DEFAULT_ADMIN_LOGIN_REDIRECT,
+  DEFAULT_ORG_ADMIN_LOGIN_REDIRECT,
   AUTH_ROUTES,
   PUBLIC_ROUTES,
-  DEFAULT_CLIENT_LOGIN_REDIRECT,
+  DEFAULT_ORG_CLIENT_LOGIN_REDIRECT,
   ADMIN_ROUTES_PREFIX,
 } from '@/lib/constants/routes'
 import { NextRequest, NextResponse } from 'next/server'
@@ -34,20 +34,20 @@ export async function middleware(request: NextRequest) {
     return response
   } else if (isAuthRoute && isLoggedIn) {
     if (role === UserRole.ORG_ADMIN) {
-      return NextResponse.redirect(new URL(DEFAULT_ADMIN_LOGIN_REDIRECT, nextUrl))
+      return NextResponse.redirect(new URL(DEFAULT_ORG_ADMIN_LOGIN_REDIRECT, nextUrl))
     } else if (role === UserRole.ORG_CLIENT) {
-      return NextResponse.redirect(new URL(DEFAULT_CLIENT_LOGIN_REDIRECT, nextUrl))
+      return NextResponse.redirect(new URL(DEFAULT_ORG_CLIENT_LOGIN_REDIRECT, nextUrl))
     } else {
       return NextResponse.redirect(new URL('/', nextUrl))
     }
   } else if (isAdminRoute && role !== UserRole.ORG_ADMIN) {
     if (role === UserRole.ORG_CLIENT) {
-      return NextResponse.redirect(new URL(DEFAULT_CLIENT_LOGIN_REDIRECT, nextUrl))
+      return NextResponse.redirect(new URL(DEFAULT_ORG_CLIENT_LOGIN_REDIRECT, nextUrl))
     } else {
       return NextResponse.redirect(new URL('/login', nextUrl))
     }
   } else if (!isPublicRoute && !isAdminRoute && role === UserRole.ORG_ADMIN) {
-    return NextResponse.redirect(new URL(DEFAULT_ADMIN_LOGIN_REDIRECT, nextUrl))
+    return NextResponse.redirect(new URL(DEFAULT_ORG_ADMIN_LOGIN_REDIRECT, nextUrl))
   } else if (!isLoggedIn && !isPublicRoute && !isAuthRoute) {
     return NextResponse.redirect(new URL('/login', nextUrl))
   }

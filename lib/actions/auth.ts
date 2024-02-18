@@ -14,7 +14,11 @@ import {
   SettingsSchema,
 } from '@/lib/zod/schemas'
 import { fetchUserByEmailAndOrgName, fetchUserById } from '@/lib/data/user'
-import { DEFAULT_ADMIN_LOGIN_REDIRECT, DEFAULT_CLIENT_LOGIN_REDIRECT } from '@/lib/constants/routes'
+import {
+  DEFAULT_ORG_ADMIN_LOGIN_REDIRECT,
+  DEFAULT_ORG_CLIENT_LOGIN_REDIRECT,
+  DEFAULT_ORG_MANAGEMENT_LOGIN_REDIRECT,
+} from '@/lib/constants/routes'
 import { generatePasswordResetToken, generateVerificationToken } from '../token/tokens'
 import { sendPasswordResetEmail, sendVerificationEmail } from '../mail/mail'
 import { getVerificationTokenByToken } from '../data/verification-token'
@@ -45,7 +49,7 @@ export async function login(prevState: any, formData: FormData) {
 
   const organization = await prisma.organization.findFirst({
     where: {
-      name: subdomain,
+      orgName: subdomain,
       users: {
         some: {
           id: existingUser.id,
@@ -68,11 +72,13 @@ export async function login(prevState: any, formData: FormData) {
 
   try {
     const redirectLink =
-      existingUser.role === UserRole.ORG_ADMIN
-        ? DEFAULT_ADMIN_LOGIN_REDIRECT
-        : existingUser.role === UserRole.ORG_CLIENT
-          ? DEFAULT_CLIENT_LOGIN_REDIRECT
-          : '/'
+      organization.orgName === 'org'
+        ? DEFAULT_ORG_MANAGEMENT_LOGIN_REDIRECT
+        : existingUser.role === UserRole.ORG_ADMIN
+          ? DEFAULT_ORG_ADMIN_LOGIN_REDIRECT
+          : existingUser.role === UserRole.ORG_CLIENT
+            ? DEFAULT_ORG_CLIENT_LOGIN_REDIRECT
+            : '/'
 
     await signIn('credentials', {
       email,
