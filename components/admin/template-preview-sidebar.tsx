@@ -1,10 +1,8 @@
 import Link from 'next/link'
 import { IoChevronBackOutline } from 'react-icons/io5'
-import { fetchTemplateById } from '@/lib/data/template'
 import TemplateInfoCard from './template-info-card'
 
-export default async function TemplatePreviewSidebar() {
-  const template = await fetchTemplateById('1')
+export default async function TemplatePreviewSidebar({ templateId }: { templateId: string }) {
   return (
     <div className="sticky top-0 flex h-screen w-[240px] flex-col bg-n-700 text-white">
       <div className="flex p-[8px]">
@@ -13,7 +11,7 @@ export default async function TemplatePreviewSidebar() {
           <span className="text-[12px]">Back</span>
         </Link>
       </div>
-      <TemplateInfoCard className="mx-[8px]" template={template} />
+      <TemplateInfoCard className="mx-[8px]" templateId={templateId} />
       <div>Create a Category</div>
     </div>
   )
