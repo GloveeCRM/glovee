@@ -15,13 +15,19 @@ export const AUTH_ROUTES = ['/login', '/register', '/error', '/reset', '/new-pas
  * The default redirect path after logging in as an admin
  * @type {string}
  */
-export const DEFAULT_ADMIN_LOGIN_REDIRECT = '/admin'
+export const DEFAULT_ORG_ADMIN_LOGIN_REDIRECT = '/admin'
 
 /**
  * The default redirect path after logging in as a user
  * @type {string}
  */
-export const DEFAULT_CLIENT_LOGIN_REDIRECT = '/applications'
+export const DEFAULT_ORG_CLIENT_LOGIN_REDIRECT = '/applications'
+
+/**
+ * The default redirect path after logging in as a user to "org" organization
+ * @type {string}
+ */
+export const DEFAULT_ORG_MANAGEMENT_LOGIN_REDIRECT = '/'
 
 /**
  * The default redirect path after logging out
