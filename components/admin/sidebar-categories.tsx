@@ -7,7 +7,7 @@ export default async function SidebarCategories({
   templateId,
 }: {
   className?: string
-  templateId: number
+  templateId: string
 }) {
   const categories = (await fetchCategoriesByTemplateId(templateId)) as any
   return (
