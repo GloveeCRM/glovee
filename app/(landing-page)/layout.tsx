@@ -15,7 +15,7 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="">{children}</body>
+      <body className="p-[8px]">{children}</body>
     </html>
   )
 }

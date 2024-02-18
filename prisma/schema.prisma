@@ -15,17 +15,10 @@ enum UserRole {
   ORG_CLIENT
 }
 
-enum ApplicationStatus {
-  CREATED
-  INPROGRESS
-  SUBMITTED
-  APPROVED
-  REJECTED
-}
-
 model Organization {
   id   String @id @default(cuid())
-  name String @unique
+  name String
+  orgName String @unique
 
   users User[]
 }
@@ -84,6 +77,14 @@ model PasswordResetToken {
   expires DateTime
   
   @@unique([email, token])
+}
+
+enum ApplicationStatus {
+  CREATED
+  INPROGRESS
+  SUBMITTED
+  APPROVED
+  REJECTED
 }
 
 model Application {
