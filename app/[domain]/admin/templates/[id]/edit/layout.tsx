@@ -10,7 +10,7 @@ export default function TemplateLayout({
   return (
     <div id="templateEditLayout" className="flex">
       <TemplateEditSidebar templateId={params.id} />
-      <div className="w-full p-[8px]">{children}</div>
+      <div className="w-full">{children}</div>
     </div>
   )
 }

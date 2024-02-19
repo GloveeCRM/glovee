@@ -14,7 +14,7 @@ export default async function TemplatePreviewPage({
   )) as QuestionSet[]
 
   return (
-    <div>
+    <>
       {templateQuestionSets.map((questionSet) => {
         if (questionSet.type === 'loop') {
           return <LoopQuestionSet key={questionSet.id} questionSet={questionSet} />
@@ -23,6 +23,6 @@ export default async function TemplatePreviewPage({
         }
         return null
       })}
-    </div>
+    </>
   )
 }
