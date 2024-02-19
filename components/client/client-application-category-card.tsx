@@ -17,7 +17,7 @@ export default function ClientApplicationCategoryCard({
     <div>
       <div className="flex items-center justify-between">
         <div
-          className="flex cursor-pointer items-center text-[14px] text-n-300"
+          className="flex flex-grow cursor-pointer text-[14px] text-n-300"
           onClick={() => onClick(category.id)}
         >
           <span>
@@ -27,13 +27,15 @@ export default function ClientApplicationCategoryCard({
               <IoMdArrowDropright className="h-[22px] w-[22px]" />
             )}
           </span>
-          <span>{category.title}</span>
+          <div className="w-full">
+            <span>{category.title}</span>
+            {isExpanded &&
+              category.sections?.map((section: Section) => (
+                <ClientSidebarSectionCard key={section.id} section={section} />
+              ))}
+          </div>
         </div>
       </div>
-      {isExpanded &&
-        category.sections?.map((section: Section) => (
-          <ClientSidebarSectionCard key={section.id} section={section} />
-        ))}
     </div>
   )
 }

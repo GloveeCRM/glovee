@@ -32,11 +32,14 @@ export default function ApplicationCategoriesCardWrapper({
   }, [selectedSectionId, categories, pathname, replace, searchParams])
 
   const handleCategoryClick = (categoryId: string) => {
-    const params = new URLSearchParams(searchParams)
-    const firstSectionId = categories.find((category) => category.id === categoryId)?.sections[0].id
-    if (firstSectionId) {
-      params.set('section', firstSectionId)
-      replace(`${pathname}?${params.toString()}`)
+    if (expandedCategory.id !== categoryId) {
+      const params = new URLSearchParams(searchParams)
+      const firstSectionId = categories.find((category) => category.id === categoryId)?.sections[0]
+        .id
+      if (firstSectionId) {
+        params.set('section', firstSectionId)
+        replace(`${pathname}?${params.toString()}`)
+      }
     }
   }
 

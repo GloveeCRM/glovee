@@ -21,8 +21,11 @@ export default function ClientSidebarSectionCard({ section }: { section: Section
 
   return (
     <div
-      className={`cursor-pointer ${selectedSectionId === section.id && 'bg-n-500'} p-[4px] text-[12px] text-n-300`}
-      onClick={() => handleClick(section.id)}
+      className={`cursor-pointer ${selectedSectionId === section.id && 'bg-n-600'} p-[4px] text-[12px] text-n-300`}
+      onClick={(e) => {
+        e.stopPropagation()
+        handleClick(section.id)
+      }}
     >
       {section.title}
     </div>
