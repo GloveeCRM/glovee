@@ -19,7 +19,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <body id="admin-app" className="">
           <div className="flex">
             <OrgSidebar />
-            <div className="h-[1200px] w-full">{children}</div>
+            <div className="w-full">{children}</div>
           </div>
         </body>
       </html>

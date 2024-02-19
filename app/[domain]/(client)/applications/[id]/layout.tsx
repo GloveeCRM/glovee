@@ -12,7 +12,7 @@ export default function ApplicationLayout({
   return (
     <div id="clientApp" className="flex">
       <ClientApplicationSidebar applicationId={params.id} />
-      <div className="h-[1200px] w-full">{children}</div>
+      <div className="w-full">{children}</div>
     </div>
   )
 }

@@ -19,7 +19,7 @@ export default async function TemplatePreviewCategories({ templateId }: { templa
     templateId
   )) as TemplateCategory[]
   return (
-    <div className="mt-[6px] h-full px-[6px]">
+    <div className="mt-[6px] px-[6px]">
       <TemplatePreviewCategoriesCardWrapper templateCategories={templateCategories} />
     </div>
   )

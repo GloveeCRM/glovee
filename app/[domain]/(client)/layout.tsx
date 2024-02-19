@@ -8,7 +8,7 @@ export default function ClientLayout({
   return (
     <div id="clientApp" className="flex">
       <ClientSidebar />
-      <div className="h-[1200px] w-full">{children}</div>
+      <div className="w-full">{children}</div>
     </div>
   )
 }
