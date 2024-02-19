@@ -10,7 +10,7 @@ export default async function TemplatePreviewLayout({
   return (
     <div id="templatePreviewLayout" className="flex">
       <TemplatePreviewSidebar templateId={params.id} />
-      <div className="w-full">{children}</div>
+      <div className="w-full p-[8px]">{children}</div>
     </div>
   )
 }
