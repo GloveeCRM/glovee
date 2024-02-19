@@ -1,18 +1,28 @@
-import { fetchTemplateById } from '@/lib/data/template'
-import { notFound } from 'next/navigation'
+import { QuestionSet } from '@/app/[domain]/(client)/applications/[id]/page'
+import FlatQuestionSet from '@/components/forms/questionSetType/flat-question-set'
+import LoopQuestionSet from '@/components/forms/questionSetType/loop-question-set'
+import { fetchTemplateQuestionSetsBySectionId } from '@/lib/data/template'
 
-export default async function PreviewPage({ params }: { params: { id: string } }) {
-  const id = params.id
-  const template = (await fetchTemplateById(id)) as any
-
-  if (!template) {
-    notFound()
-  }
+export default async function TemplatePreviewPage({
+  searchParams,
+}: {
+  searchParams: { section?: string }
+}) {
+  const sectionId = searchParams.section || ''
+  const templateQuestionSets = (await fetchTemplateQuestionSetsBySectionId(
+    sectionId
+  )) as QuestionSet[]
 
   return (
     <div>
-      <p>{template.title}</p>
-      <p>{template.description}</p>
+      {templateQuestionSets.map((questionSet) => {
+        if (questionSet.type === 'loop') {
+          return <LoopQuestionSet key={questionSet.id} questionSet={questionSet} />
+        } else if (questionSet.type === 'flat') {
+          return <FlatQuestionSet key={questionSet.id} questionSet={questionSet} />
+        }
+        return null
+      })}
     </div>
   )
 }

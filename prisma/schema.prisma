@@ -147,7 +147,7 @@ model Template {
   title   String @default("Untitled")
   description String?
 
-  templateCategories TemplateCategory[]
+  categories TemplateCategory[]
   
   user    User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
@@ -158,7 +158,7 @@ model TemplateCategory {
   position    Int
   templateId  String
 
-  templateSections    TemplateSection[]
+  sections    TemplateSection[]
 
   template    Template @relation(fields: [templateId], references: [id], onDelete: Cascade)
 }
@@ -167,22 +167,22 @@ model TemplateSection {
   id          String @id @default(cuid())
   title       String
   position    Int
-  tempCategoryId  String
+  categoryId  String
 
-  templateQuestionSets   TemplateQuestionSet[]
+  questionSets   TemplateQuestionSet[]
 
-  category    TemplateCategory @relation(fields: [tempCategoryId], references: [id], onDelete: Cascade)
+  category    TemplateCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 }
 
 model TemplateQuestionSet {
   id          String @id @default(cuid())
   type        String
   position    Int
-  tempSectionId   String
+  sectionId   String
 
-  templateQuestions   TemplateQuestion[]
+  questions   TemplateQuestion[]
 
-  section     TemplateSection @relation(fields: [tempSectionId], references: [id], onDelete: Cascade)
+  section     TemplateSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
 }
 
 model TemplateQuestion {
@@ -191,7 +191,7 @@ model TemplateQuestion {
   prompt      String
   position    Int
   helperText  String?
-  tempQuestionSetId String
+  questionSetId String
 
-  questionSet TemplateQuestionSet @relation(fields: [tempQuestionSetId], references: [id], onDelete: Cascade)
+  questionSet TemplateQuestionSet @relation(fields: [questionSetId], references: [id], onDelete: Cascade)
 }

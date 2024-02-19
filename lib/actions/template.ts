@@ -28,22 +28,22 @@ export async function createTemplate(prevState: any, formDara: FormData) {
       userId: user.id!,
       title,
       description,
-      templateCategories: {
+      categories: {
         create: [
           {
             title: 'Personal Information',
             position: 0,
-            templateSections: {
+            sections: {
               create: [
                 {
                   title: 'Basic Information',
                   position: 0,
-                  templateQuestionSets: {
+                  questionSets: {
                     create: [
                       {
                         type: 'flat',
                         position: 0,
-                        templateQuestions: {
+                        questions: {
                           create: [
                             {
                               prompt: 'What is your full name?',
@@ -61,7 +61,7 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                       {
                         type: 'loop',
                         position: 1,
-                        templateQuestions: {
+                        questions: {
                           create: [
                             {
                               prompt:
@@ -83,12 +83,12 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                 {
                   title: 'Contact Information',
                   position: 1,
-                  templateQuestionSets: {
+                  questionSets: {
                     create: [
                       {
                         type: 'flat',
                         position: 0,
-                        templateQuestions: {
+                        questions: {
                           create: [
                             {
                               prompt: 'What is your email address?',
@@ -106,7 +106,7 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                       {
                         type: 'flat',
                         position: 1,
-                        templateQuestions: {
+                        questions: {
                           create: [
                             {
                               prompt: 'What is your emergency contact?',
@@ -130,17 +130,17 @@ export async function createTemplate(prevState: any, formDara: FormData) {
           {
             title: 'Family Information',
             position: 1,
-            templateSections: {
+            sections: {
               create: [
                 {
                   title: 'Family Members',
                   position: 1,
-                  templateQuestionSets: {
+                  questionSets: {
                     create: [
                       {
                         type: 'loop',
                         position: 1,
-                        templateQuestions: {
+                        questions: {
                           create: [
                             {
                               prompt: 'What is your family member name?',
@@ -163,7 +163,7 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                       {
                         type: 'loop',
                         position: 2,
-                        templateQuestions: {
+                        questions: {
                           create: [
                             {
                               prompt: 'father side family members name',
@@ -184,12 +184,12 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                 {
                   title: 'Family Health History',
                   position: 2,
-                  templateQuestionSets: {
+                  questionSets: {
                     create: [
                       {
                         type: 'flat',
                         position: 1,
-                        templateQuestions: {
+                        questions: {
                           create: [
                             {
                               prompt: 'What is your family member health history?',

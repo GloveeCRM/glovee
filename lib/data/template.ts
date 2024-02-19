@@ -14,13 +14,13 @@ export async function fetchTemplateById(id: string) {
     const template = await prisma.template.findUnique({
       where: { id },
       include: {
-        templateCategories: {
+        categories: {
           include: {
-            templateSections: {
+            sections: {
               include: {
-                templateQuestionSets: {
+                questionSets: {
                   include: {
-                    templateQuestions: true,
+                    questions: true,
                   },
                 },
               },
@@ -39,9 +39,30 @@ export async function fetchTemplateCategoriesByTemplateId(id: string) {
   const categories = await prisma.templateCategory.findMany({
     where: { templateId: id },
     include: {
-      templateSections: true,
+      sections: true,
     },
   })
 
   return categories
+}
+
+export async function fetchTemplateQuestionSetsBySectionId(sectionId: string) {
+  if (!sectionId) {
+    return []
+  }
+
+  try {
+    const questionSets = await prisma.templateQuestionSet.findMany({
+      where: {
+        sectionId: sectionId,
+      },
+      include: {
+        questions: true,
+      },
+    })
+
+    return questionSets
+  } catch {
+    return []
+  }
 }

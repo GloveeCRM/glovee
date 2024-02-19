@@ -1,26 +1,12 @@
 import { fetchTemplateCategoriesByTemplateId } from '@/lib/data/template'
-import TemplatePreviewCategoriesCardWrapper from './template-preview-categories-card-wrapper'
-
-export interface TemplateCategory {
-  id: string
-  title: string
-  position: number
-  templateSections: TemplateSection[]
-}
-
-export interface TemplateSection {
-  id: string
-  title: string
-  position: number
-}
+import { Category } from '../client/application-categories'
+import ApplicationCategoriesCardWrapper from '../client/application-categories-card-wrapper'
 
 export default async function TemplatePreviewCategories({ templateId }: { templateId: string }) {
-  const templateCategories = (await fetchTemplateCategoriesByTemplateId(
-    templateId
-  )) as TemplateCategory[]
+  const templateCategories = (await fetchTemplateCategoriesByTemplateId(templateId)) as Category[]
   return (
     <div className="mt-[6px] px-[6px]">
-      <TemplatePreviewCategoriesCardWrapper templateCategories={templateCategories} />
+      <ApplicationCategoriesCardWrapper categories={templateCategories} />
     </div>
   )
 }
