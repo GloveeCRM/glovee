@@ -13,7 +13,7 @@ export default async function TemplateInfoCard({
   return (
     <div className={`${className} rounded bg-n-600 p-[8px]`}>
       <TemplateInfoCardTitle title={template?.title || ''} />
-      <TemplateInfoCardDescription description={template?.description || ''} />
+      {template?.description && <TemplateInfoCardDescription description={template.description} />}
     </div>
   )
 }

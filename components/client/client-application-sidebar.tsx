@@ -7,9 +7,9 @@ export default function ClientApplicationSidebar({ applicationId }: { applicatio
       id="clientApplicationSidebar"
       className="sticky top-0 h-screen w-[240px] bg-n-700 text-white"
     >
-      <div id="sidebarHeader" className="flex items-center gap-[4px] p-[8px]">
-        <IoChevronBackOutline className="h-[20px] w-[20px]" />
-        <Link href={`/applications`}>
+      <div id="sidebarHeader" className="flex items-center gap-[4px]">
+        <Link href="/applications/" className="flex w-fit items-center gap-[4px] p-[8px]">
+          <IoChevronBackOutline className="h-[20px] w-[20px]" />
           <span className="text-[16px]">Back</span>
         </Link>
       </div>
