@@ -1,18 +1,13 @@
 'use client'
 
 import { Question } from '@/app/[domain]/(client)/applications/[id]/page'
-import { useDebounce } from '@/hooks/use-debounce'
-import { saveInput } from '@/lib/actions/form'
-import { use, useEffect, useState } from 'react'
-export default function TextInputQuestion({ question }: { question: Question }) {
-  const [inputValue, setInputValue] = useState('')
-  const debouncedInput = useDebounce(inputValue, 1000)
+import { saveTextInputAnswer } from '@/lib/actions/form'
+import { useDebouncedCallback } from 'use-debounce'
 
-  useEffect(() => {
-    if (debouncedInput) {
-      saveInput({ input: debouncedInput, questionId: question.id })
-    }
-  }, [debouncedInput, question.id])
+export default function TextInputQuestion({ question }: { question: Question }) {
+  const handleChange = useDebouncedCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    saveTextInputAnswer({ input: e.target.value, questionId: question.id })
+  }, 500)
 
   return (
     <div>
@@ -23,7 +18,8 @@ export default function TextInputQuestion({ question }: { question: Question }) 
         id="text-question"
         type="text"
         className="border border-black"
-        onChange={(e) => setInputValue(e.target.value)}
+        defaultValue={question.answer?.text || ''}
+        onChange={handleChange}
       />
     </div>
   )

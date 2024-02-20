@@ -96,7 +96,11 @@ export async function fetchQuestionSetsBySectionId(id: string) {
         sectionId: id,
       },
       include: {
-        questions: true,
+        questions: {
+          include: {
+            answer: true,
+          },
+        },
       },
     })
 

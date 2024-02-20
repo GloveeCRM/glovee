@@ -1,8 +1,15 @@
 'use server'
-import { prisma } from '@/prisma/prisma'
-export async function saveInput({ input, questionId }: { input: string; questionId: string }) {
-  console.log(input)
 
+import { prisma } from '@/prisma/prisma'
+import { revalidatePath } from 'next/cache'
+
+export async function saveTextInputAnswer({
+  input,
+  questionId,
+}: {
+  input: string
+  questionId: string
+}) {
   const question = await prisma.question.findUnique({
     where: {
       id: questionId,
@@ -25,5 +32,7 @@ export async function saveInput({ input, questionId }: { input: string; question
       text: input,
     },
   })
+
+  revalidatePath(`/applications`)
   return { success: true, data: answer }
 }

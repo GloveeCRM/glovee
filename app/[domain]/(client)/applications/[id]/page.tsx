@@ -15,6 +15,13 @@ export interface Question {
   helperText?: string
   position: number
   type: string
+  answer?: Answer
+}
+
+export interface Answer {
+  id: string
+  text: string
+  questionId: string
 }
 
 export default async function ClientApplicationPage({
