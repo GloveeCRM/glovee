@@ -137,8 +137,17 @@ model Question {
   position    Int
   helperText  String?
   questionSetId String
+  answer      Answer?
 
   questionSet QuestionSet @relation(fields: [questionSetId], references: [id], onDelete: Cascade)
+}
+
+model Answer {
+  id            String @id @default(cuid())
+  questionId    String @unique
+  text          String?
+   
+  question    Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
 }
 
 model Template {
