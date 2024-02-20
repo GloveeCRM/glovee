@@ -1,6 +1,7 @@
 import { currentUser } from '@/lib/utils/user'
 import { fetchApplicationByUserId } from '@/lib/data/application'
 import Link from 'next/link'
+import { ApplicationStatus } from '@prisma/client'
 
 export default async function ClientApplicationTable() {
   const client = await currentUser()
@@ -28,8 +29,18 @@ export default async function ClientApplicationTable() {
                   {application.id}
                 </Link>
               </td>
-
               <td>{application.status}</td>
+              {application.status === ApplicationStatus.SUBMITTED ? (
+                <td>
+                  <button>Submit</button>
+                </td>
+              ) : (
+                <td>
+                  <Link href={`/applications/${application.id}`} className="underline">
+                    View
+                  </Link>
+                </td>
+              )}
             </tr>
           ))
         )}
