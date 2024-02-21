@@ -19,7 +19,7 @@ export async function fetchApplications() {
   }
 }
 
-export async function fetchApplicationByUserId(id: string) {
+export async function fetchApplicationsByUserId(id: string) {
   try {
     const application = await prisma.application.findMany({
       where: {

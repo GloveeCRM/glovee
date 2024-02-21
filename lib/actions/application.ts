@@ -85,3 +85,17 @@ export async function createApplication(formData: FormData) {
   revalidatePath('/admin/applications')
   return { success: 'Template created!' }
 }
+
+export async function submitApplicationById(id: string) {
+  const application = await prisma.application.update({
+    where: {
+      id: id,
+    },
+    data: {
+      status: 'SUBMITTED',
+    },
+  })
+
+  revalidatePath('/applications')
+  return { success: 'Application submitted!' }
+}
