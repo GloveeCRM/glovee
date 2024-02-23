@@ -9,17 +9,13 @@ export const metadata: Metadata = {
   description: '',
 }
 
-export default async function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const session = await auth()
 
   return (
     <SessionProvider session={session}>
       <html lang="en">
-        <body className="">{children}</body>
+        <body id="skyBoundCRM">{children}</body>
       </html>
     </SessionProvider>
   )
