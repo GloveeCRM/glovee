@@ -1,17 +1,18 @@
 'use client'
 
-import { useFormState } from 'react-dom'
+import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
+import { useFormState } from 'react-dom'
+
+import { FaRegCheckCircle } from 'react-icons/fa'
+import { BiMessageSquareError } from 'react-icons/bi'
 
 import { login } from '@/lib/actions/auth'
 
 import GoogleSignInButton from './google-sign-in-button'
-import Link from 'next/link'
 import { FormInput, InputError, InputLabel, PasswordInput, TextInput } from '../ui/inputs'
 import { Callout } from '../ui/callout'
-import { BiMessageSquareError } from 'react-icons/bi'
 import { SubmitButton } from '../ui/buttons'
-import { FaRegCheckCircle } from 'react-icons/fa'
 
 export default function LoginForm() {
   const [formState, dispatch] = useFormState(login, {})
