@@ -11,7 +11,7 @@ import { signUp } from '@/lib/actions/auth'
 import GoogleSignInButton from './google-sign-in-button'
 import { SubmitButton } from '../ui/buttons'
 import { Callout } from '../ui/callout'
-import { FormInput, InputLabel, TextInput } from '../ui/inputs'
+import { FormInput, InputLabel, PasswordInput, TextInput } from '../ui/inputs'
 
 export default function SignUpForm() {
   const [formState, dispatch] = useFormState(signUp, {})
@@ -33,7 +33,7 @@ export default function SignUpForm() {
         </FormInput>
         <FormInput id="password-input" error={passwordError}>
           <InputLabel htmlFor="password">Password</InputLabel>
-          <TextInput id="password" name="password" placeholder="Password" />
+          <PasswordInput id="password" name="password" placeholder="Password" />
         </FormInput>
       </div>
 
