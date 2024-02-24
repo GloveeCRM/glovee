@@ -1,5 +1,5 @@
 import NewPasswordForm from '@/components/auth/new-password-form'
 
-export default function NewPassword() {
+export default function NewPasswordPage() {
   return <NewPasswordForm />
 }
