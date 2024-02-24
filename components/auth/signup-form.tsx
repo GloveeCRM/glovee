@@ -41,7 +41,7 @@ export default function SignUpForm() {
         <Callout variant="success" className="mb-[12px]">
           <div className="flex items-center gap-[4px]">
             <FaRegCheckCircle className="h-[16px] w-[16px]" />
-            <span>Email does not exist!</span>
+            <span>{formState.success}</span>
           </div>
         </Callout>
       )}
