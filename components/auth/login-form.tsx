@@ -7,7 +7,10 @@ import { login } from '@/lib/actions/auth'
 
 import GoogleSignInButton from './google-sign-in-button'
 import Link from 'next/link'
-import { InputError, InputLabel, TextInput } from '../ui/inputs'
+import { FormInput, InputError, InputLabel, PasswordInput, TextInput } from '../ui/inputs'
+import { Callout } from '../ui/callout'
+import { BiMessageSquareError } from 'react-icons/bi'
+import { SubmitButton } from '../ui/buttons'
 
 export default function LoginForm() {
   const [formState, dispatch] = useFormState(login, {})
@@ -19,37 +22,65 @@ export default function LoginForm() {
       : ''
 
   return (
-    <form action={dispatch}>
-      <div className="mb-[24px] flex flex-col gap-[10px]">
-        <InputLabel htmlFor="email">Email</InputLabel>
-        <div>
-          <TextInput id="email" name="email" placeholder="example@gmail.com" className="mb-[6px]" />
-          {formState?.errors?.email && <InputError>{formState.errors.email[0]}</InputError>}
-        </div>
+    <form id="login-form" action={dispatch} className="w-full max-w-[400px]">
+      <div id="form-inputs" className="flex flex-col gap-[14px]">
+        <FormInput id="email-input">
+          <InputLabel htmlFor="email">Email</InputLabel>
+          <div>
+            <TextInput
+              id="email"
+              name="email"
+              placeholder="example@gmail.com"
+              className="mb-[6px]"
+            />
+            {formState?.errors?.email && <InputError>{formState.errors.email[0]}</InputError>}
+          </div>
+        </FormInput>
+        <FormInput id="password-input">
+          <InputLabel htmlFor="password">Password</InputLabel>
+          <div>
+            <PasswordInput
+              id="password"
+              name="password"
+              placeholder="Password"
+              className="mb-[6px]"
+            />
+            {formState?.errors?.password && <InputError>{formState.errors.password[0]}</InputError>}
+          </div>
+        </FormInput>
       </div>
-      <div>
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          placeholder="******"
-          className="mb-[28px] w-full rounded border border-black p-[8px] leading-tight"
-        />
-        {formState?.errors?.password && <p>{formState.errors.password[0]}</p>}
+
+      {formState?.success && <Callout variant="success">{formState.success}</Callout>}
+
+      {(formState?.error || urlError) && (
+        <Callout variant="error">
+          <div className="flex items-center gap-[4px]">
+            <BiMessageSquareError className="h-[16px] w-[16px]" />
+            <span>{formState.error || urlError}</span>
+          </div>
+        </Callout>
+      )}
+
+      <div id="form-buttons" className="mt-[26px] flex flex-col gap-[10px]">
+        <SubmitButton size="full">Login</SubmitButton>
+        <GoogleSignInButton className="rounded p-[10px]" />
       </div>
-      {formState?.success}
-      {formState?.error || urlError}
-      <Link href={'/reset'} className="cursor-pointer text-blue-400 hover:underline">
-        Forgot password?
-      </Link>
-      <button type="submit" className="mt-[20px] w-full rounded bg-n-300 p-[8px]">
-        Login
-      </button>
-      <GoogleSignInButton className="mt-[5px] rounded p-[10px]" />
-      <div className="mt-[10px] flex justify-center gap-[5px] text-[12px]">
+
+      <p id="forgot-password" className="mt-[8px]">
+        <Link
+          href="/reset-password"
+          className="cursor-pointer text-[14px] text-blue-500 hover:underline"
+        >
+          Forgot password?
+        </Link>
+      </p>
+
+      <div
+        id="do-not-have-an-account"
+        className="mt-[16px] flex justify-center gap-[5px] text-[13px]"
+      >
         <span>Do not have a account?</span>
-        <Link href={'/signup'} className="cursor-pointer text-blue-400 hover:underline">
+        <Link href="/signup" className="cursor-pointer text-blue-500 hover:underline">
           Sign Up
         </Link>
       </div>
