@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { sendResetPasswordEmail } from '@/lib/actions/auth'
 import { useFormState } from 'react-dom'
 
-export function ResetForm() {
+export function ResetPasswordForm() {
   const [formState, dispatch] = useFormState(sendResetPasswordEmail, {})
 
   return (
