@@ -11,6 +11,7 @@ import { FormInput, InputError, InputLabel, PasswordInput, TextInput } from '../
 import { Callout } from '../ui/callout'
 import { BiMessageSquareError } from 'react-icons/bi'
 import { SubmitButton } from '../ui/buttons'
+import { FaRegCheckCircle } from 'react-icons/fa'
 
 export default function LoginForm() {
   const [formState, dispatch] = useFormState(login, {})
@@ -23,7 +24,7 @@ export default function LoginForm() {
 
   return (
     <form id="login-form" action={dispatch} className="w-full max-w-[400px]">
-      <div id="form-inputs" className="flex flex-col gap-[14px]">
+      <div id="form-inputs" className="mb-[26px] flex flex-col gap-[14px]">
         <FormInput id="email-input">
           <InputLabel htmlFor="email">Email</InputLabel>
           <div>
@@ -50,10 +51,17 @@ export default function LoginForm() {
         </FormInput>
       </div>
 
-      {formState?.success && <Callout variant="success">{formState.success}</Callout>}
+      {formState?.success && (
+        <Callout variant="success" className="mb-[12px]">
+          <div className="flex items-center gap-[4px]">
+            <FaRegCheckCircle className="h-[16px] w-[16px]" />
+            <span>Email does not exist!</span>
+          </div>
+        </Callout>
+      )}
 
       {(formState?.error || urlError) && (
-        <Callout variant="error">
+        <Callout variant="error" className="mb-[12px]">
           <div className="flex items-center gap-[4px]">
             <BiMessageSquareError className="h-[16px] w-[16px]" />
             <span>{formState.error || urlError}</span>
@@ -61,7 +69,7 @@ export default function LoginForm() {
         </Callout>
       )}
 
-      <div id="form-buttons" className="mt-[26px] flex flex-col gap-[10px]">
+      <div id="form-buttons" className="flex flex-col gap-[10px]">
         <SubmitButton size="full">Login</SubmitButton>
         <GoogleSignInButton className="rounded p-[10px]" />
       </div>
