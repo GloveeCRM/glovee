@@ -9,7 +9,7 @@ export const PUBLIC_ROUTES = ['/', '/new-verification', '/create-new-organizatio
  * An array of routes that are used for authentication
  * @type {string[]}
  */
-export const AUTH_ROUTES = ['/login', '/register', '/error', '/reset', '/new-password']
+export const AUTH_ROUTES = ['/login', '/signup', '/error', '/reset', '/new-password']
 
 /**
  * The default redirect path after logging in as an admin

@@ -18,7 +18,7 @@ export default function LoginForm() {
       : ''
 
   return (
-    <form action={dispatch} className="w-1/5">
+    <form action={dispatch} className="">
       <div>
         <label htmlFor="email">Email</label>
         <input
@@ -52,7 +52,7 @@ export default function LoginForm() {
       <GoogleSignInButton className="mt-[5px] rounded p-[10px]" />
       <div className="mt-[10px] flex justify-center gap-[5px] text-[12px]">
         <span>Do not have a account?</span>
-        <Link href={'/register'} className="cursor-pointer text-blue-400 hover:underline">
+        <Link href={'/signup'} className="cursor-pointer text-blue-400 hover:underline">
           Sign Up
         </Link>
       </div>
