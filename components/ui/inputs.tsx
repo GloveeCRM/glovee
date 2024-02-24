@@ -6,7 +6,7 @@ interface InputLabelProps {
 
 export function InputLabel({ htmlFor, children, className }: InputLabelProps) {
   return (
-    <label htmlFor={htmlFor} className={`${className} block font-semibold text-n-500`}>
+    <label htmlFor={htmlFor} className={`${className} block font-semibold text-n-600`}>
       {children}
     </label>
   )
