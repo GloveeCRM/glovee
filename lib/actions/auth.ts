@@ -102,9 +102,13 @@ export async function login(prevState: any, formData: FormData) {
 }
 
 export async function signUp(prevState: any, formData: FormData) {
-  const validatedFields = await validateFormDataAgainstSchema(SignUpSchema, formData)
+  const { data, errors } = await validateFormDataAgainstSchema(SignUpSchema, formData)
 
-  const { email, password, name } = validatedFields.data
+  if (errors) {
+    return { errors }
+  }
+
+  const { email, password, name } = data
 
   const headersList = headers()
   const hostname = headersList.get('host')
