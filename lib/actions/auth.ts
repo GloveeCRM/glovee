@@ -67,7 +67,7 @@ export async function login(prevState: any, formData: FormData) {
 
     await sendVerificationEmail(verificationToken.email, verificationToken.token)
 
-    return { success: 'Confirmation email sent!' }
+    return { success: 'Confirmation email sent! Check your email to login.' }
   }
 
   try {
@@ -146,7 +146,7 @@ export async function signUp(prevState: any, formData: FormData) {
 
   await sendVerificationEmail(verificationToken.email, verificationToken.token)
 
-  return { success: 'Confirmation email sent!' }
+  return { success: 'Confirmation email sent! Check your email to login.' }
 }
 
 export async function logout() {
