@@ -95,12 +95,14 @@ interface FormInputProps {
   children: React.ReactNode
   id?: string
   className?: string
+  error?: string
 }
 
-export function FormInput({ children, id, className }: FormInputProps) {
+export function FormInput({ children, id, className, error }: FormInputProps) {
   return (
-    <div id={id} className={`${className} flex flex-col gap-[10px]`}>
-      {children}
+    <div id={id} className={`${className}`}>
+      <div className="flex flex-col gap-[10px]">{children}</div>
+      {error && <InputError className="mt-[6px]">{error}</InputError>}
     </div>
   )
 }

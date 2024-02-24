@@ -23,32 +23,19 @@ export default function LoginForm() {
       ? 'Email already in use with different provider!'
       : ''
 
+  const emailError = formState?.errors?.email ? formState?.errors?.email[0] : ''
+  const passwordError = formState?.errors?.password ? formState?.errors?.password[0] : ''
+
   return (
     <form id="login-form" action={dispatch} className="w-full max-w-[400px]">
       <div id="form-inputs" className="mb-[26px] flex flex-col gap-[14px]">
-        <FormInput id="email-input">
+        <FormInput id="email-input" error={emailError}>
           <InputLabel htmlFor="email">Email</InputLabel>
-          <div>
-            <TextInput
-              id="email"
-              name="email"
-              placeholder="example@gmail.com"
-              className="mb-[6px]"
-            />
-            {formState?.errors?.email && <InputError>{formState.errors.email[0]}</InputError>}
-          </div>
+          <TextInput id="email" name="email" placeholder="example@gmail.com" />
         </FormInput>
-        <FormInput id="password-input">
+        <FormInput id="password-input" error={passwordError}>
           <InputLabel htmlFor="password">Password</InputLabel>
-          <div>
-            <PasswordInput
-              id="password"
-              name="password"
-              placeholder="Password"
-              className="mb-[6px]"
-            />
-            {formState?.errors?.password && <InputError>{formState.errors.password[0]}</InputError>}
-          </div>
+          <PasswordInput id="password" name="password" placeholder="Password" className="" />
         </FormInput>
       </div>
 
