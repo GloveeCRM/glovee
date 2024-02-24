@@ -10,7 +10,7 @@ import { BiMessageSquareError } from 'react-icons/bi'
 import { login } from '@/lib/actions/auth'
 
 import GoogleSignInButton from './google-sign-in-button'
-import { FormInput, InputError, InputLabel, PasswordInput, TextInput } from '../ui/inputs'
+import { FormInput, InputLabel, PasswordInput, TextInput } from '../ui/inputs'
 import { Callout } from '../ui/callout'
 import { SubmitButton } from '../ui/buttons'
 
@@ -43,7 +43,7 @@ export default function LoginForm() {
         <Callout variant="success" className="mb-[12px]">
           <div className="flex items-center gap-[4px]">
             <FaRegCheckCircle className="h-[16px] w-[16px]" />
-            <span>Email does not exist!</span>
+            <span>{formState.success}</span>
           </div>
         </Callout>
       )}
