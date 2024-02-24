@@ -7,6 +7,7 @@ import { login } from '@/lib/actions/auth'
 
 import GoogleSignInButton from './google-sign-in-button'
 import Link from 'next/link'
+import { InputError, InputLabel, TextInput } from '../ui/inputs'
 
 export default function LoginForm() {
   const [formState, dispatch] = useFormState(login, {})
@@ -19,16 +20,12 @@ export default function LoginForm() {
 
   return (
     <form action={dispatch}>
-      <div>
-        <label htmlFor="email">Email</label>
-        <input
-          type="text"
-          id="email"
-          name="email"
-          placeholder="example@gmail.com"
-          className="mb-[28px] w-full rounded border border-black p-[8px] leading-tight"
-        />
-        {formState?.errors?.email && <p>{formState.errors.email[0]}</p>}
+      <div className="mb-[24px] flex flex-col gap-[10px]">
+        <InputLabel htmlFor="email">Email</InputLabel>
+        <div>
+          <TextInput id="email" name="email" placeholder="example@gmail.com" className="mb-[6px]" />
+          {formState?.errors?.email && <InputError>{formState.errors.email[0]}</InputError>}
+        </div>
       </div>
       <div>
         <label htmlFor="password">Password</label>
