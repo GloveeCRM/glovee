@@ -20,14 +20,27 @@ import {
   DEFAULT_ORG_CLIENT_LOGIN_REDIRECT,
   DEFAULT_ORG_MANAGEMENT_LOGIN_REDIRECT,
 } from '@/lib/constants/routes'
-import { generateAndStoreVerificationToken } from '@/lib/token/tokens'
 import { sendResetPasswordEmail, sendVerificationEmail } from '@/lib/mail/mail'
 import { getVerificationTokenByToken } from '@/lib/data/verification-token'
 import { fetchResetPasswordTokenByToken } from '@/lib/data/reset-password-token'
 import { validateFormDataAgainstSchema } from '@/lib/utils/validation'
 import { getCurrentOrgName } from '@/lib/utils/server'
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 
-export async function login(prevState: any, formData: FormData) {
+/**
+ * Logs in a user with the provided form data.
+ * @param {any} prevState - The previous state.
+ * @param {FormData} formData - The form data.
+ * @returns {Promise<{ success?: string, error?: string, errors?: any }>} The result of the action.
+ */
+export async function login(
+  prevState: any,
+  formData: FormData
+): Promise<{
+  success?: string
+  error?: string
+  errors?: any
+}> {
   const { data, errors } = await validateFormDataAgainstSchema(LoginSchema, formData)
 
   if (errors) {
@@ -45,6 +58,7 @@ export async function login(prevState: any, formData: FormData) {
   }
 
   if (!existingUser.emailVerified) {
+    console.log('email not verified')
     const verificationToken = await generateAndStoreVerificationToken(email, 3600)
     await sendVerificationEmail(verificationToken.email, verificationToken.token)
     return { success: 'Confirmation email sent! Check your email to login.' }
@@ -81,6 +95,12 @@ export async function login(prevState: any, formData: FormData) {
   }
 }
 
+/**
+ * Sign up a user with the provided form data.
+ * @param {any} prevState - The previous state.
+ * @param {FormData} formData - The form data.
+ * @returns {Promise<{ success?: string, error?: string, errors?: any }>} The result of the action.
+ */
 export async function signUp(prevState: any, formData: FormData) {
   const { data, errors } = await validateFormDataAgainstSchema(SignUpSchema, formData)
 
@@ -119,17 +139,36 @@ export async function signUp(prevState: any, formData: FormData) {
     await sendVerificationEmail(verificationToken.email, verificationToken.token)
     return { success: 'Confirmation email sent! Check your email to login.' }
   } catch (error) {
-    return { error: 'Something went wrong!' }
+    if (
+      error instanceof PrismaClientKnownRequestError &&
+      error.meta?.cause ==
+        "No 'Organization' record(s) (needed to inline the relation on 'User' record(s)) was found for a nested connect on one-to-many relation 'OrganizationToUser'."
+    ) {
+      return { error: 'Organization does not exist!' }
+    } else {
+      return { error: 'Something went wrong!' }
+    }
   }
 }
 
+/**
+ * Logs out the user.
+ * @returns {Promise<void>} A promise that resolves when the user is logged out.
+ */
 export async function logout() {
   return await signOut({
     redirectTo: '/login',
   })
 }
 
-export async function verifyUserEmail(token: string) {
+/**
+ * Verifies the user's email using the provided token.
+ * @param {string} token - The verification token.
+ * @returns {Promise<{ success: string } | { error: string }>} - A promise that resolves to an object with a success message if the email is verified successfully, or an error message if there is an issue with the verification process.
+ */
+export async function verifyUserEmail(
+  token: string
+): Promise<{ success: string } | { error: string }> {
   const existingToken = await getVerificationTokenByToken(token)
 
   if (!existingToken) {
@@ -150,19 +189,69 @@ export async function verifyUserEmail(token: string) {
     return { error: 'Email does not exist!' }
   }
 
-  await prisma.user.update({
-    where: { id: existingUser.id },
-    data: {
-      emailVerified: new Date(),
-      email: existingToken.email,
-    },
-  })
+  try {
+    await prisma.user.update({
+      where: { id: existingUser.id },
+      data: {
+        emailVerified: new Date(),
+        email: existingToken.email,
+      },
+    })
+  } catch (error) {
+    return { error: 'Unable to verify email!' }
+  }
 
   await prisma.verificationToken.delete({
     where: { id: existingToken.id },
   })
 
   return { success: 'Email verified!' }
+}
+
+/**
+ * Updates or creates a verification token for a given email.
+ * @param {string} email - The email associated with the verification token.
+ * @param {string} token - The verification token.
+ * @param {Date} expires - The expiration date of the verification token.
+ * @returns {Promise<VerificationToken>} The upserted verification token.
+ */
+export async function upsertVerificationToken(
+  email: string,
+  token: string,
+  expires: Date
+): Promise<VerificationToken> {
+  const verificationToken = await prisma.verificationToken.upsert({
+    create: {
+      email: email,
+      token: token,
+      expires: expires,
+    },
+    update: {
+      token: token,
+      expires: expires,
+    },
+    where: {
+      email: email,
+    },
+  })
+
+  return verificationToken
+}
+
+/**
+ * Generates and stores a verification token for the given email.
+ * @param {string} email - The email for which the verification token is generated.
+ * @param {number} expiresInSeconds - The number of seconds after which the token will expire.
+ * @returns {Promise<VerificationToken>} - The generated verification token.
+ */
+export async function generateAndStoreVerificationToken(
+  email: string,
+  expiresInSeconds: number
+): Promise<VerificationToken> {
+  const token = uuidv4()
+  const expires = new Date(new Date().getTime() + expiresInSeconds * 1000)
+  const verificationToken = await upsertVerificationToken(email, token, expires)
+  return verificationToken
 }
 
 /**
@@ -215,12 +304,25 @@ export async function generateAndStoreResetPasswordToken(
  * Triggers a reset password email for the given email.
  * @param {any} prevState - The previous state.
  * @param {FormData} formData - The form data.
- * @returns {Promise<{success: string} | {error: string}>} - The success or error message.
+ * @returns {Promise<{ success?: string, error?: string, errors?: any }>} The result of the action.
  */
-export async function triggerResetPasswordEmail(prevState: any, formData: FormData) {
-  const validatedFields = await validateFormDataAgainstSchema(ResetPasswordSchema, formData)
-  const { email } = validatedFields.data
+export async function triggerResetPasswordEmail(
+  prevState: any,
+  formData: FormData
+): Promise<{
+  success?: string
+  error?: string
+  errors?: any
+}> {
+  const { data, errors } = await validateFormDataAgainstSchema(ResetPasswordSchema, formData)
+
+  if (errors) {
+    return { errors }
+  }
+
+  const { email } = data
   const orgName = getCurrentOrgName()
+
   const existingUser = await fetchUserByEmailAndOrgName(email, orgName)
 
   if (!existingUser) {
