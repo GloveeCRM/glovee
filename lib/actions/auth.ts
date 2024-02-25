@@ -337,6 +337,7 @@ export async function triggerResetPasswordEmail(
   }
 }
 
+// TODO - Add try catch
 export async function resetPassword(token: any, prevState: any, formData: FormData) {
   if (!token) {
     return { error: 'Missing token!' }

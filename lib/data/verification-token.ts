@@ -9,9 +9,12 @@ import { VerificationToken } from '@prisma/client'
 export async function getVerificationTokenByToken(
   token: string
 ): Promise<VerificationToken | null> {
-  const verifcationToken = await prisma.verificationToken.findUnique({
-    where: { token },
-  })
-
-  return verifcationToken
+  try {
+    const verifcationToken = await prisma.verificationToken.findUnique({
+      where: { token },
+    })
+    return verifcationToken
+  } catch {
+    return null
+  }
 }

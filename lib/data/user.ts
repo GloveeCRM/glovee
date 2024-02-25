@@ -23,7 +23,6 @@ export async function fetchUserByEmailAndOrgName(
         },
       },
     })
-
     return user
   } catch {
     return null
@@ -36,6 +35,10 @@ export async function fetchUserByEmailAndOrgName(
  * @returns {Promise<User | null>} The user or null if not found.
  */
 export async function fetchUserById(id: string): Promise<User | null> {
-  const user = await prisma.user.findUnique({ where: { id: id } })
-  return user
+  try {
+    const user = await prisma.user.findUnique({ where: { id: id } })
+    return user
+  } catch {
+    return null
+  }
 }

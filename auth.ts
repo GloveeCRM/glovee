@@ -5,7 +5,7 @@ import authConfig from '@/auth.config'
 import { prisma } from '@/prisma/prisma'
 import { UserRole } from '@prisma/client'
 import { fetchUserById } from '@/lib/data/user'
-import { getAccountByUserId } from '@/lib/data/account'
+import { fetchAccountByUserId } from '@/lib/data/account'
 
 declare module 'next-auth' {
   interface User {
@@ -67,7 +67,7 @@ export const {
 
       if (!existingUser) return token
 
-      const existingAccount = await getAccountByUserId(existingUser.id)
+      const existingAccount = await fetchAccountByUserId(existingUser.id)
 
       token.isOAuth = !!existingAccount
       token.name = existingUser.name

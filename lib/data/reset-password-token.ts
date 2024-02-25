@@ -9,8 +9,12 @@ import { ResetPasswordToken } from '@prisma/client'
 export async function fetchResetPasswordTokenByToken(
   token: string
 ): Promise<ResetPasswordToken | null> {
-  const resetPasswordToken = await prisma.resetPasswordToken.findUnique({
-    where: { token },
-  })
-  return resetPasswordToken
+  try {
+    const resetPasswordToken = await prisma.resetPasswordToken.findUnique({
+      where: { token },
+    })
+    return resetPasswordToken
+  } catch {
+    return null
+  }
 }
