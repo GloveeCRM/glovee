@@ -7,8 +7,8 @@ import { useFormState } from 'react-dom'
 
 export default function NewPasswordForm() {
   const searchParams = useSearchParams()
-  const token = searchParams.get('token')
-  const newPasswordWithToken = resetPassword.bind(null, token)
+  const resetPasswordToken = searchParams.get('resetPasswordToken')
+  const newPasswordWithToken = resetPassword.bind(null, resetPasswordToken)
   const [formState, dispatch] = useFormState(newPasswordWithToken, {})
   return (
     <form action={dispatch}>

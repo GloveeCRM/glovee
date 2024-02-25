@@ -24,22 +24,22 @@ export async function sendEmail(
 /**
  * Sends a verification email to the specified email address.
  * @param {string} email - The email address to send the verification email to.
- * @param {string} token - The token used for verification.
+ * @param {string} verificationToken - The token used for verification.
  * @returns {Promise<{ success: string }>} A promise that resolves with a success message if the email is sent successfully.
  */
 export async function sendVerificationEmail(
   email: string,
-  token: string
+  verificationToken: string
 ): Promise<{ success: string }> {
   const orgName = getCurrentOrgName()
 
   let confirmLink = ''
   if (!orgName) {
-    confirmLink = `${process.env.NEXT_PUBLIC_ROOT_URL}/new-verification?token=${token}`
+    confirmLink = `${process.env.NEXT_PUBLIC_ROOT_URL}/email-verification?token=${verificationToken}`
   } else if (orgName && process.env.NEXT_PUBLIC_ROOT_DOMAIN === 'localhost:3000') {
-    confirmLink = `http://${orgName}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/new-verification?token=${token}`
+    confirmLink = `http://${orgName}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/email-verification?verificationToken=${verificationToken}`
   } else {
-    confirmLink = `https://${orgName}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/new-verification?token=${token}`
+    confirmLink = `https://${orgName}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/email-verification?verificationToken=${verificationToken}`
   }
 
   const fromEmail = process.env.RESEND_VERIFICATION_FROM_EMAIL || ''
@@ -59,17 +59,17 @@ export async function sendVerificationEmail(
  */
 export async function sendResetPasswordEmail(
   email: string,
-  token: string
+  resetPasswordToken: string
 ): Promise<{ success: string }> {
   const orgName: string = getCurrentOrgName()
 
   let resetLink: string = ''
   if (!orgName) {
-    resetLink = `${process.env.NEXT_PUBLIC_ROOT_URL}/new-password?token=${token}`
+    resetLink = `${process.env.NEXT_PUBLIC_ROOT_URL}/new-password?resetPasswordToken=${resetPasswordToken}`
   } else if (orgName && process.env.NEXT_PUBLIC_ROOT_DOMAIN === 'localhost:3000') {
-    resetLink = `http://${orgName}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/new-password?token=${token}`
+    resetLink = `http://${orgName}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/new-password?resetPasswordToken=${resetPasswordToken}`
   } else {
-    resetLink = `https://${orgName}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/new-password?token=${token}`
+    resetLink = `https://${orgName}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/new-password?resetPasswordToken=${resetPasswordToken}`
   }
 
   const fromEmail = process.env.RESEND_RESET_PASSWORD_FROM_EMAIL || ''
