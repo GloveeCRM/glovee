@@ -17,7 +17,7 @@ export default function EmailVerificationNotFoundPage() {
           <FiExternalLink className="h-[18px] w-[18px]" />
         </Link>
         <Link
-          href="/login"
+          href="/"
           className="text-o-600 flex w-fit items-center gap-[4px] font-semibold hover:underline"
         >
           Home Page
