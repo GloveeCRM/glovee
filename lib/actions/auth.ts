@@ -58,7 +58,6 @@ export async function login(
   }
 
   if (!existingUser.emailVerified) {
-    console.log('email not verified')
     const verificationToken = await generateAndStoreVerificationToken(email, 3600)
     await sendVerificationEmail(verificationToken.email, verificationToken.token)
     return { success: 'Confirmation email sent! Check your email to login.' }
