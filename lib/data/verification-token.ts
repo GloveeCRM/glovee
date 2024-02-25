@@ -12,14 +12,21 @@ export const getVerificationTokenByToken = async (token: string) => {
   }
 }
 
-export const getVerificationTokenByEmail = async (email: string) => {
-  try {
-    const verifcationToken = await prisma.verificationToken.findFirst({
-      where: { email },
-    })
+export async function upsertVerificationToken(email: string, token: string, expires: Date) {
+  const verificationToken = await prisma.verificationToken.upsert({
+    create: {
+      email: email,
+      token: token,
+      expires: expires,
+    },
+    update: {
+      token: token,
+      expires: expires,
+    },
+    where: {
+      email: email,
+    },
+  })
 
-    return verifcationToken
-  } catch (error) {
-    return null
-  }
+  return verificationToken
 }
