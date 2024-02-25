@@ -1,10 +1,11 @@
 'use server'
 
 import bcrypt from 'bcryptjs'
+import { v4 as uuidv4 } from 'uuid'
 import { AuthError } from 'next-auth'
 
 import { prisma } from '@/prisma/prisma'
-import { UserRole } from '@prisma/client'
+import { ResetPasswordToken, UserRole, VerificationToken } from '@prisma/client'
 import { getAuthenticatedUser, getAuthenticatedUserRole, signIn, signOut } from '@/auth'
 import {
   LoginSchema,
@@ -19,15 +20,12 @@ import {
   DEFAULT_ORG_CLIENT_LOGIN_REDIRECT,
   DEFAULT_ORG_MANAGEMENT_LOGIN_REDIRECT,
 } from '@/lib/constants/routes'
-import {
-  generateAndStoreResetPasswordToken,
-  generateAndStoreVerificationToken,
-} from '@/lib/token/tokens'
+import { generateAndStoreVerificationToken } from '@/lib/token/tokens'
 import { sendResetPasswordEmail, sendVerificationEmail } from '@/lib/mail/mail'
 import { getVerificationTokenByToken } from '@/lib/data/verification-token'
 import { fetchResetPasswordTokenByToken } from '@/lib/data/reset-password-token'
 import { validateFormDataAgainstSchema } from '@/lib/utils/validation'
-import { getCurrentOrgName } from '../utils/server'
+import { getCurrentOrgName } from '@/lib/utils/server'
 
 export async function login(prevState: any, formData: FormData) {
   const { data, errors } = await validateFormDataAgainstSchema(LoginSchema, formData)
@@ -102,23 +100,27 @@ export async function signUp(prevState: any, formData: FormData) {
 
   const hashedPassword = await bcrypt.hash(password, 10)
 
-  const createdUser = await prisma.user.create({
-    data: {
-      name,
-      email,
-      password: hashedPassword,
-      role: UserRole.ORG_CLIENT,
-      organization: {
-        connect: {
-          orgName: orgName,
+  try {
+    await prisma.user.create({
+      data: {
+        name,
+        email,
+        password: hashedPassword,
+        role: UserRole.ORG_CLIENT,
+        organization: {
+          connect: {
+            orgName: orgName,
+          },
         },
       },
-    },
-  })
+    })
 
-  const verificationToken = await generateAndStoreVerificationToken(email, 3600)
-  await sendVerificationEmail(verificationToken.email, verificationToken.token)
-  return { success: 'Confirmation email sent! Check your email to login.' }
+    const verificationToken = await generateAndStoreVerificationToken(email, 3600)
+    await sendVerificationEmail(verificationToken.email, verificationToken.token)
+    return { success: 'Confirmation email sent! Check your email to login.' }
+  } catch (error) {
+    return { error: 'Something went wrong!' }
+  }
 }
 
 export async function logout() {
@@ -163,22 +165,75 @@ export async function verifyUserEmail(token: string) {
   return { success: 'Email verified!' }
 }
 
+/**
+ * Updates or creates a reset password token for a given email.
+ * @param {string} email - The email associated with the reset password token.
+ * @param {string} token - The reset password token.
+ * @param {Date} expires - The expiration date of the reset password token.
+ * @returns {Promise<ResetPasswordToken>} The upserted reset password token.
+ */
+export async function upsertResetPasswordToken(
+  email: string,
+  token: string,
+  expires: Date
+): Promise<ResetPasswordToken> {
+  const resetPasswordToken = await prisma.resetPasswordToken.upsert({
+    create: {
+      email: email,
+      token: token,
+      expires: expires,
+    },
+    update: {
+      token: token,
+      expires: expires,
+    },
+    where: {
+      email: email,
+    },
+  })
+
+  return resetPasswordToken
+}
+
+/**
+ * Generates and stores a reset password token for the given email.
+ * @param {string} email - The email for which the reset password token is generated.
+ * @param {number} expiresInSeconds - The number of seconds after which the token will expire.
+ * @returns {Promise<VerificationToken>} - The generated reset password token.
+ */
+export async function generateAndStoreResetPasswordToken(
+  email: string,
+  expiresInSeconds: number
+): Promise<VerificationToken> {
+  const token = uuidv4()
+  const expires = new Date(new Date().getTime() + expiresInSeconds * 1000)
+  const resetPasswordToken = await upsertResetPasswordToken(email, token, expires)
+  return resetPasswordToken
+}
+
+/**
+ * Triggers a reset password email for the given email.
+ * @param {any} prevState - The previous state.
+ * @param {FormData} formData - The form data.
+ * @returns {Promise<{success: string} | {error: string}>} - The success or error message.
+ */
 export async function triggerResetPasswordEmail(prevState: any, formData: FormData) {
   const validatedFields = await validateFormDataAgainstSchema(ResetPasswordSchema, formData)
-
   const { email } = validatedFields.data
-
   const orgName = getCurrentOrgName()
-
   const existingUser = await fetchUserByEmailAndOrgName(email, orgName)
 
   if (!existingUser) {
     return { error: 'Email not found!' }
   }
 
-  const resetPasswordToken = await generateAndStoreResetPasswordToken(email, 3600)
-  await sendResetPasswordEmail(resetPasswordToken.email, resetPasswordToken.token)
-  return { success: 'Reset password email sent!' }
+  try {
+    const resetPasswordToken = await generateAndStoreResetPasswordToken(email, 3600)
+    await sendResetPasswordEmail(resetPasswordToken.email, resetPasswordToken.token)
+    return { success: 'Reset password email sent!' }
+  } catch (error) {
+    return { error: 'Unable to send reset password email!' }
+  }
 }
 
 export async function resetPassword(token: any, prevState: any, formData: FormData) {

@@ -21,6 +21,7 @@ export function ResetPasswordForm() {
         {formState?.errors?.email && <p>{formState.errors.email[0]}</p>}
       </div>
       {formState?.success}
+      {formState?.error}
       <button type="submit" className="w-full bg-gray-500">
         Send reset email
       </button>

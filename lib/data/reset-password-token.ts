@@ -14,33 +14,3 @@ export async function fetchResetPasswordTokenByToken(
   })
   return resetPasswordToken
 }
-
-/**
- * Updates or creates a reset password token for a given email.
- * @param {string} email - The email associated with the reset password token.
- * @param {string} token - The reset password token.
- * @param {Date} expires - The expiration date of the reset password token.
- * @returns {Promise<ResetPasswordToken>} The upserted reset password token.
- */
-export async function upsertResetPasswordToken(
-  email: string,
-  token: string,
-  expires: Date
-): Promise<ResetPasswordToken> {
-  const resetPasswordToken = await prisma.resetPasswordToken.upsert({
-    create: {
-      email: email,
-      token: token,
-      expires: expires,
-    },
-    update: {
-      token: token,
-      expires: expires,
-    },
-    where: {
-      email: email,
-    },
-  })
-
-  return resetPasswordToken
-}
