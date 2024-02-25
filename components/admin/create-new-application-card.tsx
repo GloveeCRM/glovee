@@ -1,12 +1,12 @@
 import { IoNewspaperOutline } from 'react-icons/io5'
 
 import { fetchTemplatesByUserId } from '@/lib/data/template'
-import { currentUser } from '@/lib/utils/user'
 import CreateNewApplicationModal from './create-new-application-modal'
 import { ModalProvider, ModalTrigger } from '../ui/modal'
+import { getAuthenticatedUser } from '@/auth'
 
 export default async function CreateNewApplicationCard() {
-  const user = await currentUser()
+  const user = await getAuthenticatedUser()
   const templates = await fetchTemplatesByUserId(user?.id!)
 
   return (

@@ -1,9 +1,10 @@
 'use server'
 
-import { prisma } from '@/prisma/prisma'
-import { TemplateSchema } from '../zod/schemas'
-import { currentUser } from '../utils/user'
 import { revalidatePath } from 'next/cache'
+
+import { prisma } from '@/prisma/prisma'
+import { getAuthenticatedUser } from '@/auth'
+import { TemplateSchema } from '../zod/schemas'
 
 export async function createTemplate(prevState: any, formDara: FormData) {
   const validatedFields = TemplateSchema.safeParse({
@@ -17,7 +18,7 @@ export async function createTemplate(prevState: any, formDara: FormData) {
 
   const { title, description } = validatedFields.data
 
-  const user = await currentUser()
+  const user = await getAuthenticatedUser()
 
   if (!user) {
     return { error: 'User not found! logout and login again.' }
@@ -215,7 +216,7 @@ export async function createTemplate(prevState: any, formDara: FormData) {
 }
 
 export async function deleteTemplateById(id: string) {
-  const user = await currentUser()
+  const user = await getAuthenticatedUser()
 
   if (!user) {
     return { error: 'User not found! logout and login again.' }

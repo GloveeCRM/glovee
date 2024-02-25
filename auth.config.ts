@@ -5,8 +5,7 @@ import Google from 'next-auth/providers/google'
 
 import { LoginSchema } from '@/lib/zod/schemas'
 import { fetchUserByEmailAndOrgName } from '@/lib/data/user'
-import { headers } from 'next/headers'
-import { extractSubdomainFromHostname } from './lib/utils/url'
+import { getCurrentOrgName } from '@/lib/utils/server'
 
 export default {
   providers: [
@@ -21,11 +20,9 @@ export default {
         if (validatedFields.success) {
           const { email, password } = validatedFields.data
 
-          const headerList = headers()
-          const hostname = headerList.get('host')
-          const subdomain = extractSubdomainFromHostname(hostname!) || ''
+          const orgName = getCurrentOrgName()
 
-          const user = await fetchUserByEmailAndOrgName(email, subdomain)
+          const user = await fetchUserByEmailAndOrgName(email, orgName)
           if (!user || !user.password) return null
 
           const passwordsMatch = await bcrypt.compare(password, user.password)

@@ -1,10 +1,10 @@
-import { currentUser } from '@/lib/utils/user'
+import { getAuthenticatedUser } from '@/auth'
 import { fetchTemplatesByUserId } from '@/lib/data/template'
 import CreateNewTemplateCard from './create-new-template-card'
 import TemplateCard from './template-card'
 
 export default async function TemplateCardWrapper() {
-  const user = await currentUser()
+  const user = await getAuthenticatedUser()
   const templates = await fetchTemplatesByUserId(user?.id!)
 
   return (

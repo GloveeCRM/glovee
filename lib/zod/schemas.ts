@@ -1,5 +1,6 @@
-import { UserRole } from '@prisma/client'
 import { z } from 'zod'
+
+import { UserRole } from '@prisma/client'
 
 export const ApplicationSchema = z.object({
   clientEmail: z.string().email(),

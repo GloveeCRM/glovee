@@ -82,3 +82,13 @@ export const {
   session: { strategy: 'jwt' },
   ...authConfig,
 })
+
+export async function getAuthenticatedUser() {
+  const session = await auth()
+  return session?.user
+}
+
+export async function getAuthenticatedUserRole() {
+  const session = await auth()
+  return session?.user?.role
+}

@@ -1,14 +1,14 @@
 'use server'
 
+import { revalidatePath } from 'next/cache'
+
 import { prisma } from '@/prisma/prisma'
-import { currentUser } from '../utils/user'
+import { UserRole } from '@prisma/client'
+import { getAuthenticatedUser } from '@/auth'
 import { fetchUserByEmailAndOrgName } from '../data/user'
 import { ApplicationSchema } from '../zod/schemas'
-import { revalidatePath } from 'next/cache'
 import { fetchTemplateById } from '../data/template'
-import { UserRole } from '@prisma/client'
-import { headers } from 'next/headers'
-import { extractSubdomainFromHostname } from '../utils/url'
+import { getCurrentOrgName } from '../utils/server'
 
 export async function createApplication(formData: FormData) {
   const validatedFields = ApplicationSchema.safeParse({
@@ -20,7 +20,7 @@ export async function createApplication(formData: FormData) {
     return { errors: validatedFields.error.flatten().fieldErrors }
   }
 
-  const user = await currentUser()
+  const user = await getAuthenticatedUser()
 
   if (user?.role !== UserRole.ORG_ADMIN) {
     return { error: 'You are not authorized to create application!' }
@@ -28,11 +28,9 @@ export async function createApplication(formData: FormData) {
 
   const { clientEmail, templateId } = validatedFields.data
 
-  const headerList = headers()
-  const hostname = headerList.get('host')
-  const subdomain = extractSubdomainFromHostname(hostname!) || ''
+  const orgName = getCurrentOrgName()
 
-  const client = await fetchUserByEmailAndOrgName(clientEmail, subdomain)
+  const client = await fetchUserByEmailAndOrgName(clientEmail, orgName)
 
   if (!client) {
     return { error: 'Client not found!' }

@@ -2,7 +2,7 @@
 
 import { ReactNode } from 'react'
 
-import { useCurrentRole } from '@/hooks/use-current-role'
+import { useAuthenticatedUserRole } from '@/hooks/use-authenticated-user-role'
 import { UserRole } from '@prisma/client'
 
 interface RoleGateProps {
@@ -11,7 +11,7 @@ interface RoleGateProps {
 }
 
 export function RoleGate({ children, allowedRole }: RoleGateProps) {
-  const role = useCurrentRole()
+  const role = useAuthenticatedUserRole()
 
   if (role !== allowedRole) {
     return <p>You do not have permission to view this content</p>

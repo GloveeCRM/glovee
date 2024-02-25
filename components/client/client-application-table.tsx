@@ -1,9 +1,9 @@
-import { currentUser } from '@/lib/utils/user'
+import { getAuthenticatedUser } from '@/auth'
 import { fetchApplicationsByUserId } from '@/lib/data/application'
 import ApplicationRow from './client-application-table-row'
 
 export default async function ClientApplicationTable() {
-  const client = await currentUser()
+  const client = await getAuthenticatedUser()
   const applications = await fetchApplicationsByUserId(client?.id!)
 
   return (

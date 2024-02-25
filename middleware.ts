@@ -1,6 +1,3 @@
-import NextAuth from 'next-auth'
-
-import authConfig from '@/auth.config'
 import {
   DEFAULT_ORG_ADMIN_LOGIN_REDIRECT,
   AUTH_ROUTES,
@@ -9,18 +6,16 @@ import {
   ADMIN_ROUTES_PREFIX,
 } from '@/lib/constants/routes'
 import { NextRequest, NextResponse } from 'next/server'
-import { extractSubdomainFromHostname } from './lib/utils/url'
 import { auth } from './auth'
 import { UserRole } from '@prisma/client'
+import { getCurrentOrgName } from './lib/utils/server'
 
 export async function middleware(request: NextRequest) {
   const session = await auth()
   const isLoggedIn = !!session?.user
   const role = session?.user?.role
-
   const { nextUrl } = request
-  const hostname = request.headers.get('host')!
-  const subdomain = extractSubdomainFromHostname(hostname)
+  const orgName = getCurrentOrgName()
 
   const isApiAuthRoute = nextUrl.pathname.startsWith('/api/auth')
   const isPublicRoute = PUBLIC_ROUTES.includes(nextUrl.pathname)
@@ -30,7 +25,7 @@ export async function middleware(request: NextRequest) {
   if (isApiAuthRoute) {
     const searchParams = request.nextUrl.searchParams.toString()
     const pathWithSearchParams = `${nextUrl.pathname}${searchParams ? `?${searchParams}` : ''}`
-    const response = NextResponse.rewrite(new URL(`/${subdomain}${pathWithSearchParams}`, nextUrl))
+    const response = NextResponse.rewrite(new URL(`/${orgName}${pathWithSearchParams}`, nextUrl))
     return response
   } else if (isAuthRoute && isLoggedIn) {
     if (role === UserRole.ORG_ADMIN) {
@@ -52,10 +47,10 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/login', nextUrl))
   }
 
-  if (subdomain) {
+  if (orgName) {
     const searchParams = request.nextUrl.searchParams.toString()
     const pathWithSearchParams = `${nextUrl.pathname}${searchParams ? `?${searchParams}` : ''}`
-    const response = NextResponse.rewrite(new URL(`/${subdomain}${pathWithSearchParams}`, nextUrl))
+    const response = NextResponse.rewrite(new URL(`/${orgName}${pathWithSearchParams}`, nextUrl))
     return response
   }
 
