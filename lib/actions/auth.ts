@@ -163,11 +163,11 @@ export async function logout() {
 /**
  * Verifies the user's email using the provided token.
  * @param {string} token - The verification token.
- * @returns {Promise<{ success: string } | { error: string }>} - A promise that resolves to an object with a success message if the email is verified successfully, or an error message if there is an issue with the verification process.
+ * @returns {Promise<{ success?: string, error?: string }>} The result of the action.
  */
 export async function verifyUserEmail(
   token: string
-): Promise<{ success: string } | { error: string }> {
+): Promise<{ success?: string; error?: string }> {
   const existingToken = await getVerificationTokenByToken(token)
 
   if (!existingToken) {
