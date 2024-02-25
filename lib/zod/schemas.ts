@@ -58,7 +58,7 @@ export const NewPasswordSchema = z.object({
   }),
 })
 
-export const ResetSchema = z.object({
+export const ResetPasswordSchema = z.object({
   email: z.string().email({
     message: 'Email is required',
   }),

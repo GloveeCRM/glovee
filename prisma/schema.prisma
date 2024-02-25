@@ -68,7 +68,7 @@ model VerificationToken {
   expires DateTime
 }
 
-model PasswordResetToken {
+model ResetPasswordToken {
   id String @id @default(cuid())
   email String @unique
   token String @unique

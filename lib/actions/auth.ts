@@ -10,7 +10,7 @@ import {
   LoginSchema,
   NewPasswordSchema,
   SignUpSchema,
-  ResetSchema,
+  ResetPasswordSchema,
   SettingsSchema,
 } from '@/lib/zod/schemas'
 import { fetchUserByEmailAndOrgName, fetchUserById } from '@/lib/data/user'
@@ -19,12 +19,14 @@ import {
   DEFAULT_ORG_CLIENT_LOGIN_REDIRECT,
   DEFAULT_ORG_MANAGEMENT_LOGIN_REDIRECT,
 } from '@/lib/constants/routes'
-import { generatePasswordResetToken, generateVerificationToken } from '@/lib/token/tokens'
-import { sendPasswordResetEmail, sendVerificationEmail } from '@/lib/mail/mail'
+import {
+  generateAndStoreResetPasswordToken,
+  generateAndStoreVerificationToken,
+} from '@/lib/token/tokens'
+import { sendResetPasswordEmail, sendVerificationEmail } from '@/lib/mail/mail'
 import { getVerificationTokenByToken } from '@/lib/data/verification-token'
-import { getPasswordResetTokenByToken } from '@/lib/data/password-reset-token'
+import { fetchResetPasswordTokenByToken } from '@/lib/data/reset-password-token'
 import { validateFormDataAgainstSchema } from '@/lib/utils/validation'
-import { fetchOrgByUserIdAndOrgName } from '../data/organization'
 import { getCurrentOrgName } from '../utils/server'
 
 export async function login(prevState: any, formData: FormData) {
@@ -44,23 +46,15 @@ export async function login(prevState: any, formData: FormData) {
     return { error: 'Email does not exist!' }
   }
 
-  const organization = await fetchOrgByUserIdAndOrgName(existingUser.id, orgName)
-
-  if (!organization) {
-    return { error: 'Not authorized to access this organization!' }
-  }
-
   if (!existingUser.emailVerified) {
-    const verificationToken = await generateVerificationToken(existingUser.email as any, 3600)
-
+    const verificationToken = await generateAndStoreVerificationToken(email, 3600)
     await sendVerificationEmail(verificationToken.email, verificationToken.token)
-
     return { success: 'Confirmation email sent! Check your email to login.' }
   }
 
   try {
     const redirectLink =
-      organization.orgName === 'org'
+      existingUser.organization?.orgName === 'org'
         ? DEFAULT_ORG_MANAGEMENT_LOGIN_REDIRECT
         : existingUser.role === UserRole.ORG_ADMIN
           ? DEFAULT_ORG_ADMIN_LOGIN_REDIRECT
@@ -108,30 +102,22 @@ export async function signUp(prevState: any, formData: FormData) {
 
   const hashedPassword = await bcrypt.hash(password, 10)
 
-  const organization = await prisma.organization.findFirst({
-    where: {
-      name: orgName,
-    },
-  })
-
-  if (!organization) {
-    throw new Error('Organization not found!')
-  }
-
-  await prisma.user.create({
+  const createdUser = await prisma.user.create({
     data: {
       name,
       email,
       password: hashedPassword,
       role: UserRole.ORG_CLIENT,
-      organizationId: organization.id,
+      organization: {
+        connect: {
+          orgName: orgName,
+        },
+      },
     },
   })
 
-  const verificationToken = await generateVerificationToken(email, 3600)
-
+  const verificationToken = await generateAndStoreVerificationToken(email, 3600)
   await sendVerificationEmail(verificationToken.email, verificationToken.token)
-
   return { success: 'Confirmation email sent! Check your email to login.' }
 }
 
@@ -148,22 +134,15 @@ export async function verifyUserEmail(token: string) {
     return { error: 'Token does not exist!' }
   }
 
-  const hasExpired = new Date(existingToken.expires) < new Date()
+  const tokenHasExpired = new Date(existingToken.expires) < new Date()
 
-  if (hasExpired) {
+  if (tokenHasExpired) {
     return { error: 'Token has expired!' }
   }
 
   const orgName = getCurrentOrgName()
 
-  const existingUser = await prisma.user.findFirst({
-    where: {
-      email: existingToken.email,
-      organization: {
-        name: orgName,
-      },
-    },
-  })
+  const existingUser = await fetchUserByEmailAndOrgName(existingToken.email, orgName)
 
   if (!existingUser) {
     return { error: 'Email does not exist!' }
@@ -184,8 +163,8 @@ export async function verifyUserEmail(token: string) {
   return { success: 'Email verified!' }
 }
 
-export async function sendResetPasswordEmail(prevState: any, formData: FormData) {
-  const validatedFields = await validateFormDataAgainstSchema(ResetSchema, formData)
+export async function triggerResetPasswordEmail(prevState: any, formData: FormData) {
+  const validatedFields = await validateFormDataAgainstSchema(ResetPasswordSchema, formData)
 
   const { email } = validatedFields.data
 
@@ -197,11 +176,9 @@ export async function sendResetPasswordEmail(prevState: any, formData: FormData)
     return { error: 'Email not found!' }
   }
 
-  const passwordResetToken = await generatePasswordResetToken(email)
-
-  await sendPasswordResetEmail(passwordResetToken.email, passwordResetToken.token)
-
-  return { success: 'Reset email sent!' }
+  const resetPasswordToken = await generateAndStoreResetPasswordToken(email, 3600)
+  await sendResetPasswordEmail(resetPasswordToken.email, resetPasswordToken.token)
+  return { success: 'Reset password email sent!' }
 }
 
 export async function resetPassword(token: any, prevState: any, formData: FormData) {
@@ -213,7 +190,7 @@ export async function resetPassword(token: any, prevState: any, formData: FormDa
 
   const { password } = validatedFields.data
 
-  const existingToken = await getPasswordResetTokenByToken(token)
+  const existingToken = await fetchResetPasswordTokenByToken(token)
 
   if (!existingToken) {
     return { error: 'Invalid Token!' }
@@ -242,7 +219,7 @@ export async function resetPassword(token: any, prevState: any, formData: FormDa
     },
   })
 
-  await prisma.passwordResetToken.delete({
+  await prisma.resetPasswordToken.delete({
     where: { id: existingToken.id },
   })
 
@@ -268,7 +245,7 @@ export async function settings(prevState: any, formData: FormData) {
     return { error: 'Unauthorized' }
   }
 
-  const dbUser = await fetchUserById(user.id!) // ! to check if it's null or not
+  const dbUser = await fetchUserById(user.id!)
 
   if (!dbUser) {
     return { error: 'Unauthorized' }
@@ -285,7 +262,7 @@ export async function settings(prevState: any, formData: FormData) {
       return { error: 'Email already in use!' }
     }
 
-    const verificationToken = await generateVerificationToken(email, 3600)
+    const verificationToken = await generateAndStoreVerificationToken(email, 3600)
     await sendVerificationEmail(verificationToken.email, verificationToken.token)
 
     return { success: 'Confirmation email sent!' }

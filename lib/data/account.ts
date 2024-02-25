@@ -1,13 +1,10 @@
 import { prisma } from '@/prisma/prisma'
+import { Account } from '@prisma/client'
 
-export const getAccountByUserId = async (userId: string) => {
-  try {
-    const account = await prisma.account.findFirst({
-      where: { userId: userId },
-    })
+export async function getAccountByUserId(userId: string): Promise<Account | null> {
+  const account = await prisma.account.findFirst({
+    where: { userId: userId },
+  })
 
-    return account
-  } catch (error) {
-    return null
-  }
+  return account
 }
