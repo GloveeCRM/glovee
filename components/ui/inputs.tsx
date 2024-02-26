@@ -12,15 +12,6 @@ export function InputLabel({ htmlFor, children, className }: InputLabelProps) {
   )
 }
 
-interface InputFieldProps {
-  children: React.ReactNode
-  className?: string
-}
-
-export function InputError({ children, className }: InputFieldProps) {
-  return <p className={`${className} text-[13px] font-medium text-red-600`}>{children}</p>
-}
-
 interface TextInputProps {
   id?: string
   size?: 'sm' | 'md' | 'lg'
@@ -89,6 +80,15 @@ export function PasswordInput({
       className={`${className} w-full rounded border-[1px] border-n-300 px-4 py-2 transition autofill:bg-none autofill:outline-n-400 focus:border-n-400 focus:outline focus:outline-[1px] focus:outline-n-400`}
     />
   )
+}
+
+interface InputErrorProps {
+  children: React.ReactNode
+  className?: string
+}
+
+export function InputError({ children, className }: InputErrorProps) {
+  return <p className={`${className} text-[13px] font-medium text-red-600`}>{children}</p>
 }
 
 interface FormInputProps {
