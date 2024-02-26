@@ -28,7 +28,11 @@ export function useModal() {
   return context
 }
 
-export function ModalProvider({ children }: { children: ReactNode }) {
+interface ModalProviderProps {
+  children: ReactNode
+}
+
+export function ModalProvider({ children }: ModalProviderProps) {
   const [isModalOpen, setModalOpen] = useState(false)
 
   const openModal = useCallback(() => setModalOpen(true), [])
