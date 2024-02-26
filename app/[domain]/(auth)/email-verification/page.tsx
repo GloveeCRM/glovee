@@ -4,11 +4,11 @@ import { Suspense } from 'react'
 import { EmailVerificationCard } from '@/components/auth/email-verification-card'
 import EmailVerificationLoading from '@/components/auth/email-verification-loading'
 
-export default async function NewVerificationPage({
-  searchParams,
-}: {
+interface NewVerificationPageProps {
   searchParams: { verificationToken?: string }
-}) {
+}
+
+export default async function NewVerificationPage({ searchParams }: NewVerificationPageProps) {
   const verificationToken = searchParams.verificationToken
 
   if (!verificationToken) {
