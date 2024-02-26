@@ -53,9 +53,14 @@ export const SettingsSchema = z
   )
 
 export const NewPasswordSchema = z.object({
-  password: z.string().min(6, {
-    message: 'Minimum 6 characters required',
-  }),
+  password: z
+    .string()
+    .min(1, {
+      message: 'Password is required',
+    })
+    .min(6, {
+      message: 'Minimum 6 characters required',
+    }),
 })
 
 export const ResetPasswordSchema = z.object({

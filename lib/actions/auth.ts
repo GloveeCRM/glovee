@@ -337,25 +337,34 @@ export async function triggerResetPasswordEmail(
   }
 }
 
-// TODO - Add try catch
-export async function resetPassword(token: any, prevState: any, formData: FormData) {
+/**
+ * Resets the password for a user.
+ * @param {string} token - The reset password token.
+ * @param {any} prevState - The previous state.
+ * @param {FormData} formData - The form data containing the new password.
+ * @returns {Promise<{ error?: string, errors?: any, success?: string }>} - The result of the password reset operation.
+ */
+export async function resetPassword(token: string, prevState: any, formData: FormData) {
   if (!token) {
     return { error: 'Missing token!' }
   }
 
-  const validatedFields = await validateFormDataAgainstSchema(NewPasswordSchema, formData)
+  const { data, errors } = await validateFormDataAgainstSchema(NewPasswordSchema, formData)
 
-  const { password } = validatedFields.data
+  if (errors) {
+    return { errors }
+  }
 
   const existingToken = await fetchResetPasswordTokenByToken(token)
 
   if (!existingToken) {
     return { error: 'Invalid Token!' }
   }
+  const { password } = data
 
-  const hasExpired = new Date(existingToken.expires) < new Date()
+  const tokenHasExpired = new Date(existingToken.expires) < new Date()
 
-  if (hasExpired) {
+  if (tokenHasExpired) {
     return { error: 'Token has expired!' }
   }
 
@@ -369,12 +378,16 @@ export async function resetPassword(token: any, prevState: any, formData: FormDa
 
   const hashedPassword = await bcrypt.hash(password, 10)
 
-  await prisma.user.update({
-    where: { id: existingUser.id },
-    data: {
-      password: hashedPassword,
-    },
-  })
+  try {
+    await prisma.user.update({
+      where: { id: existingUser.id },
+      data: {
+        password: hashedPassword,
+      },
+    })
+  } catch (error) {
+    return { error: 'Unable to set a new password!' }
+  }
 
   await prisma.resetPasswordToken.delete({
     where: { id: existingToken.id },

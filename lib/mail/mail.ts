@@ -65,11 +65,11 @@ export async function sendResetPasswordEmail(
 
   let resetLink: string = ''
   if (!orgName) {
-    resetLink = `${process.env.NEXT_PUBLIC_ROOT_URL}/new-password?resetPasswordToken=${resetPasswordToken}`
+    resetLink = `${process.env.NEXT_PUBLIC_ROOT_URL}/set-new-password?resetPasswordToken=${resetPasswordToken}`
   } else if (orgName && process.env.NEXT_PUBLIC_ROOT_DOMAIN === 'localhost:3000') {
-    resetLink = `http://${orgName}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/new-password?resetPasswordToken=${resetPasswordToken}`
+    resetLink = `http://${orgName}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/set-new-password?resetPasswordToken=${resetPasswordToken}`
   } else {
-    resetLink = `https://${orgName}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/new-password?resetPasswordToken=${resetPasswordToken}`
+    resetLink = `https://${orgName}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/set-new-password?resetPasswordToken=${resetPasswordToken}`
   }
 
   const fromEmail = process.env.RESEND_RESET_PASSWORD_FROM_EMAIL || ''
