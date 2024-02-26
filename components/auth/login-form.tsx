@@ -46,7 +46,7 @@ export default function LoginForm() {
         </FormInput>
         <FormInput id="password-input" error={passwordError}>
           <InputLabel htmlFor="password">Password</InputLabel>
-          <PasswordInput id="password" name="password" placeholder="Password" className="" />
+          <PasswordInput id="password" name="password" placeholder="Password" />
         </FormInput>
       </div>
 
