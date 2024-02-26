@@ -88,17 +88,18 @@ function DividerSkeleton({ className }: DividerSkeletonProps) {
 export function LoginFormSkeleton() {
   return (
     <div
-      className={`${shimmer} w-full max-w-[420px] rounded-md bg-gray-100 px-[20px] py-[40px] shadow-sm`}
+      className={`${shimmer} w-full max-w-[420px] rounded-md bg-gray-100 px-[20px] py-[30px] shadow-sm`}
     >
+      <FormHeadingSkeleton />
       <TextInputQuestionSkeleton size="sm" className="mb-[26px]" />
-      <TextInputQuestionSkeleton className="mb-[46px]" />
-      <TitleSkeleton size="md" className="mb-[26px] bg-gray-400" />
-      <ButtonSkeleton className="mx-auto mb-[16px]" size="lg">
+      <TextInputQuestionSkeleton className="mb-[36px]" />
+      <ButtonSkeleton className="mx-auto mb-[16px]" size="full">
         <TitleSkeleton size="sm" className="bg-gray-200" />
       </ButtonSkeleton>
-      <ButtonSkeleton className="mx-auto mb-[36px]" size="lg">
+      <ButtonSkeleton className="mx-auto mb-[36px]" size="full">
         <IconSkeleton size="sm" className="bg-gray-200" />
       </ButtonSkeleton>
+      <TitleSkeleton size="md" className="mb-[26px] bg-gray-400" />
       <div className="flex justify-center gap-[8px]">
         <TitleSkeleton />
         <TitleSkeleton size="sm" className="bg-gray-200" />
@@ -110,14 +111,16 @@ export function LoginFormSkeleton() {
 export function SignUpFormSkeleton() {
   return (
     <div
-      className={`${shimmer} w-full max-w-[420px] rounded-md bg-gray-100 px-[20px] py-[40px] shadow-sm`}
+      className={`${shimmer} w-full max-w-[420px] rounded-md bg-gray-100 px-[20px] py-[30px] shadow-sm`}
     >
+      <FormHeadingSkeleton />
       <TextInputQuestionSkeleton size="sm" className="mb-[26px]" />
-      <TextInputQuestionSkeleton className="mb-[46px]" />
-      <ButtonSkeleton className="mx-auto mb-[16px]" size="lg">
+      <TextInputQuestionSkeleton className="mb-[26px]" />
+      <TextInputQuestionSkeleton className="mb-[36px]" />
+      <ButtonSkeleton className="mx-auto mb-[16px]" size="full">
         <TitleSkeleton size="sm" className="bg-gray-200" />
       </ButtonSkeleton>
-      <ButtonSkeleton className="mx-auto mb-[36px]" size="lg">
+      <ButtonSkeleton className="mx-auto mb-[26px]" size="full">
         <IconSkeleton size="sm" className="bg-gray-200" />
       </ButtonSkeleton>
       <div className="flex justify-center gap-[8px]">
