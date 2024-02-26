@@ -12,6 +12,7 @@ import GoogleSignInButton from './google-sign-in-button'
 import { SubmitButton } from '../ui/buttons'
 import { Callout } from '../ui/callout'
 import { FormInput, InputLabel, PasswordInput, TextInput } from '../ui/inputs'
+import Divider from '../ui/divider'
 
 export default function SignUpForm() {
   const [formState, dispatch] = useFormState(signUp, {})
@@ -21,7 +22,17 @@ export default function SignUpForm() {
   const passwordError = formState?.errors?.password ? formState?.errors?.password[0] : ''
 
   return (
-    <form action={dispatch} className="w-full max-w-[400px]">
+    <form
+      id="signup-form"
+      action={dispatch}
+      className="w-full max-w-[420px] rounded-md border border-n-300 p-[20px] shadow-sm"
+    >
+      <h1 id="signup-form-title" className="mb-[8px] text-center text-xl font-bold text-n-700">
+        Sign Up
+      </h1>
+
+      <Divider className="mb-[16px] border-n-300" />
+
       <div id="form-inputs" className="mb-[26px] flex flex-col gap-[14px]">
         <FormInput id="name-input" error={nameError}>
           <InputLabel htmlFor="name">Name</InputLabel>

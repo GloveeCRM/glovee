@@ -13,6 +13,7 @@ import GoogleSignInButton from './google-sign-in-button'
 import { FormInput, InputLabel, PasswordInput, TextInput } from '../ui/inputs'
 import { Callout } from '../ui/callout'
 import { SubmitButton } from '../ui/buttons'
+import Divider from '../ui/divider'
 
 export default function LoginForm() {
   const [formState, dispatch] = useFormState(login, {})
@@ -27,7 +28,17 @@ export default function LoginForm() {
   const passwordError = formState?.errors?.password ? formState?.errors?.password[0] : ''
 
   return (
-    <form id="login-form" action={dispatch} className="w-full max-w-[400px]">
+    <form
+      id="login-form"
+      action={dispatch}
+      className="w-full max-w-[420px] rounded-md border border-n-300 p-[20px] shadow-sm"
+    >
+      <h1 id="login-form-title" className="mb-[8px] text-center text-xl font-bold text-n-700">
+        Login
+      </h1>
+
+      <Divider className="mb-[16px] border-n-300" />
+
       <div id="form-inputs" className="mb-[26px] flex flex-col gap-[14px]">
         <FormInput id="email-input" error={emailError}>
           <InputLabel htmlFor="email">Email</InputLabel>

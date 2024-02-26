@@ -7,7 +7,7 @@ export default function ErrorCard() {
   return (
     <div className="flex flex-col items-center">
       <p className="text-2xl font-bold">Something went wrong!</p>
-      <Divider orientation="horizontal" className="my-[20px] border-n-400" size={2} />
+      <Divider className="my-[20px] border-n-400" size={2} />
       <Link href={'/login'}>
         <div className="group flex w-[205px] items-center justify-center gap-[20px] rounded-full bg-n-700 py-[8px] pl-[6px] text-[21px] text-n-100">
           <span>Back to login!</span>
