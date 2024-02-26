@@ -21,7 +21,7 @@ export default function EmailVerificationSuccess({ success }: { success: string 
     return () => {
       clearInterval(timer)
     }
-  }, [])
+  }, [router])
 
   return (
     <div>

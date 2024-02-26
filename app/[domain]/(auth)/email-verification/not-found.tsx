@@ -6,7 +6,7 @@ export default function EmailVerificationNotFoundPage() {
     <div>
       <div className="mb-[30px]">
         <h2 className="mb-[10px] text-center text-3xl font-semibold">404 Not Found</h2>
-        <p>Could not find the requested email verification.</p>
+        <p>Could not find a valid email verification token.</p>
       </div>
       <div className="flex justify-center gap-[30px]">
         <Link
