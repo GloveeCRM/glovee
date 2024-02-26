@@ -1,12 +1,11 @@
 import { useEffect, useRef } from 'react'
 
-export default function Dialog({
-  showDialog,
-  children,
-}: {
+interface DialogProps {
   showDialog: boolean
   children: React.ReactNode
-}) {
+}
+
+export default function Dialog({ showDialog, children }: DialogProps) {
   const dialogRef = useRef<HTMLDialogElement | null>(null)
 
   useEffect(() => {
