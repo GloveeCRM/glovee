@@ -8,7 +8,7 @@ import { Callout } from '../ui/callout'
 import { FaRegCheckCircle } from 'react-icons/fa'
 import { SubmitButton } from '../ui/buttons'
 import Divider from '../ui/divider'
-import { ResetPasswordFormSkeleton } from '../skeletons'
+import { BiMessageSquareError } from 'react-icons/bi'
 
 export function ResetPasswordForm() {
   const [formState, dispatch] = useFormState(triggerResetPasswordEmail, {})
@@ -40,6 +40,15 @@ export function ResetPasswordForm() {
           <div className="flex items-center gap-[4px]">
             <FaRegCheckCircle className="h-[16px] w-[16px]" />
             <span>{formState.success}</span>
+          </div>
+        </Callout>
+      )}
+
+      {formState?.error && (
+        <Callout variant="error" className="mb-[12px]">
+          <div className="flex items-center gap-[4px]">
+            <BiMessageSquareError className="h-[16px] w-[16px]" />
+            <span>{formState.error}</span>
           </div>
         </Callout>
       )}
