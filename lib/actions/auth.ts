@@ -396,6 +396,7 @@ export async function resetPassword(token: string, prevState: any, formData: For
   return { success: 'Password Updated!' }
 }
 
+// TODO: Clean up the following code
 export async function admin() {
   const role = await getAuthenticatedUserRole()
 
@@ -406,6 +407,7 @@ export async function admin() {
   return { error: 'Forbidden!' }
 }
 
+// TODO: Clean up the following code
 export async function settings(prevState: any, formData: FormData) {
   const validatedFields = await validateFormDataAgainstSchema(SettingsSchema, formData)
 
