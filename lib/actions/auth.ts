@@ -67,7 +67,7 @@ export async function login(
     const redirectLink =
       existingUser.organization?.orgName === 'org'
         ? DEFAULT_ORG_MANAGEMENT_LOGIN_REDIRECT
-        : existingUser.role === UserRole.ORG_ADMIN
+        : existingUser.role === UserRole.ORG_ADMIN || existingUser.role === UserRole.ORG_OWNER
           ? DEFAULT_ORG_ADMIN_LOGIN_REDIRECT
           : existingUser.role === UserRole.ORG_CLIENT
             ? DEFAULT_ORG_CLIENT_LOGIN_REDIRECT
