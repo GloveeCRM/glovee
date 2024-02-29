@@ -7,7 +7,12 @@ import { getAuthenticatedUser } from '@/auth'
 
 export default async function CreateNewApplicationCard() {
   const user = await getAuthenticatedUser()
-  const templates = await fetchTemplatesByUserId(user?.id!)
+
+  if (!user || !user.id) {
+    return null
+  }
+
+  const templates = await fetchTemplatesByUserId(user.id)
 
   return (
     <ModalProvider>
