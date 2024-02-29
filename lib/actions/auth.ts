@@ -29,9 +29,6 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 
 /**
  * Logs in a user with the provided form data.
- * @param {any} prevState - The previous state.
- * @param {FormData} formData - The form data.
- * @returns {Promise<{ success?: string, error?: string, errors?: any }>} The result of the action.
  */
 export async function login(
   prevState: any,
@@ -96,9 +93,6 @@ export async function login(
 
 /**
  * Sign up a user with the provided form data.
- * @param {any} prevState - The previous state.
- * @param {FormData} formData - The form data.
- * @returns {Promise<{ success?: string, error?: string, errors?: any }>} The result of the action.
  */
 export async function signUp(prevState: any, formData: FormData) {
   const { data, errors } = await validateFormDataAgainstSchema(SignUpSchema, formData)
@@ -152,7 +146,6 @@ export async function signUp(prevState: any, formData: FormData) {
 
 /**
  * Logs out the user.
- * @returns {Promise<void>} A promise that resolves when the user is logged out.
  */
 export async function logout() {
   return await signOut({
@@ -162,8 +155,6 @@ export async function logout() {
 
 /**
  * Verifies the user's email using the provided token.
- * @param {string} token - The verification token.
- * @returns {Promise<{ success?: string, error?: string }>} The result of the action.
  */
 export async function verifyUserEmail(
   token: string
@@ -209,10 +200,6 @@ export async function verifyUserEmail(
 
 /**
  * Updates or creates a verification token for a given email.
- * @param {string} email - The email associated with the verification token.
- * @param {string} token - The verification token.
- * @param {Date} expires - The expiration date of the verification token.
- * @returns {Promise<VerificationToken>} The upserted verification token.
  */
 export async function upsertVerificationToken(
   email: string,
@@ -239,9 +226,6 @@ export async function upsertVerificationToken(
 
 /**
  * Generates and stores a verification token for the given email.
- * @param {string} email - The email for which the verification token is generated.
- * @param {number} expiresInSeconds - The number of seconds after which the token will expire.
- * @returns {Promise<VerificationToken>} - The generated verification token.
  */
 export async function generateAndStoreVerificationToken(
   email: string,
@@ -255,10 +239,6 @@ export async function generateAndStoreVerificationToken(
 
 /**
  * Updates or creates a reset password token for a given email.
- * @param {string} email - The email associated with the reset password token.
- * @param {string} token - The reset password token.
- * @param {Date} expires - The expiration date of the reset password token.
- * @returns {Promise<ResetPasswordToken>} The upserted reset password token.
  */
 export async function upsertResetPasswordToken(
   email: string,
@@ -285,9 +265,6 @@ export async function upsertResetPasswordToken(
 
 /**
  * Generates and stores a reset password token for the given email.
- * @param {string} email - The email for which the reset password token is generated.
- * @param {number} expiresInSeconds - The number of seconds after which the token will expire.
- * @returns {Promise<VerificationToken>} - The generated reset password token.
  */
 export async function generateAndStoreResetPasswordToken(
   email: string,
@@ -301,9 +278,6 @@ export async function generateAndStoreResetPasswordToken(
 
 /**
  * Triggers a reset password email for the given email.
- * @param {any} prevState - The previous state.
- * @param {FormData} formData - The form data.
- * @returns {Promise<{ success?: string, error?: string, errors?: any }>} The result of the action.
  */
 export async function triggerResetPasswordEmail(
   prevState: any,
@@ -339,10 +313,6 @@ export async function triggerResetPasswordEmail(
 
 /**
  * Resets the password for a user.
- * @param {string} token - The reset password token.
- * @param {any} prevState - The previous state.
- * @param {FormData} formData - The form data containing the new password.
- * @returns {Promise<{ error?: string, errors?: any, success?: string }>} - The result of the password reset operation.
  */
 export async function resetPassword(token: string, prevState: any, formData: FormData) {
   if (!token) {

@@ -1,7 +1,5 @@
 /**
  * Extracts the subdomain from a given hostname.
- * @param {string} hostname - The hostname from which to extract the subdomain.
- * @returns {string | null} - The extracted subdomain, or null if no subdomain is found.
  */
 export function extractSubdomainFromHostname(hostname: string) {
   const parts = hostname.split('.')

@@ -3,8 +3,6 @@ import { ResetPasswordToken } from '@prisma/client'
 
 /**
  * Fetches a reset password token by token.
- * @param {string} token - The reset password token.
- * @returns {Promise<ResetPasswordToken | null>} The reset password token or null if not found.
  */
 export async function fetchResetPasswordTokenByToken(
   token: string

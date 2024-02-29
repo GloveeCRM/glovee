@@ -3,9 +3,6 @@ import { Organization, User } from '@prisma/client'
 
 /**
  * Fetches a user by email and organization name.
- * @param {string} email - The email of the user.
- * @param {string} orgName - The name of the organization.
- * @returns {Promise<(User & { organization: Organization | null }) | null>} The user or null if not found.
  */
 export async function fetchUserByEmailAndOrgName(
   email: string,
@@ -31,8 +28,6 @@ export async function fetchUserByEmailAndOrgName(
 
 /**
  * Fetches a user by their ID.
- * @param {string} id - The ID of the user.
- * @returns {Promise<User | null>} The user or null if not found.
  */
 export async function fetchUserById(id: string): Promise<User | null> {
   try {
