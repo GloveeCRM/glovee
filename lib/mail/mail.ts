@@ -6,11 +6,6 @@ const resend = new Resend(process.env.RESEND_API_KEY)
 
 /**
  * Sends an email using the provided parameters.
- * @param {string} from - The email address to send the email from.
- * @param {string} to - The email address to send the email to.
- * @param {string} subject - The subject of the email.
- * @param {string} html - The HTML content of the email.
- * @returns {Promise<void>} A promise that resolves when the email is sent.
  */
 export async function sendEmail(
   from: string,
@@ -23,9 +18,6 @@ export async function sendEmail(
 
 /**
  * Sends a verification email to the specified email address.
- * @param {string} email - The email address to send the verification email to.
- * @param {string} verificationToken - The token used for verification.
- * @returns {Promise<{ success: string }>} A promise that resolves with a success message if the email is sent successfully.
  */
 export async function sendVerificationEmail(
   email: string,
@@ -53,9 +45,6 @@ export async function sendVerificationEmail(
 
 /**
  * Sends a reset password email to the specified email address.
- * @param {string} email - The email address to send the password reset email to.
- * @param {string} token - The token used for password reset.
- * @returns {Promise<{ success: string }>} A promise that resolves with a success message if the email is sent successfully.
  */
 export async function sendResetPasswordEmail(
   email: string,
