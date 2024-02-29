@@ -1,4 +1,4 @@
-import NextAuth from 'next-auth'
+import NextAuth, { DefaultSession, User } from 'next-auth'
 
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import authConfig from '@/auth.config'
@@ -83,9 +83,10 @@ export const {
   ...authConfig,
 })
 
-export async function getAuthenticatedUser() {
+export async function getAuthenticatedUser(): Promise<User | null> {
   const session = await auth()
-  return session?.user
+  if (!session || !session.user) return null
+  return session.user
 }
 
 export async function getAuthenticatedUserRole() {
