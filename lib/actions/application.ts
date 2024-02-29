@@ -22,7 +22,7 @@ export async function createApplication(formData: FormData) {
 
   const user = await getAuthenticatedUser()
 
-  if (user?.role !== UserRole.ORG_ADMIN) {
+  if (!user || user.role !== UserRole.ORG_ADMIN) {
     return { error: 'You are not authorized to create application!' }
   }
 
