@@ -16,7 +16,7 @@ export async function fetchUserByEmailAndOrgName(
       where: {
         email: email,
         organization: {
-          name: orgName,
+          orgName: orgName,
         },
       },
     })

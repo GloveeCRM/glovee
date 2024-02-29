@@ -19,6 +19,7 @@ model Organization {
   id   String @id @default(cuid())
   name String
   orgName String @unique
+  logoUrl String?
 
   users User[]
 }
