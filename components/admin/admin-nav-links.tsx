@@ -13,12 +13,12 @@ export default function NavLinks() {
   const pathname = usePathname()
 
   return (
-    <div id="navLinks">
+    <div id="nav-links">
       {links.map((link) => (
         <Link
           key={link.path}
           href={link.path}
-          className={`${pathname === link.path && 'text-blue-200'}`}
+          className={`${pathname === link.path ? 'text-blue-200' : 'text-n-100'}`}
         >
           <p>{link.name}</p>
         </Link>
