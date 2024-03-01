@@ -31,7 +31,6 @@ export async function middleware(request: NextRequest) {
     const response = NextResponse.rewrite(new URL(`/${orgName}${pathWithSearchParams}`, nextUrl))
     return response
   } else if (isAuthRoute && isLoggedIn) {
-    console.log('role', role)
     if (isOrgAdminOrOrgOwner) {
       return NextResponse.redirect(new URL(DEFAULT_ORG_ADMIN_LOGIN_REDIRECT, nextUrl))
     } else if (isOrgClient) {
