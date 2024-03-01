@@ -23,13 +23,13 @@ export default function TemplateCard({ id, title, description }: TemplateCardPro
         )}
         <div className="flex gap-[8px]">
           <Link
-            href={`/admin/templates/${id}/preview`}
+            href={`/admin/template/${id}/preview`}
             className="flex h-[36px] w-full items-center justify-center rounded bg-n-600 text-n-100"
           >
             View
           </Link>
           <Link
-            href={`/admin/templates/${id}/edit`}
+            href={`/admin/template/${id}/edit`}
             className="flex h-[36px] w-1/5 items-center justify-center rounded bg-n-600 text-n-100"
           >
             <HiOutlinePencilSquare className="h-[20px] w-[20px]" />
