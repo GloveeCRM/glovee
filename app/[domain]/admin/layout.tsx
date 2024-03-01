@@ -1,14 +1,14 @@
 import AdminSidebar from '@/components/admin/admin-sidebar'
 
-export default function AdminLayout({
-  children,
-}: Readonly<{
+interface AdminLayoutProps {
   children: React.ReactNode
-}>) {
+}
+
+export default function AdminLayout({ children }: AdminLayoutProps) {
   return (
-    <div id="adminApp" className="flex">
+    <div id="admin" className="flex">
       <AdminSidebar />
-      <div className="w-full">{children}</div>
+      <div className="flex-1">{children}</div>
     </div>
   )
 }

@@ -1,14 +1,14 @@
 import ClientSidebar from '@/components/client/client-sidebar'
 
-export default function ClientLayout({
-  children,
-}: Readonly<{
+interface ClientLayoutProps {
   children: React.ReactNode
-}>) {
+}
+
+export default function ClientLayout({ children }: ClientLayoutProps) {
   return (
-    <div id="clientApp" className="flex">
+    <div id="client" className="flex">
       <ClientSidebar />
-      <div className="w-full">{children}</div>
+      <div className="flex-1">{children}</div>
     </div>
   )
 }
