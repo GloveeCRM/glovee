@@ -4,8 +4,9 @@ import bcrypt from 'bcryptjs'
 import { v4 as uuidv4 } from 'uuid'
 import { AuthError } from 'next-auth'
 
-import { prisma } from '@/prisma/prisma'
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import { ResetPasswordToken, UserRole, VerificationToken } from '@prisma/client'
+import { prisma } from '@/prisma/prisma'
 import { getAuthenticatedUser, getAuthenticatedUserRole, signIn, signOut } from '@/auth'
 import {
   LoginSchema,
@@ -25,7 +26,6 @@ import { getVerificationTokenByToken } from '@/lib/data/verification-token'
 import { fetchResetPasswordTokenByToken } from '@/lib/data/reset-password-token'
 import { validateFormDataAgainstSchema } from '@/lib/utils/validation'
 import { getCurrentOrgName } from '@/lib/utils/server'
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 
 /**
  * Logs in a user with the provided form data.

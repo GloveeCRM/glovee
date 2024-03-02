@@ -2,8 +2,7 @@ import Link from 'next/link'
 
 import { IoChevronBackOutline } from 'react-icons/io5'
 
-import TemplateInfoCard from './template-info-card'
-import TemplatePreviewCategories from './template-preview-categories'
+import TemplateInfoCard from '../template-info-card'
 
 export default async function TemplatePreviewSidebar({ templateId }: { templateId: string }) {
   return (
@@ -13,7 +12,6 @@ export default async function TemplatePreviewSidebar({ templateId }: { templateI
         <span className="text-[16px]">Back</span>
       </Link>
       <TemplateInfoCard className="mx-[8px]" templateId={templateId} />
-      <TemplatePreviewCategories templateId={templateId} />
     </div>
   )
 }

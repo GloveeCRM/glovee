@@ -1,5 +1,5 @@
-import ApplicationsTable from '@/components/admin/applications-table'
-import CreateNewApplicationCard from '@/components/admin/create-new-application-card'
+import ApplicationsTable from '@/components/admin/dashboard/applications/applications-table'
+import CreateNewApplicationCard from '@/components/admin/dashboard/applications/create-new-application-card'
 
 export default async function ApplicationsPage() {
   return (

@@ -2,9 +2,9 @@
 
 import { MouseEvent } from 'react'
 
-import { createApplication } from '@/lib/actions/application'
-import { Modal, useModal } from '../ui/modal'
 import { Template } from '@prisma/client'
+import { createApplication } from '@/lib/actions/application'
+import { Modal, useModal } from '@/components/ui/modal'
 import TemplateSelect from './template-select'
 
 export default function CreateNewApplicationModal({ templates }: { templates: Template[] }) {

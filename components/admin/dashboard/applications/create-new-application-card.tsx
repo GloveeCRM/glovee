@@ -2,7 +2,7 @@ import { IoNewspaperOutline } from 'react-icons/io5'
 
 import { fetchTemplatesByUserId } from '@/lib/data/template'
 import CreateNewApplicationModal from './create-new-application-modal'
-import { ModalProvider, ModalTrigger } from '../ui/modal'
+import { ModalProvider, ModalTrigger } from '../../../ui/modal'
 import { getAuthenticatedUser } from '@/auth'
 
 export default async function CreateNewApplicationCard() {

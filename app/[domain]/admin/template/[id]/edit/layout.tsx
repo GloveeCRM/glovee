@@ -1,4 +1,4 @@
-import TemplateEditSidebar from '@/components/admin/template-edit-sidebar'
+import TemplateEditSidebar from '@/components/admin/template/edit/template-edit-sidebar'
 
 export default function TemplateLayout({
   params,

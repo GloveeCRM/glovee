@@ -4,7 +4,7 @@ import { MouseEvent } from 'react'
 import { useFormState } from 'react-dom'
 
 import { createTemplate } from '@/lib/actions/template'
-import { Modal, useModal } from '../ui/modal'
+import { Modal, useModal } from '../../../ui/modal'
 
 export default function CreateNewTemplateModal() {
   const [formState, dispatch] = useFormState(createTemplate, {})

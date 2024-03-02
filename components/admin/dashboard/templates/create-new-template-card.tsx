@@ -1,7 +1,7 @@
 import { AiOutlineFileAdd } from 'react-icons/ai'
 
 import CreateNewTemplateModal from './create-new-template-modal'
-import { ModalProvider, ModalTrigger } from '../ui/modal'
+import { ModalProvider, ModalTrigger } from '../../../ui/modal'
 
 export default function CreateNewTemplateCard() {
   return (

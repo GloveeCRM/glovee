@@ -1,4 +1,4 @@
-import TemplatePreviewSidebar from '@/components/admin/template-preview-sidebar'
+import TemplatePreviewSidebar from '@/components/admin/template/preview/template-preview-sidebar'
 
 export default async function TemplatePreviewLayout({
   params,

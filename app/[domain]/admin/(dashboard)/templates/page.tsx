@@ -1,4 +1,4 @@
-import TemplateCardWrapper from '@/components/admin/template-card-wrapper'
+import TemplateCardWrapper from '@/components/admin/dashboard/templates/template-card-wrapper'
 
 export default async function TemplatesPage() {
   return (
