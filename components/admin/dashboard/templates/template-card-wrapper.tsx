@@ -5,7 +5,8 @@ import TemplateCard from './template-card'
 
 export default async function TemplateCardWrapper() {
   const user = await getAuthenticatedUser()
-  const templates = await fetchTemplatesByUserId(user?.id!)
+  if (!user || !user.id) return null
+  const templates = await fetchTemplatesByUserId(user.id)
 
   return (
     <div className="grid grid-cols-1 gap-[8px] md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
