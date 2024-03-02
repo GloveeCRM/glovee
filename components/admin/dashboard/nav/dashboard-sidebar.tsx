@@ -5,7 +5,11 @@ import { OrgInfoCardSkeleton } from '@/components/skeletons'
 import NavLinks from './nav-links'
 import OrgInfoCard from './org-info-card'
 
-export default function DashboardSidebar() {
+interface DashboardSidebarProps {
+  orgName: string
+}
+
+export default function DashboardSidebar({ orgName }: DashboardSidebarProps) {
   return (
     <div
       id="dashboard-sidebard"
@@ -13,7 +17,7 @@ export default function DashboardSidebar() {
     >
       <div id="sidebar-header" className="min-h-[77px] flex-shrink-0">
         <Suspense fallback={<OrgInfoCardSkeleton />}>
-          <OrgInfoCard />
+          <OrgInfoCard orgName={orgName} />
         </Suspense>
       </div>
 

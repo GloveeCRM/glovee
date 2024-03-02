@@ -1,7 +1,7 @@
 import { fetchTemplateById } from '@/lib/data/template'
 import { notFound } from 'next/navigation'
 
-export default async function EditPage({ params }: { params: { id: string } }) {
+export default async function TemplateEditPage({ params }: { params: { id: string } }) {
   const id = params.id
   const template = (await fetchTemplateById(id)) as any
 

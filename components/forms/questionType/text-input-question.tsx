@@ -1,6 +1,6 @@
 'use client'
 
-import { Question } from '@/app/[domain]/(client)/applications/[id]/page'
+import { Question } from '@/app/[orgName]/(client)/applications/[id]/page'
 import { saveTextInputAnswer } from '@/lib/actions/form'
 import { useDebouncedCallback } from 'use-debounce'
 

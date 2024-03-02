@@ -2,11 +2,12 @@ import Image from 'next/image'
 
 import { DEFAULT_ORG_LOGO_URL } from '@/lib/constants/images'
 import { fetchOrganizationByOrgName } from '@/lib/data/organization'
-import { getCurrentOrgName } from '@/lib/utils/server'
 
-export default async function OrgInfoCard() {
-  const orgName = getCurrentOrgName()
-  if (!orgName) return null
+interface OrgInfoCardProps {
+  orgName: string
+}
+
+export default async function OrgInfoCard({ orgName }: OrgInfoCardProps) {
   const org = await fetchOrganizationByOrgName(orgName)
 
   return (

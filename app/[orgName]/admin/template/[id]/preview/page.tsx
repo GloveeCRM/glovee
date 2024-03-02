@@ -1,4 +1,4 @@
-import { QuestionSet } from '@/app/[domain]/(client)/applications/[id]/page'
+import { QuestionSet } from '@/app/[orgName]/(client)/applications/[id]/page'
 import FlatQuestionSet from '@/components/forms/questionSetType/flat-question-set'
 import LoopQuestionSet from '@/components/forms/questionSetType/loop-question-set'
 import { fetchTemplateQuestionSetsBySectionId } from '@/lib/data/template'

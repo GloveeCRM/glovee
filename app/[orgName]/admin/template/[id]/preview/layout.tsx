@@ -4,7 +4,7 @@ export default async function TemplatePreviewLayout({
   params,
   children,
 }: {
-  params: { domain: string; id: string }
+  params: { orgName: string; id: string }
   children: React.ReactNode
 }) {
   return (
