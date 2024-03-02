@@ -12,15 +12,13 @@ interface TemplateCardProps {
 
 export default function TemplateCard({ id, title, description }: TemplateCardProps) {
   return (
-    <div className="flex flex-col justify-between rounded-md border border-n-600 p-[8px]">
+    <div className="flex flex-col justify-between rounded-md border border-n-500 p-[8px]">
       <div className="mb-[8px] flex justify-between gap-[10px]">
-        <p className="text-[16px] font-bold text-n-700">{title}</p>
+        <p className="text-[16px] font-bold">{title}</p>
         <TemplateCardOptionsMenuButton templateId={id} />
       </div>
       <div>
-        {description && (
-          <p className="mb-[10px] line-clamp-3 text-[14px] text-n-600">{description}</p>
-        )}
+        {description && <p className="mb-[10px] line-clamp-3 text-[14px]">{description}</p>}
         <div className="flex gap-[8px]">
           <Link
             href={`/admin/template/${id}/preview`}

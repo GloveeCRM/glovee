@@ -101,6 +101,17 @@ function LogoSkeleton({ className, size }: LogoSkeletonProps) {
   return <div className={`${className} ${sizeClass} rounded-full bg-n-200`} />
 }
 
+interface SquareSkeletonProps {
+  className?: string
+  size?: 'sm' | 'md' | 'lg' | 'full'
+}
+
+function SquareSkeleton({ className, size }: SquareSkeletonProps) {
+  const sizeClass =
+    size === 'sm' ? 'h-[36px] w-1/5' : size === 'full' ? 'h-[36px] w-full' : 'h-[36px] w-full'
+  return <div className={`${className} ${sizeClass} items-center justify-center rounded`}></div>
+}
+
 export function LoginFormSkeleton() {
   return (
     <div className="w-full max-w-[420px] animate-pulse rounded-md bg-n-100 px-[20px] py-[30px] shadow-sm">
@@ -161,6 +172,39 @@ export function OrgInfoCardSkeleton() {
     <div className="flex animate-pulse items-center gap-[8px] rounded-md bg-n-600 p-[6px]">
       <LogoSkeleton className="bg-n-500" size="md" />
       <TitleSkeleton size="sm" className="bg-n-500" />
+    </div>
+  )
+}
+
+export function TemplateCardSkeleton() {
+  return (
+    <div className="flex flex-col justify-between rounded-md bg-n-100 p-[8px]">
+      <TitleSkeleton size="sm" className=" mb-[8px] bg-n-400" />
+      <TitleSkeleton size="md" className=" mb-[10px]  bg-n-300" />
+      <div className="flex gap-[8px]">
+        <SquareSkeleton size="full" className="bg-n-400" />
+        <SquareSkeleton size="sm" className="bg-n-400" />
+      </div>
+    </div>
+  )
+}
+
+export function CreateNewTemplateCardSkeleton() {
+  return (
+    <div className="flex h-full flex-col items-center justify-center gap-[8px] rounded-md border border-dashed border-n-400">
+      <IconSkeleton size="md" className="bg-n-200" />
+      <TitleSkeleton size="sm" className="bg-n-300" />
+    </div>
+  )
+}
+
+export function TemplateCardWrapperSkeleton() {
+  return (
+    <div className="grid animate-pulse grid-cols-1 gap-[8px] md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <CreateNewTemplateCardSkeleton />
+      <TemplateCardSkeleton />
+      <TemplateCardSkeleton />
+      <TemplateCardSkeleton />
     </div>
   )
 }

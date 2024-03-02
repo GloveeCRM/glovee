@@ -13,7 +13,7 @@ export default function NavLinks() {
   const pathname = usePathname()
 
   return (
-    <div id="nav-links" className="h-full bg-red-800">
+    <div id="nav-links" className="h-full">
       {links.map((link) => (
         <Link
           key={link.path}

@@ -1,9 +1,9 @@
 import { Suspense } from 'react'
 
 import { logout } from '@/lib/actions/auth'
+import { OrgInfoCardSkeleton } from '@/components/skeletons'
 import NavLinks from './nav-links'
 import OrgInfoCard from './org-info-card'
-import { OrgInfoCardSkeleton } from '@/components/skeletons'
 
 export default function DashboardSidebar() {
   return (
