@@ -1,6 +1,3 @@
-const shimmer =
-  'before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent relative'
-
 interface IconSkeletonProps {
   className?: string
   size?: 'sm' | 'md' | 'lg'
@@ -104,9 +101,7 @@ function LogoSkeleton({ className, size }: LogoSkeletonProps) {
 
 export function LoginFormSkeleton() {
   return (
-    <div
-      className={`${shimmer} w-full max-w-[420px] rounded-md bg-gray-100 px-[20px] py-[30px] shadow-sm`}
-    >
+    <div className="w-full max-w-[420px] animate-pulse rounded-md bg-gray-100 px-[20px] py-[30px] shadow-sm">
       <FormHeadingSkeleton />
       <TextInputQuestionSkeleton size="sm" className="mb-[26px]" />
       <TextInputQuestionSkeleton className="mb-[36px]" />
@@ -127,9 +122,7 @@ export function LoginFormSkeleton() {
 
 export function SignUpFormSkeleton() {
   return (
-    <div
-      className={`${shimmer} w-full max-w-[420px] rounded-md bg-gray-100 px-[20px] py-[30px] shadow-sm`}
-    >
+    <div className="w-full max-w-[420px] animate-pulse rounded-md bg-gray-100 px-[20px] py-[30px] shadow-sm">
       <FormHeadingSkeleton />
       <TextInputQuestionSkeleton size="sm" className="mb-[26px]" />
       <TextInputQuestionSkeleton className="mb-[26px]" />
@@ -150,9 +143,7 @@ export function SignUpFormSkeleton() {
 
 export function ResetPasswordFormSkeleton() {
   return (
-    <div
-      className={`${shimmer} w-full max-w-[420px] rounded-md bg-gray-100 px-[20px] py-[30px] shadow-sm`}
-    >
+    <div className="w-full max-w-[420px] animate-pulse rounded-md bg-gray-100 px-[20px] py-[30px] shadow-sm">
       <FormHeadingSkeleton />
       <TextInputQuestionSkeleton size="sm" className="mb-[16px]" />
       <ButtonSkeleton className="mx-auto mb-[30px]" size="full">
@@ -165,7 +156,7 @@ export function ResetPasswordFormSkeleton() {
 
 export function OrgInfoCardSkeleton() {
   return (
-    <div className={`${shimmer} flex items-center gap-[8px] rounded-md bg-n-600 p-[6px]`}>
+    <div className="flex animate-pulse items-center gap-[8px] rounded-md bg-n-600 p-[6px]">
       <LogoSkeleton className="bg-n-500" size="md" />
       <TitleSkeleton size="sm" className="bg-n-500" />
     </div>

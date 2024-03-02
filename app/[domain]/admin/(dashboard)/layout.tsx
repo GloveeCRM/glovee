@@ -1,4 +1,4 @@
-import AdminSidebar from '@/components/admin/dashboard/nav/admin-sidebar'
+import DashboardSidebar from '@/components/admin/dashboard/nav/dashboard-sidebar'
 
 interface AdminLayoutProps {
   children: React.ReactNode
@@ -7,7 +7,7 @@ interface AdminLayoutProps {
 export default function AdminLayout({ children }: AdminLayoutProps) {
   return (
     <div id="dashboard" className="flex">
-      <AdminSidebar />
+      <DashboardSidebar />
       <div className="flex-1 p-[8px]">{children}</div>
     </div>
   )

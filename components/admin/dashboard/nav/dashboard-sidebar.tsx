@@ -5,10 +5,10 @@ import NavLinks from './admin-nav-links'
 import OrgInfoCard from './org-info-card'
 import { OrgInfoCardSkeleton } from '@/components/skeletons'
 
-export default function AdminSidebar() {
+export default function DashboardSidebar() {
   return (
     <div
-      id="adminSidebar"
+      id="dashboard-sidebard"
       className="sticky top-0 flex h-screen w-[230px] flex-col bg-n-700 p-[8px]"
     >
       <Suspense fallback={<OrgInfoCardSkeleton />}>

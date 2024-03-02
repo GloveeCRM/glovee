@@ -26,13 +26,6 @@ const config: Config = {
           400: '#F09235',
         },
       },
-      keyframes: {
-        shimmer: {
-          '100%': {
-            transform: 'translateX(100%)',
-          },
-        },
-      },
     },
   },
   plugins: [],
