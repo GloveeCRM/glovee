@@ -50,7 +50,7 @@ export async function sendResetPasswordEmail(
   email: string,
   resetPasswordToken: string
 ): Promise<{ success: string }> {
-  const orgName: string = getCurrentOrgName()
+  const orgName = getCurrentOrgName()
 
   let resetLink: string = ''
   if (!orgName) {

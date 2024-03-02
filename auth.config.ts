@@ -22,6 +22,8 @@ export default {
 
           const orgName = getCurrentOrgName()
 
+          if (!orgName) return null
+
           const user = await fetchUserByEmailAndOrgName(email, orgName)
           if (!user || !user.password) return null
 

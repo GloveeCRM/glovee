@@ -30,6 +30,10 @@ export async function createApplication(formData: FormData) {
 
   const orgName = getCurrentOrgName()
 
+  if (!orgName) {
+    return { error: 'Organization not found!' }
+  }
+
   const client = await fetchUserByEmailAndOrgName(clientEmail, orgName)
 
   if (!client) {

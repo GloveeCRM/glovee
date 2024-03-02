@@ -48,6 +48,10 @@ export async function login(
 
   const orgName = getCurrentOrgName()
 
+  if (!orgName) {
+    return { error: 'Organization not found!' }
+  }
+
   const existingUser = await fetchUserByEmailAndOrgName(email, orgName)
 
   if (!existingUser) {
@@ -104,6 +108,10 @@ export async function signUp(prevState: any, formData: FormData) {
   const { email, password, name } = data
 
   const orgName = getCurrentOrgName()
+
+  if (!orgName) {
+    return { error: 'Organization not found!' }
+  }
 
   const existingUser = await fetchUserByEmailAndOrgName(email, orgName)
 
@@ -172,6 +180,10 @@ export async function verifyUserEmail(
   }
 
   const orgName = getCurrentOrgName()
+
+  if (!orgName) {
+    return { error: 'Organization not found!' }
+  }
 
   const existingUser = await fetchUserByEmailAndOrgName(existingToken.email, orgName)
 
@@ -296,6 +308,10 @@ export async function triggerResetPasswordEmail(
   const { email } = data
   const orgName = getCurrentOrgName()
 
+  if (!orgName) {
+    return { error: 'Organization not found!' }
+  }
+
   const existingUser = await fetchUserByEmailAndOrgName(email, orgName)
 
   if (!existingUser) {
@@ -339,6 +355,10 @@ export async function resetPassword(token: string, prevState: any, formData: For
   }
 
   const orgName = getCurrentOrgName()
+
+  if (!orgName) {
+    return { error: 'Organization not found!' }
+  }
 
   const existingUser = await fetchUserByEmailAndOrgName(existingToken.email, orgName)
 
@@ -397,6 +417,10 @@ export async function settings(prevState: any, formData: FormData) {
 
   if (email && email !== user.email) {
     const orgName = getCurrentOrgName()
+
+    if (!orgName) {
+      return { error: 'Organization not found!' }
+    }
 
     const existingUser = await fetchUserByEmailAndOrgName(email, orgName)
 

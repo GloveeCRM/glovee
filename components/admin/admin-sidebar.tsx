@@ -1,7 +1,6 @@
-import Image from 'next/image'
-
 import { logout } from '@/lib/actions/auth'
 import NavLinks from './admin-nav-links'
+import OrgInfoCard from './org-info-card'
 
 export default function AdminSidebar() {
   return (
@@ -9,19 +8,7 @@ export default function AdminSidebar() {
       id="adminSidebar"
       className="sticky top-0 flex h-screen w-[230px] flex-col bg-n-700 p-[8px]"
     >
-      <div
-        id="org-info"
-        className="flex items-center gap-[8px] rounded-md bg-n-600 p-[6px] text-[14px] font-semibold text-n-100"
-      >
-        <Image
-          src="https://be8lvzzwj1r921za.public.blob.vercel-storage.com/calver-logo-oubsyhP5ERck6V1tCa1Xgq75pcFoKF.png"
-          alt="f"
-          width={65}
-          height={65}
-          className="rounded-full"
-        />
-        <h1>Calver Immigration Consulting Inc.</h1>
-      </div>
+      <OrgInfoCard />
       <div className="h-full">
         <NavLinks />
       </div>

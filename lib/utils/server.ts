@@ -8,6 +8,7 @@ import { extractSubdomainFromHostname } from './url'
 export function getCurrentOrgName() {
   const headersList = headers()
   const hostname = headersList.get('host')
-  const subdomain = extractSubdomainFromHostname(hostname!) || ''
+  if (!hostname) return null
+  const subdomain = extractSubdomainFromHostname(hostname)
   return subdomain
 }
