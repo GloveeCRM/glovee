@@ -6,7 +6,7 @@ interface IconSkeletonProps {
 function IconSkeleton({ className, size = 'md' }: IconSkeletonProps) {
   const width = size === 'sm' ? 'w-[20px]' : size === 'md' ? 'w-[40px]' : 'w-[60px]'
   const height = size === 'sm' ? 'h-[20px]' : size === 'md' ? 'h-[40px]' : 'h-[60px]'
-  return <div className={`${className} ${height} ${width} rounded-md bg-gray-300`} />
+  return <div className={`${className} ${height} ${width} rounded-md`} />
 }
 
 interface ButtonSkeletonProps {
@@ -25,9 +25,7 @@ function ButtonSkeleton({ children, className, size = 'md' }: ButtonSkeletonProp
           : 'w-full'
   const height = 'h-[45px]'
   return (
-    <div
-      className={`${className} ${height} ${width} flex items-center justify-center rounded-md bg-gray-300`}
-    >
+    <div className={`${className} ${height} ${width} flex items-center justify-center rounded-md`}>
       {children}
     </div>
   )
@@ -40,11 +38,15 @@ interface TitleSkeletonProps {
 function TitleSkeleton({ className, size = 'md' }: TitleSkeletonProps) {
   const width = size === 'sm' ? 'w-[100px]' : size === 'md' ? 'w-[200px]' : 'w-[300px]'
   const height = 'h-[16px]'
-  return <div className={`${className} ${height} ${width} rounded-md bg-gray-300`} />
+  return <div className={`${className} ${height} ${width} rounded-md`} />
 }
 
-function TextInputFieldSkeleton() {
-  return <div className="h-[35px] w-full rounded-md bg-gray-300" />
+interface TextInputFieldSkeletonProps {
+  className?: string
+}
+
+function TextInputFieldSkeleton({ className }: TextInputFieldSkeletonProps) {
+  return <div className={`${className} h-[35px] w-full rounded-md`} />
 }
 
 interface TextInputQuestionSkeletonProps {
@@ -55,8 +57,8 @@ interface TextInputQuestionSkeletonProps {
 function TextInputQuestionSkeleton({ className, size = 'md' }: TextInputQuestionSkeletonProps) {
   return (
     <div className={`${className} flex flex-col gap-[8px]`}>
-      <TitleSkeleton size={size} />
-      <TextInputFieldSkeleton />
+      <TitleSkeleton size={size} className="bg-n-400" />
+      <TextInputFieldSkeleton className="bg-n-300" />
     </div>
   )
 }
@@ -68,7 +70,7 @@ interface FormHeadingSkeletonProps {
 function FormHeadingSkeleton({ className }: FormHeadingSkeletonProps) {
   return (
     <div className={`${className} flex flex-col items-center`}>
-      <TitleSkeleton size="sm" className="mb-[8px]" />
+      <TitleSkeleton size="sm" className="mb-[8px] bg-n-400" />
       <DividerSkeleton className="mb-[16px]" />
     </div>
   )
@@ -79,7 +81,7 @@ interface DividerSkeletonProps {
 }
 
 function DividerSkeleton({ className }: DividerSkeletonProps) {
-  return <div className={`${className} h-[2px] w-full bg-gray-200`} />
+  return <div className={`${className} h-[2px] w-full bg-n-200`} />
 }
 
 interface LogoSkeletonProps {
@@ -96,25 +98,25 @@ function LogoSkeleton({ className, size }: LogoSkeletonProps) {
         : size === 'lg'
           ? 'h-[85px] w-[85px]'
           : 'h-[110px] w-[110px]'
-  return <div className={`${className} ${sizeClass} rounded-full bg-gray-200`} />
+  return <div className={`${className} ${sizeClass} rounded-full bg-n-200`} />
 }
 
 export function LoginFormSkeleton() {
   return (
-    <div className="w-full max-w-[420px] animate-pulse rounded-md bg-gray-100 px-[20px] py-[30px] shadow-sm">
+    <div className="w-full max-w-[420px] animate-pulse rounded-md bg-n-100 px-[20px] py-[30px] shadow-sm">
       <FormHeadingSkeleton />
       <TextInputQuestionSkeleton size="sm" className="mb-[26px]" />
       <TextInputQuestionSkeleton className="mb-[36px]" />
-      <ButtonSkeleton className="mx-auto mb-[16px]" size="full">
-        <TitleSkeleton size="sm" className="bg-gray-200" />
+      <ButtonSkeleton className="mx-auto mb-[16px] bg-n-300" size="full">
+        <TitleSkeleton size="sm" className="bg-n-400" />
       </ButtonSkeleton>
-      <ButtonSkeleton className="mx-auto mb-[36px]" size="full">
-        <IconSkeleton size="sm" className="bg-gray-200" />
+      <ButtonSkeleton className="mx-auto mb-[36px] bg-n-300" size="full">
+        <IconSkeleton size="sm" className="bg-n-200" />
       </ButtonSkeleton>
-      <TitleSkeleton size="md" className="mb-[26px] bg-gray-400" />
+      <TitleSkeleton size="md" className="mb-[26px] bg-n-400" />
       <div className="flex justify-center gap-[8px]">
-        <TitleSkeleton />
-        <TitleSkeleton size="sm" className="bg-gray-200" />
+        <TitleSkeleton className="bg-n-300" />
+        <TitleSkeleton size="sm" className="bg-n-400" />
       </div>
     </div>
   )
@@ -122,20 +124,20 @@ export function LoginFormSkeleton() {
 
 export function SignUpFormSkeleton() {
   return (
-    <div className="w-full max-w-[420px] animate-pulse rounded-md bg-gray-100 px-[20px] py-[30px] shadow-sm">
+    <div className="w-full max-w-[420px] animate-pulse rounded-md bg-n-100 px-[20px] py-[30px] shadow-sm">
       <FormHeadingSkeleton />
       <TextInputQuestionSkeleton size="sm" className="mb-[26px]" />
       <TextInputQuestionSkeleton className="mb-[26px]" />
       <TextInputQuestionSkeleton className="mb-[36px]" />
-      <ButtonSkeleton className="mx-auto mb-[16px]" size="full">
-        <TitleSkeleton size="sm" className="bg-gray-200" />
+      <ButtonSkeleton className="mx-auto mb-[16px] bg-n-300" size="full">
+        <TitleSkeleton size="sm" className="bg-n-400" />
       </ButtonSkeleton>
-      <ButtonSkeleton className="mx-auto mb-[26px]" size="full">
-        <IconSkeleton size="sm" className="bg-gray-200" />
+      <ButtonSkeleton className="mx-auto mb-[26px] bg-n-300" size="full">
+        <IconSkeleton size="sm" className="bg-n-200" />
       </ButtonSkeleton>
       <div className="flex justify-center gap-[8px]">
-        <TitleSkeleton />
-        <TitleSkeleton size="sm" className="bg-gray-200" />
+        <TitleSkeleton className="bg-n-300" />
+        <TitleSkeleton size="sm" className="bg-n-400" />
       </div>
     </div>
   )
@@ -143,13 +145,13 @@ export function SignUpFormSkeleton() {
 
 export function ResetPasswordFormSkeleton() {
   return (
-    <div className="w-full max-w-[420px] animate-pulse rounded-md bg-gray-100 px-[20px] py-[30px] shadow-sm">
+    <div className="w-full max-w-[420px] animate-pulse rounded-md bg-n-100 px-[20px] py-[30px] shadow-sm">
       <FormHeadingSkeleton />
       <TextInputQuestionSkeleton size="sm" className="mb-[16px]" />
-      <ButtonSkeleton className="mx-auto mb-[30px]" size="full">
-        <TitleSkeleton size="sm" className="bg-gray-200" />
+      <ButtonSkeleton className="mx-auto mb-[30px] bg-n-300" size="full">
+        <TitleSkeleton size="sm" className="bg-n-400" />
       </ButtonSkeleton>
-      <TitleSkeleton size="sm" className="bg-gray-200" />
+      <TitleSkeleton size="sm" className="bg-n-300" />
     </div>
   )
 }
