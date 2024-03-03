@@ -240,3 +240,27 @@ export async function deleteTemplateById(id: string) {
 
   revalidatePath('/admin/templates')
 }
+
+/**
+ * Update template title by id
+ */
+export async function updateTemplateTitleById(
+  templateId: string,
+  title: string
+): Promise<{ success?: string; error?: string }> {
+  try {
+    await prisma.template.update({
+      where: {
+        id: templateId,
+      },
+      data: {
+        title: title,
+      },
+    })
+
+    revalidatePath(`/admin/template/${templateId}/edit`)
+    return { success: 'Template title updated!' }
+  } catch (error) {
+    return { error: 'Failed to update template title!' }
+  }
+}
