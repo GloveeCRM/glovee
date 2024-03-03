@@ -2,15 +2,16 @@
 
 import { usePathname } from 'next/navigation'
 import { LuLayoutTemplate } from 'react-icons/lu'
-import { IoFolderOutline } from 'react-icons/io5'
+import { IoFolderOutline, IoSettingsOutline } from 'react-icons/io5'
 import { GoCommentDiscussion } from 'react-icons/go'
-import { IoSettingsOutline } from 'react-icons/io5'
+import { FaUsers } from 'react-icons/fa'
 
 import { NavLinkItem } from './nav-link-item'
 
 const links = [
   { name: 'Templates', path: '/admin/templates', icon: LuLayoutTemplate },
   { name: 'Applications', path: '/admin/applications', icon: IoFolderOutline },
+  { name: 'Clients', path: '/admin/clients', icon: FaUsers },
   { name: 'Tickets', path: '/admin/tickets', icon: GoCommentDiscussion },
   { name: 'Settings', path: '/admin/settings', icon: IoSettingsOutline },
 ]
