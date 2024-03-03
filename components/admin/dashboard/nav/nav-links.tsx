@@ -1,27 +1,37 @@
 'use client'
 
-import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { LuLayoutTemplate } from 'react-icons/lu'
+import { IoFolderOutline } from 'react-icons/io5'
+import { GoCommentDiscussion } from 'react-icons/go'
+import { IoSettingsOutline } from 'react-icons/io5'
+
+import { NavLinkItem } from './nav-link-item'
 
 const links = [
-  { name: 'Templates', path: '/admin/templates' },
-  { name: 'Applications', path: '/admin/applications' },
-  { name: 'Tickets', path: '/admin/tickets' },
-  { name: 'Settings', path: '/admin/settings' },
+  { name: 'Templates', path: '/admin/templates', icon: LuLayoutTemplate },
+  { name: 'Applications', path: '/admin/applications', icon: IoFolderOutline },
+  { name: 'Tickets', path: '/admin/tickets', icon: GoCommentDiscussion },
+  { name: 'Settings', path: '/admin/settings', icon: IoSettingsOutline },
 ]
-export default function NavLinks() {
+
+interface NavLinksProps {
+  className?: string
+}
+
+export default function NavLinks({ className }: NavLinksProps) {
   const pathname = usePathname()
 
   return (
-    <div id="nav-links" className="h-full">
+    <div id="nav-links" className={className}>
       {links.map((link) => (
-        <Link
+        <NavLinkItem
           key={link.path}
+          name={link.name}
           href={link.path}
-          className={`${pathname === link.path ? 'text-blue-200' : 'text-n-100'}`}
-        >
-          <p>{link.name}</p>
-        </Link>
+          icon={link.icon}
+          active={pathname === link.path}
+        />
       ))}
     </div>
   )
