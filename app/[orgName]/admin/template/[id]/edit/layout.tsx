@@ -6,11 +6,12 @@ interface templateEditLayoutProps {
 }
 
 export default function templateEditLayout({ params, children }: templateEditLayoutProps) {
-  console.log('orgName:', params.orgName)
+  const templateId = params.id
+
   return (
-    <div id="templateEditLayout" className="flex">
-      <TemplateEditSidebar templateId={params.id} />
-      <div className="w-full">{children}</div>
+    <div id="template-edit-layout" className="flex">
+      <TemplateEditSidebar templateId={templateId} />
+      <div className="flex-1">{children}</div>
     </div>
   )
 }

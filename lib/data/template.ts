@@ -1,4 +1,5 @@
 import { prisma } from '@/prisma/prisma'
+import { Template } from '@prisma/client'
 
 export async function fetchTemplatesByUserId(userId: string) {
   try {
@@ -9,7 +10,7 @@ export async function fetchTemplatesByUserId(userId: string) {
   }
 }
 
-export async function fetchTemplateById(id: string) {
+export async function fetchTemplateById(id: string): Promise<Template | null> {
   try {
     const template = await prisma.template.findUnique({
       where: { id },

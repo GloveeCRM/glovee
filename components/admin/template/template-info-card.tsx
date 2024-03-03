@@ -2,17 +2,25 @@ import { fetchTemplateById } from '@/lib/data/template'
 import TemplateInfoCardTitle from './template-info-card-title'
 import TemplateInfoCardDescription from './template-info-card-description'
 
+interface TemplateInfoCardProps {
+  templateId: string
+  editable?: boolean
+  className?: string
+}
 export default async function TemplateInfoCard({
   templateId,
+  editable = false,
   className,
-}: {
-  templateId: string
-  className?: string
-}) {
+}: TemplateInfoCardProps) {
   const template = await fetchTemplateById(templateId)
+
   return (
-    <div className={`${className} rounded bg-n-600 p-[8px]`}>
-      <TemplateInfoCardTitle title={template?.title || ''} />
+    <div className={`${className} rounded bg-n-600`}>
+      <TemplateInfoCardTitle
+        templateId={templateId}
+        title={template?.title || 'Untitled Template'}
+        editable={editable}
+      />
       {template?.description && <TemplateInfoCardDescription description={template.description} />}
     </div>
   )
