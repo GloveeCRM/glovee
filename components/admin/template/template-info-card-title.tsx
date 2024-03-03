@@ -1,7 +1,7 @@
 'use client'
 
 import { updateTemplateTitleById } from '@/lib/actions/template'
-import { experimental_useOptimistic as useOptimistic, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { PiCheckBold } from 'react-icons/pi'
 import { MdOutlineModeEdit } from 'react-icons/md'
 
