@@ -4,12 +4,13 @@ export default async function ClientsPage({ params }: { params: { orgName: strin
   const orgName = params.orgName
   const clients = await fetchClientsByOrgName(orgName)
   return (
-    <div>
-      <h1 className="mb-[15px] text-[24px] font-bold">
-        {clients.map((client) => (
-          <div key={client.id}>{client.email}</div>
-        ))}
-      </h1>
+    <div className="mb-[15px] text-[24px] font-bold">
+      {clients.map((client) => (
+        <div key={client.id}>
+          <p>{client.name}</p>
+          <p>{client.email}</p>
+        </div>
+      ))}
     </div>
   )
 }
