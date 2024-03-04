@@ -1,26 +1,34 @@
 'use client'
 
-import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
+import { IoFolderOutline, IoSettingsOutline } from 'react-icons/io5'
+import { GoCommentDiscussion } from 'react-icons/go'
+import { NavLinkItem } from '../admin/dashboard/nav/nav-link-item'
+
 const links = [
-  { name: 'Applications', path: '/applications' },
-  { name: 'Tickets', path: '/tickets' },
-  { name: 'Settings', path: '/settings' },
+  { name: 'Applications', path: '/applications', icon: IoFolderOutline },
+  { name: 'Tickets', path: '/tickets', icon: GoCommentDiscussion },
+  { name: 'Settings', path: '/settings', icon: IoSettingsOutline },
 ]
-export default function NavLinks() {
+
+interface NavLinksProps {
+  className?: string
+}
+
+export default function NavLinks({ className }: NavLinksProps) {
   const pathname = usePathname()
 
   return (
-    <div id="navLinks">
+    <div id="nav-links" className={className}>
       {links.map((link) => (
-        <Link
+        <NavLinkItem
           key={link.path}
+          name={link.name}
           href={link.path}
-          className={`${pathname === link.path && 'text-blue-200'}`}
-        >
-          <p>{link.name}</p>
-        </Link>
+          icon={link.icon}
+          active={pathname === link.path}
+        />
       ))}
     </div>
   )
