@@ -1,6 +1,9 @@
-import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
 import Link from 'next/link'
 import Image from 'next/image'
+
+import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
+import ActiveButton from './active-button'
+import DeactiveButton from './deactive-button'
 
 export default function ClientsTableRow({
   id,
@@ -33,7 +36,11 @@ export default function ClientsTableRow({
       </td>
       <td>{email}</td>
       <td>{id}</td>
-      <td>{status}</td>
+      <td>
+        {status}
+        <ActiveButton />
+        <DeactiveButton />
+      </td>
     </tr>
   )
 }
