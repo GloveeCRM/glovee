@@ -1,5 +1,9 @@
+'use server'
+
 import { prisma } from '@/prisma/prisma'
 import { UserRole } from '@prisma/client'
+import { UserStatus } from '@prisma/client'
+import { revalidatePath } from 'next/cache'
 
 export async function fetchClientsByOrgName(orgName: string) {
   try {
@@ -15,5 +19,24 @@ export async function fetchClientsByOrgName(orgName: string) {
     return clients
   } catch {
     return []
+  }
+}
+
+export async function deactiveClientById(id: string) {
+  try {
+    console.log('deactivating client')
+    await prisma.user.update({
+      where: { id: id },
+      data: {
+        status: UserStatus.INACTIVE,
+      },
+    })
+    console.log('revalidating path')
+
+    revalidatePath('/admin/clients')
+    return { success: 'Client deactived!' }
+  } catch (error) {
+    console.log('error deactivating client', error)
+    return { error: 'Client not found!' }
   }
 }
