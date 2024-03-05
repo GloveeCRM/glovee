@@ -24,19 +24,32 @@ export async function fetchClientsByOrgName(orgName: string) {
 
 export async function deactivateClientById(id: string) {
   try {
-    console.log('deactivating client')
     await prisma.user.update({
       where: { id: id },
       data: {
         status: UserStatus.INACTIVE,
       },
     })
-    console.log('revalidating path')
 
     revalidatePath('/admin/clients')
     return { success: 'Client deactived!' }
   } catch (error) {
-    console.log('error deactivating client', error)
+    return { error: 'Client not found!' }
+  }
+}
+
+export async function activateClientById(id: string) {
+  try {
+    await prisma.user.update({
+      where: { id: id },
+      data: {
+        status: UserStatus.ACTIVE,
+      },
+    })
+
+    revalidatePath('/admin/clients')
+    return { success: 'Client activated!' }
+  } catch (error) {
     return { error: 'Client not found!' }
   }
 }

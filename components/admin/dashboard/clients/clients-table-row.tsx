@@ -38,7 +38,7 @@ export default function ClientsTableRow({
       <td>{id}</td>
       <td>
         {status}
-        <ActiveButton />
+        <ActiveButton CLientId={id} />
         <DeactiveButton CLientId={id} />
       </td>
     </tr>
