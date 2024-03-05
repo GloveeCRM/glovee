@@ -22,7 +22,7 @@ export async function fetchClientsByOrgName(orgName: string) {
   }
 }
 
-export async function deactiveClientById(id: string) {
+export async function deactivateClientById(id: string) {
   try {
     console.log('deactivating client')
     await prisma.user.update({
