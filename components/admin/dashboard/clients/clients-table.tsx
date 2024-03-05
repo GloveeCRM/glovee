@@ -1,4 +1,5 @@
 import { fetchClientsByOrgName } from '@/lib/data/clients'
+import ClientTableRow from './client-table-row'
 
 export default async function ClientsTable({ orgName }: { orgName: string }) {
   const clients = await fetchClientsByOrgName(orgName)
@@ -10,6 +11,7 @@ export default async function ClientsTable({ orgName }: { orgName: string }) {
           <th>ID</th>
           <th>Name</th>
           <th>Email</th>
+          <th>Status</th>
         </tr>
         {clients.length === 0 ? (
           <tr>
@@ -17,11 +19,13 @@ export default async function ClientsTable({ orgName }: { orgName: string }) {
           </tr>
         ) : (
           clients.map((client) => (
-            <tr key={client.id}>
-              <td>{client.id}</td>
-              <td>{client.name}</td>
-              <td>{client.email}</td>
-            </tr>
+            <ClientTableRow
+              id={client.id}
+              name={client.name!}
+              email={client.email!}
+              status={client.status}
+              key={client.id}
+            />
           ))
         )}
       </tbody>
