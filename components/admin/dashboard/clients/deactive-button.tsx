@@ -1,10 +1,10 @@
 'use client'
 
-import { deactiveClientById } from '@/lib/data/clients'
+import { deactivateClientById } from '@/lib/data/clients'
 
 export default function DeactiveButton({ CLientId }: { CLientId: string }) {
   async function handleClickDeactivate() {
-    await deactiveClientById(CLientId)
+    await deactivateClientById(CLientId)
   }
   return (
     <button
