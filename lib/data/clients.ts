@@ -22,6 +22,40 @@ export async function fetchClientsByOrgName(orgName: string) {
   }
 }
 
+export async function fetchClientsByOrgNameandSearchQuery(orgName: string, query: string) {
+  try {
+    const clients = await prisma.user.findMany({
+      where: {
+        role: UserRole.ORG_CLIENT,
+        organization: {
+          orgName: orgName,
+        },
+        OR: [
+          {
+            id: {
+              contains: query,
+            },
+          },
+          {
+            name: {
+              contains: query,
+            },
+          },
+          {
+            email: {
+              contains: query,
+            },
+          },
+        ],
+      },
+    })
+
+    return clients
+  } catch {
+    return []
+  }
+}
+
 export async function deactivateClientById(id: string) {
   try {
     await prisma.user.update({

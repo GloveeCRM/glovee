@@ -1,8 +1,8 @@
-import { fetchClientsByOrgName } from '@/lib/data/clients'
+import { fetchClientsByOrgNameandSearchQuery } from '@/lib/data/clients'
 import ClientsTableRow from './clients-table-row'
 
-export default async function ClientsTable({ orgName }: { orgName: string }) {
-  const clients = await fetchClientsByOrgName(orgName)
+export default async function ClientsTable({ orgName, query }: { orgName: string; query: string }) {
+  const clients = await fetchClientsByOrgNameandSearchQuery(orgName, query)
 
   return (
     <table className="border-separate border-spacing-2 border border-n-700">
