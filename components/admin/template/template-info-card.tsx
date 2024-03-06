@@ -21,7 +21,13 @@ export default async function TemplateInfoCard({
         title={template?.title || 'Untitled Template'}
         editable={editable}
       />
-      {template?.description && <TemplateInfoCardDescription description={template.description} />}
+      {template?.description && (
+        <TemplateInfoCardDescription
+          templateId={templateId}
+          description={template.description}
+          editable={editable}
+        />
+      )}
     </div>
   )
 }

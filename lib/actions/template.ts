@@ -264,3 +264,27 @@ export async function updateTemplateTitleById(
     return { error: 'Failed to update template title!' }
   }
 }
+
+/**
+ * Update template description by id
+ */
+export async function updateTemplateDescriptionById(
+  templateId: string,
+  description: string
+): Promise<{ success?: string; error?: string }> {
+  try {
+    await prisma.template.update({
+      where: {
+        id: templateId,
+      },
+      data: {
+        description: description,
+      },
+    })
+
+    revalidatePath(`/admin/template/${templateId}/edit`)
+    return { success: 'Template description updated!' }
+  } catch (error) {
+    return { error: 'Failed to update template description!' }
+  }
+}
