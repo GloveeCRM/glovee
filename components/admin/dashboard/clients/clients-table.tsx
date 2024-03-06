@@ -11,7 +11,7 @@ export default async function ClientsTable({ orgName }: { orgName: string }) {
           <th></th>
           <th>Name</th>
           <th>Email</th>
-          <th>ID</th>
+          <th>Client ID</th>
           <th>Status</th>
         </tr>
         {clients.length === 0 ? (

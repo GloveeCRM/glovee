@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 
+import { UserStatus } from '@prisma/client'
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
 import ActiveButton from './active-button'
 import DeactiveButton from './deactive-button'
@@ -37,9 +38,8 @@ export default function ClientsTableRow({
       <td>{email}</td>
       <td>{id}</td>
       <td>
-        {status}
-        <ActiveButton CLientId={id} />
-        <DeactiveButton CLientId={id} />
+        {(status === UserStatus.ACTIVE && <DeactiveButton CLientId={id} />) ||
+          (status === UserStatus.INACTIVE && <ActiveButton CLientId={id} />)}
       </td>
     </tr>
   )
