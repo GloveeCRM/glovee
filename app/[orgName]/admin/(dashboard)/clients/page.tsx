@@ -11,7 +11,8 @@ export default async function ClientsPage({
   }
 }) {
   const orgName = params.orgName
-  const query = searchParams?.query || ''
+  const query = searchParams?.query?.trim() || ''
+
   return (
     <>
       <ClinetPageToolBar />

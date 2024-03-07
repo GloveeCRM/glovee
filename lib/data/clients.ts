@@ -39,11 +39,13 @@ export async function fetchClientsByOrgNameandSearchQuery(orgName: string, query
           {
             name: {
               contains: query,
+              mode: 'insensitive',
             },
           },
           {
             email: {
               contains: query,
+              mode: 'insensitive',
             },
           },
         ],

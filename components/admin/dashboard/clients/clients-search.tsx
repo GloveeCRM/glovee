@@ -1,7 +1,9 @@
 'use client'
+
 import { useSearchParams, usePathname, useRouter } from 'next/navigation'
 import { useDebouncedCallback } from 'use-debounce'
 import { IoSearch } from 'react-icons/io5'
+import { useEffect } from 'react'
 
 export default function ClientsSearch({
   placeholder,
@@ -15,8 +17,6 @@ export default function ClientsSearch({
   const { replace } = useRouter()
 
   const handleClientSearch = useDebouncedCallback((searchInput) => {
-    console.log(`Searching... ${searchInput}`)
-
     const params = new URLSearchParams(searchParams)
     if (searchInput) {
       params.set('query', searchInput)
@@ -26,6 +26,14 @@ export default function ClientsSearch({
     replace(`${pathname}?${params.toString()}`)
   }, 1000)
 
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    handleClientSearch(e.target.value)
+  }
+
+  useEffect(() => {
+    handleClientSearch('')
+  }, [handleClientSearch])
+
   return (
     <div className="relative flex flex-1 flex-shrink-0">
       <label htmlFor="search" className="sr-only">
@@ -34,7 +42,7 @@ export default function ClientsSearch({
       <input
         type="text"
         className={`${className} peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500`}
-        onChange={(e) => handleClientSearch(e.target.value)}
+        onChange={handleChange}
         placeholder={placeholder}
         defaultValue={searchParams.get('query')?.toString()}
       />
