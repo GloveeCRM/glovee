@@ -1,10 +1,11 @@
 import ClientsSearch from './clients-search'
+import CreateNewClient from './create-new-client'
 
 export default function ClinetPageToolBar() {
   return (
-    <div className="flex justify-between bg-yellow-500">
+    <div className="flex justify-between">
       <ClientsSearch placeholder="Search clients" className="w-1/3" />
-      <div>Add new client</div>
+      <CreateNewClient />
     </div>
   )
 }
