@@ -2,6 +2,12 @@ import { z } from 'zod'
 
 import { UserRole } from '@prisma/client'
 
+export const CreateClientSchema = z.object({
+  clientFirstName: z.string(),
+  clientLastName: z.string(),
+  clientEmail: z.string().email(),
+})
+
 export const ApplicationSchema = z.object({
   clientEmail: z.string().email(),
   templateId: z.string(),

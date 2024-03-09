@@ -3,12 +3,29 @@
 import { MouseEvent } from 'react'
 
 import { Modal, useModal } from '@/components/ui/modal'
+import { createClient } from '@/lib/actions/user'
 
 export default function CreateNewClientModal() {
   const { closeModal } = useModal()
+
+  async function handleCreateClient(formData: FormData) {
+    createClient(formData)
+      .then((data) => {
+        closeModal()
+        if (data.success) {
+          alert('Client created successfully')
+        } else {
+          alert('Client creation failed')
+        }
+      })
+      .catch((err) => {
+        alert('Client creation failed miserably')
+      })
+  }
+
   return (
     <Modal title="Create a new client">
-      <form action="" className="w-[85vw] max-w-[570px]">
+      <form action={handleCreateClient} className="w-[85vw] max-w-[570px]">
         <div>
           <div className="flex">
             <div>
