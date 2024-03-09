@@ -1,4 +1,4 @@
-import { fetchClientsByOrgNameandSearchQuery } from '@/lib/data/clients'
+import { fetchClientsByOrgNameandSearchQuery } from '@/lib/data/user'
 import ClientsTableRow from './clients-table-row'
 
 export default async function ClientsTable({ orgName, query }: { orgName: string; query: string }) {

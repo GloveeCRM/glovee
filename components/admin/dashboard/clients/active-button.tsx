@@ -1,6 +1,6 @@
 'use client'
 
-import { activateClientById } from '@/lib/data/clients'
+import { activateClientById } from '@/lib/data/user'
 
 export default function ActiveButton({ CLientId }: { CLientId: string }) {
   async function handleClickReactivate() {
