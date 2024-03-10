@@ -75,7 +75,7 @@ export default function TemplateInfoCardDescription({
           <p
             className={`mb-[4px] ml-[7px] w-[calc(100%-14px)] pt-[2px] text-n-300 ${description.length <= 129 && 'mb-[6px]'} ${!isExpanded ? 'line-clamp-3' : ''}`}
           >
-            {description}
+            {description || <span>No description</span>}
           </p>
           {description.length > 129 && (
             <button
