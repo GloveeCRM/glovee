@@ -65,7 +65,7 @@ export default function TemplateInfoCardDescription({
       {isEditing ? (
         <textarea
           ref={descriptionInputRef}
-          className="mb-[4px] ml-[2px] mt-[5px] block w-[calc(100%-25px)] resize-none overflow-hidden rounded border-[1px] border-n-500 bg-n-700/70 px-[4px] pb-[2px] focus:border-[1px] focus:border-n-500 focus:outline-none"
+          className="mb-[6px] ml-[2px] mt-[2px] block w-[calc(100%-25px)] resize-none overflow-hidden rounded border-[1px] border-n-500 bg-n-700/70 px-[4px] pb-[2px] focus:border-[1px] focus:border-n-500 focus:outline-none"
           defaultValue={description}
           onChange={adjustTextareaHeight}
           onKeyDown={handleKeyDown}
@@ -73,13 +73,13 @@ export default function TemplateInfoCardDescription({
       ) : (
         <>
           <p
-            className={`mb-[4px] ml-[7px] w-[calc(100%-14px)] pt-[6px] text-n-300 ${!isExpanded ? 'line-clamp-3' : ''}`}
+            className={`mb-[4px] ml-[7px] w-[calc(100%-14px)] pt-[2px] text-n-300 ${description.length <= 129 && 'mb-[6px]'} ${!isExpanded ? 'line-clamp-3' : ''}`}
           >
             {description}
           </p>
-          {description.length > 85 && (
+          {description.length > 129 && (
             <button
-              className="mb-[4px] ml-[7px] text-[11px] text-n-100 underline"
+              className="mb-[6px] ml-[7px] text-[11px] text-n-100 underline"
               onClick={() => setIsExpanded(!isExpanded)}
             >
               {isExpanded ? 'Show less' : 'Show more'}

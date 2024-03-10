@@ -33,10 +33,17 @@ function ButtonSkeleton({ children, className, size = 'md' }: ButtonSkeletonProp
 
 interface TitleSkeletonProps {
   className?: string
-  size?: 'sm' | 'md' | 'lg'
+  size?: 'sm' | 'md' | 'lg' | 'full'
 }
 function TitleSkeleton({ className, size = 'md' }: TitleSkeletonProps) {
-  const width = size === 'sm' ? 'w-[100px]' : size === 'md' ? 'w-[200px]' : 'w-[300px]'
+  const width =
+    size === 'sm'
+      ? 'w-[100px]'
+      : size === 'md'
+        ? 'w-[200px]'
+        : size === 'lg'
+          ? 'w-[300px]'
+          : 'w-full'
   const height = 'h-[16px]'
   return <div className={`${className} ${height} ${width} rounded-md`} />
 }
@@ -205,6 +212,59 @@ export function TemplateCardWrapperSkeleton() {
       <TemplateCardSkeleton />
       <TemplateCardSkeleton />
       <TemplateCardSkeleton />
+    </div>
+  )
+}
+
+export function TemplateInfoCardSkeleton() {
+  return (
+    <div className="flex animate-pulse flex-col gap-[5px] rounded bg-n-600 p-[8px]">
+      <TitleSkeleton size="sm" className="bg-n-400" />
+      <div className="flex flex-col gap-[4px]">
+        <TitleSkeleton size="full" className="bg-n-500" />
+        <TitleSkeleton size="full" className="bg-n-500" />
+      </div>
+    </div>
+  )
+}
+
+function TemplateEditSidebarCategorySkeleton() {
+  return (
+    <div className="flex items-center gap-[4px] rounded bg-n-600/80 p-[10px]">
+      <IconSkeleton className="h-[30px] w-[30px] bg-n-500" />
+      <TitleSkeleton className="w-[135px] bg-n-500" />
+    </div>
+  )
+}
+
+interface TemplateEditSidebarSectionSkeletonProps {
+  selected?: boolean
+}
+
+function TemplateEditSidebarSectionSkeleton({ selected }: TemplateEditSidebarSectionSkeletonProps) {
+  return (
+    <div
+      className={`flex items-center gap-[4px] rounded py-[8px] pl-[35px] ${selected ? 'bg-n-500/60' : 'bg-n-600/50'}`}
+    >
+      <IconSkeleton size="sm" className={`${selected ? 'bg-n-400' : 'bg-n-500'}`} />
+      <TitleSkeleton className={`w-[135px] ${selected ? 'bg-n-400' : 'bg-n-500'}`} />
+    </div>
+  )
+}
+
+export function TemplateEditSidebarCategoriesSkeleton() {
+  return (
+    <div className="flex animate-pulse flex-col gap-[12px] rounded bg-n-600/50 p-[6px]">
+      <div className="flex flex-col gap-[6px]">
+        <TemplateEditSidebarCategorySkeleton />
+        <TemplateEditSidebarSectionSkeleton selected />
+        <TemplateEditSidebarSectionSkeleton />
+        <TemplateEditSidebarSectionSkeleton />
+      </div>
+
+      <TemplateEditSidebarCategorySkeleton />
+      <TemplateEditSidebarCategorySkeleton />
+      <TemplateEditSidebarCategorySkeleton />
     </div>
   )
 }

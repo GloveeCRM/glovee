@@ -7,19 +7,19 @@ import {
 } from '@prisma/client'
 
 export type TemplateType = Template & {
-  categories: TemplateCategoryType[]
+  categories?: TemplateCategoryType[]
 }
 
 export type TemplateCategoryType = TemplateCategory & {
-  sections: TemplateSectionType[]
+  sections?: TemplateSectionType[]
 }
 
 export type TemplateSectionType = TemplateSection & {
-  questionSets: TemplateQuestionSetType[]
+  questionSets?: TemplateQuestionSetType[]
 }
 
 export type TemplateQuestionSetType = TemplateQuestionSet & {
-  questions: TemplateQuestionType[]
+  questions?: TemplateQuestionType[]
 }
 
 export type TemplateQuestionType = TemplateQuestion & {}
