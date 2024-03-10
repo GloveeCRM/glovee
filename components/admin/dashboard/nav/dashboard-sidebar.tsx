@@ -13,7 +13,7 @@ export default function DashboardSidebar({ orgName }: DashboardSidebarProps) {
   return (
     <div
       id="dashboard-sidebard"
-      className="sticky top-0 flex h-screen w-[230px] flex-col bg-n-700 p-[8px]"
+      className="sticky top-0 flex h-screen w-[230px] flex-shrink-0 flex-col bg-n-700 p-[8px]"
     >
       <div id="sidebar-header" className="mb-[10px] min-h-[77px] flex-shrink-0">
         <Suspense fallback={<OrgInfoCardSkeleton />}>

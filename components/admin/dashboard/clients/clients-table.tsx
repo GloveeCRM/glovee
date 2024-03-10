@@ -5,18 +5,18 @@ export default async function ClientsTable({ orgName, query }: { orgName: string
   const clients = await fetchClientsByOrgNameandSearchQuery(orgName, query)
 
   return (
-    <table className="border-separate border-spacing-2 border border-n-700">
+    <table className="w-full">
       <tbody>
-        <tr>
+        <tr className="border-b-2 border-n-700 text-left">
           <th></th>
-          <th>Name</th>
+          <th>Full Name</th>
           <th>Email</th>
-          <th>Client ID</th>
+          <th>ID</th>
           <th>Status</th>
         </tr>
         {clients.length === 0 ? (
           <tr>
-            <td colSpan={3}>No clients found</td>
+            <td colSpan={5}>No clients found</td>
           </tr>
         ) : (
           clients.map((client) => (

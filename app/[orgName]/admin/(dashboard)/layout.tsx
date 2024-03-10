@@ -9,9 +9,9 @@ export default function AdminLayout({ children, params }: AdminLayoutProps) {
   const orgName = params.orgName
 
   return (
-    <div id="dashboard" className="flex">
+    <div id="dashboard" className="flex overflow-hidden">
       <DashboardSidebar orgName={orgName} />
-      <div className="flex-1 p-[8px]">{children}</div>
+      <div className="flex-1 overflow-auto p-[8px]">{children}</div>
     </div>
   )
 }

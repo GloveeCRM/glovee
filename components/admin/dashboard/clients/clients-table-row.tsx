@@ -21,12 +21,12 @@ export default function ClientsTableRow({
 }) {
   return (
     <tr key={id}>
-      <td>
+      <td className="min-w-[50px]">
         <Image
           src={image || DEFAULT_MALE_CLIENT_LOGO_URL}
           alt="CLient Logo"
-          width={65}
-          height={65}
+          width={45}
+          height={45}
           className="rounded-full"
         />
       </td>
@@ -37,9 +37,12 @@ export default function ClientsTableRow({
       </td>
       <td>{email}</td>
       <td>{id}</td>
-      <td>
-        {(status === UserStatus.ACTIVE && <DeactiveButton CLientId={id} />) ||
-          (status === UserStatus.INACTIVE && <ActiveButton CLientId={id} />)}
+      <td className="">
+        <span className="rounded-full bg-n-600 p-[6px] text-center text-xs text-white">
+          {status}
+        </span>
+        {/* {(status === UserStatus.ACTIVE && <DeactiveButton CLientId={id} />) ||
+          (status === UserStatus.INACTIVE && <ActiveButton CLientId={id} />)} */}
       </td>
     </tr>
   )
