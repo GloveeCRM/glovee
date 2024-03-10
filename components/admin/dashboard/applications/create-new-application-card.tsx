@@ -12,7 +12,7 @@ export default async function CreateNewApplicationCard() {
     return null
   }
 
-  const templates = await fetchTemplatesByUserId(user.id)
+  const templates = (await fetchTemplatesByUserId(user.id)) || []
 
   return (
     <ModalProvider>

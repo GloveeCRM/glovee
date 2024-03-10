@@ -215,29 +215,21 @@ export async function createTemplate(prevState: any, formDara: FormData) {
   return { success: 'Template created!', data: template }
 }
 
-export async function deleteTemplateById(id: string) {
-  const user = await getAuthenticatedUser()
+/**
+ * Delete template by id
+ */
+export async function deleteTemplateById(templateId: string) {
+  try {
+    await prisma.template.delete({
+      where: {
+        id: templateId,
+      },
+    })
 
-  if (!user) {
-    return { error: 'User not found! logout and login again.' }
+    revalidatePath('/admin/templates')
+  } catch (error) {
+    return { error: 'Failed to delete template!' }
   }
-
-  const template = await prisma.template.findUnique({
-    where: {
-      id,
-    },
-  })
-
-  if (template?.userId !== user.id) {
-    return { error: 'You are not authorized to delete this template!' }
-  }
-
-  await prisma.template.delete({
-    where: {
-      id,
-    },
-  })
-
   revalidatePath('/admin/templates')
 }
 

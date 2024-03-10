@@ -6,6 +6,7 @@ import TemplateCard from './template-card'
 export default async function TemplateCardWrapper() {
   const user = await getAuthenticatedUser()
   if (!user || !user.id) return null
+  // TODO: Change this to be ORG ID
   const templates = await fetchTemplatesByUserId(user.id)
 
   return (

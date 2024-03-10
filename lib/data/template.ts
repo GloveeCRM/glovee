@@ -10,7 +10,7 @@ import { TemplateCategoryType, TemplateQuestionSetType, TemplateType } from '@/l
  */
 export async function fetchTemplatesByUserId(userId: string): Promise<Template[] | null> {
   try {
-    const templates = await prisma.template.findMany({ where: { userId } })
+    const templates = await prisma.template.findMany({ where: { userId: userId } })
     return templates
   } catch {
     return null

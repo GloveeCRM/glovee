@@ -1,7 +1,7 @@
 import { QuestionSet } from '@/app/[orgName]/(client)/applications/[id]/page'
 import FlatQuestionSet from '@/components/forms/questionSetType/flat-question-set'
 import LoopQuestionSet from '@/components/forms/questionSetType/loop-question-set'
-import { fetchTemplateQuestionSetsBySectionId } from '@/lib/data/template'
+import { fetchTemplateQuestionSetsWithQuestionsBySectionId } from '@/lib/data/template'
 
 export default async function TemplatePreviewPage({
   searchParams,
@@ -9,7 +9,7 @@ export default async function TemplatePreviewPage({
   searchParams: { section?: string }
 }) {
   const sectionId = searchParams.section || ''
-  const templateQuestionSets = (await fetchTemplateQuestionSetsBySectionId(
+  const templateQuestionSets = (await fetchTemplateQuestionSetsWithQuestionsBySectionId(
     sectionId
   )) as QuestionSet[]
 

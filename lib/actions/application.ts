@@ -7,17 +7,17 @@ import { UserRole } from '@prisma/client'
 import { getAuthenticatedUser } from '@/auth'
 import { fetchUserByEmailAndOrgName } from '../data/user'
 import { ApplicationSchema } from '../zod/schemas'
-import { fetchTemplateById } from '../data/template'
+import { fetchFullTemplateById } from '../data/template'
 import { getCurrentOrgName } from '../utils/server'
+import { validateFormDataAgainstSchema } from '../utils/validation'
 
-export async function createApplication(formData: FormData) {
-  const validatedFields = ApplicationSchema.safeParse({
-    clientEmail: formData.get('clientEmail'),
-    templateId: formData.get('templateId'),
-  })
+export async function createApplication(
+  formData: FormData
+): Promise<{ success?: string; error?: string; errors?: any }> {
+  const { data, errors } = await validateFormDataAgainstSchema(ApplicationSchema, formData)
 
-  if (!validatedFields.success) {
-    return { errors: validatedFields.error.flatten().fieldErrors }
+  if (errors) {
+    return { errors }
   }
 
   const user = await getAuthenticatedUser()
@@ -26,13 +26,13 @@ export async function createApplication(formData: FormData) {
     return { error: 'You are not authorized to create application!' }
   }
 
-  const { clientEmail, templateId } = validatedFields.data
-
   const orgName = getCurrentOrgName()
 
   if (!orgName) {
     return { error: 'Organization not found!' }
   }
+
+  const { clientEmail, templateId } = data
 
   const client = await fetchUserByEmailAndOrgName(clientEmail, orgName)
 
@@ -44,7 +44,7 @@ export async function createApplication(formData: FormData) {
     return { error: 'Client is not a user!' }
   }
 
-  const template = await fetchTemplateById(templateId)
+  const template = await fetchFullTemplateById(templateId)
 
   if (!template) {
     return { error: 'Template not found!' }
@@ -56,19 +56,19 @@ export async function createApplication(formData: FormData) {
       userId: user.id!,
       status: 'CREATED',
       categories: {
-        create: template.categories.map((category) => ({
+        create: template.categories?.map((category) => ({
           title: category.title,
           position: category.position,
           sections: {
-            create: category.sections.map((section) => ({
+            create: category.sections?.map((section) => ({
               title: section.title,
               position: section.position,
               questionSets: {
-                create: section.questionSets.map((questionSet) => ({
+                create: section.questionSets?.map((questionSet) => ({
                   type: questionSet.type,
                   position: questionSet.position,
                   questions: {
-                    create: questionSet.questions.map((question) => ({
+                    create: questionSet.questions?.map((question) => ({
                       type: question.type,
                       prompt: question.prompt,
                       position: question.position,
@@ -88,16 +88,25 @@ export async function createApplication(formData: FormData) {
   return { success: 'Template created!' }
 }
 
-export async function submitApplicationById(id: string) {
-  const application = await prisma.application.update({
-    where: {
-      id: id,
-    },
-    data: {
-      status: 'SUBMITTED',
-    },
-  })
+/**
+ * Set application status to submitted
+ */
+export async function submitApplicationById(
+  applicationId: string
+): Promise<{ success?: string; error?: string }> {
+  try {
+    await prisma.application.update({
+      where: {
+        id: applicationId,
+      },
+      data: {
+        status: 'SUBMITTED',
+      },
+    })
 
-  revalidatePath('/applications')
-  return { success: 'Application submitted!' }
+    revalidatePath('/applications')
+    return { success: 'Application submitted!' }
+  } catch (error) {
+    return { error: 'Failed to submit application!' }
+  }
 }
