@@ -5,7 +5,7 @@ import { CreateClientSchema } from '../zod/schemas'
 import { getCurrentOrgName } from '../utils/server'
 import { revalidatePath } from 'next/cache'
 
-export async function createClient(formData: FormData) {
+export async function createClient(prevState: any, formData: FormData) {
   const validatedFields = CreateClientSchema.safeParse({
     clientFirstName: formData.get('clientFirstName'),
     clientLastName: formData.get('clientLastName'),
