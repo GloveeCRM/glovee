@@ -37,10 +37,8 @@ export default function ClientsTableRow({
       </td>
       <td>{email}</td>
       <td>{id}</td>
-      <td className="">
-        <span className="rounded-full bg-n-600 p-[6px] text-center text-xs text-white">
-          {status}
-        </span>
+      <td>
+        <span className="rounded-full bg-n-600 p-[6px] text-[12px] text-white">{status}</span>
         {/* {(status === UserStatus.ACTIVE && <DeactiveButton CLientId={id} />) ||
           (status === UserStatus.INACTIVE && <ActiveButton CLientId={id} />)} */}
       </td>

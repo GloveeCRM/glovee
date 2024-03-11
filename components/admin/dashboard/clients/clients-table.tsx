@@ -5,7 +5,7 @@ export default async function ClientsTable({ orgName, query }: { orgName: string
   const clients = await fetchClientsByOrgNameandSearchQuery(orgName, query)
 
   return (
-    <table className="w-full">
+    <table className="mt-[28px] w-full text-[14px]">
       <tbody>
         <tr className="border-b-2 border-n-700 text-left">
           <th></th>
