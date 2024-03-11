@@ -1,5 +1,10 @@
-import { TemplateCategoryType } from '@/lib/types/template'
 import { IoMdArrowDropdown, IoMdArrowDropright } from 'react-icons/io'
+
+import { TemplateCategoryType } from '@/lib/types/template'
+import { useTemplateEditContext } from '@/contexts/template-edit-context'
+import TemplateEditSidebarSection from './template-edit-sidebar-section'
+import CreateSectionButton from './create-section-button'
+import TemplateEditSidebarSectionWrapper from './template-edit-sidebar-section-wrapper'
 
 interface TemplateEditSidebarCategoryProps {
   category: TemplateCategoryType
@@ -10,14 +15,29 @@ export default function TemplateEditSidebarCategory({
   category,
   isExpanded,
 }: TemplateEditSidebarCategoryProps) {
+  const { selectedCategoryId, setSelectedCategoryId, setSelectedSectionId } =
+    useTemplateEditContext()
+
+  function handleClickCategory() {
+    if (selectedCategoryId !== category.id) {
+      setSelectedCategoryId(category.id)
+      setSelectedSectionId(category.sections?.[0].id || '')
+    }
+  }
+
   return (
-    <div className="rounded-sm bg-red-500">
-      {isExpanded ? (
-        <IoMdArrowDropdown className="h-[22px] w-[22px]" />
-      ) : (
-        <IoMdArrowDropright className="h-[22px] w-[22px]" />
-      )}
-      {category.title}
+    <div className={`rounded ${isExpanded && 'bg-n-600/60'}`}>
+      <div className="flex cursor-pointer py-[6px]" onClick={handleClickCategory}>
+        <div>
+          {isExpanded ? (
+            <IoMdArrowDropdown className="h-[22px] w-[22px]" />
+          ) : (
+            <IoMdArrowDropright className="h-[22px] w-[22px]" />
+          )}
+        </div>
+        <div>{category.title}</div>
+      </div>
+      {isExpanded && <TemplateEditSidebarSectionWrapper sections={category.sections || []} />}
     </div>
   )
 }
