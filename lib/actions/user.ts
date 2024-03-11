@@ -2,7 +2,7 @@
 
 import { prisma } from '@/prisma/prisma'
 import { CreateClientSchema } from '../zod/schemas'
-import { getCurrentOrgName } from '../utils/server'
+import { fetchCurrentOrgId } from '../utils/server'
 import { revalidatePath } from 'next/cache'
 
 export async function createClient(prevState: any, formData: FormData) {
@@ -33,15 +33,4 @@ export async function createClient(prevState: any, formData: FormData) {
 
   revalidatePath('/admin/clients')
   return { success: 'Client created!' }
-}
-
-export async function fetchCurrentOrgId() {
-  const orgName = getCurrentOrgName()
-  const org = await prisma.organization.findUnique({
-    where: {
-      orgName: orgName!,
-    },
-  })
-
-  return org?.id
 }
