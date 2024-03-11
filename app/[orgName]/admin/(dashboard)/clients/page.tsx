@@ -14,9 +14,10 @@ export default async function ClientsPage({
   const query = searchParams?.query?.trim() || ''
 
   return (
-    <>
+    <div>
+      <h1 className="mb-[22px] text-[24px] font-bold">Clients</h1>
       <ClinetPageToolBar />
       <ClientsTable orgName={orgName} query={query} />
-    </>
+    </div>
   )
 }
