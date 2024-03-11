@@ -41,12 +41,12 @@ export default function ClientsSearch({
       </label>
       <input
         type="text"
-        className={`${className} peer block w-1/3 rounded border border-n-400 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500`}
+        className={`${className} block h-[40px] w-[300px] rounded border border-n-400 py-[9px] pl-[35px] text-[14px] placeholder:text-gray-500 focus:border-n-500 focus:outline-none`}
         onChange={handleChange}
         placeholder={placeholder}
         defaultValue={searchParams.get('query')?.toString()}
       />
-      <IoSearch className="absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+      <IoSearch className="absolute left-[10px] top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
     </div>
   )
 }

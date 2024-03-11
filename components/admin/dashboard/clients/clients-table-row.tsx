@@ -31,14 +31,19 @@ export default function ClientsTableRow({
         />
       </td>
       <td>
-        <Link className="cursor-pointer text-sky-500 underline" href={`/admin/clients/${id}`}>
+        <Link
+          className="cursor-pointer font-medium hover:text-blue-600"
+          href={`/admin/clients/${id}`}
+        >
           {name}
         </Link>
       </td>
       <td>{email}</td>
       <td>{id}</td>
       <td>
-        <span className="rounded-full bg-n-600 p-[6px] text-[12px] text-white">{status}</span>
+        <span className="rounded-full bg-n-600 px-[6px] py-[2px] text-[12px] text-white">
+          {status}
+        </span>
         {/* {(status === UserStatus.ACTIVE && <DeactiveButton CLientId={id} />) ||
           (status === UserStatus.INACTIVE && <ActiveButton CLientId={id} />)} */}
       </td>

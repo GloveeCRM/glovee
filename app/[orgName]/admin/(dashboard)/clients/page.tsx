@@ -1,4 +1,4 @@
-import ClinetPageToolBar from '@/components/admin/dashboard/clients/clients-page-tool-bar'
+import ClinetPageToolbar from '@/components/admin/dashboard/clients/clients-page-toolbar'
 import ClientsTable from '@/components/admin/dashboard/clients/clients-table'
 
 export default async function ClientsPage({
@@ -16,7 +16,7 @@ export default async function ClientsPage({
   return (
     <div>
       <h1 className="mb-[22px] text-[24px] font-bold">Clients</h1>
-      <ClinetPageToolBar />
+      <ClinetPageToolbar />
       <ClientsTable orgName={orgName} query={query} />
     </div>
   )
