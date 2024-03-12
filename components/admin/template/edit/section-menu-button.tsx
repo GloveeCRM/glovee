@@ -6,9 +6,10 @@ import useSectionActions from '@/hooks/template/use-section-actions'
 
 interface SectionMenuButtonProps {
   sectionId: string
+  onRename: () => void
 }
 
-export default function SectionMenuButton({ sectionId }: SectionMenuButtonProps) {
+export default function SectionMenuButton({ sectionId, onRename }: SectionMenuButtonProps) {
   return (
     <div className="absolute right-[6px]">
       <Popover>
@@ -18,7 +19,7 @@ export default function SectionMenuButton({ sectionId }: SectionMenuButtonProps)
           className="w-[140px] rounded-[3px] bg-n-700 p-[4px]
                text-[14px] text-n-100 shadow-[0px_0px_0px_1px_rgba(15,15,15,0.05),0px_3px_6px_rgba(15,15,15,0.2),0px_9px_24px_rgba(15,15,15,0.2)] transition duration-100"
         >
-          <RenameSection sectionId={sectionId} />
+          <RenameSection sectionId={sectionId} onClick={onRename} />
           <DeleteSection sectionId={sectionId} />
         </PopoverContent>
       </Popover>
@@ -36,11 +37,11 @@ function MenuButton() {
   )
 }
 
-function RenameSection({ sectionId }: { sectionId: string }) {
+function RenameSection({ sectionId, onClick }: { sectionId: string; onClick: () => void }) {
   const { toggle } = usePopover()
 
   function handleClickRenameSection() {
-    console.log('rename section')
+    onClick()
     toggle()
   }
 
