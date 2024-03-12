@@ -2,14 +2,16 @@ import { BiTrash } from 'react-icons/bi'
 import { FiEdit, FiMoreHorizontal } from 'react-icons/fi'
 
 import { Popover, PopoverContent, PopoverTrigger, usePopover } from '@/components/ui/popover'
-import useSectionActions from '@/hooks/template/use-section-actions'
 
 interface SectionMenuButtonProps {
-  sectionId: string
   onClickRename: () => void
+  onClickDelete: () => void
 }
 
-export default function SectionMenuButton({ sectionId, onClickRename }: SectionMenuButtonProps) {
+export default function SectionMenuButton({
+  onClickRename,
+  onClickDelete,
+}: SectionMenuButtonProps) {
   return (
     <div className="absolute right-[6px]">
       <Popover>
@@ -19,8 +21,8 @@ export default function SectionMenuButton({ sectionId, onClickRename }: SectionM
           className="w-[140px] rounded-[3px] bg-n-700 p-[4px]
                text-[14px] text-n-100 shadow-[0px_0px_0px_1px_rgba(15,15,15,0.05),0px_3px_6px_rgba(15,15,15,0.2),0px_9px_24px_rgba(15,15,15,0.2)] transition duration-100"
         >
-          <RenameSection sectionId={sectionId} onClick={onClickRename} />
-          <DeleteSection sectionId={sectionId} />
+          <RenameSection onClick={onClickRename} />
+          <DeleteSection onClick={onClickDelete} />
         </PopoverContent>
       </Popover>
     </div>
@@ -41,7 +43,7 @@ function MenuButton() {
   )
 }
 
-function RenameSection({ sectionId, onClick }: { sectionId: string; onClick: () => void }) {
+function RenameSection({ onClick }: { onClick: () => void }) {
   const { toggle } = usePopover()
 
   function handleClickRenameSection() {
@@ -59,13 +61,11 @@ function RenameSection({ sectionId, onClick }: { sectionId: string; onClick: () 
   )
 }
 
-function DeleteSection({ sectionId }: { sectionId: string }) {
+function DeleteSection({ onClick }: { onClick: () => void }) {
   const { toggle } = usePopover()
-  const { removeSectionFromCategory } = useSectionActions()
 
   function handleClickDeleteSection() {
-    removeSectionFromCategory(sectionId)
-    console.log('delete section', sectionId)
+    onClick()
     toggle()
   }
 

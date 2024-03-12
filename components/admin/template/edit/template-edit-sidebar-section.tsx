@@ -18,7 +18,7 @@ export default function TemplateEditSidebarSection({
   const [isEditing, setIsEditing] = useState<boolean>(false)
 
   const { setSelectedSectionId } = useTemplateEditContext()
-  const { updateSectionTitle } = useSectionActions()
+  const { updateSectionTitle, removeSectionFromCategory } = useSectionActions()
 
   const sectionInputRef = useRef<HTMLTextAreaElement>(null)
 
@@ -29,6 +29,10 @@ export default function TemplateEditSidebarSection({
 
   function handleClickRename() {
     setIsEditing(true)
+  }
+
+  function handleClickDelete() {
+    removeSectionFromCategory(section.id)
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
@@ -101,7 +105,10 @@ export default function TemplateEditSidebarSection({
           </span>
           <div className="flex items-start">
             <div className="pr-[6px]">{section.title}</div>
-            <SectionMenuButton sectionId={section.id} onClickRename={handleClickRename} />
+            <SectionMenuButton
+              onClickRename={handleClickRename}
+              onClickDelete={handleClickDelete}
+            />
           </div>
         </div>
       )}
