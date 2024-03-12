@@ -1,6 +1,6 @@
 'use client'
 
-import { TemplateCategoryType } from '@/lib/types/template'
+import { TemplateCategoryType, TemplateSectionType } from '@/lib/types/template'
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react'
 
 type TemplateEditContextType = {
@@ -53,15 +53,6 @@ export default function TemplateEditProvider({ templateId, children }: TemplateE
       setSelectedSectionId(categories[0].sections?.[0].id || '')
     }
   }, [categories])
-
-  // useEffect(() => {
-  //   if (categories && selectedCategoryId) {
-  //     const selectedCategory = categories.find((category) => category.id === selectedCategoryId)
-  //     if (selectedCategory) {
-  //       setSelectedSectionId(selectedCategory.sections?.[0].id || '')
-  //     }
-  //   }
-  // }, [selectedCategoryId, categories])
 
   return <TemplateEditContext.Provider value={value}>{children}</TemplateEditContext.Provider>
 }

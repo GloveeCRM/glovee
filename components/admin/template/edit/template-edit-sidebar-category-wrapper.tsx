@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 
 import { TemplateCategoryType } from '@/lib/types/template'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
@@ -31,14 +31,13 @@ export default function TemplateEditSidebarCategoryWrapper({
     <div id="template-edit-sidebar-category-wrapper">
       <div className="flex flex-col gap-[4px]">
         {categories?.map((category: TemplateCategoryType) => (
-          <>
+          <Fragment key={category.id}>
             <TemplateEditSidebarCategory
-              key={category.id}
               category={category}
               isExpanded={selectedCategoryId === category.id}
             />
             <Divider className="border-n-500" />
-          </>
+          </Fragment>
         ))}
       </div>
       <CreateCategoryButton type={categories ? 'add' : 'create'} />

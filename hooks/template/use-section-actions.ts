@@ -1,0 +1,36 @@
+'use client'
+
+import { v4 as uuidv4 } from 'uuid'
+
+import { useTemplateEditContext } from '@/contexts/template-edit-context'
+
+export default function useSectionActions() {
+  const { categories, setCategories, selectedCategoryId } = useTemplateEditContext()
+
+  function createSectionInCategory(categoryId: string) {
+    if (!categories) return
+
+    const updatedCategories = categories.map((category) => {
+      if (category.id !== selectedCategoryId) return category
+
+      const updatedSections = [
+        ...(category.sections || []),
+        {
+          id: uuidv4(),
+          title: 'Untitled Section',
+          position: (category.sections?.length || 0) + 1,
+          categoryId: category.id,
+          questionSets: [],
+        },
+      ]
+
+      return { ...category, sections: updatedSections }
+    })
+
+    setCategories(updatedCategories)
+  }
+
+  return {
+    createSectionInCategory,
+  }
+}

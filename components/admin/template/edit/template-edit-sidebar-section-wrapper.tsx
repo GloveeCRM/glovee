@@ -4,10 +4,12 @@ import TemplateEditSidebarSection from './template-edit-sidebar-section'
 import CreateSectionButton from './create-section-button'
 
 interface TemplateEditSidebarSectionWrapperProps {
+  categoryId: string
   sections: TemplateSectionType[]
 }
 
 export default function TemplateEditSidebarSectionWrapper({
+  categoryId,
   sections,
 }: TemplateEditSidebarSectionWrapperProps) {
   const { selectedSectionId } = useTemplateEditContext()
@@ -20,7 +22,7 @@ export default function TemplateEditSidebarSectionWrapper({
           active={section.id === selectedSectionId}
         />
       ))}
-      <CreateSectionButton type={sections ? 'add' : 'create'} />
+      <CreateSectionButton type={sections ? 'add' : 'create'} categoryId={categoryId} />
     </div>
   )
 }

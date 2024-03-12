@@ -2,8 +2,6 @@ import { IoMdArrowDropdown, IoMdArrowDropright } from 'react-icons/io'
 
 import { TemplateCategoryType } from '@/lib/types/template'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
-import TemplateEditSidebarSection from './template-edit-sidebar-section'
-import CreateSectionButton from './create-section-button'
 import TemplateEditSidebarSectionWrapper from './template-edit-sidebar-section-wrapper'
 
 interface TemplateEditSidebarCategoryProps {
@@ -37,7 +35,12 @@ export default function TemplateEditSidebarCategory({
         </div>
         <div>{category.title}</div>
       </div>
-      {isExpanded && <TemplateEditSidebarSectionWrapper sections={category.sections || []} />}
+      {isExpanded && (
+        <TemplateEditSidebarSectionWrapper
+          categoryId={category.id}
+          sections={category.sections || []}
+        />
+      )}
     </div>
   )
 }
