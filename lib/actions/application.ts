@@ -8,7 +8,7 @@ import { getAuthenticatedUser } from '@/auth'
 import { fetchUserByEmailAndOrgName } from '../data/user'
 import { ApplicationSchema } from '../zod/schemas'
 import { fetchFullTemplateById } from '../data/template'
-import { getCurrentOrgName } from '../utils/server'
+import { fetchCurrentOrgId, getCurrentOrgName } from '../utils/server'
 import { validateFormDataAgainstSchema } from '../utils/validation'
 
 export async function createApplication(
@@ -27,8 +27,9 @@ export async function createApplication(
   }
 
   const orgName = getCurrentOrgName()
+  const orgId = await fetchCurrentOrgId()
 
-  if (!orgName) {
+  if (!orgName || !orgId) {
     return { error: 'Organization not found!' }
   }
 
@@ -53,7 +54,8 @@ export async function createApplication(
   const application = await prisma.application.create({
     data: {
       clientId: client.id,
-      userId: user.id!,
+      orgId: orgId,
+      templateName: template.title,
       status: 'CREATED',
       categories: {
         create: template.categories?.map((category) => ({
