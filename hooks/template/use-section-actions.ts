@@ -11,7 +11,7 @@ export default function useSectionActions() {
     if (!categories) return
 
     const updatedCategories = categories.map((category) => {
-      if (category.id !== selectedCategoryId) return category
+      if (category.id !== categoryId) return category
 
       const updatedSections = [
         ...(category.sections || []),
@@ -46,8 +46,27 @@ export default function useSectionActions() {
     setCategories(updatedCategories)
   }
 
+  function updateSectionTitle(sectionId: string, title: string) {
+    if (!categories) return
+
+    const updatedCategories = categories.map((category) => {
+      if (category.id !== selectedCategoryId) return category
+
+      const updatedSections = (category.sections || []).map((section) => {
+        if (section.id !== sectionId) return section
+
+        return { ...section, title }
+      })
+
+      return { ...category, sections: updatedSections }
+    })
+
+    setCategories(updatedCategories)
+  }
+
   return {
     createSectionInCategory,
     removeSectionFromCategory,
+    updateSectionTitle,
   }
 }
