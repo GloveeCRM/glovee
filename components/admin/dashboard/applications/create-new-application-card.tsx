@@ -1,4 +1,4 @@
-import { IoNewspaperOutline } from 'react-icons/io5'
+import { GoPlus } from 'react-icons/go'
 
 import { fetchTemplatesByUserId } from '@/lib/data/template'
 import CreateNewApplicationModal from './create-new-application-modal'
@@ -17,9 +17,9 @@ export default async function CreateNewApplicationCard() {
   return (
     <ModalProvider>
       <ModalTrigger>
-        <div className="flex h-full cursor-pointer flex-col items-center justify-center rounded-md border border-dashed border-n-600 p-[8px] text-[16px] text-n-700">
-          <IoNewspaperOutline className="h-[26px] w-[26px]" />
-          <span>Create a new application</span>
+        <div className="flex cursor-pointer items-center gap-[4px] rounded border border-n-700 py-[5px] pl-[8px] pr-[10px]">
+          <GoPlus className="h-[20px] w-[20px]" />
+          <span>New Application</span>
           <CreateNewApplicationModal templates={templates} />
         </div>
       </ModalTrigger>

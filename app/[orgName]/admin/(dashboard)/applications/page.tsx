@@ -6,8 +6,6 @@ export default async function ApplicationsPage() {
   return (
     <div>
       <h1 className="mb-[22px] text-[24px] font-bold">Applications</h1>
-
-      <CreateNewApplicationCard />
       <ApplicationPageToolbar />
       <ApplicationsTable />
     </div>
