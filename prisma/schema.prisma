@@ -27,6 +27,7 @@ model Organization {
   logoUrl String?
 
   users User[]
+  applications    Application[]
 }
 
 model User {
@@ -43,7 +44,6 @@ model User {
   accounts        Account[]
   organization    Organization? @relation(fields: [organizationId], references: [id])
   templates       Template[]
-  applications    Application[]
   assignedClients Application[] @relation("AssignedClient")
 
   @@unique([organizationId, email])
@@ -90,15 +90,26 @@ enum ApplicationStatus {
   REJECTED
 }
 
+enum ApplicationRole {
+  MAIN
+  SPOUSE
+  CHILD
+  OTHER
+}
+
 model Application {
   id          String @id @default(cuid())
-  userId      String
+  orgId       String
   clientId    String
+  templateName String
+  applicantFirstName String @default("unnamed")
+  applicantLastName  String @default("applicant")
+  role        ApplicationRole @default(MAIN)
   status      ApplicationStatus @default(CREATED)
 
   categories Category[]
 
-  user        User   @relation(fields: [userId], references: [id])
+  organization        Organization   @relation(fields: [orgId], references: [id])
   client      User  @relation("AssignedClient", fields: [clientId], references: [id], onDelete: Cascade)
 }
 
