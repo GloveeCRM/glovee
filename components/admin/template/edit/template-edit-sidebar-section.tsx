@@ -32,7 +32,7 @@ export default function TemplateEditSidebarSection({
     >
       <PiDotsSixVerticalBold className="h-[20px] w-[20px] text-n-300 opacity-0 transition-opacity duration-150 group-hover:opacity-100" />
       <div className="pr-[6px] text-[14px]">{section.title}</div>
-      <SectionMenuButton />
+      <SectionMenuButton sectionId={section.id} />
     </div>
   )
 }

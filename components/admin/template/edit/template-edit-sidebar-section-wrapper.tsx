@@ -15,14 +15,18 @@ export default function TemplateEditSidebarSectionWrapper({
   const { selectedSectionId } = useTemplateEditContext()
   return (
     <div>
-      {sections.map((section) => (
-        <TemplateEditSidebarSection
-          key={section.id}
-          section={section}
-          active={section.id === selectedSectionId}
-        />
-      ))}
-      <CreateSectionButton type={sections ? 'add' : 'create'} categoryId={categoryId} />
+      {sections.length > 0 ? (
+        sections.map((section) => (
+          <TemplateEditSidebarSection
+            key={section.id}
+            section={section}
+            active={section.id === selectedSectionId}
+          />
+        ))
+      ) : (
+        <div className="py-[4px] pl-[23px] text-[12px] text-n-300">No sections</div>
+      )}
+      <CreateSectionButton type={sections.length > 0 ? 'add' : 'create'} categoryId={categoryId} />
     </div>
   )
 }

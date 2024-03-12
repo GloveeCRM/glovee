@@ -1,8 +1,14 @@
-import { Popover, PopoverContent, PopoverTrigger, usePopover } from '@/components/ui/popover'
 import { BiTrash } from 'react-icons/bi'
 import { FiEdit, FiMoreHorizontal } from 'react-icons/fi'
 
-export default function SectionMenuButton() {
+import { Popover, PopoverContent, PopoverTrigger, usePopover } from '@/components/ui/popover'
+import useSectionActions from '@/hooks/template/use-section-actions'
+
+interface SectionMenuButtonProps {
+  sectionId: string
+}
+
+export default function SectionMenuButton({ sectionId }: SectionMenuButtonProps) {
   return (
     <div className="absolute right-[6px]">
       <Popover>
@@ -12,8 +18,8 @@ export default function SectionMenuButton() {
           className="w-[140px] rounded-[3px] bg-n-700 p-[4px]
                text-[14px] text-n-100 shadow-[0px_0px_0px_1px_rgba(15,15,15,0.05),0px_3px_6px_rgba(15,15,15,0.2),0px_9px_24px_rgba(15,15,15,0.2)] transition duration-100"
         >
-          <RenameSection sectionId="sectionId" />
-          <DeleteSection sectionId="sectionId" />
+          <RenameSection sectionId={sectionId} />
+          <DeleteSection sectionId={sectionId} />
         </PopoverContent>
       </Popover>
     </div>
@@ -22,9 +28,10 @@ export default function SectionMenuButton() {
 
 function MenuButton() {
   const { isOpen } = usePopover()
+
   return (
     <PopoverTrigger className={`group-hover:opacity-100 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
-      <FiMoreHorizontal className="h-[22px] w-[22px]" />
+      <FiMoreHorizontal className="h-[18px] w-[18px]" />
     </PopoverTrigger>
   )
 }
@@ -49,9 +56,11 @@ function RenameSection({ sectionId }: { sectionId: string }) {
 
 function DeleteSection({ sectionId }: { sectionId: string }) {
   const { toggle } = usePopover()
+  const { removeSectionFromCategory } = useSectionActions()
 
   function handleClickDeleteSection() {
-    console.log('delete section')
+    removeSectionFromCategory(sectionId)
+    console.log('delete section', sectionId)
     toggle()
   }
 

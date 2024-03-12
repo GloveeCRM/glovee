@@ -34,7 +34,7 @@ export default function TemplateEditProvider({ templateId, children }: TemplateE
   const [categories, setCategories] = useState<TemplateCategoryType[] | null>(null)
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>(categories?.[0]?.id || '')
   const [selectedSectionId, setSelectedSectionId] = useState<string>(
-    categories?.[0]?.sections?.[0].id || ''
+    categories?.[0]?.sections?.[0]?.id || ''
   )
 
   const value = {

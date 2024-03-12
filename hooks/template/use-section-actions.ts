@@ -30,7 +30,24 @@ export default function useSectionActions() {
     setCategories(updatedCategories)
   }
 
+  function removeSectionFromCategory(sectionId: string) {
+    if (!categories) return
+
+    const updatedCategories = categories.map((category) => {
+      if (category.id !== selectedCategoryId) return category
+
+      const updatedSections = (category.sections || []).filter(
+        (section) => section.id !== sectionId
+      )
+
+      return { ...category, sections: updatedSections }
+    })
+
+    setCategories(updatedCategories)
+  }
+
   return {
     createSectionInCategory,
+    removeSectionFromCategory,
   }
 }
