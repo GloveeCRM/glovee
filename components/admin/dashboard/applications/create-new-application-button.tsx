@@ -5,7 +5,7 @@ import CreateNewApplicationModal from './create-new-application-modal'
 import { ModalProvider, ModalTrigger } from '../../../ui/modal'
 import { getAuthenticatedUser } from '@/auth'
 
-export default async function CreateNewApplicationCard() {
+export default async function CreateNewApplicationButton() {
   const user = await getAuthenticatedUser()
 
   if (!user || !user.id) {

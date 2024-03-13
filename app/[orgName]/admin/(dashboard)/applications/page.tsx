@@ -1,6 +1,6 @@
 import ApplicationPageToolbar from '@/components/admin/dashboard/applications/applications-page-toolbar'
 import ApplicationsTable from '@/components/admin/dashboard/applications/applications-table'
-import CreateNewApplicationCard from '@/components/admin/dashboard/applications/create-new-application-card'
+import CreateNewApplicationCard from '@/components/admin/dashboard/applications/create-new-application-button'
 
 export default async function ApplicationsPage() {
   return (
