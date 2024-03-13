@@ -10,27 +10,73 @@ import TemplateSelect from './template-select'
 export default function CreateNewApplicationModal({ templates }: { templates: Template[] }) {
   const { closeModal } = useModal()
 
-  async function handleCreateApplication(formData: FormData) {
-    createApplication(formData)
-      .then((data) => {
-        closeModal()
-        if (data.success) {
-          alert('Application created successfully')
-        } else {
-          alert('Application creation failed')
-        }
-      })
-      .catch((err) => {
-        alert('Application creation failed miserably')
-      })
-  }
+  // async function handleCreateApplication(formData: FormData) {
+  //   createApplication(formData)
+  //     .then((data) => {
+  //       closeModal()
+  //       if (data.success) {
+  //         alert('Application created successfully')
+  //       } else {
+  //         alert('Application creation failed')
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       alert('Application creation failed miserably')
+  //     })
+  // }
 
   return (
     <Modal title="Create a new application">
-      <form action={handleCreateApplication} className="w-[85vw] max-w-[570px]">
+      <form className="w-[85vw] max-w-[570px]">
         <div>
-          <label htmlFor="clientEmail">Add client email</label>
-          <input type="text" name="clientEmail" id="clientEmail" className=" border border-black" />
+          <label htmlFor="client-name" className="mb-[4px] block text-[14px] text-n-700">
+            Client Name
+          </label>
+          <input
+            type="text"
+            name="clientName"
+            id="client-name"
+            className="w-full rounded border border-n-400 px-[8px] py-[3px] text-[14px] leading-tight"
+          />
+        </div>
+        <div>
+          <label htmlFor="role" className="mb-[4px] block text-[14px] text-n-700">
+            Role
+          </label>
+          <select
+            name="role"
+            id="role"
+            className="w-full rounded border border-n-400 px-[8px] py-[3px] text-[14px] leading-tight"
+          >
+            <option value="MAIN">Main</option>
+            <option value="SPOUSE">Spouse</option>
+            <option value="CHILD">Child</option>
+            <option value="OTHER">Other</option>
+          </select>
+        </div>
+        <div className="flex justify-between">
+          <div>
+            <label htmlFor="applicantFirstName" className="mb-[4px] block text-[14px] text-n-700">
+              Applicant First Name
+            </label>
+            <input
+              type="text"
+              name="applicantFirstName"
+              id="applicant-first-name"
+              className="w-full rounded border border-n-400 px-[8px] py-[3px] text-[14px] leading-tight"
+            />
+          </div>
+          <div>
+            <label htmlFor="applicantLastName" className="mb-[4px] block text-[14px] text-n-700">
+              Applicant Last Name
+            </label>
+            <input
+              type="text"
+              name="applicantLastName"
+              id="applicant-last-name"
+              className="w-full rounded border border-n-400 px-[8px] py-[3px] text-[14px] leading-tight"
+            />
+          </div>
         </div>
         <TemplateSelect templates={templates} />
         <div className="mt-[10px] flex justify-center gap-[8px]">

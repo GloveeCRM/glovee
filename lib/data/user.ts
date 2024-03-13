@@ -11,7 +11,7 @@ import { UserStatus } from '@prisma/client'
  * Fetches a user by email and organization name.
  */
 export async function fetchUserByEmailAndOrgName(
-  email: string,
+  name: string,
   orgName: string
 ): Promise<(User & { organization: Organization | null }) | null> {
   try {
@@ -20,7 +20,7 @@ export async function fetchUserByEmailAndOrgName(
         organization: true,
       },
       where: {
-        email: email,
+        name: name,
         organization: {
           orgName: orgName,
         },
@@ -92,6 +92,30 @@ export async function fetchClientsByOrgNameandSearchQuery(orgName: string, query
     })
 
     return clients
+  } catch {
+    return []
+  }
+}
+
+// not sure
+export async function fetchClientsByOrgNameAndName(orgName: string, name: string) {
+  try {
+    const clients = await prisma.user.findMany({
+      where: {
+        role: UserRole.ORG_CLIENT,
+        organization: {
+          orgName: orgName,
+        },
+        OR: [
+          {
+            name: {
+              contains: name,
+              mode: 'insensitive',
+            },
+          },
+        ],
+      },
+    })
   } catch {
     return []
   }

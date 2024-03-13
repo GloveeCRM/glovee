@@ -9,7 +9,7 @@ export const CreateClientSchema = z.object({
 })
 
 export const ApplicationSchema = z.object({
-  clientEmail: z.string().email(),
+  clientName: z.string(),
   templateId: z.string(),
 })
 
