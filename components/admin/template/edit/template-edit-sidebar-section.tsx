@@ -85,7 +85,7 @@ export default function TemplateEditSidebarSection({
 
   return (
     <div
-      className={`group relative flex cursor-pointer gap-[4px] text-[14px] ${active && 'bg-n-500/50'} ${isEditing ? 'py-[5px]' : 'py-[6px]'}`}
+      className={`group/section relative flex cursor-pointer gap-[4px] text-[14px] ${active && 'bg-n-500/50'} ${isEditing ? 'py-[5px]' : 'py-[6px]'}`}
       onClick={handleClickSection}
     >
       {isEditing ? (
@@ -101,7 +101,7 @@ export default function TemplateEditSidebarSection({
       ) : (
         <div className="flex items-start gap-[3px] pl-[8px]">
           <span>
-            <PiDotsSixVerticalBold className="h-[22px] w-[22px] text-n-300 opacity-0 transition-opacity duration-150 group-hover:opacity-100" />
+            <PiDotsSixVerticalBold className="h-[22px] w-[22px] text-n-300 opacity-0 transition-opacity duration-150 group-hover/section:opacity-100" />
           </span>
           <div className="flex items-start">
             <div className="pr-[6px]">{section.title}</div>

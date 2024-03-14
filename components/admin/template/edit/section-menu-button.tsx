@@ -34,7 +34,7 @@ function MenuButton() {
 
   return (
     <PopoverTrigger
-      className={`rounded-sm bg-n-700 p-[2px] group-hover:opacity-100 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
+      className={`rounded-sm bg-n-700 p-[2px] group-hover/section:opacity-100 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
     >
       <span>
         <FiMoreHorizontal className="h-[18px] w-[18px]" />
