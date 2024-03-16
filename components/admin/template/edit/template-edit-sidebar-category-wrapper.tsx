@@ -16,13 +16,15 @@ export default function TemplateEditSidebarCategoryWrapper({
   templateId,
 }: TemplateEditSidebarCategoryWrapperProps) {
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  const { categories, selectedCategoryId } = useTemplateEditContext()
+  const { template, selectedCategoryId } = useTemplateEditContext()
+
+  const templateCategories = template?.categories
 
   useEffect(() => {
-    if (categories) {
+    if (templateCategories) {
       setIsLoading(false)
     }
-  }, [categories])
+  }, [templateCategories])
 
   if (isLoading) {
     return <TemplateEditSidebarCategoriesSkeleton />
@@ -31,7 +33,7 @@ export default function TemplateEditSidebarCategoryWrapper({
   return (
     <div id="template-edit-sidebar-category-wrapper">
       <div className="flex flex-col gap-[4px]">
-        {categories?.map((category: TemplateCategoryType) => (
+        {templateCategories?.map((category: TemplateCategoryType) => (
           <Fragment key={category.id}>
             <TemplateEditSidebarCategory
               category={category}
@@ -41,7 +43,7 @@ export default function TemplateEditSidebarCategoryWrapper({
           </Fragment>
         ))}
       </div>
-      <CreateCategoryButton templateId={templateId} type={categories ? 'add' : 'create'} />
+      <CreateCategoryButton templateId={templateId} type={templateCategories ? 'add' : 'create'} />
     </div>
   )
 }

@@ -1,13 +1,17 @@
 'use client'
 
-import { fetchTemplateCategoriesWithSectionsByTemplateId } from '@/lib/data/template'
-import { TemplateCategoryType } from '@/lib/types/template'
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react'
+
+import {
+  fetchFullTemplateById,
+  fetchTemplateCategoriesWithSectionsByTemplateId,
+} from '@/lib/data/template'
+import { TemplateCategoryType, TemplateType } from '@/lib/types/template'
 
 type TemplateEditContextType = {
   templateId: string
-  categories: TemplateCategoryType[] | null
-  setCategories: Dispatch<SetStateAction<TemplateCategoryType[] | null>>
+  template: TemplateType | null
+  setTemplate: Dispatch<SetStateAction<TemplateType | null>>
   selectedCategoryId: string
   selectedSectionId: string
   setSelectedCategoryId: Dispatch<SetStateAction<string>>
@@ -16,8 +20,8 @@ type TemplateEditContextType = {
 
 const templateEditContextDefaultValues: TemplateEditContextType = {
   templateId: '',
-  categories: null,
-  setCategories: () => {},
+  template: null,
+  setTemplate: () => {},
   selectedCategoryId: '',
   setSelectedCategoryId: () => {},
   selectedSectionId: '',
@@ -32,17 +36,18 @@ interface TemplateEditProviderProps {
 }
 
 export default function TemplateEditProvider({ templateId, children }: TemplateEditProviderProps) {
-  const [savedCategories, setSavedCategories] = useState<TemplateCategoryType[] | null>([])
-  const [categories, setCategories] = useState<TemplateCategoryType[] | null>(null)
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string>(categories?.[0]?.id || '')
+  const [template, setTemplate] = useState<TemplateType | null>(null)
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>(
+    template?.categories?.[0]?.id || ''
+  )
   const [selectedSectionId, setSelectedSectionId] = useState<string>(
-    categories?.[0]?.sections?.[0]?.id || ''
+    template?.categories?.[0]?.sections?.[0]?.id || ''
   )
 
   const value = {
     templateId,
-    categories,
-    setCategories,
+    template,
+    setTemplate,
     selectedCategoryId,
     setSelectedCategoryId,
     selectedSectionId,
@@ -51,19 +56,18 @@ export default function TemplateEditProvider({ templateId, children }: TemplateE
 
   useEffect(() => {
     if (templateId) {
-      fetchTemplateCategoriesWithSectionsByTemplateId(templateId).then((data) => {
-        setSavedCategories(data)
-        setCategories(data)
+      fetchFullTemplateById(templateId).then((data) => {
+        setTemplate(data)
       })
     }
   }, [templateId])
 
   useEffect(() => {
-    if (categories && selectedCategoryId === '') {
-      setSelectedCategoryId(categories[0].id)
-      setSelectedSectionId(categories[0].sections?.[0].id || '')
+    if (template && template.categories && selectedCategoryId === '') {
+      setSelectedCategoryId(template.categories[0].id)
+      setSelectedSectionId(template.categories[0].sections?.[0].id || '')
     }
-  }, [categories])
+  }, [template])
 
   return <TemplateEditContext.Provider value={value}>{children}</TemplateEditContext.Provider>
 }

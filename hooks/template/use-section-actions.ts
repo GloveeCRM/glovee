@@ -5,12 +5,13 @@ import { v4 as uuidv4 } from 'uuid'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
 
 export default function useSectionActions() {
-  const { categories, setCategories, selectedCategoryId } = useTemplateEditContext()
+  const { template, setTemplate, selectedCategoryId } = useTemplateEditContext()
+  const templateCategories = template?.categories
 
   function createSectionInCategory(categoryId: string) {
-    if (!categories) return
+    if (!templateCategories) return
 
-    const updatedCategories = categories.map((category) => {
+    const updatedCategories = templateCategories.map((category) => {
       if (category.id !== categoryId) return category
 
       const updatedSections = [
@@ -27,13 +28,13 @@ export default function useSectionActions() {
       return { ...category, sections: updatedSections }
     })
 
-    setCategories(updatedCategories)
+    setTemplate({ ...template, categories: updatedCategories })
   }
 
   function removeSectionFromCategory(sectionId: string) {
-    if (!categories) return
+    if (!templateCategories) return
 
-    const updatedCategories = categories.map((category) => {
+    const updatedCategories = templateCategories.map((category) => {
       if (category.id !== selectedCategoryId) return category
 
       const updatedSections = (category.sections || []).filter(
@@ -43,13 +44,13 @@ export default function useSectionActions() {
       return { ...category, sections: updatedSections }
     })
 
-    setCategories(updatedCategories)
+    setTemplate({ ...template, categories: updatedCategories })
   }
 
   function updateSectionTitle(sectionId: string, title: string) {
-    if (!categories) return
+    if (!templateCategories) return
 
-    const updatedCategories = categories.map((category) => {
+    const updatedCategories = templateCategories.map((category) => {
       if (category.id !== selectedCategoryId) return category
 
       const updatedSections = (category.sections || []).map((section) => {
@@ -61,7 +62,7 @@ export default function useSectionActions() {
       return { ...category, sections: updatedSections }
     })
 
-    setCategories(updatedCategories)
+    setTemplate({ ...template, categories: updatedCategories })
   }
 
   return {
