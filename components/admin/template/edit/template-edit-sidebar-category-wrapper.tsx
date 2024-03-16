@@ -11,19 +11,18 @@ import CreateCategoryButton from './create-category-button'
 
 interface TemplateEditSidebarCategoryWrapperProps {
   templateId: string
-  initialCategories: TemplateCategoryType[] | null
 }
 export default function TemplateEditSidebarCategoryWrapper({
   templateId,
-  initialCategories,
 }: TemplateEditSidebarCategoryWrapperProps) {
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  const { categories, setCategories, selectedCategoryId } = useTemplateEditContext()
+  const { categories, selectedCategoryId } = useTemplateEditContext()
 
   useEffect(() => {
-    setCategories(initialCategories)
-    setIsLoading(false)
-  }, [initialCategories, setCategories, setIsLoading])
+    if (categories) {
+      setIsLoading(false)
+    }
+  }, [categories])
 
   if (isLoading) {
     return <TemplateEditSidebarCategoriesSkeleton />

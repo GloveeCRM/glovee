@@ -7,7 +7,7 @@ import {
   TemplateInfoCardSkeleton,
 } from '@/components/skeletons'
 import TemplateInfoCard from '../template-info-card'
-import TemplateEditSidebarCategories from './template-edit-sidebar-categories'
+import TemplateEditSidebarCategoryWrapper from './template-edit-sidebar-category-wrapper'
 
 interface TemplateEditSidebarProps {
   templateId: string
@@ -27,7 +27,7 @@ export default async function TemplateEditSidebar({ templateId }: TemplateEditSi
       </div>
       <div id="sidebar-categories" className="mt-[6px]">
         <Suspense fallback={<TemplateEditSidebarCategoriesSkeleton />}>
-          <TemplateEditSidebarCategories templateId={templateId} />
+          <TemplateEditSidebarCategoryWrapper templateId={templateId} />
         </Suspense>
       </div>
     </div>
