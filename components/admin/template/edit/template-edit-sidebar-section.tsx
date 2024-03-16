@@ -59,8 +59,8 @@ export default function TemplateEditSidebarSection({
   }
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (sectionInputRef.current && !sectionInputRef.current.contains(event.target as Node)) {
+    function handleClickOutside(e: MouseEvent) {
+      if (sectionInputRef.current && !sectionInputRef.current.contains(e.target as Node)) {
         setIsEditing(false)
         updateSectionTitle(section.id, sectionInputRef.current.value)
       }
@@ -89,15 +89,13 @@ export default function TemplateEditSidebarSection({
       onClick={handleClickSection}
     >
       {isEditing ? (
-        <div className="flex items-center">
-          <textarea
-            ref={sectionInputRef}
-            className="ml-[28px] block w-[186px] resize-none overflow-hidden rounded border-[1px] border-n-500 bg-n-700/70 px-[4px] pb-[2px] focus:border-[1px] focus:border-n-500 focus:outline-none"
-            defaultValue={section.title}
-            onChange={handleTitleChange}
-            onKeyDown={handleKeyDown}
-          />
-        </div>
+        <textarea
+          ref={sectionInputRef}
+          className="ml-[28px] block w-[186px] resize-none overflow-hidden rounded border-[1px] border-n-500 bg-n-700/70 px-[4px] pb-[2px] focus:border-[1px] focus:border-n-500 focus:outline-none"
+          defaultValue={section.title}
+          onChange={handleTitleChange}
+          onKeyDown={handleKeyDown}
+        />
       ) : (
         <div className="flex items-start gap-[3px] pl-[8px]">
           <span>

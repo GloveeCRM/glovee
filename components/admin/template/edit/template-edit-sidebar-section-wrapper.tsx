@@ -13,6 +13,7 @@ export default function TemplateEditSidebarSectionWrapper({
   sections,
 }: TemplateEditSidebarSectionWrapperProps) {
   const { selectedSectionId } = useTemplateEditContext()
+
   return (
     <div>
       {sections.length > 0 ? (

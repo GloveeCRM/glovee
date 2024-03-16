@@ -12,7 +12,10 @@ export default async function TemplateEditSidebarCategories({
 
   return (
     <div className="text-[16px]">
-      <TemplateEditSidebarCategoryWrapper initialCategories={initialCategories} />
+      <TemplateEditSidebarCategoryWrapper
+        templateId={templateId}
+        initialCategories={initialCategories}
+      />
     </div>
   )
 }

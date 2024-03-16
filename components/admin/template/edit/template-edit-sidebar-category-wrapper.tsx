@@ -5,14 +5,16 @@ import { Fragment, useEffect, useState } from 'react'
 import { TemplateCategoryType } from '@/lib/types/template'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
 import { TemplateEditSidebarCategoriesSkeleton } from '@/components/skeletons'
+import Divider from '@/components/ui/divider'
 import TemplateEditSidebarCategory from './template-edit-sidebar-category'
 import CreateCategoryButton from './create-category-button'
-import Divider from '@/components/ui/divider'
 
 interface TemplateEditSidebarCategoryWrapperProps {
+  templateId: string
   initialCategories: TemplateCategoryType[] | null
 }
 export default function TemplateEditSidebarCategoryWrapper({
+  templateId,
   initialCategories,
 }: TemplateEditSidebarCategoryWrapperProps) {
   const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -40,7 +42,7 @@ export default function TemplateEditSidebarCategoryWrapper({
           </Fragment>
         ))}
       </div>
-      <CreateCategoryButton type={categories ? 'add' : 'create'} />
+      <CreateCategoryButton templateId={templateId} type={categories ? 'add' : 'create'} />
     </div>
   )
 }
