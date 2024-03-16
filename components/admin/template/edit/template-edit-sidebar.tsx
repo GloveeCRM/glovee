@@ -8,6 +8,7 @@ import {
 } from '@/components/skeletons'
 import TemplateInfoCard from '../template-info-card'
 import TemplateEditSidebarCategoryWrapper from './template-edit-sidebar-category-wrapper'
+import SaveTemplateButton from './save-template-button'
 
 interface TemplateEditSidebarProps {
   templateId: string
@@ -30,6 +31,7 @@ export default async function TemplateEditSidebar({ templateId }: TemplateEditSi
           <TemplateEditSidebarCategoryWrapper templateId={templateId} />
         </Suspense>
       </div>
+      <SaveTemplateButton />
     </div>
   )
 }
