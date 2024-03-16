@@ -10,7 +10,8 @@ type TemplateEditContextType = {
   templateId: string
   template: TemplateType | null
   setTemplate: Dispatch<SetStateAction<TemplateType | null>>
-  initialTemplate: TemplateType | null
+  savedTemplate: TemplateType | null
+  setSavedTemplate: Dispatch<SetStateAction<TemplateType | null>>
   isTemplateChanged: boolean
   selectedCategoryId: string
   setSelectedCategoryId: Dispatch<SetStateAction<string>>
@@ -22,7 +23,8 @@ const templateEditContextDefaultValues: TemplateEditContextType = {
   templateId: '',
   template: null,
   setTemplate: () => {},
-  initialTemplate: null,
+  savedTemplate: null,
+  setSavedTemplate: () => {},
   isTemplateChanged: false,
   selectedCategoryId: '',
   setSelectedCategoryId: () => {},
@@ -50,7 +52,7 @@ export default function TemplateEditProvider({ templateId, children }: TemplateE
 
   useEffect(() => {
     async function fetchAndSetInitialTemplate() {
-      const fetchedTemplate = getTemplateFromLocalStorage(templateId)
+      const fetchedTemplate = await fetchFullTemplateById(templateId)
       setSavedTemplate(fetchedTemplate)
 
       const localTemplate = getTemplateFromLocalStorage(templateId)
@@ -96,7 +98,8 @@ export default function TemplateEditProvider({ templateId, children }: TemplateE
     templateId,
     template,
     setTemplate,
-    initialTemplate: savedTemplate,
+    savedTemplate,
+    setSavedTemplate,
     isTemplateChanged,
     selectedCategoryId,
     setSelectedCategoryId,

@@ -5,6 +5,8 @@ import { revalidatePath } from 'next/cache'
 import { prisma } from '@/prisma/prisma'
 import { getAuthenticatedUser } from '@/auth'
 import { TemplateSchema } from '../zod/schemas'
+import { TemplateType } from '../types/template'
+import { title } from 'process'
 
 export async function createTemplate(prevState: any, formDara: FormData) {
   const validatedFields = TemplateSchema.safeParse({
@@ -278,5 +280,68 @@ export async function updateTemplateDescriptionById(
     return { success: 'Template description updated!' }
   } catch (error) {
     return { error: 'Failed to update template description!' }
+  }
+}
+
+/**
+ * Update full template by id
+ */
+export async function updateFullTemplateById(
+  templateId: string,
+  template: TemplateType
+): Promise<{ success?: string; error?: string }> {
+  try {
+    await prisma.template.update({
+      where: {
+        id: templateId,
+      },
+      data: {
+        title: template.title,
+        description: template.description,
+        categories: {
+          update: template.categories?.map((category) => ({
+            where: { id: category.id },
+            data: {
+              title: category.title,
+              position: category.position,
+              sections: {
+                update: category.sections?.map((section) => ({
+                  where: { id: section.id },
+                  data: {
+                    title: section.title,
+                    position: section.position,
+                    questionSets: {
+                      update: section.questionSets?.map((questionSet) => ({
+                        where: { id: questionSet.id },
+                        data: {
+                          type: questionSet.type,
+                          position: questionSet.position,
+                          questions: {
+                            update: questionSet.questions?.map((question) => ({
+                              where: { id: question.id },
+                              data: {
+                                type: question.type,
+                                prompt: question.prompt,
+                                position: question.position,
+                                helperText: question.helperText,
+                              },
+                            })),
+                          },
+                        },
+                      })),
+                    },
+                  },
+                })),
+              },
+            },
+          })),
+        },
+      },
+    })
+
+    revalidatePath(`/admin/template/${templateId}/edit`)
+    return { success: 'Template updated!' }
+  } catch (error) {
+    return { error: 'Failed to update template!' }
   }
 }
