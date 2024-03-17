@@ -244,9 +244,9 @@ interface TemplateEditTopbarSectionSkeletonProps {
 function TemplateEditTopbarSectionSkeleton({ selected }: TemplateEditTopbarSectionSkeletonProps) {
   return (
     <div
-      className={`flex items-center border-l-[1px] border-n-500/50 bg-n-600/50 px-[6px] ${selected && 'bg-n-800/50'}`}
+      className={`flex items-center border-l-[1px] border-n-500/50 bg-n-600/50 px-[6px] ${selected && 'bg-n-500/75'}`}
     >
-      <TitleSkeleton size="sm" className={`bg-n-500/50 ${selected && 'bg-n-600/50'}`} />
+      <TitleSkeleton size="sm" className={`bg-n-500/50 ${selected && 'bg-n-400/50'}`} />
     </div>
   )
 }
