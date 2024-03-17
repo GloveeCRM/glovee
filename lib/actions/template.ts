@@ -299,27 +299,34 @@ export async function updateFullTemplateById(
         title: template.title,
         description: template.description,
         categories: {
-          update: template.categories?.map((category) => ({
+          upsert: template.categories?.map((category) => ({
             where: { id: category.id },
-            data: {
+            update: {
               title: category.title,
               position: category.position,
               sections: {
-                update: category.sections?.map((section) => ({
+                upsert: category.sections?.map((section) => ({
                   where: { id: section.id },
-                  data: {
+                  update: {
                     title: section.title,
                     position: section.position,
                     questionSets: {
-                      update: section.questionSets?.map((questionSet) => ({
+                      upsert: section.questionSets?.map((questionSet) => ({
                         where: { id: questionSet.id },
-                        data: {
+                        update: {
                           type: questionSet.type,
                           position: questionSet.position,
                           questions: {
-                            update: questionSet.questions?.map((question) => ({
+                            upsert: questionSet.questions?.map((question) => ({
                               where: { id: question.id },
-                              data: {
+                              update: {
+                                type: question.type,
+                                prompt: question.prompt,
+                                position: question.position,
+                                helperText: question.helperText,
+                              },
+                              create: {
+                                id: question.id,
                                 type: question.type,
                                 prompt: question.prompt,
                                 position: question.position,
@@ -328,8 +335,71 @@ export async function updateFullTemplateById(
                             })),
                           },
                         },
+                        create: {
+                          id: questionSet.id,
+                          type: questionSet.type,
+                          position: questionSet.position,
+                          questions: {
+                            create: questionSet.questions?.map((question) => ({
+                              id: question.id,
+                              type: question.type,
+                              prompt: question.prompt,
+                              position: question.position,
+                              helperText: question.helperText,
+                            })),
+                          },
+                        },
                       })),
                     },
+                  },
+                  create: {
+                    id: section.id,
+                    title: section.title,
+                    position: section.position,
+                    questionSets: {
+                      create: section.questionSets?.map((questionSet) => ({
+                        id: questionSet.id,
+                        type: questionSet.type,
+                        position: questionSet.position,
+                        questions: {
+                          create: questionSet.questions?.map((question) => ({
+                            id: question.id,
+                            type: question.type,
+                            prompt: question.prompt,
+                            position: question.position,
+                            helperText: question.helperText,
+                          })),
+                        },
+                      })),
+                    },
+                  },
+                })),
+              },
+            },
+            create: {
+              id: category.id,
+              title: category.title,
+              position: category.position,
+              sections: {
+                create: category.sections?.map((section) => ({
+                  id: section.id,
+                  title: section.title,
+                  position: section.position,
+                  questionSets: {
+                    create: section.questionSets?.map((questionSet) => ({
+                      id: questionSet.id,
+                      type: questionSet.type,
+                      position: questionSet.position,
+                      questions: {
+                        create: questionSet.questions?.map((question) => ({
+                          id: question.id,
+                          type: question.type,
+                          prompt: question.prompt,
+                          position: question.position,
+                          helperText: question.helperText,
+                        })),
+                      },
+                    })),
                   },
                 })),
               },
