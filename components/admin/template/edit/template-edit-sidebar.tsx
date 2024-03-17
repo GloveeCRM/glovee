@@ -3,7 +3,7 @@ import { Suspense } from 'react'
 import { IoChevronBackOutline } from 'react-icons/io5'
 
 import {
-  TemplateEditSidebarCategoriesSkeleton,
+  TemplateEditSidebarCategoryWrapperSkeleton,
   TemplateInfoCardSkeleton,
 } from '@/components/skeletons'
 import TemplateInfoCard from '../template-info-card'
@@ -16,7 +16,7 @@ interface TemplateEditSidebarProps {
 
 export default async function TemplateEditSidebar({ templateId }: TemplateEditSidebarProps) {
   return (
-    <div className="sticky top-0 flex h-screen w-[240px] flex-col bg-n-700 p-[8px] text-n-100">
+    <div className="sticky top-0 flex h-screen w-[240px] flex-shrink-0 flex-col bg-n-700 p-[8px] text-n-100">
       <div id="sidebar-header" className="flex flex-col">
         <Link href="/admin/templates/" className="mb-[8px] flex w-fit items-center gap-[4px]">
           <IoChevronBackOutline className="h-[20px] w-[20px]" />
@@ -27,7 +27,7 @@ export default async function TemplateEditSidebar({ templateId }: TemplateEditSi
         </Suspense>
       </div>
       <div id="sidebar-categories" className="mt-[6px]">
-        <Suspense fallback={<TemplateEditSidebarCategoriesSkeleton />}>
+        <Suspense fallback={<TemplateEditSidebarCategoryWrapperSkeleton />}>
           <TemplateEditSidebarCategoryWrapper templateId={templateId} />
         </Suspense>
       </div>

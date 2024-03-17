@@ -56,13 +56,13 @@ export default function SaveTemplateButton() {
     <div className="flex items-center gap-[6px]">
       <button
         type="button"
-        className={`flex w-[80px] items-center justify-center rounded bg-n-200 py-[5px] font-medium text-n-700 disabled:bg-opacity-50 ${isPending && 'bg-opacity-50'}`}
+        className={`flex w-[70px] items-center justify-center rounded bg-n-200 py-[3px] font-medium text-n-700 disabled:bg-opacity-50 ${isPending && 'bg-opacity-50'}`}
         disabled={!isTemplateChanged}
         onClick={handleClickSave}
       >
         {isPending ? (
           <span>
-            <ImSpinner2 className="h-[24px] w-[24px] animate-spin text-n-700" />
+            <ImSpinner2 className="h-[20px] w-[20px] animate-spin text-n-700" />
           </span>
         ) : (
           <span>Save</span>
