@@ -31,7 +31,6 @@ export default async function TemplateEditSidebar({ templateId }: TemplateEditSi
           <TemplateEditSidebarCategoryWrapper templateId={templateId} />
         </Suspense>
       </div>
-      <SaveTemplateButton />
     </div>
   )
 }

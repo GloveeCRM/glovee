@@ -1,6 +1,7 @@
 'use client'
 
-import { useTransition } from 'react'
+import { useEffect, useState, useTransition } from 'react'
+import { ImSpinner2 } from 'react-icons/im'
 
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
 import { updateFullTemplateById } from '@/lib/actions/template'
@@ -9,12 +10,32 @@ import { TemplateType } from '@/lib/types/template'
 export default function SaveTemplateButton() {
   const { templateId, template, isTemplateChanged, setSavedTemplate } = useTemplateEditContext()
   const [isPending, startTransition] = useTransition()
+  const [message, setMessage] = useState<string>('')
 
   function saveTemplateChanges(templateId: string, template: TemplateType) {
+    setMessage('Saving changes...')
     startTransition(() => {
-      updateFullTemplateById(templateId, template).then(() => {
-        setSavedTemplate(template)
-      })
+      updateFullTemplateById(templateId, template)
+        .then((data) => {
+          if (data.success) {
+            setSavedTemplate(template)
+            setMessage('Changes saved!')
+            setTimeout(() => {
+              if (isTemplateChanged) {
+                setMessage('Click to save changes')
+              } else {
+                setMessage('No changes to save')
+              }
+            }, 2000)
+          } else {
+            setMessage('Failed to save changes!')
+            setTimeout(() => setMessage('Click to save changes'), 2000)
+          }
+        })
+        .catch(() => {
+          setMessage('Failed to save changes!')
+          setTimeout(() => setMessage('Click to save changes'), 2000)
+        })
     })
   }
 
@@ -23,14 +44,31 @@ export default function SaveTemplateButton() {
     saveTemplateChanges(templateId, template)
   }
 
+  useEffect(() => {
+    if (isTemplateChanged) {
+      setMessage('Click to save changes')
+    } else if (message !== 'Changes saved!' && message !== 'Failed to save changes!') {
+      setMessage('No changes to save')
+    }
+  }, [isTemplateChanged])
+
   return (
-    <button
-      type="button"
-      className={`w-full rounded-md bg-n-500 py-[8px] text-n-100 disabled:bg-red-600 ${isPending ? 'opacity-50' : ''}`}
-      disabled={!isTemplateChanged}
-      onClick={handleClickSave}
-    >
-      Save
-    </button>
+    <div className="flex items-center gap-[6px]">
+      <button
+        type="button"
+        className={`flex w-[80px] items-center justify-center rounded bg-n-200 py-[5px] font-medium text-n-700 disabled:bg-opacity-50 ${isPending && 'bg-opacity-50'}`}
+        disabled={!isTemplateChanged}
+        onClick={handleClickSave}
+      >
+        {isPending ? (
+          <span>
+            <ImSpinner2 className="h-[24px] w-[24px] animate-spin text-n-700" />
+          </span>
+        ) : (
+          <span>Save</span>
+        )}
+      </button>
+      <p className="flex-1 text-[12px] text-n-300">{message}</p>
+    </div>
   )
 }

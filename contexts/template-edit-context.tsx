@@ -13,6 +13,7 @@ type TemplateEditContextType = {
   savedTemplate: TemplateType | null
   setSavedTemplate: Dispatch<SetStateAction<TemplateType | null>>
   isTemplateChanged: boolean
+  setIsTemplateChanged: Dispatch<SetStateAction<boolean>>
   selectedCategoryId: string
   setSelectedCategoryId: Dispatch<SetStateAction<string>>
   selectedSectionId: string
@@ -26,6 +27,7 @@ const templateEditContextDefaultValues: TemplateEditContextType = {
   savedTemplate: null,
   setSavedTemplate: () => {},
   isTemplateChanged: false,
+  setIsTemplateChanged: () => {},
   selectedCategoryId: '',
   setSelectedCategoryId: () => {},
   selectedSectionId: '',
@@ -101,6 +103,7 @@ export default function TemplateEditProvider({ templateId, children }: TemplateE
     savedTemplate,
     setSavedTemplate,
     isTemplateChanged,
+    setIsTemplateChanged,
     selectedCategoryId,
     setSelectedCategoryId,
     selectedSectionId,
