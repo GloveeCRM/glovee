@@ -1,3 +1,5 @@
+'use client'
+
 import { TemplateSectionType } from '@/lib/types/template'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
 import TemplateEditSidebarSection from './template-edit-sidebar-section'

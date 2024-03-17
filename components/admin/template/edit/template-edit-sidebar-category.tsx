@@ -1,6 +1,7 @@
+'use client'
+
 import { useEffect, useRef, useState } from 'react'
 import { IoMdArrowDropdown, IoMdArrowDropright } from 'react-icons/io'
-import { PiDotsSixVerticalBold } from 'react-icons/pi'
 
 import { TemplateCategoryType } from '@/lib/types/template'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'

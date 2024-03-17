@@ -1,3 +1,5 @@
+'use client'
+
 import { BiTrash } from 'react-icons/bi'
 import { FiEdit, FiMoreHorizontal } from 'react-icons/fi'
 

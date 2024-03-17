@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useRef, useState } from 'react'
 import { PiDotsSixVerticalBold } from 'react-icons/pi'
 
