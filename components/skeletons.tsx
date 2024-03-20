@@ -231,7 +231,9 @@ export function TemplateInfoCardSkeleton() {
 function TemplateEditSidebarCategorySkeleton() {
   return (
     <div className="flex items-center gap-[4px] rounded bg-n-600/80 p-[10px]">
-      <IconSkeleton className="h-[30px] w-[30px] bg-n-500" />
+      <div>
+        <IconSkeleton className="h-[25px] w-[25px] bg-n-500" />
+      </div>
       <TitleSkeleton className="w-[135px] bg-n-500" />
     </div>
   )
@@ -258,10 +260,12 @@ interface TemplateEditSidebarSectionSkeletonProps {
 function TemplateEditSidebarSectionSkeleton({ selected }: TemplateEditSidebarSectionSkeletonProps) {
   return (
     <div
-      className={`flex items-center gap-[4px] rounded py-[8px] pl-[35px] ${selected ? 'bg-n-500/60' : 'bg-n-600/50'}`}
+      className={`flex items-center gap-[4px] rounded py-[8px] pl-[40px] ${selected ? 'bg-n-500/60' : 'bg-n-600/50'}`}
     >
-      <IconSkeleton size="sm" className={`${selected ? 'bg-n-400' : 'bg-n-500'}`} />
-      <TitleSkeleton className={`w-[135px] ${selected ? 'bg-n-400' : 'bg-n-500'}`} />
+      <div>
+        <IconSkeleton size="sm" className={`${selected ? 'bg-n-400' : 'bg-n-500'}`} />
+      </div>
+      <TitleSkeleton className={`${selected ? 'bg-n-400' : 'bg-n-500'}`} size="sm" />
     </div>
   )
 }
