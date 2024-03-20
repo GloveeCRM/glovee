@@ -62,7 +62,7 @@ export default function SaveTemplateButton() {
       >
         {isPending ? (
           <span>
-            <ImSpinner2 className="h-[20px] w-[20px] animate-spin text-n-700" />
+            <ImSpinner2 className="h-[24px] w-[24px] animate-spin text-n-700" />
           </span>
         ) : (
           <span>Save</span>
