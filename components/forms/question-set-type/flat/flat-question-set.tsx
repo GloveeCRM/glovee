@@ -1,5 +1,5 @@
 import { QuestionSet } from '@/app/[orgName]/(client)/applications/[id]/page'
-import TextInputQuestion from '../questionType/text-input-question'
+import TextInputQuestion from '../../questionType/text-input-question'
 
 export default function FlatQuestionSet({ questionSet }: { questionSet: QuestionSet }) {
   return (

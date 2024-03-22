@@ -1,5 +1,5 @@
-import FlatQuestionSet from '@/components/forms/questionSetType/flat-question-set'
-import LoopQuestionSet from '@/components/forms/questionSetType/loop-question-set'
+import FlatQuestionSet from '@/components/forms/question-set-type/flat/flat-question-set'
+import LoopQuestionSet from '@/components/forms/question-set-type/loop/loop-question-set'
 import { fetchQuestionSetsBySectionId } from '@/lib/data/application'
 
 export interface QuestionSet {
