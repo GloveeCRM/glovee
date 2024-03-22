@@ -5,7 +5,7 @@ export default function DependsOnQuestionSetIcon() {
         <span className="text-[12px] font-medium">Depends On</span>
       </div>
       <div className="bg-b-300 flex h-[20px] items-center justify-center">
-        <span className="text-[8px]">Drop a question set here</span>
+        <span className="text-[8px] text-n-800/70">Drop a question set here</span>
       </div>
     </div>
   )

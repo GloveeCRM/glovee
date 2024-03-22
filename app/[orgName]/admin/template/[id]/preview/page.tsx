@@ -1,6 +1,6 @@
 import { QuestionSet } from '@/app/[orgName]/(client)/applications/[id]/page'
-import FlatQuestionSet from '@/components/forms/question-set-type/flat/flat-question-set'
-import LoopQuestionSet from '@/components/forms/question-set-type/loop/loop-question-set'
+import FlatQuestionSet from '@/components/forms/question-set-types/flat/flat-question-set'
+import LoopQuestionSet from '@/components/forms/question-set-types/loop/loop-question-set'
 import { fetchTemplateQuestionSetsWithQuestionsBySectionId } from '@/lib/data/template'
 
 export default async function TemplatePreviewPage({
