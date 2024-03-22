@@ -1,5 +1,4 @@
 import Divider from '@/components/ui/divider'
-import { PiCheckBold } from 'react-icons/pi'
 
 export default function DocumentIcon() {
   return (
