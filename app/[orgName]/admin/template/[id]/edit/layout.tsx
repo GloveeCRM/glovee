@@ -15,7 +15,7 @@ export default function templateEditLayout({ params, children }: templateEditLay
     <div id="template-edit-layout" className="flex">
       <TemplateEditProvider templateId={templateId}>
         <TemplateEditSidebar templateId={templateId} />
-        <div className="flex-1">
+        <div className="min-w-0 flex-1">
           <TemplateEditTopbar />
           {children}
         </div>
