@@ -10,10 +10,7 @@ export default function DateInputIcon() {
           <div className="flex w-[20px] items-center">
             <Divider className="mb-[2px] border-n-500" size={2} />
           </div>
-          <div className="flex h-[20px] items-center justify-between rounded-sm border-[1px] border-n-600">
-            <div className="ml-[5px] w-[20px]">
-              <Divider className="border-n-500" size={2} />
-            </div>
+          <div className="flex h-[20px] items-center justify-end rounded-sm border-[1px] border-n-600">
             <span>
               <MdOutlineKeyboardArrowDown className="h-[20px] w-[20px]" />
             </span>
@@ -23,10 +20,7 @@ export default function DateInputIcon() {
           <div className="flex w-[20px] items-center">
             <Divider className="mb-[2px] border-n-500" size={2} />
           </div>
-          <div className="flex h-[20px] items-center justify-between rounded-sm border-[1px] border-n-600">
-            <div className="ml-[5px] w-[20px]">
-              <Divider className="border-n-500" size={2} />
-            </div>
+          <div className="flex h-[20px] items-center justify-end rounded-sm border-[1px] border-n-600">
             <span>
               <MdOutlineKeyboardArrowDown className="h-[20px] w-[20px]" />
             </span>
@@ -36,10 +30,7 @@ export default function DateInputIcon() {
           <div className="flex w-[20px] items-center">
             <Divider className="mb-[2px] border-n-500" size={2} />
           </div>
-          <div className="flex h-[20px] items-center justify-between rounded-sm border-[1px] border-n-600">
-            <div className="ml-[5px] w-[20px]">
-              <Divider className="border-n-500" size={2} />
-            </div>
+          <div className="flex h-[20px] items-center justify-end rounded-sm border-[1px] border-n-600">
             <span>
               <MdOutlineKeyboardArrowDown className="h-[20px] w-[20px]" />
             </span>
