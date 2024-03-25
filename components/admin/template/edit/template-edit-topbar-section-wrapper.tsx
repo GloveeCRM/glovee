@@ -16,10 +16,10 @@ export default function TemplateEditTopbarSectionWrapper() {
   )?.sections
 
   useEffect(() => {
-    if (selectedCategorySections) {
+    if (template !== null) {
       setIsLoading(false)
     }
-  }, [selectedCategorySections])
+  }, [template])
 
   if (isLoading) {
     return <TemplateEditTopbarSectionWrapperSkeleton />

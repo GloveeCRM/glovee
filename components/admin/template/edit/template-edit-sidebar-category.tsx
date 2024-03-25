@@ -34,6 +34,7 @@ export default function TemplateEditSidebarCategory({
 
   function handleClickDeleteCategory() {
     removeCategoryFromTemplate(category.id)
+    setSelectedCategoryId('')
   }
 
   function handleClickRenameCategory() {

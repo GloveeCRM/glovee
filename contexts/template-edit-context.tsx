@@ -77,11 +77,11 @@ export default function TemplateEditProvider({ templateId, children }: TemplateE
       if (!template || !template.categories) return
 
       if (!selectedCategoryId) {
-        setSelectedCategoryId(template.categories[0].id)
+        setSelectedCategoryId(template.categories?.[0]?.id)
       }
 
-      if (!selectedSectionId && template.categories[0].sections) {
-        setSelectedSectionId(template.categories[0].sections[0].id || '')
+      if (!selectedSectionId && template.categories?.[0]?.sections) {
+        setSelectedSectionId(template.categories[0].sections[0]?.id || '')
       }
     }
 
