@@ -90,7 +90,7 @@ export default function TemplateEditSidebarCategory({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [isEditing, categoryTitleInputRef])
+  }, [isEditing, categoryTitleInputRef, category.id, updateCategoryTitle])
 
   return (
     <div className={`rounded ${isExpanded && 'bg-n-600/60'}`}>

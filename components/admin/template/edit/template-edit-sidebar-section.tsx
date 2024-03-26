@@ -83,7 +83,7 @@ export default function TemplateEditSidebarSection({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [isEditing, sectionInputRef])
+  }, [isEditing, sectionInputRef, section.id, updateSectionTitle])
 
   return (
     <div

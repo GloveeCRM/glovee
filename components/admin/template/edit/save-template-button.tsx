@@ -50,7 +50,7 @@ export default function SaveTemplateButton() {
     } else if (message !== 'Changes saved!' && message !== 'Failed to save changes!') {
       setMessage('No changes to save')
     }
-  }, [isTemplateChanged])
+  }, [message, isTemplateChanged])
 
   return (
     <div className="flex items-center gap-[6px]">
