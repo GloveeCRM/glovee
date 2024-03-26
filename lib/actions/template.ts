@@ -353,10 +353,10 @@ export async function updateFullTemplateById(
       )
     )
 
-    const categoryIdsToDelete = categoriesToDelete?.map((cat) => cat.id)
-    const sectionIdsToDelete = sectionsToDelete?.map((sec) => sec?.id)
-    const questionSetIdsToDelete = questionSetsToDelete?.map((qSet) => qSet?.id)
-    const questionIdsToDelete = questionsToDelete?.map((q) => q?.id)
+    const categoryIdsToDelete = categoriesToDelete.map((cat) => cat.id)
+    const sectionIdsToDelete = sectionsToDelete.map((sec) => sec.id)
+    const questionSetIdsToDelete = questionSetsToDelete.map((qSet) => qSet.id)
+    const questionIdsToDelete = questionsToDelete.map((q) => q.id)
 
     await prisma.templateCategory.deleteMany({
       where: {
