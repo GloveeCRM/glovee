@@ -7,6 +7,7 @@ import { getAuthenticatedUser } from '@/auth'
 import { TemplateSchema } from '../zod/schemas'
 import { TemplateType } from '../types/template'
 import { title } from 'process'
+import { fetchFullTemplateById } from '../data/template'
 
 export async function createTemplate(prevState: any, formDara: FormData) {
   const validatedFields = TemplateSchema.safeParse({
@@ -291,6 +292,104 @@ export async function updateFullTemplateById(
   template: TemplateType
 ): Promise<{ success?: string; error?: string }> {
   try {
+    const currentTemplateInDB = await fetchFullTemplateById(templateId)
+
+    const categoriesInDB = currentTemplateInDB?.categories ?? []
+    const templateCategories = template.categories ?? []
+
+    const categoriesToDelete = categoriesInDB.filter(
+      (dbCategory) => !templateCategories.some((category) => category.id === dbCategory.id)
+    )
+
+    const sectionsToDelete = categoriesInDB.flatMap((dbCategory) => {
+      if (!categoriesToDelete.find((cat) => cat.id === dbCategory.id)) {
+        const correspondingCategory = templateCategories.find((cat) => cat.id === dbCategory.id)
+        const dbSections = dbCategory.sections ?? []
+        const templateSections = correspondingCategory?.sections ?? []
+        return dbSections.filter(
+          (dbSection) => !templateSections.some((section) => section.id === dbSection.id)
+        )
+      } else {
+        return []
+      }
+    })
+
+    const questionSetsToDelete = categoriesInDB.flatMap((dbCategory) =>
+      (dbCategory.sections ?? []).flatMap((dbSection) => {
+        if (!sectionsToDelete.find((sec) => sec.id === dbSection.id)) {
+          const correspondingSection = templateCategories
+            .flatMap((cat) => cat.sections ?? [])
+            .find((section) => section.id === dbSection.id)
+          return (dbSection.questionSets ?? []).filter(
+            (dbQuestionSet) =>
+              !(correspondingSection?.questionSets ?? []).some(
+                (qSet) => qSet.id === dbQuestionSet.id
+              )
+          )
+        } else {
+          return []
+        }
+      })
+    )
+
+    const questionsToDelete = categoriesInDB.flatMap((dbCategory) =>
+      (dbCategory.sections ?? []).flatMap((dbSection) =>
+        (dbSection.questionSets ?? []).flatMap((dbQuestionSet) => {
+          if (!questionSetsToDelete.find((qSet) => qSet.id === dbQuestionSet.id)) {
+            const correspondingQuestionSet = templateCategories
+              .flatMap((cat) => cat.sections ?? [])
+              .flatMap((sec) => sec.questionSets ?? [])
+              .find((qSet) => qSet.id === dbQuestionSet.id)
+            return (dbQuestionSet.questions ?? []).filter(
+              (dbQuestion) =>
+                !(correspondingQuestionSet?.questions ?? []).some(
+                  (question) => question.id === dbQuestion.id
+                )
+            )
+          } else {
+            return []
+          }
+        })
+      )
+    )
+
+    const categoryIdsToDelete = categoriesToDelete?.map((cat) => cat.id)
+    const sectionIdsToDelete = sectionsToDelete?.map((sec) => sec?.id)
+    const questionSetIdsToDelete = questionSetsToDelete?.map((qSet) => qSet?.id)
+    const questionIdsToDelete = questionsToDelete?.map((q) => q?.id)
+
+    await prisma.templateCategory.deleteMany({
+      where: {
+        id: {
+          in: categoryIdsToDelete,
+        },
+      },
+    })
+
+    await prisma.templateSection.deleteMany({
+      where: {
+        id: {
+          in: sectionIdsToDelete,
+        },
+      },
+    })
+
+    await prisma.templateQuestionSet.deleteMany({
+      where: {
+        id: {
+          in: questionSetIdsToDelete,
+        },
+      },
+    })
+
+    await prisma.templateQuestion.deleteMany({
+      where: {
+        id: {
+          in: questionIdsToDelete,
+        },
+      },
+    })
+
     await prisma.template.update({
       where: {
         id: templateId,
