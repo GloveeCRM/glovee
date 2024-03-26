@@ -3,42 +3,25 @@
 import { MouseEvent } from 'react'
 
 import { Template } from '@prisma/client'
-import { createApplication } from '@/lib/actions/application'
 import { Modal, useModal } from '@/components/ui/modal'
 import TemplateSelect from './template-select'
+import ClientSearchDropdown from './clients-search-dropdown'
 
-export default function CreateNewApplicationModal({ templates }: { templates: Template[] }) {
+interface CreateNewApplicationModalProps {
+  templates: Template[]
+  orgName: string
+}
+
+export default function CreateNewApplicationModal({
+  templates,
+  orgName,
+}: CreateNewApplicationModalProps) {
   const { closeModal } = useModal()
-
-  // async function handleCreateApplication(formData: FormData) {
-  //   createApplication(formData)
-  //     .then((data) => {
-  //       closeModal()
-  //       if (data.success) {
-  //         alert('Application created successfully')
-  //       } else {
-  //         alert('Application creation failed')
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       alert('Application creation failed miserably')
-  //     })
-  // }
 
   return (
     <Modal title="Create a new application">
       <form className="w-[85vw] max-w-[570px]">
-        <div>
-          <label htmlFor="client-name" className="mb-[4px] block text-[14px] text-n-700">
-            Client Name
-          </label>
-          <input
-            type="text"
-            name="clientName"
-            id="client-name"
-            className="w-full rounded border border-n-400 px-[8px] py-[3px] text-[14px] leading-tight"
-          />
-        </div>
+        <ClientSearchDropdown orgName={orgName} />
         <div>
           <label htmlFor="role" className="mb-[4px] block text-[14px] text-n-700">
             Role
@@ -63,7 +46,7 @@ export default function CreateNewApplicationModal({ templates }: { templates: Te
               type="text"
               name="applicantFirstName"
               id="applicant-first-name"
-              className="w-full rounded border border-n-400 px-[8px] py-[3px] text-[14px] leading-tight"
+              className="w-full rounded border border-n-400  px-[8px] py-[3px] text-[14px] leading-tight"
             />
           </div>
           <div>

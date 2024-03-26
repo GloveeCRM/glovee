@@ -11,7 +11,7 @@ import { UserStatus } from '@prisma/client'
  * Fetches a user by email and organization name.
  */
 export async function fetchUserByEmailAndOrgName(
-  name: string,
+  email: string,
   orgName: string
 ): Promise<(User & { organization: Organization | null }) | null> {
   try {
@@ -20,7 +20,7 @@ export async function fetchUserByEmailAndOrgName(
         organization: true,
       },
       where: {
-        name: name,
+        email: email,
         organization: {
           orgName: orgName,
         },
