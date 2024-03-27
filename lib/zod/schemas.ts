@@ -9,8 +9,9 @@ export const CreateClientSchema = z.object({
 })
 
 export const ApplicationSchema = z.object({
-  clientName: z.string(),
-  templateId: z.string(),
+  role: z.string(),
+  applicantFirstName: z.string(),
+  applicantLastName: z.string(),
 })
 
 export const TemplateSchema = z.object({
