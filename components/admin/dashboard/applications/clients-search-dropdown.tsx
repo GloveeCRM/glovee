@@ -52,9 +52,14 @@ export default function ClientSearchDropdown({
   return (
     <div>
       <div className="relative">
+        <label htmlFor="clientName" className="mb-[4px] block text-[14px] text-n-700">
+          Client Name
+        </label>
         <input
           type="text"
-          className=" w-full rounded border border-n-400 px-[8px] py-[3px] text-[14px]  text-gray-700"
+          id="client-name"
+          name="clientName"
+          className="mb-[14px] w-full rounded border border-n-400 px-[8px] py-[3px] text-[14px]  text-gray-700"
           placeholder="Search..."
           onChange={(e) => setSearchTerm(e.target.value)}
           value={searchTerm}
@@ -66,18 +71,20 @@ export default function ClientSearchDropdown({
           }}
           disabled={selectedClientId !== ''}
         />
-        <div className="absolute top-[2px] flex w-full items-center justify-between bg-n-300">
-          {clients?.find((client) => client.id === selectedClientId)?.name}
-          {selectedClientId !== '' && <IoCloseOutline onClick={() => handleSelectClient('')} />}
-        </div>
+        {selectedClientId !== '' && (
+          <div className="absolute top-[2px] flex w-full items-center justify-between rounded border border-n-400 bg-white px-[8px] py-[3px] text-[14px] text-gray-700">
+            {clients?.find((client) => client.id === selectedClientId)?.name}
+            {selectedClientId !== '' && <IoCloseOutline onClick={() => handleSelectClient('')} />}
+          </div>
+        )}
       </div>
 
       {(isSearching || searchTerm !== '') && (
-        <div className="absolute z-10 max-h-[100px] w-[85vw] max-w-[570px] origin-top-right overflow-auto border bg-white px-[8px] py-[3px] text-[14px] focus:outline-none">
+        <div className="absolute z-10 mt-[4px] max-h-[100px] w-[85vw] max-w-[570px] origin-top-right overflow-auto border bg-white py-[3px] text-[14px] shadow focus:outline-none">
           {filteredClients?.map((client) => (
             <div
               key={client.id}
-              className="w-full text-left hover:bg-gray-100"
+              className="w-full border-b border-n-400 px-[8px] py-[3px] text-left text-[14px] hover:bg-gray-100"
               onClick={() => {
                 handleSelectClient(client.id)
                 setSearchTerm('')

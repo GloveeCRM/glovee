@@ -46,7 +46,6 @@ export default function CreateNewApplicationModal({
           selectedClientId={selectedClientId}
           setSelectedClientId={handleClientSelect}
         />
-        <div>{selectedClientId}</div>
         <div>
           <label htmlFor="role" className="mb-[4px] block text-[14px] text-n-700">
             Role
@@ -54,7 +53,7 @@ export default function CreateNewApplicationModal({
           <select
             name="role"
             id="role"
-            className="w-full rounded border border-n-400 px-[8px] py-[3px] text-[14px] leading-tight"
+            className="mb-[14px] w-full rounded border border-n-400 px-[8px] py-[3px] text-[14px] leading-tight"
           >
             <option value="MAIN">Main</option>
             <option value="SPOUSE">Spouse</option>
@@ -72,7 +71,7 @@ export default function CreateNewApplicationModal({
               type="text"
               name="applicantFirstName"
               id="applicant-first-name"
-              className="w-full rounded border border-n-400  px-[8px] py-[3px] text-[14px] leading-tight"
+              className="mb-[14px] w-full rounded border border-n-400  px-[8px] py-[3px] text-[14px] leading-tight"
             />
           </div>
           <div>
@@ -83,7 +82,7 @@ export default function CreateNewApplicationModal({
               type="text"
               name="applicantLastName"
               id="applicant-last-name"
-              className="w-full rounded border border-n-400 px-[8px] py-[3px] text-[14px] leading-tight"
+              className="mb-[14px] w-full rounded border border-n-400 px-[8px] py-[3px] text-[14px] leading-tight"
             />
           </div>
         </div>
@@ -92,7 +91,6 @@ export default function CreateNewApplicationModal({
           selectedTemplateId={selectedTemplateId}
           setSelectedTemplateId={setSelectedTemplateId}
         />
-        <div>{selectedTemplateId}</div>
         <div className="mt-[10px] flex justify-center gap-[8px]">
           <button
             className="w-full rounded-md bg-n-200 px-[12px] py-[6px] text-[14px] font-bold text-n-700 transition hover:bg-n-400"
