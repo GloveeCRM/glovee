@@ -8,12 +8,17 @@ import { IoCloseOutline } from 'react-icons/io5'
 
 interface ClientSearchDropdownProps {
   orgName: string
+  selectedClientId: string | null
+  setSelectedClientId: (clientId: string) => void
 }
 
-export default function ClientSearchDropdown({ orgName }: ClientSearchDropdownProps) {
+export default function ClientSearchDropdown({
+  orgName,
+  selectedClientId,
+  setSelectedClientId,
+}: ClientSearchDropdownProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [isSearching, setIsSearching] = useState(false)
-  const [selectedClientId, setSelectedClientId] = useState('')
   const [clients, setClients] = useState<User[] | null>(null)
   const [isLoadingClients, setIsLoadingClients] = useState(true)
 
@@ -35,6 +40,10 @@ export default function ClientSearchDropdown({ orgName }: ClientSearchDropdownPr
             client.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             client.id.includes(searchTerm)
         )
+
+  const handleSelectClient = (clientId: string) => {
+    setSelectedClientId(clientId)
+  }
 
   if (isLoadingClients) {
     return <div>Loading...</div>
@@ -59,7 +68,7 @@ export default function ClientSearchDropdown({ orgName }: ClientSearchDropdownPr
         />
         <div className="absolute top-[2px] flex w-full items-center justify-between bg-n-300">
           {clients?.find((client) => client.id === selectedClientId)?.name}
-          {selectedClientId !== '' && <IoCloseOutline onClick={() => setSelectedClientId('')} />}
+          {selectedClientId !== '' && <IoCloseOutline onClick={() => handleSelectClient('')} />}
         </div>
       </div>
 
@@ -70,7 +79,7 @@ export default function ClientSearchDropdown({ orgName }: ClientSearchDropdownPr
               key={client.id}
               className="w-full text-left hover:bg-gray-100"
               onClick={() => {
-                setSelectedClientId(client.id)
+                handleSelectClient(client.id)
                 setSearchTerm('')
                 setIsSearching(false)
               }}
