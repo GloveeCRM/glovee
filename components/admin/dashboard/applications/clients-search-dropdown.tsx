@@ -51,10 +51,10 @@ export default function ClientSearchDropdown({
 
   return (
     <div>
+      <label htmlFor="clientName" className="mb-[4px] block text-[14px] text-n-700">
+        Client Name
+      </label>
       <div className="relative">
-        <label htmlFor="clientName" className="mb-[4px] block text-[14px] text-n-700">
-          Client Name
-        </label>
         <input
           type="text"
           id="client-name"
@@ -72,7 +72,7 @@ export default function ClientSearchDropdown({
           disabled={selectedClientId !== ''}
         />
         {selectedClientId !== '' && (
-          <div className="absolute top-[2px] flex w-full items-center justify-between rounded border border-n-400 bg-white px-[8px] py-[3px] text-[14px] text-gray-700">
+          <div className="absolute top-[.25px] flex w-full items-center justify-between rounded border border-n-400 bg-white px-[8px] py-[3px] text-[14px] text-gray-700">
             {clients?.find((client) => client.id === selectedClientId)?.name}
             {selectedClientId !== '' && <IoCloseOutline onClick={() => handleSelectClient('')} />}
           </div>
