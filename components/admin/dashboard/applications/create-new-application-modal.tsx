@@ -53,7 +53,7 @@ export default function CreateNewApplicationModal({
           <select
             name="role"
             id="role"
-            className="mb-[14px] w-full rounded border border-n-400 px-[8px] py-[3px] text-[14px] leading-tight"
+            className="mb-[14px] w-full rounded border border-n-400 px-[8px] py-[3px] text-[14px]"
           >
             <option value="MAIN">Main</option>
             <option value="SPOUSE">Spouse</option>
@@ -71,7 +71,7 @@ export default function CreateNewApplicationModal({
               type="text"
               name="applicantFirstName"
               id="applicant-first-name"
-              className="mb-[14px] w-full rounded border border-n-400  px-[8px] py-[3px] text-[14px] leading-tight"
+              className="mb-[14px] w-full rounded border border-n-400  px-[8px] py-[3px] text-[14px]"
             />
           </div>
           <div>
@@ -82,7 +82,7 @@ export default function CreateNewApplicationModal({
               type="text"
               name="applicantLastName"
               id="applicant-last-name"
-              className="mb-[14px] w-full rounded border border-n-400 px-[8px] py-[3px] text-[14px] leading-tight"
+              className="mb-[14px] w-full rounded border border-n-400 px-[8px] py-[3px] text-[14px]"
             />
           </div>
         </div>
