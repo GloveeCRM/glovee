@@ -5,13 +5,16 @@ import { revalidatePath } from 'next/cache'
 import { prisma } from '@/prisma/prisma'
 import { UserRole } from '@prisma/client'
 import { getAuthenticatedUser } from '@/auth'
-import { fetchUserByEmailAndOrgName } from '../data/user'
+import { fetchUserByEmailAndOrgName, fetchUserById } from '../data/user'
 import { ApplicationSchema } from '../zod/schemas'
 import { fetchFullTemplateById } from '../data/template'
 import { fetchCurrentOrgId, getCurrentOrgName } from '../utils/server'
 import { validateFormDataAgainstSchema } from '../utils/validation'
 
 export async function createApplication(
+  clientId: string,
+  templateId: string,
+  prevState: any,
   formData: FormData
 ): Promise<{ success?: string; error?: string; errors?: any }> {
   const { data, errors } = await validateFormDataAgainstSchema(ApplicationSchema, formData)
@@ -33,9 +36,9 @@ export async function createApplication(
     return { error: 'Organization not found!' }
   }
 
-  const { clientEmail, templateId } = data
+  const { role, applicantFirstName, applicantLastName } = data
 
-  const client = await fetchUserByEmailAndOrgName(clientEmail, orgName)
+  const client = await fetchUserById(clientId)
 
   if (!client) {
     return { error: 'Client not found!' }
@@ -56,6 +59,9 @@ export async function createApplication(
       clientId: client.id,
       orgId: orgId,
       templateName: template.title,
+      applicantFirstName: applicantFirstName,
+      applicantLastName: applicantLastName,
+      role: role,
       status: 'CREATED',
       categories: {
         create: template.categories?.map((category) => ({
