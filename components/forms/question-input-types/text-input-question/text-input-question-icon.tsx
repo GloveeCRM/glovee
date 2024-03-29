@@ -1,6 +1,6 @@
 import Divider from '@/components/ui/divider'
 
-export default function TextInputIcon() {
+export default function TextInputQuestionIcon() {
   return (
     <div className="skew-x-0 rounded bg-n-200 px-[6px] py-[4px] text-[12px] text-n-600" draggable>
       <span className="text-[12px]">Text Input</span>

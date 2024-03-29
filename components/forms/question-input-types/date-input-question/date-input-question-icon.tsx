@@ -1,7 +1,7 @@
 import Divider from '@/components/ui/divider'
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md'
 
-export default function DateInputIcon() {
+export default function DateInputQuestionIcon() {
   return (
     <div className="skew-x-0 rounded bg-n-200 px-[6px] py-[4px] text-[12px] text-n-600" draggable>
       <span className="text-[12px]">Date Input</span>

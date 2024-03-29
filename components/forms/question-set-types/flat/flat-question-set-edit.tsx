@@ -1,6 +1,7 @@
-import { TemplateQuestionSetType, TemplateQuestionType } from '@/lib/types/template'
 import { useState } from 'react'
-import TextInputEdit from '../../input-types/text-input/text-input-edit'
+
+import { TemplateQuestionSetType, TemplateQuestionType } from '@/lib/types/template'
+import TextInputQuestionEdit from '../../question-input-types/text-input-question/text-input-question-edit'
 
 interface FlatQuestionSetEditProps {
   questionSet: TemplateQuestionSetType
@@ -59,7 +60,7 @@ function FlatQuestionSetEditQuestionWrapper({
     <div className="flex flex-col gap-[6px] rounded bg-g-200/80 px-[6px] py-[8px]">
       {questions.map((question) =>
         question.type === 'text-input' ? (
-          <TextInputEdit key={question.id} question={question} />
+          <TextInputQuestionEdit key={question.id} question={question} />
         ) : (
           <div key={question.id}>{question.type}</div>
         )

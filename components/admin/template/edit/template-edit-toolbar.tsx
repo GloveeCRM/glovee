@@ -2,13 +2,13 @@ import FlatQuestionSetIcon from '@/components/forms/question-set-types/flat/flat
 import SaveTemplateButton from './save-template-button'
 import DependsOnQuestionSetIcon from '@/components/forms/question-set-types/depends-on/depends-on-question-set-icon'
 import LoopQuestionSetIcon from '@/components/forms/question-set-types/loop/loop-question-set-icon'
-import CheckboxIcon from '@/components/forms/input-types/checkbox/checkbox-icon'
-import TextInputIcon from '@/components/forms/input-types/text-input/text-input-icon'
-import TextareaIcon from '@/components/forms/input-types/textarea/textarea-icon'
-import SelectIcon from '@/components/forms/input-types/select/select-icon'
-import DateInputIcon from '@/components/forms/input-types/date-input/date-input-icon'
-import RadioIcon from '@/components/forms/input-types/radio/radio-icon'
-import DocumentIcon from '@/components/forms/input-types/document/document-icon'
+import CheckboxQuestionIcon from '@/components/forms/question-input-types/checkbox-question/checkbox-question-icon'
+import TextInputQuestionIcon from '@/components/forms/question-input-types/text-input-question/text-input-question-icon'
+import TextareaQuestionIcon from '@/components/forms/question-input-types/textarea-question/textarea-question-icon'
+import SelectQuestionIcon from '@/components/forms/question-input-types/select-question/select-question-icon'
+import DateInputQuestionIcon from '@/components/forms/question-input-types/date-input-question/date-input-question-icon'
+import RadioQuestionIcon from '@/components/forms/question-input-types/radio-question/radio-question-icon'
+import DocumentQuestionIcon from '@/components/forms/question-input-types/document-question/document-question-icon'
 
 export default function TemplateEditToolbar() {
   return (
@@ -26,13 +26,13 @@ export default function TemplateEditToolbar() {
         <div className="mt-[10px]">
           <h6 className="text-[14px]">Input Types</h6>
           <div className="mt-[8px] flex flex-col gap-[6px]">
-            <TextInputIcon />
-            <TextareaIcon />
-            <SelectIcon />
-            <DateInputIcon />
-            <RadioIcon />
-            <CheckboxIcon />
-            <DocumentIcon />
+            <TextInputQuestionIcon />
+            <TextareaQuestionIcon />
+            <SelectQuestionIcon />
+            <DateInputQuestionIcon />
+            <RadioQuestionIcon />
+            <CheckboxQuestionIcon />
+            <DocumentQuestionIcon />
           </div>
         </div>
       </div>
