@@ -6,8 +6,11 @@ import FlatQuestionSetEdit from '@/components/forms/question-set-types/flat/flat
 import LoopQuestionSetEdit from '@/components/forms/question-set-types/loop/loop-question-set-edit'
 
 export default function QuestionsEditBoard() {
-  const { template } = useTemplateEditContext()
-  const templateQuestionSets = template?.categories?.[0]?.sections?.[0]?.questionSets
+  const { template, selectedCategoryId, selectedSectionId } = useTemplateEditContext()
+
+  const templateQuestionSets = template?.categories
+    ?.find((category) => category.id === selectedCategoryId)
+    ?.sections?.find((section) => section.id === selectedSectionId)?.questionSets
 
   return (
     <div
