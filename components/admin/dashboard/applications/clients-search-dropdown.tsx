@@ -1,8 +1,10 @@
 'use client'
 
+import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
 import { fetchClientsByOrgName } from '@/lib/data/user'
 import { User } from '@prisma/client'
 import React, { useEffect, useState } from 'react'
+import Image from 'next/image'
 
 import { IoCloseOutline } from 'react-icons/io5'
 
@@ -40,6 +42,8 @@ export default function ClientSearchDropdown({
             client.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             client.id.includes(searchTerm)
         )
+
+  console.log(filteredClients)
 
   const handleSelectClient = (clientId: string) => {
     setSelectedClientId(clientId)
@@ -84,13 +88,24 @@ export default function ClientSearchDropdown({
           {filteredClients?.map((client) => (
             <div
               key={client.id}
-              className="w-full border-b border-n-400 px-[8px] py-[3px] text-left text-[14px] hover:bg-gray-100"
+              className="flex w-full items-center border-b border-n-400 px-[8px] py-[3px] text-left text-[14px] hover:bg-gray-100"
               onClick={() => {
                 handleSelectClient(client.id)
                 setSearchTerm('')
                 setIsSearching(false)
               }}
             >
+              {client.image === null ? (
+                <Image
+                  src={DEFAULT_MALE_CLIENT_LOGO_URL}
+                  alt="CLient Logo"
+                  width={25}
+                  height={25}
+                  className="rounded-full"
+                />
+              ) : (
+                client.image
+              )}
               {client.name}
             </div>
           ))}
