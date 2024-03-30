@@ -35,7 +35,7 @@ function MenuButton({ display }: MenuButtonProps) {
 
   return (
     <PopoverTrigger
-      className={`rounded-sm opacity-0 transition duration-100 group-hover:opacity-100 ${display && 'opacity-100'} ${isOpen && 'bg-n-700 text-n-100 opacity-100'}`}
+      className={`flex h-[10px] items-center rounded-sm p-[2px] opacity-0 transition duration-100 group-hover:opacity-100 ${display && 'opacity-100'} ${isOpen && 'bg-n-700 text-n-100 opacity-100'}`}
     >
       <FiMoreHorizontal className="h-[20px] w-[20px]" />
     </PopoverTrigger>
