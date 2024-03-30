@@ -5,6 +5,22 @@ import { useTemplateEditContext } from '@/contexts/template-edit-context'
 export default function useQuestionSetActions() {
   const { template, setTemplate } = useTemplateEditContext()
 
+  function getQuestionSetById(questionSetId: string) {
+    if (!template || !template.categories) return
+
+    for (const category of template.categories) {
+      if (!category.sections) continue
+
+      for (const section of category.sections) {
+        if (!section.questionSets) continue
+
+        for (const questionSet of section.questionSets) {
+          if (questionSet.id === questionSetId) return questionSet
+        }
+      }
+    }
+  }
+
   function removeQuestionSetFromSection(questionSetId: string) {
     if (!template || !template.categories) return
 
@@ -26,6 +42,7 @@ export default function useQuestionSetActions() {
   }
 
   return {
+    getQuestionSetById,
     removeQuestionSetFromSection,
   }
 }
