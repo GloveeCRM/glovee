@@ -3,16 +3,18 @@ import ApplicationsTable from '@/components/admin/dashboard/applications/applica
 
 interface ApplicationsPageProps {
   params: { orgName: string }
+  searchParams?: { query?: string }
 }
 
-export default async function ApplicationsPage({ params }: ApplicationsPageProps) {
+export default async function ApplicationsPage({ params, searchParams }: ApplicationsPageProps) {
   const orgName = params.orgName
+  const query = searchParams?.query?.trim() || ''
 
   return (
     <div>
       <h1 className="mb-[22px] text-[24px] font-bold">Applications</h1>
       <ApplicationPageToolbar orgName={orgName} />
-      <ApplicationsTable />
+      <ApplicationsTable orgName={orgName} query={query} />
     </div>
   )
 }

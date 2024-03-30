@@ -1,15 +1,12 @@
 import ClinetPageToolbar from '@/components/admin/dashboard/clients/clients-page-toolbar'
 import ClientsTable from '@/components/admin/dashboard/clients/clients-table'
 
-export default async function ClientsPage({
-  params,
-  searchParams,
-}: {
+interface ClientsPageProps {
   params: { orgName: string }
-  searchParams?: {
-    query?: string
-  }
-}) {
+  searchParams?: { query?: string }
+}
+
+export default async function ClientsPage({ params, searchParams }: ClientsPageProps) {
   const orgName = params.orgName
   const query = searchParams?.query?.trim() || ''
 
