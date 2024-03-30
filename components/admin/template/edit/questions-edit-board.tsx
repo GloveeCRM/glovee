@@ -17,7 +17,7 @@ export default function QuestionsEditBoard() {
       id="questions-edit-board"
       className="flex h-full flex-col gap-[4px] rounded-lg bg-white p-[4px]"
     >
-      {templateQuestionSets ? (
+      {templateQuestionSets && templateQuestionSets.length > 0 ? (
         templateQuestionSets.map((questionSet) =>
           questionSet.type === 'flat' ? (
             <FlatQuestionSetEdit key={questionSet.id} questionSet={questionSet} />

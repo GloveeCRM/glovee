@@ -1,6 +1,6 @@
 import { TemplateQuestionType } from '@/lib/types/template'
-import TextInputQuestionEditMenuButton from './text-input-question-edit-menu-button'
 import useQuestionActions from '@/hooks/template/use-question-actions'
+import TextInputQuestionEditMenuButton from './text-input-question-edit-menu-button'
 
 interface TextInputQuestionEditProps {
   question: TemplateQuestionType
