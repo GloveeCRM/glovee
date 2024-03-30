@@ -1,4 +1,4 @@
-import { fetchApplicationByOrgNameandSearchQuery, fetchApplications } from '@/lib/data/application'
+import { fetchApplicationByOrgNameandSearchQuery } from '@/lib/data/application'
 import ApplicationsTableRow from './applications-table-row'
 
 interface ApplicationsTableProps {
@@ -31,6 +31,8 @@ export default async function ApplicationsTable({ orgName, query }: Applications
               role={application.role}
               status={application.status}
               key={application.id}
+              applicantFirstName={application.applicantFirstName}
+              applicantLastName={application.applicantLastName}
             />
           ))
         )}
