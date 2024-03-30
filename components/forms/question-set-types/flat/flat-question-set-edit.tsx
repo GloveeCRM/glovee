@@ -1,69 +1,56 @@
-import { useState } from 'react'
+'use client'
 
-import { TemplateQuestionSetType, TemplateQuestionType } from '@/lib/types/template'
-import TextInputQuestionEdit from '../../question-input-types/text-input-question/text-input-question-edit'
+import { useEffect, useRef } from 'react'
+
+import { TemplateQuestionSetType } from '@/lib/types/template'
+import { useTemplateEditContext } from '@/contexts/template-edit-context'
+import FlatQuestionSetEditQuestionWrapper from './flat-question-set-edit-question-wrapper'
+import EmptyFlatQuestionSetQuestionDropzone from './empty-flat-question-set-question-dropzone'
+import FlatQuestionSetEditMenuButton from './flat-question-set-edit-menu-button'
 
 interface FlatQuestionSetEditProps {
   questionSet: TemplateQuestionSetType
 }
 
 export default function FlatQuestionSetEdit({ questionSet }: FlatQuestionSetEditProps) {
+  const { selectedQuestionSetId, setSelectedQuestionSetId } = useTemplateEditContext()
+  const isQuestionSetSelected = selectedQuestionSetId === questionSet.id
+
+  const flatQuestionSetRef = useRef<HTMLDivElement>(null)
+
   const questions = questionSet.questions
 
+  function handleClickQuestionSet() {
+    setSelectedQuestionSetId(questionSet.id)
+  }
+
+  function handleClickDeleteQuestion() {
+    console.log('Delete question set', questionSet.id)
+  }
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (flatQuestionSetRef.current && !flatQuestionSetRef.current.contains(e.target as Node)) {
+        setSelectedQuestionSetId('')
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
   return (
-    <div className="rounded bg-g-500 p-[6px] pt-[12px]">
+    <div
+      className={`group/questionSet rounded bg-g-500 ${isQuestionSetSelected ? 'border-[3px] border-g-700 p-[5px] pt-[13px]' : 'p-[8px] pt-[16px]'}`}
+      onClick={handleClickQuestionSet}
+      ref={flatQuestionSetRef}
+    >
+      <FlatQuestionSetEditMenuButton onClickDelete={handleClickDeleteQuestion} />
+
       {questions ? (
         <FlatQuestionSetEditQuestionWrapper questions={questions} />
       ) : (
         <EmptyFlatQuestionSetQuestionDropzone />
-      )}
-    </div>
-  )
-}
-
-function EmptyFlatQuestionSetQuestionDropzone() {
-  const [isDraggedOver, setIsDraggedOver] = useState<boolean>(false)
-
-  return (
-    <div
-      className={`rounded border-[1px] border-dashed ${isDraggedOver ? 'border-n-600 bg-g-200' : 'border-n-500 bg-g-200/80'}`}
-    >
-      <div
-        className="flex h-[65px] items-center justify-center text-center text-[12px]"
-        onDragEnter={(e) => {
-          e.preventDefault()
-          setIsDraggedOver(true)
-        }}
-        onDragLeave={(e) => {
-          e.preventDefault()
-          setIsDraggedOver(false)
-        }}
-        onDrop={(e) => {
-          e.preventDefault()
-          console.log('drop')
-        }}
-      >
-        Drag an Input Type Here
-      </div>
-    </div>
-  )
-}
-
-interface FlatQuestionSetEditQuestionWrapperProps {
-  questions: TemplateQuestionType[]
-}
-
-function FlatQuestionSetEditQuestionWrapper({
-  questions,
-}: FlatQuestionSetEditQuestionWrapperProps) {
-  return (
-    <div className="flex flex-col gap-[6px] rounded bg-g-200/80 px-[6px] py-[8px]">
-      {questions.map((question) =>
-        question.type === 'text-input' ? (
-          <TextInputQuestionEdit key={question.id} question={question} />
-        ) : (
-          <div key={question.id}>{question.type}</div>
-        )
       )}
     </div>
   )

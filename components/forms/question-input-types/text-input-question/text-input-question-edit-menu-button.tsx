@@ -18,7 +18,7 @@ export default function TextInputQuestionEditMenuButton({
         className="mt-[2px] w-[140px] rounded-sm bg-n-700 p-[4px]
                    text-[14px] text-n-100 shadow-[0px_0px_0px_1px_rgba(15,15,15,0.05),0px_3px_6px_rgba(15,15,15,0.2),0px_9px_24px_rgba(15,15,15,0.2)] transition duration-100"
       >
-        <DeleteCategory onClick={onClickDelete} />
+        <DeleteTextInputQuestion onClick={onClickDelete} />
       </PopoverContent>
     </Popover>
   )
@@ -36,11 +36,11 @@ function MenuButton() {
   )
 }
 
-interface DeleteCategoryProps {
+interface DeleteTextInputQuestionProps {
   onClick: () => void
 }
 
-function DeleteCategory({ onClick }: DeleteCategoryProps) {
+function DeleteTextInputQuestion({ onClick }: DeleteTextInputQuestionProps) {
   const { toggle } = usePopover()
 
   function handleClickDeleteQuestion() {

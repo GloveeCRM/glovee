@@ -17,6 +17,8 @@ export default function EmptySectionQuestionSetDropzone() {
       onDragEnter={(e) => {
         e.preventDefault()
         setIsDropAllowed(true)
+        const objectType = e.dataTransfer.getData('objectType')
+        console.log(objectType)
       }}
       onDragLeave={(e) => {
         e.preventDefault()

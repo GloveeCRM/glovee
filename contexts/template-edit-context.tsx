@@ -18,6 +18,8 @@ type TemplateEditContextType = {
   setSelectedCategoryId: Dispatch<SetStateAction<string>>
   selectedSectionId: string
   setSelectedSectionId: Dispatch<SetStateAction<string>>
+  selectedQuestionSetId: string
+  setSelectedQuestionSetId: Dispatch<SetStateAction<string>>
 }
 
 const templateEditContextDefaultValues: TemplateEditContextType = {
@@ -32,6 +34,8 @@ const templateEditContextDefaultValues: TemplateEditContextType = {
   setSelectedCategoryId: () => {},
   selectedSectionId: '',
   setSelectedSectionId: () => {},
+  selectedQuestionSetId: '',
+  setSelectedQuestionSetId: () => {},
 }
 
 const TemplateEditContext = createContext<TemplateEditContextType>(templateEditContextDefaultValues)
@@ -50,6 +54,7 @@ export default function TemplateEditProvider({ templateId, children }: TemplateE
   const [selectedSectionId, setSelectedSectionId] = useState<string>(
     template?.categories?.[0]?.sections?.[0]?.id || ''
   )
+  const [selectedQuestionSetId, setSelectedQuestionSetId] = useState<string>('')
   const [isTemplateChanged, setIsTemplateChanged] = useState<boolean>(false)
 
   useEffect(() => {
@@ -108,6 +113,8 @@ export default function TemplateEditProvider({ templateId, children }: TemplateE
     setSelectedCategoryId,
     selectedSectionId,
     setSelectedSectionId,
+    selectedQuestionSetId,
+    setSelectedQuestionSetId,
   }
 
   return <TemplateEditContext.Provider value={value}>{children}</TemplateEditContext.Provider>
