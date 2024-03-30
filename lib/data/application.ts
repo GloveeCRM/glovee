@@ -1,5 +1,66 @@
 import { prisma } from '@/prisma/prisma'
 
+export async function fetchApplicationByOrgNameandSearchQuery(orgName: string, query: string) {
+  try {
+    const applications = await prisma.application.findMany({
+      where: {
+        organization: {
+          orgName: orgName,
+        },
+        OR: [
+          {
+            id: {
+              contains: query,
+            },
+          },
+          {
+            clientId: {
+              contains: query,
+            },
+          },
+          {
+            client: {
+              name: {
+                contains: query,
+                mode: 'insensitive',
+              },
+            },
+          },
+          {
+            templateName: {
+              contains: query,
+              mode: 'insensitive',
+            },
+          },
+          {
+            applicantFirstName: {
+              contains: query,
+              mode: 'insensitive',
+            },
+          },
+          {
+            applicantLastName: {
+              contains: query,
+              mode: 'insensitive',
+            },
+          },
+        ],
+      },
+      include: {
+        client: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    })
+    return applications
+  } catch (error) {
+    console.error(error)
+    return []
+  }
+}
+
 export async function fetchApplications() {
   try {
     const applications = await prisma.application.findMany({

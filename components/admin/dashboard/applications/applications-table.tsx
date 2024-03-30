@@ -1,8 +1,13 @@
-import { fetchApplications } from '@/lib/data/application'
+import { fetchApplicationByOrgNameandSearchQuery, fetchApplications } from '@/lib/data/application'
 import ApplicationsTableRow from './applications-table-row'
 
-export default async function ApplicationsTable() {
-  const applications = await fetchApplications()
+interface ApplicationsTableProps {
+  orgName: string
+  query: string
+}
+
+export default async function ApplicationsTable({ orgName, query }: ApplicationsTableProps) {
+  const applications = await fetchApplicationByOrgNameandSearchQuery(orgName, query)
   return (
     <table className="mt-[28px] w-full text-[14px]">
       <tbody>
