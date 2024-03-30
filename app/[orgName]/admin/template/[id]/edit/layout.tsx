@@ -1,4 +1,6 @@
 import TemplateEditSidebar from '@/components/admin/template/edit/template-edit-sidebar'
+import TemplateEditToolbar from '@/components/admin/template/edit/template-edit-toolbar'
+import TemplateEditTopbar from '@/components/admin/template/edit/template-edit-topbar'
 import TemplateEditProvider from '@/contexts/template-edit-context'
 
 interface templateEditLayoutProps {
@@ -13,7 +15,11 @@ export default function templateEditLayout({ params, children }: templateEditLay
     <div id="template-edit-layout" className="flex">
       <TemplateEditProvider templateId={templateId}>
         <TemplateEditSidebar templateId={templateId} />
-        <div className="flex-1">{children}</div>
+        <div className="min-w-0 flex-1 bg-n-400">
+          <TemplateEditTopbar />
+          {children}
+        </div>
+        <TemplateEditToolbar />
       </TemplateEditProvider>
     </div>
   )

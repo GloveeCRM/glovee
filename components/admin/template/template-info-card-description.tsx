@@ -42,7 +42,7 @@ export default function TemplateInfoCardDescription({
   const adjustTextareaHeight = () => {
     const textarea = descriptionInputRef.current
     if (textarea) {
-      textarea.style.height = '22px'
+      textarea.style.height = '21px'
       textarea.style.height = `${textarea.scrollHeight}px`
     }
   }

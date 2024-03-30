@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 
 import { fetchTemplateById } from '@/lib/data/template'
+import QuestionsEditBoard from '@/components/admin/template/edit/questions-edit-board'
 
 interface TemplateEditPageProps {
   params: {
@@ -17,9 +18,8 @@ export default async function TemplateEditPage({ params }: TemplateEditPageProps
   }
 
   return (
-    <div>
-      <p>{template.title}</p>
-      <p>{template.description}</p>
+    <div className="p-[4px]">
+      <QuestionsEditBoard />
     </div>
   )
 }
