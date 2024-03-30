@@ -16,7 +16,7 @@ export default function EmptySectionQuestionSetDropzone() {
       style={customDashedBorderStyle}
       onDragEnter={(e) => {
         e.preventDefault()
-        setIsDropAllowed(true)
+        e.stopPropagation()
         const objectType = e.dataTransfer.getData('objectType')
         console.log(objectType)
       }}
@@ -26,6 +26,16 @@ export default function EmptySectionQuestionSetDropzone() {
       }}
       onDrop={(e) => {
         e.preventDefault()
+        e.stopPropagation()
+        const type = e.dataTransfer.getData('objectType')
+        console.log(type)
+        e.currentTarget.style.backgroundColor = 'blue'
+      }}
+      onDragOver={(e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        const objectType = e.dataTransfer.getData('objectType')
+        console.log(objectType)
       }}
     >
       Drag a Question Type Here

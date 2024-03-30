@@ -4,15 +4,17 @@ import { Popover, PopoverContent, PopoverTrigger, usePopover } from '@/component
 import { BiTrash } from 'react-icons/bi'
 
 interface TextInputQuestionEditMenuButtonProps {
+  display: boolean
   onClickDelete: () => void
 }
 
 export default function TextInputQuestionEditMenuButton({
+  display,
   onClickDelete,
 }: TextInputQuestionEditMenuButtonProps) {
   return (
     <Popover>
-      <MenuButton />
+      <MenuButton display={display} />
       <PopoverContent
         position="bottom-left"
         className="mt-[2px] w-[140px] rounded-sm bg-n-700 p-[4px]
@@ -24,12 +26,16 @@ export default function TextInputQuestionEditMenuButton({
   )
 }
 
-function MenuButton() {
+interface MenuButtonProps {
+  display: boolean
+}
+
+function MenuButton({ display }: MenuButtonProps) {
   const { isOpen } = usePopover()
 
   return (
     <PopoverTrigger
-      className={`rounded-sm opacity-0 transition duration-100 group-hover:opacity-100 ${isOpen && 'bg-n-700 text-n-100 opacity-100'}`}
+      className={`rounded-sm opacity-0 transition duration-100 group-hover:opacity-100 ${display && 'opacity-100'} ${isOpen && 'bg-n-700 text-n-100 opacity-100'}`}
     >
       <FiMoreHorizontal className="h-[20px] w-[20px]" />
     </PopoverTrigger>
