@@ -14,8 +14,12 @@ export default function QuestionSetSettingsToolbar({
   return (
     <div>
       <div>Question Set Settings</div>
-      <div>questionSetId: {questionSetId}</div>
-      <div>questionSetType: {questionSet?.type}</div>
+      {questionSet &&
+        Object.entries(questionSet).map(([key, value]) => (
+          <div key={key}>
+            {key}: {JSON.stringify(value)}
+          </div>
+        ))}
     </div>
   )
 }
