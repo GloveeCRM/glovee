@@ -1,3 +1,5 @@
+import { motion } from 'framer-motion'
+
 import FlatQuestionSetIcon from '@/components/forms/question-set-types/flat/flat-question-set-icon'
 import DependsOnQuestionSetIcon from '@/components/forms/question-set-types/depends-on/depends-on-question-set-icon'
 import LoopQuestionSetIcon from '@/components/forms/question-set-types/loop/loop-question-set-icon'
@@ -11,7 +13,12 @@ import DocumentQuestionIcon from '@/components/forms/question-input-types/docume
 
 export default function TemplateEditDefaultToolbar() {
   return (
-    <div className="mt-[14px] overflow-y-scroll">
+    <motion.div
+      className="mt-[14px] overflow-y-scroll"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.1, duration: 0.05 }}
+    >
       <div>
         <h6 className="text-[14px]">Question Set Types</h6>
         <div className="mt-[8px] flex flex-col gap-[6px]">
@@ -32,6 +39,6 @@ export default function TemplateEditDefaultToolbar() {
           <DocumentQuestionIcon />
         </div>
       </div>
-    </div>
+    </motion.div>
   )
 }

@@ -1,3 +1,5 @@
+import { motion } from 'framer-motion'
+
 import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
 
 interface QuestionSetSettingsToolbarProps {
@@ -12,7 +14,7 @@ export default function QuestionSetSettingsToolbar({
   const questionSet = getQuestionSetById(questionSetId)
 
   return (
-    <div>
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.05 }}>
       <div>Question Set Settings</div>
       {questionSet &&
         Object.entries(questionSet).map(([key, value]) => (
@@ -20,6 +22,6 @@ export default function QuestionSetSettingsToolbar({
             {key}: {JSON.stringify(value)}
           </div>
         ))}
-    </div>
+    </motion.div>
   )
 }
