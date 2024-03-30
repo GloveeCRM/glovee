@@ -45,7 +45,8 @@ interface DeleteFlatQuestionSetProps {
 function DeleteFlatQuestionSet({ onClick }: DeleteFlatQuestionSetProps) {
   const { toggle } = usePopover()
 
-  function handleClickDeleteQuestion() {
+  function handleClickDeleteQuestion(e: React.MouseEvent<HTMLDivElement>) {
+    e.stopPropagation()
     onClick()
     toggle()
   }

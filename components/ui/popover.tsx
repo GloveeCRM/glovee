@@ -33,7 +33,7 @@ export function Popover({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const containerRef = useRef<HTMLDivElement>(null)
 
-  const toggle = () => {
+  function toggle() {
     setIsOpen(!isOpen)
   }
 
@@ -70,8 +70,13 @@ export function PopoverTrigger({
 }) {
   const { toggle, isOpen } = usePopover()
 
+  function handleClick(e: React.MouseEvent) {
+    e.stopPropagation()
+    toggle()
+  }
+
   return (
-    <div onClick={toggle} className={`cursor-pointer ${className} ${isOpen && openClassName}`}>
+    <div onClick={handleClick} className={`cursor-pointer ${className} ${isOpen && openClassName}`}>
       {children}
     </div>
   )
