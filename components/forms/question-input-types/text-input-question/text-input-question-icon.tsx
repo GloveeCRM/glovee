@@ -1,8 +1,18 @@
+'use client'
+
 import Divider from '@/components/ui/divider'
 
 export default function TextInputQuestionIcon() {
+  function handleDragStart(e: React.DragEvent<HTMLDivElement>) {
+    e.dataTransfer.setData('objectType', 'question')
+  }
+
   return (
-    <div className="skew-x-0 rounded bg-n-200 px-[6px] py-[4px] text-[12px] text-n-600" draggable>
+    <div
+      className="skew-x-0 rounded bg-n-200 px-[6px] py-[4px] text-[12px] text-n-600"
+      draggable
+      onDragStart={handleDragStart}
+    >
       <span className="text-[12px]">Text Input</span>
       <div className="mb-[2px] mt-[4px] flex flex-col gap-[2px]">
         <div className="flex w-[35px] items-center">
