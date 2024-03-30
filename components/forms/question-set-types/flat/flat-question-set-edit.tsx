@@ -7,6 +7,7 @@ import { useTemplateEditContext } from '@/contexts/template-edit-context'
 import FlatQuestionSetEditQuestionWrapper from './flat-question-set-edit-question-wrapper'
 import EmptyFlatQuestionSetQuestionDropzone from './empty-flat-question-set-question-dropzone'
 import FlatQuestionSetEditMenuButton from './flat-question-set-edit-menu-button'
+import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
 
 interface FlatQuestionSetEditProps {
   questionSet: TemplateQuestionSetType
@@ -14,6 +15,8 @@ interface FlatQuestionSetEditProps {
 
 export default function FlatQuestionSetEdit({ questionSet }: FlatQuestionSetEditProps) {
   const { selectedQuestionSetId, setSelectedQuestionSetId } = useTemplateEditContext()
+  const { removeQuestionSetFromSection } = useQuestionSetActions()
+
   const isQuestionSetSelected = selectedQuestionSetId === questionSet.id
 
   const flatQuestionSetRef = useRef<HTMLDivElement>(null)
@@ -25,7 +28,8 @@ export default function FlatQuestionSetEdit({ questionSet }: FlatQuestionSetEdit
   }
 
   function handleClickDeleteQuestion() {
-    console.log('Delete question set', questionSet.id)
+    removeQuestionSetFromSection(questionSet.id)
+    setSelectedQuestionSetId('')
   }
 
   useEffect(() => {
