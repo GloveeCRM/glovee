@@ -50,7 +50,7 @@ export default function FlatQuestionSetEdit({ questionSet }: FlatQuestionSetEdit
       ref={flatQuestionSetRef}
     >
       <FlatQuestionSetEditMenuButton onClickDelete={handleClickDeleteQuestionSet} />
-      {questions ? (
+      {questions && questions.length > 0 ? (
         <FlatQuestionSetEditQuestionWrapper questions={questions} />
       ) : (
         <EmptyFlatQuestionSetQuestionDropzone />

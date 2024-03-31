@@ -1,13 +1,14 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import { FiPlus } from 'react-icons/fi'
 
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
 import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
 import { TemplateQuestionSetType } from '@/lib/types/template'
-import { useEffect, useRef } from 'react'
 import LoopQuestionSetEditQuestionWrapper from './loop-question-set-edit-question-wrapper'
 import LoopQuestionSetEditMenuButton from './loop-question-set-edit-menu-button'
+import EmptyLoopQuestionSetQuestionDropzone from './empty-loop-question-set-question-dropzone'
 
 interface LoopQuestionSetEditProps {
   questionSet: TemplateQuestionSetType
@@ -50,10 +51,10 @@ export default function LoopQuestionSetEdit({ questionSet }: LoopQuestionSetEdit
       ref={loopQuestionSetRef}
     >
       <LoopQuestionSetEditMenuButton onClickDelete={handleClickDeleteQuestionSet} />
-      {questions ? (
+      {questions && questions.length > 0 ? (
         <LoopQuestionSetEditQuestionWrapper questions={questions} />
       ) : (
-        <div>EmptyLoopQuestionSetQuestionDropzone</div>
+        <EmptyLoopQuestionSetQuestionDropzone />
       )}
       <LoopQuestionSetEditFooter />
     </div>
