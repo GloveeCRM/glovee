@@ -27,7 +27,7 @@ export default function FlatQuestionSetEdit({ questionSet }: FlatQuestionSetEdit
     setSelectedQuestionSetId(questionSet.id)
   }
 
-  function handleClickDeleteQuestion() {
+  function handleClickDeleteQuestionSet() {
     removeQuestionSetFromSection(questionSet.id)
     setSelectedQuestionSetId('')
   }
@@ -49,8 +49,7 @@ export default function FlatQuestionSetEdit({ questionSet }: FlatQuestionSetEdit
       onClick={handleClickQuestionSet}
       ref={flatQuestionSetRef}
     >
-      <FlatQuestionSetEditMenuButton onClickDelete={handleClickDeleteQuestion} />
-
+      <FlatQuestionSetEditMenuButton onClickDelete={handleClickDeleteQuestionSet} />
       {questions ? (
         <FlatQuestionSetEditQuestionWrapper questions={questions} />
       ) : (
