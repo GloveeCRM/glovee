@@ -11,7 +11,7 @@ export default async function ApplicationsPage({ params, searchParams }: Applica
   const query = searchParams?.query?.trim() || ''
 
   return (
-    <div>
+    <div className="mx-[8px]">
       <h1 className="mb-[22px] text-[24px] font-bold">Applications</h1>
       <ApplicationPageToolbar orgName={orgName} />
       <ApplicationsTable orgName={orgName} query={query} />
