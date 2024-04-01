@@ -1,6 +1,7 @@
 import Image from 'next/image'
 
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
+import Link from 'next/link'
 
 interface ApplicationsTableRowProps {
   id: string
@@ -22,19 +23,31 @@ export default function ApplicationsTableRow({
   applicantLastName,
 }: ApplicationsTableRowProps) {
   return (
-    <tr key={id} className="pb-[10px] hover:bg-n-200">
-      <td>{id}</td>
-      <td className="flex items-end gap-[6px]">
-        {
-          <Image
-            src={DEFAULT_MALE_CLIENT_LOGO_URL}
-            alt="CLient Logo"
-            width={25}
-            height={25}
-            className="rounded-full"
-          />
-        }
-        {clientName}
+    <tr key={id} className=" hover:bg-n-200">
+      <td className="py-[10px]">
+        <Link
+          className="cursor-pointer font-medium hover:text-blue-600"
+          href={`/admin/applications/${id}`}
+        >
+          {id}
+        </Link>
+      </td>
+      <td>
+        <Link
+          className="cursor-pointer font-medium hover:text-blue-600"
+          href={`/admin/clients/${id}`}
+        >
+          <div className="flex items-end gap-[6px]">
+            <Image
+              src={DEFAULT_MALE_CLIENT_LOGO_URL}
+              alt="CLient Logo"
+              width={25}
+              height={25}
+              className="rounded-full"
+            />
+            {clientName}
+          </div>
+        </Link>
       </td>
       <td>{templateName}</td>
       <td>

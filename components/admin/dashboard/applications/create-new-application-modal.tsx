@@ -65,7 +65,6 @@ export default function CreateNewApplicationModal({
             <option value="OTHER">Other</option>
           </select>
         </div>
-
         <div className="mb-[14px] grid grid-flow-col gap-[14px] text-[14px]">
           <div>
             <label htmlFor="applicantFirstName" className="mb-[4px] block text-n-700">
@@ -75,6 +74,7 @@ export default function CreateNewApplicationModal({
               type="text"
               name="applicantFirstName"
               id="applicant-first-name"
+              placeholder="Jane"
               className="w-full rounded-sm border border-n-400 px-[8px] py-[3px]"
             />
           </div>
@@ -86,6 +86,7 @@ export default function CreateNewApplicationModal({
               type="text"
               name="applicantLastName"
               id="applicant-last-name"
+              placeholder="Cooper"
               className="w-full rounded-sm border border-n-400 px-[8px] py-[3px]"
             />
           </div>
