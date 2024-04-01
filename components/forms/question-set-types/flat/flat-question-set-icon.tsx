@@ -1,8 +1,18 @@
 'use client'
 
+import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
+
 export default function FlatQuestionSetIcon() {
+  const { setDraggedObject } = useDragAndDropContext()
+
   function handleDragStart(e: React.DragEvent<HTMLDivElement>) {
     e.dataTransfer.setData('objectType', 'questionSet')
+    setDraggedObject({
+      type: 'questionSet',
+      object: {
+        type: 'flat',
+      },
+    })
   }
 
   return (

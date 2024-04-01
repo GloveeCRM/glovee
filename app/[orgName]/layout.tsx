@@ -3,6 +3,7 @@ import { SessionProvider } from 'next-auth/react'
 
 import { auth } from '@/auth'
 import '../globals.css'
+import DragAndDropProvider from '@/contexts/drag-and-drop-context'
 
 export const metadata: Metadata = {
   title: 'Immigration CRM',
@@ -18,9 +19,11 @@ export default async function RootLayout({ children }: RootLayoutProps) {
 
   return (
     <SessionProvider session={session}>
-      <html lang="en">
-        <body id="skyBoundCRM">{children}</body>
-      </html>
+      <DragAndDropProvider>
+        <html lang="en">
+          <body id="skyBoundCRM">{children}</body>
+        </html>
+      </DragAndDropProvider>
     </SessionProvider>
   )
 }

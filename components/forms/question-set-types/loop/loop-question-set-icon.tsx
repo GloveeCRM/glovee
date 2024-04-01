@@ -1,9 +1,27 @@
 import { FiPlus } from 'react-icons/fi'
 
+import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
+
 export default function LoopQuestionSetIcon() {
+  const { setDraggedObject } = useDragAndDropContext()
+
+  function handleDragStart(e: React.DragEvent<HTMLDivElement>) {
+    e.dataTransfer.setData('objectType', 'questionSet')
+    setDraggedObject({
+      type: 'questionSet',
+      object: {
+        type: 'lop',
+      },
+    })
+  }
+
   return (
-    <div className="bg-r-500 skew-x-0 rounded p-[4px] text-n-800" draggable>
-      <div className="bg-r-200 flex h-[38px] items-center justify-center rounded-sm">
+    <div
+      className="skew-x-0 rounded bg-r-500 p-[4px] text-n-800"
+      draggable
+      onDragStart={handleDragStart}
+    >
+      <div className="flex h-[38px] items-center justify-center rounded-sm bg-r-200">
         <span className="text-[12px] font-medium">Loop</span>
       </div>
       <div className="mt-[4px] flex items-center justify-center">
