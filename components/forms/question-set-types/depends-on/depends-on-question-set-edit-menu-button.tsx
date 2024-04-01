@@ -5,13 +5,13 @@ import { FiMoreHorizontal } from 'react-icons/fi'
 
 import { Popover, PopoverContent, PopoverTrigger, usePopover } from '@/components/ui/popover'
 
-interface LoopQuestionSetEditMenuButtonProps {
+interface DependsOnQuestionSetEditMenuButtonProps {
   onClickDelete: () => void
 }
 
-export default function LoopQuestionSetEditMenuButton({
+export default function DependsOnQuestionSetEditMenuButton({
   onClickDelete,
-}: LoopQuestionSetEditMenuButtonProps) {
+}: DependsOnQuestionSetEditMenuButtonProps) {
   return (
     <Popover>
       <MenuButton />
@@ -20,10 +20,14 @@ export default function LoopQuestionSetEditMenuButton({
         className="mt-[0px] w-[140px] rounded-sm bg-n-700 p-[4px]
                    text-[14px] text-n-100 shadow-[0px_0px_0px_1px_rgba(15,15,15,0.05),0px_3px_6px_rgba(15,15,15,0.2),0px_9px_24px_rgba(15,15,15,0.2)] transition duration-100"
       >
-        <DeleteLoopQuestionSet onClick={onClickDelete} />
+        <DeleteDependsOnQuestionSet onClick={onClickDelete} />
       </PopoverContent>
     </Popover>
   )
+}
+
+interface DeleteDependsOnQuestionSetProps {
+  onClick: () => void
 }
 
 function MenuButton() {
@@ -31,18 +35,14 @@ function MenuButton() {
 
   return (
     <PopoverTrigger
-      className={`absolute right-0 top-[-12px] flex h-[10px] items-center rounded-sm p-[2px] opacity-0 transition duration-100 group-hover/questionSet:opacity-100 ${isOpen && 'bg-r-200 opacity-100'}`}
+      className={`absolute right-0 top-[-12px] flex h-[10px] items-center rounded-sm p-[2px] opacity-0 transition duration-100 group-hover/questionSet:opacity-100 ${isOpen && 'bg-b-300 opacity-100'}`}
     >
       <FiMoreHorizontal className="h-[20px] w-[20px]" />
     </PopoverTrigger>
   )
 }
 
-interface DeleteLoopQuestionSetProps {
-  onClick: () => void
-}
-
-function DeleteLoopQuestionSet({ onClick }: DeleteLoopQuestionSetProps) {
+function DeleteDependsOnQuestionSet({ onClick }: DeleteDependsOnQuestionSetProps) {
   const { toggle } = usePopover()
 
   function handleClickDeleteQuestionSet(e: React.MouseEvent<HTMLDivElement>) {

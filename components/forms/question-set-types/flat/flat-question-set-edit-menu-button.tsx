@@ -45,7 +45,7 @@ interface DeleteFlatQuestionSetProps {
 function DeleteFlatQuestionSet({ onClick }: DeleteFlatQuestionSetProps) {
   const { toggle } = usePopover()
 
-  function handleClickDeleteQuestion(e: React.MouseEvent<HTMLDivElement>) {
+  function handleClickDeleteQuestionSet(e: React.MouseEvent<HTMLDivElement>) {
     e.stopPropagation()
     onClick()
     toggle()
@@ -53,7 +53,7 @@ function DeleteFlatQuestionSet({ onClick }: DeleteFlatQuestionSetProps) {
 
   return (
     <div
-      onClick={handleClickDeleteQuestion}
+      onClick={handleClickDeleteQuestionSet}
       className="flex cursor-pointer items-center gap-[6px] rounded-sm p-[2px] transition hover:bg-n-600/70 hover:text-red-500"
     >
       <BiTrash className="h-[18px] w-[18px]" /> Delete
