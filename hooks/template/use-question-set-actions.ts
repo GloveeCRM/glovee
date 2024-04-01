@@ -1,6 +1,7 @@
 'use client'
 
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
+import { TemplateQuestionSetType } from '@/lib/types/template'
 
 export default function useQuestionSetActions() {
   const { template, setTemplate } = useTemplateEditContext()
@@ -19,6 +20,26 @@ export default function useQuestionSetActions() {
         }
       }
     }
+  }
+
+  function createQuestionSetInSection(sectionId: string, questionSet: TemplateQuestionSetType) {
+    if (!template || !template.categories) return
+    console.log('sectionId', sectionId)
+    console.log('creating question set')
+
+    const updatedCategories = template.categories.map((category) => {
+      if (!category.sections) return category
+      const updatedSections = category.sections.map((section) => {
+        if (section.id !== sectionId) return section
+
+        const updatedQuestionSets = [...(section.questionSets || []), questionSet]
+        return { ...section, questionSets: updatedQuestionSets }
+      })
+
+      return { ...category, sections: updatedSections }
+    })
+
+    setTemplate({ ...template, categories: updatedCategories })
   }
 
   function removeQuestionSetFromSection(questionSetId: string) {
@@ -43,6 +64,7 @@ export default function useQuestionSetActions() {
 
   return {
     getQuestionSetById,
+    createQuestionSetInSection,
     removeQuestionSetFromSection,
   }
 }

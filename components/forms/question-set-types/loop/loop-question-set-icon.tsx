@@ -10,7 +10,7 @@ export default function LoopQuestionSetIcon() {
     setDraggedObject({
       type: 'questionSet',
       object: {
-        type: 'lop',
+        type: 'loop',
       },
     })
   }
