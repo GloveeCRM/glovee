@@ -47,14 +47,21 @@ export default function EmptySectionQuestionSetDropzone() {
     }
   }
 
+  function handleDragOver(e: React.DragEvent<HTMLDivElement>) {
+    e.preventDefault()
+    if (!isDropAllowed) {
+      e.dataTransfer.dropEffect = 'none'
+    }
+  }
+
   return (
     <div
-      className={`flex h-[150px] items-center justify-center font-medium text-n-600 transition duration-75 ${isDraggedOver ? (isDropAllowed ? 'text-n-700' : 'cursor-no-drop bg-n-300/50 text-n-700/50') : ''}`}
+      className={`flex h-[150px] items-center justify-center font-medium text-n-600 transition duration-75 ${isDraggedOver ? (isDropAllowed ? 'text-n-700' : 'bg-n-300/50 text-n-700/50') : ''}`}
       style={customDashedBorderStyle}
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      onDragOver={(e) => e.preventDefault()}
+      onDragOver={handleDragOver}
     >
       Drag a Question Type Here
     </div>
