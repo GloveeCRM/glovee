@@ -27,12 +27,6 @@ export async function fetchApplicationByOrgNameandSearchQuery(orgName: string, q
             },
           },
           {
-            templateName: {
-              contains: query,
-              mode: 'insensitive',
-            },
-          },
-          {
             applicantFirstName: {
               contains: query,
               mode: 'insensitive',
