@@ -35,7 +35,7 @@ export default function CreateNewApplicationModal({
   return (
     <Modal title="Create a new application">
       <form
-        className="w-[85vw] max-w-[570px]"
+        className="w-[35vw] max-w-[570px]"
         action={async (formData: FormData) => {
           dispatch(formData)
           closeModal()
@@ -46,15 +46,19 @@ export default function CreateNewApplicationModal({
           selectedClientId={selectedClientId}
           setSelectedClientId={handleClientSelect}
         />
-        <div>
-          <label htmlFor="role" className="mb-[4px] block text-[14px] text-n-700">
+        <div className="my-[14px] text-[14px]">
+          <label htmlFor="role" className="mb-[4px] block text-n-700">
             Role
           </label>
           <select
             name="role"
             id="role"
-            className="mb-[14px] w-full rounded border border-n-400 px-[8px] py-[3px] text-[14px]"
+            className="w-full rounded-sm border border-n-400 px-[8px] py-[3px]"
+            defaultValue=""
           >
+            <option value="" disabled>
+              --Select--
+            </option>
             <option value="MAIN">Main</option>
             <option value="SPOUSE">Spouse</option>
             <option value="CHILD">Child</option>
@@ -62,27 +66,27 @@ export default function CreateNewApplicationModal({
           </select>
         </div>
 
-        <div className="flex justify-between">
+        <div className="mb-[14px] grid grid-flow-col gap-[14px] text-[14px]">
           <div>
-            <label htmlFor="applicantFirstName" className="mb-[4px] block text-[14px] text-n-700">
+            <label htmlFor="applicantFirstName" className="mb-[4px] block text-n-700">
               Applicant First Name
             </label>
             <input
               type="text"
               name="applicantFirstName"
               id="applicant-first-name"
-              className="mb-[14px] w-full rounded border border-n-400  px-[8px] py-[3px] text-[14px]"
+              className="w-full rounded-sm border border-n-400 px-[8px] py-[3px]"
             />
           </div>
           <div>
-            <label htmlFor="applicantLastName" className="mb-[4px] block text-[14px] text-n-700">
+            <label htmlFor="applicantLastName" className="mb-[4px] block text-n-700">
               Applicant Last Name
             </label>
             <input
               type="text"
               name="applicantLastName"
               id="applicant-last-name"
-              className="mb-[14px] w-full rounded border border-n-400 px-[8px] py-[3px] text-[14px]"
+              className="w-full rounded-sm border border-n-400 px-[8px] py-[3px]"
             />
           </div>
         </div>

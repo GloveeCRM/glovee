@@ -63,7 +63,7 @@ export default function ClientSearchDropdown({
           type="text"
           id="client-name"
           name="clientName"
-          className="mb-[14px] w-full rounded border border-n-400 px-[8px] py-[3px] text-[14px]  text-gray-700"
+          className="mb-[4px] w-full rounded-sm border border-n-400 px-[8px] py-[3px] text-[14px]  text-gray-700 focus:outline-none"
           placeholder="Search..."
           onChange={(e) => setSearchTerm(e.target.value)}
           value={searchTerm}
@@ -76,15 +76,28 @@ export default function ClientSearchDropdown({
           disabled={selectedClientId !== ''}
         />
         {selectedClientId !== '' && (
-          <div className="absolute top-[.25px] flex w-full items-center justify-between rounded border border-n-400 bg-white px-[8px] py-[3px] text-[14px] text-gray-700">
-            {clients?.find((client) => client.id === selectedClientId)?.name}
+          <div className="absolute top-[.25px] flex w-full items-center justify-between rounded-sm border border-n-400 bg-white px-[8px] py-[3px] text-[14px] text-gray-700">
+            <div className="flex items-center gap-[4px]">
+              {clients?.find((client) => client.id === selectedClientId)?.image === null ? (
+                <Image
+                  src={DEFAULT_MALE_CLIENT_LOGO_URL}
+                  alt="CLient Logo"
+                  width={20}
+                  height={20}
+                  className="rounded-full"
+                />
+              ) : (
+                clients?.find((client) => client.id === selectedClientId)?.image
+              )}
+              {clients?.find((client) => client.id === selectedClientId)?.name}
+            </div>
             {selectedClientId !== '' && <IoCloseOutline onClick={() => handleSelectClient('')} />}
           </div>
         )}
       </div>
 
       {(isSearching || searchTerm !== '') && (
-        <div className="absolute z-10 mt-[4px] max-h-[100px] w-[85vw] max-w-[570px] origin-top-right overflow-auto border bg-white py-[3px] text-[14px] shadow focus:outline-none">
+        <div className="absolute z-10 max-h-[174px] w-[35vw] max-w-[570px] overflow-auto rounded-sm border border-n-400 bg-white py-[3px] text-[14px] shadow-2xl">
           {filteredClients?.map((client) => (
             <div
               key={client.id}
