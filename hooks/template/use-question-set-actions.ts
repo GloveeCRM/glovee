@@ -22,6 +22,18 @@ export default function useQuestionSetActions() {
     }
   }
 
+  function getQuestionSetsInSection(sectionId: string) {
+    if (!template || !template.categories) return
+
+    for (const category of template.categories) {
+      if (!category.sections) continue
+
+      for (const section of category.sections) {
+        if (section.id === sectionId) return section.questionSets
+      }
+    }
+  }
+
   function createQuestionSetInSection(sectionId: string, questionSet: TemplateQuestionSetType) {
     if (!template || !template.categories) return
 
@@ -72,6 +84,7 @@ export default function useQuestionSetActions() {
 
   return {
     getQuestionSetById,
+    getQuestionSetsInSection,
     createQuestionSetInSection,
     removeQuestionSetFromSection,
   }
