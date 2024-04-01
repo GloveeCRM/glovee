@@ -97,31 +97,35 @@ export default function ClientSearchDropdown({
       </div>
 
       {(isSearching || searchTerm !== '') && (
-        <div className="absolute z-10 max-h-[174px] w-[35vw] max-w-[570px] overflow-auto rounded-sm border border-n-400 bg-white py-[3px] text-[14px] shadow-2xl">
-          {filteredClients?.map((client) => (
-            <div
-              key={client.id}
-              className="flex w-full items-center border-b border-n-400 px-[8px] py-[3px] text-left text-[14px] hover:bg-gray-100"
-              onClick={() => {
-                handleSelectClient(client.id)
-                setSearchTerm('')
-                setIsSearching(false)
-              }}
-            >
-              {client.image === null ? (
-                <Image
-                  src={DEFAULT_MALE_CLIENT_LOGO_URL}
-                  alt="CLient Logo"
-                  width={25}
-                  height={25}
-                  className="rounded-full"
-                />
-              ) : (
-                client.image
-              )}
-              {client.name}
-            </div>
-          ))}
+        <div className="absolute z-10 max-h-[174px] w-[35vw] max-w-[570px] overflow-auto rounded-sm border border-n-400 bg-white text-[14px] shadow-2xl">
+          {filteredClients === null || filteredClients?.length === 0 ? (
+            <div className="bg-n-600 px-[4px] text-white">No clients found</div>
+          ) : (
+            filteredClients?.map((client) => (
+              <div
+                key={client.id}
+                className="flex w-full items-center border-b border-n-400 px-[8px] py-[3px] text-left text-[14px] hover:bg-gray-100"
+                onClick={() => {
+                  handleSelectClient(client.id)
+                  setSearchTerm('')
+                  setIsSearching(false)
+                }}
+              >
+                {client.image === null ? (
+                  <Image
+                    src={DEFAULT_MALE_CLIENT_LOGO_URL}
+                    alt="CLient Logo"
+                    width={25}
+                    height={25}
+                    className="rounded-full"
+                  />
+                ) : (
+                  client.image
+                )}
+                {client.name}
+              </div>
+            ))
+          )}
         </div>
       )}
     </div>
