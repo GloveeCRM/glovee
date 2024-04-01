@@ -48,7 +48,7 @@ export default function FlatQuestionSetEdit({ questionSet }: FlatQuestionSetEdit
 
   return (
     <div>
-      <SectionQuestionSetDropzone />
+      <SectionQuestionSetDropzone position={questionSet.position} />
       <div
         className={`group/questionSet rounded bg-g-500 ${isQuestionSetSelected ? 'border-[3px] border-g-700 p-[5px] pt-[13px]' : 'p-[8px] pt-[16px]'}`}
         onClick={handleClickQuestionSet}
@@ -61,7 +61,7 @@ export default function FlatQuestionSetEdit({ questionSet }: FlatQuestionSetEdit
           <EmptyFlatQuestionSetQuestionDropzone />
         )}
       </div>
-      <SectionQuestionSetDropzone />
+      <SectionQuestionSetDropzone position={questionSet.position + 1} />
     </div>
   )
 }

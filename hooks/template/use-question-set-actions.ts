@@ -24,15 +24,23 @@ export default function useQuestionSetActions() {
 
   function createQuestionSetInSection(sectionId: string, questionSet: TemplateQuestionSetType) {
     if (!template || !template.categories) return
-    console.log('sectionId', sectionId)
-    console.log('creating question set')
 
     const updatedCategories = template.categories.map((category) => {
       if (!category.sections) return category
       const updatedSections = category.sections.map((section) => {
         if (section.id !== sectionId) return section
 
-        const updatedQuestionSets = [...(section.questionSets || []), questionSet]
+        const existingQuestionSets = section.questionSets || []
+
+        const updatedQuestionSets = existingQuestionSets.map((existingQuestionSet) => {
+          if (existingQuestionSet.position >= questionSet.position) {
+            return { ...existingQuestionSet, position: existingQuestionSet.position + 1 }
+          }
+          return existingQuestionSet
+        })
+
+        updatedQuestionSets.splice(questionSet.position, 0, questionSet)
+
         return { ...section, questionSets: updatedQuestionSets }
       })
 

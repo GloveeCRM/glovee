@@ -47,7 +47,7 @@ export default function LoopQuestionSetEdit({ questionSet }: LoopQuestionSetEdit
 
   return (
     <div>
-      <SectionQuestionSetDropzone />
+      <SectionQuestionSetDropzone position={questionSet.position} />
 
       <div
         className={`group/questionSet rounded bg-r-500 ${isQuestionSetSelected ? 'border-[3px] border-r-700 p-[5px] pt-[13px]' : 'p-[8px] pt-[16px]'}`}
@@ -62,7 +62,7 @@ export default function LoopQuestionSetEdit({ questionSet }: LoopQuestionSetEdit
         )}
         <LoopQuestionSetEditFooter />
       </div>
-      <SectionQuestionSetDropzone />
+      <SectionQuestionSetDropzone position={questionSet.position + 1} />
     </div>
   )
 }

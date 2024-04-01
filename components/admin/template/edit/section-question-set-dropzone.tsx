@@ -1,11 +1,22 @@
 'use client'
 
-import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 import { useState } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 
-export default function SectionQuestionSetDropzone() {
+import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
+import { useTemplateEditContext } from '@/contexts/template-edit-context'
+import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
+import { TemplateQuestionSetType } from '@/lib/types/template'
+
+interface SectionQuestionSetDropzoneProps {
+  position: number
+}
+
+export default function SectionQuestionSetDropzone({ position }: SectionQuestionSetDropzoneProps) {
   const [isDraggedOver, setIsDraggedOver] = useState<boolean>(false)
+  const { selectedSectionId } = useTemplateEditContext()
   const { draggedObject, setDraggedObject } = useDragAndDropContext()
+  const { createQuestionSetInSection } = useQuestionSetActions()
 
   const isDropAllowed = isDraggedOver && draggedObject?.type === 'questionSet'
 
@@ -30,6 +41,14 @@ export default function SectionQuestionSetDropzone() {
     e.preventDefault()
     setIsDraggedOver(false)
     if (isDropAllowed) {
+      const questionSet: TemplateQuestionSetType = {
+        id: uuidv4(),
+        sectionId: selectedSectionId,
+        position: position,
+        type: draggedObject.object.type,
+        questions: [],
+      }
+      createQuestionSetInSection(selectedSectionId, questionSet)
       setDraggedObject(null)
     }
   }
