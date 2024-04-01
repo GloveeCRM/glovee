@@ -38,6 +38,10 @@ export async function createApplication(
 
   const { role, applicantFirstName, applicantLastName } = data
 
+  if (!role || !applicantFirstName || !applicantLastName) {
+    return { error: 'Role, first name and last name are required!' }
+  }
+
   const client = await fetchUserById(clientId)
 
   if (!client) {
