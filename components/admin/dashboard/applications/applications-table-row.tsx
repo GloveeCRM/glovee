@@ -23,7 +23,7 @@ export default function ApplicationsTableRow({
   applicantLastName,
 }: ApplicationsTableRowProps) {
   return (
-    <tr key={id} className=" hover:bg-n-200">
+    <tr key={id} className=" hover:bg-n-100">
       <td className="py-[10px]">
         <Link
           className="cursor-pointer font-medium hover:text-blue-600"
@@ -51,8 +51,8 @@ export default function ApplicationsTableRow({
       </td>
       <td>{templateName}</td>
       <td>
-        <span className="rounded-full bg-n-200 px-[6px] py-[2px] text-[12px] text-n-700">
-          {` ${role} (${applicantFirstName} ${applicantLastName})`}
+        <span className="rounded-full bg-n-300 px-[6px] py-[2px] text-[10px] text-n-700">
+          <span className="font-semibold">{role}</span> ({applicantFirstName} {applicantLastName})
         </span>
       </td>
       <td>

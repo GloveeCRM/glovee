@@ -20,7 +20,9 @@ export default async function ApplicationsTable({ orgName, query }: Applications
         </tr>
         {applications.length === 0 ? (
           <tr>
-            <td colSpan={5}>No applications found</td>
+            <td colSpan={5} className="py-[12px] text-center text-n-500">
+              No applications found
+            </td>
           </tr>
         ) : (
           applications.map((application) => (

@@ -99,7 +99,7 @@ export default function ClientSearchDropdown({
       {(isSearching || searchTerm !== '') && (
         <div className="absolute z-10 max-h-[174px] w-[35vw] max-w-[570px] overflow-auto rounded-sm border border-n-400 bg-white text-[14px] shadow-2xl">
           {filteredClients === null || filteredClients?.length === 0 ? (
-            <div className="bg-n-600 px-[4px] text-white">No clients found</div>
+            <div className="py-[4px] text-center text-n-500">No clients found</div>
           ) : (
             filteredClients?.map((client) => (
               <div
