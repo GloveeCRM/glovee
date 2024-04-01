@@ -8,6 +8,7 @@ import FlatQuestionSetEditQuestionWrapper from './flat-question-set-edit-questio
 import EmptyFlatQuestionSetQuestionDropzone from './empty-flat-question-set-question-dropzone'
 import FlatQuestionSetEditMenuButton from './flat-question-set-edit-menu-button'
 import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
+import SectionQuestionSetDropzone from '@/components/admin/template/edit/section-question-set-dropzone'
 
 interface FlatQuestionSetEditProps {
   questionSet: TemplateQuestionSetType
@@ -43,18 +44,24 @@ export default function FlatQuestionSetEdit({ questionSet }: FlatQuestionSetEdit
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
+  console.log(questionSet)
+
   return (
-    <div
-      className={`group/questionSet rounded bg-g-500 ${isQuestionSetSelected ? 'border-[3px] border-g-700 p-[5px] pt-[13px]' : 'p-[8px] pt-[16px]'}`}
-      onClick={handleClickQuestionSet}
-      ref={flatQuestionSetRef}
-    >
-      <FlatQuestionSetEditMenuButton onClickDelete={handleClickDeleteQuestionSet} />
-      {questions && questions.length > 0 ? (
-        <FlatQuestionSetEditQuestionWrapper questions={questions} />
-      ) : (
-        <EmptyFlatQuestionSetQuestionDropzone />
-      )}
+    <div>
+      <SectionQuestionSetDropzone />
+      <div
+        className={`group/questionSet rounded bg-g-500 ${isQuestionSetSelected ? 'border-[3px] border-g-700 p-[5px] pt-[13px]' : 'p-[8px] pt-[16px]'}`}
+        onClick={handleClickQuestionSet}
+        ref={flatQuestionSetRef}
+      >
+        <FlatQuestionSetEditMenuButton onClickDelete={handleClickDeleteQuestionSet} />
+        {questions && questions.length > 0 ? (
+          <FlatQuestionSetEditQuestionWrapper questions={questions} />
+        ) : (
+          <EmptyFlatQuestionSetQuestionDropzone />
+        )}
+      </div>
+      <SectionQuestionSetDropzone />
     </div>
   )
 }

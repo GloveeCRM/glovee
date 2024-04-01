@@ -9,6 +9,7 @@ import { TemplateQuestionSetType } from '@/lib/types/template'
 import LoopQuestionSetEditQuestionWrapper from './loop-question-set-edit-question-wrapper'
 import LoopQuestionSetEditMenuButton from './loop-question-set-edit-menu-button'
 import EmptyLoopQuestionSetQuestionDropzone from './empty-loop-question-set-question-dropzone'
+import SectionQuestionSetDropzone from '@/components/admin/template/edit/section-question-set-dropzone'
 
 interface LoopQuestionSetEditProps {
   questionSet: TemplateQuestionSetType
@@ -45,18 +46,23 @@ export default function LoopQuestionSetEdit({ questionSet }: LoopQuestionSetEdit
   }, [])
 
   return (
-    <div
-      className={`group/questionSet rounded bg-r-500 ${isQuestionSetSelected ? 'border-[3px] border-r-700 p-[5px] pt-[13px]' : 'p-[8px] pt-[16px]'}`}
-      onClick={handleClickQuestionSet}
-      ref={loopQuestionSetRef}
-    >
-      <LoopQuestionSetEditMenuButton onClickDelete={handleClickDeleteQuestionSet} />
-      {questions && questions.length > 0 ? (
-        <LoopQuestionSetEditQuestionWrapper questions={questions} />
-      ) : (
-        <EmptyLoopQuestionSetQuestionDropzone />
-      )}
-      <LoopQuestionSetEditFooter />
+    <div>
+      <SectionQuestionSetDropzone />
+
+      <div
+        className={`group/questionSet rounded bg-r-500 ${isQuestionSetSelected ? 'border-[3px] border-r-700 p-[5px] pt-[13px]' : 'p-[8px] pt-[16px]'}`}
+        onClick={handleClickQuestionSet}
+        ref={loopQuestionSetRef}
+      >
+        <LoopQuestionSetEditMenuButton onClickDelete={handleClickDeleteQuestionSet} />
+        {questions && questions.length > 0 ? (
+          <LoopQuestionSetEditQuestionWrapper questions={questions} />
+        ) : (
+          <EmptyLoopQuestionSetQuestionDropzone />
+        )}
+        <LoopQuestionSetEditFooter />
+      </div>
+      <SectionQuestionSetDropzone />
     </div>
   )
 }
