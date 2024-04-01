@@ -22,10 +22,13 @@ export default function TemplateSelect({
       <select
         name="templateId"
         id="templateId"
-        className="w-full rounded border border-n-400 px-[8px] py-[3px] text-[14px] leading-tight"
+        className="w-full rounded-sm border border-n-400 px-[8px] py-[3px] text-[14px]"
         onChange={handleChange}
+        defaultValue=""
       >
-        <option value="">--Select--</option>
+        <option value="" disabled>
+          --Select--
+        </option>
         {templates?.map((template) => (
           <option key={template.id} value={template.id}>
             {template.title}

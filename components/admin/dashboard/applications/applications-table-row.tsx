@@ -22,7 +22,7 @@ export default function ApplicationsTableRow({
   applicantLastName,
 }: ApplicationsTableRowProps) {
   return (
-    <tr key={id} className="hover:bg-gray-100">
+    <tr key={id} className="pb-[10px] hover:bg-n-200">
       <td>{id}</td>
       <td className="flex items-end gap-[6px]">
         {
