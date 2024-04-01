@@ -60,7 +60,7 @@ export default function SectionQuestionSetDropzone({ position }: SectionQuestion
 
   return (
     <div
-      className={`my-[2px] h-[8px] bg-blue-300 opacity-100 transition-opacity duration-75 ${isTheFirstDropzone ? 'rounded-tl-full rounded-tr-full' : isTheLastDropzone ? 'rounded-bl-full rounded-br-full' : 'rounded-full'} ${isDropAllowed && 'bg-blue-500 opacity-100'}`}
+      className={`h-[8px] bg-blue-300 opacity-0 transition-opacity duration-75 ${isTheFirstDropzone ? 'mb-[2px] rounded-tl-full rounded-tr-full' : isTheLastDropzone ? 'mt-[2px] rounded-bl-full rounded-br-full' : 'my-[2px] rounded-full'} ${isDropAllowed && 'bg-blue-500 opacity-100'}`}
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
       onDragOver={handleDragOver}
