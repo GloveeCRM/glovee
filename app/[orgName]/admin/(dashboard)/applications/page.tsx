@@ -6,7 +6,7 @@ interface ApplicationsPageProps {
   searchParams?: { query?: string }
 }
 
-export default async function ApplicationsPage({ params, searchParams }: ApplicationsPageProps) {
+export default function ApplicationsPage({ params, searchParams }: ApplicationsPageProps) {
   const orgName = params.orgName
   const query = searchParams?.query?.trim() || ''
 
