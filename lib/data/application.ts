@@ -94,11 +94,30 @@ interface Application {
 
 export async function fetchApplicationById(id: string) {
   try {
-    const application = (await prisma.application.findFirst({
+    const application = await prisma.application.findFirst({
       where: {
         id,
       },
-    })) as Application
+      include: {
+        categories: {
+          include: {
+            sections: {
+              include: {
+                questionSets: {
+                  include: {
+                    questions: {
+                      //     include: {
+                      //       answer: true,
+                      //     },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    })
 
     return application
   } catch {
