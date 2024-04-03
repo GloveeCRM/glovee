@@ -62,10 +62,19 @@ export default async function ClientPage({ params }: ClientsPageProps) {
             ) : (
               applications.map((application) => (
                 <tr key={application.id}>
-                  <td>{application.id}</td>
+                  <td className="py-[10px]">{application.id}</td>
                   <td>{application.templateName}</td>
-                  <td>{`${application.role} (${application.applicantFirstName} ${application.applicantLastName})`}</td>
-                  <td>{application.status}</td>
+                  <td>
+                    <span className="rounded-full bg-n-300 px-[6px] py-[2px] text-[10px] text-n-700">
+                      <span className="font-semibold">{application.role}</span> (
+                      {application.applicantFirstName} {application.applicantLastName})
+                    </span>
+                  </td>
+                  <td>
+                    <span className="rounded-full bg-n-600 px-[6px] py-[2px] text-[12px] text-white">
+                      {application.status}
+                    </span>
+                  </td>
                 </tr>
               ))
             )}
