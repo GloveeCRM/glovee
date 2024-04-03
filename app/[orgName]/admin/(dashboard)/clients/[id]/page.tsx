@@ -3,6 +3,8 @@ import { fetchUserById } from '@/lib/data/user'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { fetchApplicationsByUserId } from '@/lib/data/application'
+import CreateNewApplicationButton from '@/components/admin/dashboard/applications/create-new-application-button'
+import { GoPlus } from 'react-icons/go'
 
 interface ClientsPageProps {
   params: { id: string }
@@ -34,8 +36,14 @@ export default async function ClientPage({ params }: ClientsPageProps) {
         </div>
       </div>
       <div>
-        <h1 className="mb-[15px] text-[20px] font-bold">Applications</h1>
-        <table>
+        <div className="mt-[20px] flex justify-between">
+          <h1 className="text-[20px] font-bold">Applications</h1>
+          <div className="flex cursor-pointer items-center gap-[4px] rounded border border-n-700 py-[5px] pl-[8px] pr-[10px]">
+            <GoPlus className="h-[20px] w-[20px]" />
+            <span>New Application</span>
+          </div>
+        </div>
+        <table className="mt-[15px] w-full text-[14px]">
           <thead className="border-b-2 border-n-700 text-left">
             <tr>
               <th>Application ID</th>
