@@ -52,12 +52,12 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                             {
                               prompt: 'What is your full name?',
                               position: 0,
-                              type: 'text-input',
+                              type: 'textInput',
                             },
                             {
                               prompt: 'What is your date of birth?',
                               position: 1,
-                              type: 'text-input',
+                              type: 'textInput',
                             },
                           ],
                         },
@@ -71,12 +71,12 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                               prompt:
                                 'what is your address? (add any address you have lived in the past 10 years)',
                               position: 0,
-                              type: 'text-input',
+                              type: 'textInput',
                             },
                             {
                               prompt: 'job position',
                               position: 1,
-                              type: 'text-input',
+                              type: 'textInput',
                             },
                           ],
                         },
@@ -97,12 +97,12 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                             {
                               prompt: 'What is your email address?',
                               position: 0,
-                              type: 'text-input',
+                              type: 'textInput',
                             },
                             {
                               prompt: 'What is your phone number?',
                               position: 1,
-                              type: 'text-input',
+                              type: 'textInput',
                             },
                           ],
                         },
@@ -115,12 +115,12 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                             {
                               prompt: 'What is your emergency contact?',
                               position: 0,
-                              type: 'text-input',
+                              type: 'textInput',
                             },
                             {
                               prompt: 'What is your emergency contact phone number?',
                               position: 1,
-                              type: 'text-input',
+                              type: 'textInput',
                             },
                           ],
                         },
@@ -149,17 +149,17 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                             {
                               prompt: 'What is your family member name?',
                               position: 0,
-                              type: 'text-input',
+                              type: 'textInput',
                             },
                             {
                               prompt: 'What is your family member date of birth?',
                               position: 1,
-                              type: 'text-input',
+                              type: 'textInput',
                             },
                             {
                               prompt: 'What is your family member occupation?',
                               position: 2,
-                              type: 'text-input',
+                              type: 'textInput',
                             },
                           ],
                         },
@@ -172,12 +172,12 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                             {
                               prompt: 'father side family members name',
                               position: 1,
-                              type: 'text-input',
+                              type: 'textInput',
                             },
                             {
                               prompt: 'mother side family members name',
                               position: 2,
-                              type: 'text-input',
+                              type: 'textInput',
                             },
                           ],
                         },
@@ -198,7 +198,7 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                             {
                               prompt: 'What is your family member health history?',
                               position: 1,
-                              type: 'text-input',
+                              type: 'textInput',
                             },
                           ],
                         },
