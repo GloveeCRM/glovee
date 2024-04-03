@@ -1,14 +1,18 @@
 'use client'
 
 import { useState } from 'react'
+import { v4 as uuid4 } from 'uuid'
 
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
+import useQuestionActions from '@/hooks/template/use-question-actions'
+import { TemplateQuestion } from '@prisma/client'
 
 export default function EmptyFlatQuestionSetQuestionDropzone() {
   const [isDraggedOver, setIsDraggedOver] = useState<boolean>(false)
   const { selectedSectionId } = useTemplateEditContext()
   const { draggedObject, setDraggedObject } = useDragAndDropContext()
+  const { createQuestionInQuestionSet } = useQuestionActions()
 
   const isDropAllowed = isDraggedOver && draggedObject?.type === 'question'
 
@@ -25,6 +29,18 @@ export default function EmptyFlatQuestionSetQuestionDropzone() {
   function handleDrop(e: React.DragEvent<HTMLDivElement>) {
     e.preventDefault()
     setIsDraggedOver(false)
+    if (isDropAllowed) {
+      const question: TemplateQuestion = {
+        id: uuid4(),
+        type: draggedObject.object.type,
+        prompt: 'An Untitled Question',
+        position: 0,
+        helperText: 'No helper text',
+        questionSetId: selectedSectionId,
+      }
+      createQuestionInQuestionSet(selectedSectionId, question)
+    }
+    setDraggedObject(null)
   }
 
   function handleDragOver(e: React.DragEvent<HTMLDivElement>) {
