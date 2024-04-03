@@ -2,6 +2,7 @@ import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
 import { fetchUserById } from '@/lib/data/user'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
+import { fetchApplicationsByUserId } from '@/lib/data/application'
 
 interface ClientsPageProps {
   params: { id: string }
@@ -9,6 +10,7 @@ interface ClientsPageProps {
 export default async function ClientPage({ params }: ClientsPageProps) {
   const userId = params.id
   const client = await fetchUserById(userId)
+  const applications = await fetchApplicationsByUserId(userId)
 
   if (!client) {
     notFound()
@@ -30,6 +32,37 @@ export default async function ClientPage({ params }: ClientsPageProps) {
           <p>{client.email}</p>
           <p>{client.id}</p>
         </div>
+      </div>
+      <div>
+        <h1 className="mb-[15px] text-[20px] font-bold">Applications</h1>
+        <table>
+          <thead className="border-b-2 border-n-700 text-left">
+            <tr>
+              <th>Application ID</th>
+              <th>Template</th>
+              <th>Role</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {!applications || applications.length === 0 ? (
+              <tr>
+                <td colSpan={4} className="py-[12px] text-center text-n-500">
+                  No applications found
+                </td>
+              </tr>
+            ) : (
+              applications.map((application) => (
+                <tr key={application.id}>
+                  <td>{application.id}</td>
+                  <td>{application.templateName}</td>
+                  <td>{`${application.role} (${application.applicantFirstName} ${application.applicantLastName})`}</td>
+                  <td>{application.status}</td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
       </div>
     </div>
   )
