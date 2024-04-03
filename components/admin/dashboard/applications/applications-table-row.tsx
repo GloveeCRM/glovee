@@ -27,7 +27,7 @@ export default function ApplicationsTableRow({
       <td className="py-[10px]">
         <Link
           className="cursor-pointer font-medium hover:text-blue-600"
-          href={`/admin/applications/${id}`}
+          href={`/admin/application/${id}`}
         >
           {id}
         </Link>
