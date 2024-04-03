@@ -19,9 +19,9 @@ export default function CreateNewClientModal() {
         }}
         className="w-[85vw] max-w-[450px]"
       >
-        <div>
-          <div className="flex justify-between">
-            <div className="">
+        <div className="mb-[18px]">
+          <div className="mb-[20px] grid grid-flow-col gap-[12px]">
+            <div>
               <label className="mb-[4px] block text-[14px] text-n-700" htmlFor="clientEmail">
                 First Name
               </label>
@@ -29,7 +29,8 @@ export default function CreateNewClientModal() {
                 type="text"
                 name="clientFirstName"
                 id="client-first-name"
-                className="w-full rounded border border-n-400 px-[8px] py-[3px] text-[14px] leading-tight"
+                placeholder="Jane"
+                className="w-full rounded-sm border border-n-400 px-[8px] py-[3px] text-[14px]"
               />
             </div>
             <div>
@@ -40,7 +41,8 @@ export default function CreateNewClientModal() {
                 type="text"
                 name="clientLastName"
                 id="client-last-name"
-                className="w-full rounded border border-n-400 px-[8px] py-[3px] text-[14px] leading-tight"
+                placeholder="Cooper"
+                className="w-full rounded-sm border border-n-400 px-[8px] py-[3px] text-[14px]"
               />
             </div>
           </div>
@@ -51,7 +53,8 @@ export default function CreateNewClientModal() {
             type="text"
             name="clientEmail"
             id="clientEmail"
-            className="w-full rounded border border-n-400 px-[8px] py-[3px] text-[14px] leading-tight"
+            placeholder="jane.cooper@gmail.com"
+            className="w-full rounded-sm border border-n-400 px-[8px] py-[3px] text-[14px]"
           />
           {formState.error?.clientEmail && (
             <div className="text-red-500">{formState.errors.clientEmail}</div>

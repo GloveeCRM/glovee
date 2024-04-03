@@ -20,7 +20,7 @@ export default function ClientsTableRow({
   status: string
 }) {
   return (
-    <tr key={id}>
+    <tr key={id} className="hover:bg-n-100">
       <td className="min-w-[50px]">
         <Image
           src={image || DEFAULT_MALE_CLIENT_LOGO_URL}
