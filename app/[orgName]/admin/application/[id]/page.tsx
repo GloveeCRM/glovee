@@ -1,6 +1,5 @@
-import { notFound } from 'next/navigation'
-
 import { fetchApplicationById } from '@/lib/data/application'
+import { notFound } from 'next/navigation'
 
 interface ApplicationPreviewPageProps {
   params: {
@@ -15,7 +14,7 @@ export default async function ApplicationPreviewPage({ params }: ApplicationPrev
   if (!application) {
     notFound()
   }
-  console.log(application.categories)
+
   return (
     <div>
       {application.categories.map((category) =>
