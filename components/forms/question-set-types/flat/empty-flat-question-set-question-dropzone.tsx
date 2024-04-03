@@ -3,14 +3,18 @@
 import { useState } from 'react'
 import { v4 as uuid4 } from 'uuid'
 
-import { useTemplateEditContext } from '@/contexts/template-edit-context'
+import { TemplateQuestion } from '@prisma/client'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 import useQuestionActions from '@/hooks/template/use-question-actions'
-import { TemplateQuestion } from '@prisma/client'
 
-export default function EmptyFlatQuestionSetQuestionDropzone() {
+interface EmptyFlatQuestionSetQuestionDropzoneProps {
+  questionSetId: string
+}
+
+export default function EmptyFlatQuestionSetQuestionDropzone({
+  questionSetId,
+}: EmptyFlatQuestionSetQuestionDropzoneProps) {
   const [isDraggedOver, setIsDraggedOver] = useState<boolean>(false)
-  const { selectedSectionId } = useTemplateEditContext()
   const { draggedObject, setDraggedObject } = useDragAndDropContext()
   const { createQuestionInQuestionSet } = useQuestionActions()
 
@@ -36,9 +40,9 @@ export default function EmptyFlatQuestionSetQuestionDropzone() {
         prompt: 'An Untitled Question',
         position: 0,
         helperText: 'No helper text',
-        questionSetId: selectedSectionId,
+        questionSetId: questionSetId,
       }
-      createQuestionInQuestionSet(selectedSectionId, question)
+      createQuestionInQuestionSet(questionSetId, question)
     }
     setDraggedObject(null)
   }

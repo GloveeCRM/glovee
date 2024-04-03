@@ -60,7 +60,7 @@ export default function FlatQuestionSetEdit({ questionSet }: FlatQuestionSetEdit
         {questions && questions.length > 0 ? (
           <FlatQuestionSetEditQuestionWrapper questions={questions} />
         ) : (
-          <EmptyFlatQuestionSetQuestionDropzone />
+          <EmptyFlatQuestionSetQuestionDropzone questionSetId={questionSet.id} />
         )}
       </div>
       <SectionQuestionSetDropzone position={questionSet.position + 1} />
