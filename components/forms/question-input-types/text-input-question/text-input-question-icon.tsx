@@ -1,10 +1,19 @@
 'use client'
 
 import Divider from '@/components/ui/divider'
+import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 
 export default function TextInputQuestionIcon() {
+  const { setDraggedObject } = useDragAndDropContext()
+
   function handleDragStart(e: React.DragEvent<HTMLDivElement>) {
     e.dataTransfer.setData('objectType', 'question')
+    setDraggedObject({
+      type: 'question',
+      object: {
+        type: 'textInput',
+      },
+    })
   }
 
   return (
