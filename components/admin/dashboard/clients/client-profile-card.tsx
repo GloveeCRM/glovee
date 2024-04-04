@@ -40,7 +40,6 @@ export default function ClientProfileCard({ client, userId }: { client: any; use
             className="h-[20px] w-[20px]"
             onClick={() => setIsEditing(!isEditing)}
           />
-          <div>{isEditing.toString()}</div>
         </div>
       )}
       <div>
