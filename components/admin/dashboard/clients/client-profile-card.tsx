@@ -1,3 +1,4 @@
+'use client'
 import Image from 'next/image'
 
 import { UserStatus } from '@prisma/client'
@@ -6,7 +7,10 @@ import DeactiveButton from './deactive-button'
 import ActiveButton from './active-button'
 import { HiOutlinePencilSquare } from 'react-icons/hi2'
 
+import { useState } from 'react'
+
 export default function ClientProfileCard({ client, userId }: { client: any; userId: string }) {
+  const [isEditing, setIsEditing] = useState(false)
   return (
     <div className="flex items-center justify-between rounded-lg border border-n-400 bg-n-100/50 px-[14px] py-[18px]">
       <div className="flex gap-[4px]">
@@ -28,7 +32,11 @@ export default function ClientProfileCard({ client, userId }: { client: any; use
             </p>
           </div>
         </div>
-        <HiOutlinePencilSquare className="h-[20px] w-[20px]" />
+        <HiOutlinePencilSquare
+          className="h-[20px] w-[20px]"
+          onClick={() => setIsEditing(!isEditing)}
+        />
+        <div>{isEditing.toString()}</div>
       </div>
       <div>
         {(client.status === UserStatus.ACTIVE && <DeactiveButton CLientId={userId} />) ||
