@@ -6,7 +6,7 @@ import DeactiveButton from './deactive-button'
 import ActiveButton from './active-button'
 import { HiOutlinePencilSquare } from 'react-icons/hi2'
 
-export default function ClientProfile({ client, userId }: { client: any; userId: string }) {
+export default function ClientProfileCard({ client, userId }: { client: any; userId: string }) {
   return (
     <div className="flex items-center justify-between rounded-lg border border-n-400 bg-n-100/50 px-[14px] py-[18px]">
       <div className="flex gap-[4px]">
