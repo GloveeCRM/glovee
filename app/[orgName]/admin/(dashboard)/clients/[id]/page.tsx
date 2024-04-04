@@ -1,14 +1,9 @@
-import Image from 'next/image'
 import { notFound } from 'next/navigation'
 
 import { GoPlus } from 'react-icons/go'
-import { HiOutlinePencilSquare } from 'react-icons/hi2'
-import { UserStatus } from '@prisma/client'
-import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
 import { fetchUserById } from '@/lib/data/user'
 import { fetchApplicationsByUserId } from '@/lib/data/application'
-import ActiveButton from '@/components/admin/dashboard/clients/active-button'
-import DeactiveButton from '@/components/admin/dashboard/clients/deactive-button'
+import ClientProfile from '@/components/admin/dashboard/clients/client-profile'
 
 interface ClientsPageProps {
   params: { id: string }
@@ -25,33 +20,7 @@ export default async function ClientPage({ params }: ClientsPageProps) {
   return (
     <div>
       <h1 className="mb-[15px] text-[24px] font-bold">Client</h1>
-      <div className="flex items-center justify-between rounded-lg border border-n-400 bg-n-100/50 px-[14px] py-[18px]">
-        <div className="flex gap-[4px]">
-          <div className="flex items-center gap-[8px]">
-            <Image
-              src={client.image || DEFAULT_MALE_CLIENT_LOGO_URL}
-              alt="CLient Logo"
-              width={75}
-              height={75}
-              className="rounded-full"
-            />
-            <div className="text-[16px]">
-              <p>{client.name}</p>
-              <p>{client.email}</p>
-              <p>
-                <span className="rounded-full border bg-n-200 px-[6px] py-[2px] text-[12px]">
-                  {client.id}
-                </span>
-              </p>
-            </div>
-          </div>
-          <HiOutlinePencilSquare className="h-[20px] w-[20px]" />
-        </div>
-        <div>
-          {(client.status === UserStatus.ACTIVE && <DeactiveButton CLientId={userId} />) ||
-            (client.status === UserStatus.INACTIVE && <ActiveButton CLientId={userId} />)}
-        </div>
-      </div>
+      <ClientProfile client={client} userId={userId} />
       <div>
         <div className="mt-[20px] flex justify-between">
           <h1 className="text-[20px] font-bold">Applications</h1>
