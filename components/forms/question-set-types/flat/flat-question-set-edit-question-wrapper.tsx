@@ -1,6 +1,7 @@
 import { TemplateQuestionType } from '@/lib/types/template'
 import TextInputQuestionEdit from '../../question-input-types/text-input-question/text-input-question-edit'
 import NonEmptyQuestionSetDropzone from '@/components/admin/template/edit/non-empty-question-set-dropzone'
+import TextareaQuestionEdit from '../../question-input-types/textarea-question/textarea-question-edit'
 
 interface FlatQuestionSetEditQuestionWrapperProps {
   questions: TemplateQuestionType[]
@@ -22,6 +23,8 @@ export default function FlatQuestionSetEditQuestionWrapper({
           )}
           {question.type === 'textInput' ? (
             <TextInputQuestionEdit key={question.id} question={question} />
+          ) : question.type === 'textarea' ? (
+            <TextareaQuestionEdit key={question.id} question={question} />
           ) : (
             <div key={question.id}>{question.type}</div>
           )}

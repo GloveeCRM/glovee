@@ -1,11 +1,12 @@
 'use client'
 
-import NonEmptySectionDropzone from '@/components/admin/template/edit/non-empty-section-dropzone'
+import { useEffect, useRef } from 'react'
+
 import { TemplateQuestionSetType } from '@/lib/types/template'
-import DependsOnQuestionSetEditMenuButton from './depends-on-question-set-edit-menu-button'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
 import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
-import { useEffect, useRef } from 'react'
+import NonEmptySectionDropzone from '@/components/admin/template/edit/non-empty-section-dropzone'
+import DependsOnQuestionSetEditMenuButton from './depends-on-question-set-edit-menu-button'
 
 interface DependsOnQuestionSetEditProps {
   questionSet: TemplateQuestionSetType
