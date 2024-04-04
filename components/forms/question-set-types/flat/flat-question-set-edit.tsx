@@ -8,7 +8,7 @@ import FlatQuestionSetEditQuestionWrapper from './flat-question-set-edit-questio
 import EmptyFlatQuestionSetQuestionDropzone from './empty-flat-question-set-question-dropzone'
 import FlatQuestionSetEditMenuButton from './flat-question-set-edit-menu-button'
 import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
-import SectionQuestionSetDropzone from '@/components/admin/template/edit/section-question-set-dropzone'
+import NonEmptySectionDropzone from '@/components/admin/template/edit/non-empty-section-dropzone'
 
 interface FlatQuestionSetEditProps {
   questionSet: TemplateQuestionSetType
@@ -44,13 +44,11 @@ export default function FlatQuestionSetEdit({ questionSet }: FlatQuestionSetEdit
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  const showQuestionSetDropzoneBefore = questionSet.position === 0
+  const showDropzoneBefore = questionSet.position === 0
 
   return (
     <div>
-      {showQuestionSetDropzoneBefore && (
-        <SectionQuestionSetDropzone position={questionSet.position} />
-      )}
+      {showDropzoneBefore && <NonEmptySectionDropzone position={questionSet.position} />}
       <div
         className={`group/questionSet rounded bg-g-500 ${isQuestionSetSelected ? 'border-[3px] border-g-700 p-[5px] pt-[13px]' : 'p-[8px] pt-[16px]'}`}
         onClick={handleClickQuestionSet}
@@ -63,7 +61,7 @@ export default function FlatQuestionSetEdit({ questionSet }: FlatQuestionSetEdit
           <EmptyFlatQuestionSetQuestionDropzone questionSetId={questionSet.id} />
         )}
       </div>
-      <SectionQuestionSetDropzone position={questionSet.position + 1} />
+      <NonEmptySectionDropzone position={questionSet.position + 1} />
     </div>
   )
 }

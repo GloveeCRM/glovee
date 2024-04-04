@@ -1,6 +1,6 @@
 'use client'
 
-import SectionQuestionSetDropzone from '@/components/admin/template/edit/section-question-set-dropzone'
+import NonEmptySectionDropzone from '@/components/admin/template/edit/non-empty-section-dropzone'
 import { TemplateQuestionSetType } from '@/lib/types/template'
 import DependsOnQuestionSetEditMenuButton from './depends-on-question-set-edit-menu-button'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
@@ -48,9 +48,7 @@ export default function DependsOnQuestionSetEdit({ questionSet }: DependsOnQuest
 
   return (
     <div>
-      {showQuestionSetDropzoneBefore && (
-        <SectionQuestionSetDropzone position={questionSet.position} />
-      )}
+      {showQuestionSetDropzoneBefore && <NonEmptySectionDropzone position={questionSet.position} />}
       <div
         className={`group/questionSet rounded bg-b-500 ${isQuestionSetSelected ? 'border-[3px] border-b-700 p-[5px] pt-[13px]' : 'p-[8px] pt-[16px]'}`}
         onClick={handleClickQuestionSet}
@@ -84,7 +82,7 @@ export default function DependsOnQuestionSetEdit({ questionSet }: DependsOnQuest
           <div>Empty dependsOn question set</div>
         )}
       </div>
-      <SectionQuestionSetDropzone position={questionSet.position + 1} />
+      <NonEmptySectionDropzone position={questionSet.position + 1} />
     </div>
   )
 }

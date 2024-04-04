@@ -67,11 +67,29 @@ export default function useQuestionSetActions() {
 
     const updatedCategories = template.categories.map((category) => {
       if (!category.sections) return category
+
       const updatedSections = category.sections.map((section) => {
         if (!section.questionSets) return section
-        const updatedQuestionSets = section.questionSets.filter(
-          (questionSet) => questionSet.id !== questionSetId
-        )
+
+        let removedQuestionSetPosition: number | null = null
+
+        const filteredQuestionSets = section.questionSets.filter((questionSet) => {
+          if (questionSet.id === questionSetId) {
+            removedQuestionSetPosition = questionSet.position
+            return false
+          }
+          return true
+        })
+
+        const updatedQuestionSets = filteredQuestionSets.map((questionSet) => {
+          if (
+            removedQuestionSetPosition !== null &&
+            questionSet.position > removedQuestionSetPosition
+          ) {
+            return { ...questionSet, position: questionSet.position - 1 }
+          }
+          return questionSet
+        })
 
         return { ...section, questionSets: updatedQuestionSets }
       })

@@ -3,24 +3,32 @@
 import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
+import { TemplateQuestion } from '@prisma/client'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
-import { useTemplateEditContext } from '@/contexts/template-edit-context'
-import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
-import { TemplateQuestionSetType } from '@/lib/types/template'
+import useQuestionActions from '@/hooks/template/use-question-actions'
 
-interface SectionQuestionSetDropzoneProps {
+interface NonEmptyQuestionSetDropzoneProps {
+  questionSetId: string
+  questionSetType: string
   position: number
 }
 
-export default function SectionQuestionSetDropzone({ position }: SectionQuestionSetDropzoneProps) {
+export default function NonEmptyQuestionSetDropzone({
+  questionSetId,
+  questionSetType,
+  position,
+}: NonEmptyQuestionSetDropzoneProps) {
   const [isDraggedOver, setIsDraggedOver] = useState<boolean>(false)
-  const { selectedSectionId } = useTemplateEditContext()
   const { draggedObject, setDraggedObject } = useDragAndDropContext()
-  const { getQuestionSetsInSection, createQuestionSetInSection } = useQuestionSetActions()
+  const { getQuestionsInQuestionSet, createQuestionInQuestionSet } = useQuestionActions()
 
-  const isDropAllowed = isDraggedOver && draggedObject?.type === 'questionSet'
+  const isDropAllowed =
+    isDraggedOver &&
+    ((questionSetType === 'flat' && draggedObject?.type === 'question') ||
+      ((questionSetType === 'loop' || questionSetType === 'dependsOn') &&
+        draggedObject?.type === 'questionSet'))
 
-  const questionSetsInSection = getQuestionSetsInSection(selectedSectionId)
+  const questionsInQuestionSet = getQuestionsInQuestionSet(questionSetId)
 
   function handleDragEnter(e: React.DragEvent<HTMLDivElement>) {
     e.preventDefault()
@@ -43,20 +51,21 @@ export default function SectionQuestionSetDropzone({ position }: SectionQuestion
     e.preventDefault()
     setIsDraggedOver(false)
     if (isDropAllowed) {
-      const questionSet: TemplateQuestionSetType = {
+      const question: TemplateQuestion = {
         id: uuidv4(),
-        sectionId: selectedSectionId,
-        position: position,
         type: draggedObject.object.type,
-        questions: [],
+        prompt: 'An Untitled Question',
+        position: position,
+        helperText: 'No helper text',
+        questionSetId: questionSetId,
       }
-      createQuestionSetInSection(selectedSectionId, questionSet)
-      setDraggedObject(null)
+      createQuestionInQuestionSet(questionSetId, question)
     }
+    setDraggedObject(null)
   }
 
   const isTheFirstDropzone = position === 0
-  const isTheLastDropzone = questionSetsInSection && questionSetsInSection.length === position
+  const isTheLastDropzone = questionsInQuestionSet && questionsInQuestionSet.length === position
 
   return (
     <div

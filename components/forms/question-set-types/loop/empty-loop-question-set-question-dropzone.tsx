@@ -21,7 +21,6 @@ export default function EmptyLoopQuestionSetQuestionDropzone() {
         }}
         onDrop={(e) => {
           e.preventDefault()
-          console.log('drop')
         }}
       >
         Drag a Question Set Type Here

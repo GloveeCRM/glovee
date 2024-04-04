@@ -1,8 +1,11 @@
+'use client'
+
+import { useEffect, useRef } from 'react'
+
 import { TemplateQuestionType } from '@/lib/types/template'
+import { useTemplateEditContext } from '@/contexts/template-edit-context'
 import useQuestionActions from '@/hooks/template/use-question-actions'
 import TextInputQuestionEditMenuButton from './text-input-question-edit-menu-button'
-import { useTemplateEditContext } from '@/contexts/template-edit-context'
-import { useEffect, useRef } from 'react'
 
 interface TextInputQuestionEditProps {
   question: TemplateQuestionType
