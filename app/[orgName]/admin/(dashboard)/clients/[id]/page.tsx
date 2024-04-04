@@ -1,10 +1,14 @@
+import Image from 'next/image'
+import { notFound } from 'next/navigation'
+
+import { GoPlus } from 'react-icons/go'
+import { HiOutlinePencilSquare } from 'react-icons/hi2'
+import { UserStatus } from '@prisma/client'
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
 import { fetchUserById } from '@/lib/data/user'
-import { notFound } from 'next/navigation'
-import Image from 'next/image'
 import { fetchApplicationsByUserId } from '@/lib/data/application'
-import CreateNewApplicationButton from '@/components/admin/dashboard/applications/create-new-application-button'
-import { GoPlus } from 'react-icons/go'
+import ActiveButton from '@/components/admin/dashboard/clients/active-button'
+import DeactiveButton from '@/components/admin/dashboard/clients/deactive-button'
 
 interface ClientsPageProps {
   params: { id: string }
@@ -21,18 +25,31 @@ export default async function ClientPage({ params }: ClientsPageProps) {
   return (
     <div>
       <h1 className="mb-[15px] text-[24px] font-bold">Client</h1>
-      <div className="flex items-center gap-[8px] rounded-lg border border-n-400 bg-n-100/50">
-        <Image
-          src={client.image || DEFAULT_MALE_CLIENT_LOGO_URL}
-          alt="CLient Logo"
-          width={75}
-          height={75}
-          className="rounded-full"
-        />
-        <div className="text-[16px]">
-          <p>{client.name}</p>
-          <p>{client.email}</p>
-          <p>{client.id}</p>
+      <div className="flex items-center justify-between rounded-lg border border-n-400 bg-n-100/50 px-[14px] py-[18px]">
+        <div className="flex gap-[4px]">
+          <div className="flex items-center gap-[8px]">
+            <Image
+              src={client.image || DEFAULT_MALE_CLIENT_LOGO_URL}
+              alt="CLient Logo"
+              width={75}
+              height={75}
+              className="rounded-full"
+            />
+            <div className="text-[16px]">
+              <p>{client.name}</p>
+              <p>{client.email}</p>
+              <p>
+                <span className="rounded-full border bg-n-200 px-[6px] py-[2px] text-[12px]">
+                  {client.id}
+                </span>
+              </p>
+            </div>
+          </div>
+          <HiOutlinePencilSquare className="h-[20px] w-[20px]" />
+        </div>
+        <div>
+          {(client.status === UserStatus.ACTIVE && <DeactiveButton CLientId={userId} />) ||
+            (client.status === UserStatus.INACTIVE && <ActiveButton CLientId={userId} />)}
         </div>
       </div>
       <div>
