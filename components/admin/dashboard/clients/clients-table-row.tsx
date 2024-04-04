@@ -1,10 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 
-import { UserStatus } from '@prisma/client'
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
-import ActiveButton from './active-button'
-import DeactiveButton from './deactive-button'
 
 export default function ClientsTableRow({
   id,
@@ -44,8 +41,6 @@ export default function ClientsTableRow({
         <span className="rounded-full bg-n-600 px-[6px] py-[2px] text-[12px] text-white">
           {status}
         </span>
-        {/* {(status === UserStatus.ACTIVE && <DeactiveButton CLientId={id} />) ||
-          (status === UserStatus.INACTIVE && <ActiveButton CLientId={id} />)} */}
       </td>
     </tr>
   )
