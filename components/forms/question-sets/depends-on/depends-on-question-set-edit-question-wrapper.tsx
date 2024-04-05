@@ -1,6 +1,6 @@
 import { TemplateQuestionType } from '@/lib/types/template'
 import { TemplateQuestionType as TemplateQuestionTypes } from '@prisma/client'
-import TextInputQuestionEdit from '../../question-input-types/text-input-question/text-input-question'
+import TextInputQuestionEdit from '../../questions/text-input-question/text-input-question'
 
 interface DependsOnQuestionSetEditQuestionWrapperProps {
   questions: TemplateQuestionType[]

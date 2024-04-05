@@ -2,9 +2,9 @@
 
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
 import EmptySectionQuestionSetDropzone from './empty-section-question-set-dropzone'
-import FlatQuestionSetEdit from '@/components/forms/question-set-types/flat/flat-question-set-edit'
-import LoopQuestionSetEdit from '@/components/forms/question-set-types/loop/loop-question-set-edit'
-import DependsOnQuestionSetEdit from '@/components/forms/question-set-types/depends-on/depends-on-question-set-edit'
+import FlatQuestionSetEdit from '@/components/forms/question-sets/flat/flat-question-set-edit'
+import LoopQuestionSetEdit from '@/components/forms/question-sets/loop/loop-question-set-edit'
+import DependsOnQuestionSetEdit from '@/components/forms/question-sets/depends-on/depends-on-question-set-edit'
 
 export default function QuestionsEditBoard() {
   const { template, selectedCategoryId, selectedSectionId } = useTemplateEditContext()
