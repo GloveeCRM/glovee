@@ -1,9 +1,29 @@
-import Divider from '@/components/ui/divider'
+'use client'
+
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md'
 
+import Divider from '@/components/ui/divider'
+import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
+
 export default function DateInputQuestionIcon() {
+  const { setDraggedObject } = useDragAndDropContext()
+
+  function handleDragStart(e: React.DragEvent<HTMLDivElement>) {
+    e.dataTransfer.setData('objectType', 'question')
+    setDraggedObject({
+      type: 'question',
+      object: {
+        type: 'dateInput',
+      },
+    })
+  }
+
   return (
-    <div className="skew-x-0 rounded bg-n-200 px-[6px] py-[4px] text-[12px] text-n-600" draggable>
+    <div
+      className="skew-x-0 rounded bg-n-200 px-[6px] py-[4px] text-[12px] text-n-600"
+      draggable
+      onDragStart={handleDragStart}
+    >
       <span className="text-[12px]">Date Input</span>
       <div className="mb-[2px] mt-[6px] flex gap-[6px]">
         <div className="w-full">

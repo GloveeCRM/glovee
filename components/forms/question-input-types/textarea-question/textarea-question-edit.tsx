@@ -5,18 +5,19 @@ import { useEffect, useRef } from 'react'
 import { TemplateQuestionType } from '@/lib/types/template'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
 import useQuestionActions from '@/hooks/template/use-question-actions'
-import TextInputQuestionEditMenuButton from './text-input-question-edit-menu-button'
+import TextareaQuestionEditMenuButton from './textarea-question-edit-menu-button'
 
-interface TextInputQuestionEditProps {
+interface TextareaQuestionEditProps {
   question: TemplateQuestionType
 }
 
-export default function TextInputQuestionEdit({ question }: TextInputQuestionEditProps) {
+export default function TextareaQuestionEdit({ question }: TextareaQuestionEditProps) {
   const { setSelectedQuestionSetId, selectedQuestionId, setSelectedQuestionId } =
     useTemplateEditContext()
+
   const { removeQuestionFromSection } = useQuestionActions()
 
-  const textInputQuestionEditRef = useRef<HTMLDivElement>(null)
+  const textareaQuestionEditRef = useRef<HTMLDivElement>(null)
 
   const isQuestionSelected = selectedQuestionId === question.id
 
@@ -33,8 +34,8 @@ export default function TextInputQuestionEdit({ question }: TextInputQuestionEdi
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (
-        textInputQuestionEditRef.current &&
-        !textInputQuestionEditRef.current.contains(e.target as Node)
+        textareaQuestionEditRef.current &&
+        !textareaQuestionEditRef.current.contains(e.target as Node)
       ) {
         setSelectedQuestionId('')
       }
@@ -47,21 +48,21 @@ export default function TextInputQuestionEdit({ question }: TextInputQuestionEdi
   return (
     <div
       className={`group rounded bg-n-100 text-[14px] ${isQuestionSelected ? 'border-[1px] border-n-700 p-[5px]' : 'p-[6px]'}`}
-      ref={textInputQuestionEditRef}
+      ref={textareaQuestionEditRef}
       onClick={handleClickQuestion}
     >
       <div className="flex justify-between">
         <div className="mb-[4px]">{question.prompt}</div>
-        <TextInputQuestionEditMenuButton
+        <TextareaQuestionEditMenuButton
           onClickDelete={handleClickDeleteQuestion}
           display={isQuestionSelected}
         />
       </div>
-      <input
-        type="text"
-        className="h-[32px] w-full cursor-default rounded border-[1px] border-n-400 bg-n-100 px-[6px] text-[12px] focus:outline-none"
-        placeholder={question.type}
+      <textarea
+        className="w-full rounded border-[1px] border-n-400 bg-n-100 p-[4px] px-[6px] text-[12px] focus:outline-none"
+        placeholder="Type your answer here..."
         readOnly
+        rows={3}
       />
     </div>
   )
