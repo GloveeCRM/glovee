@@ -2,9 +2,13 @@ import { MouseEvent } from 'react'
 
 interface ClientProfileEditProps {
   setIsEditing: (isEditing: boolean) => void
+  client: any
 }
 
-export default function ClientProfileEdit({ setIsEditing }: ClientProfileEditProps) {
+export default function ClientProfileEdit({ setIsEditing, client }: ClientProfileEditProps) {
+  const fullName = client.name
+  const firstName = fullName.split(' ')[0]
+  const lastName = fullName.split(' ')[1]
   return (
     <form action="">
       <div>
@@ -17,6 +21,7 @@ export default function ClientProfileEdit({ setIsEditing }: ClientProfileEditPro
               type="text"
               name="clientFirstName"
               id="client-first-name"
+              defaultValue={firstName}
               className="w-full rounded-sm border border-n-400 bg-n-100/50 px-[8px] py-[4px] text-[14px]"
             />
           </div>
@@ -28,6 +33,7 @@ export default function ClientProfileEdit({ setIsEditing }: ClientProfileEditPro
               type="text"
               name="clientLastName"
               id="client-last-name"
+              defaultValue={lastName}
               className="w-full rounded-sm border border-n-400 bg-n-100/50 px-[8px] py-[4px] text-[14px]"
             />
           </div>
@@ -39,6 +45,7 @@ export default function ClientProfileEdit({ setIsEditing }: ClientProfileEditPro
           type="text"
           name="clientEmail"
           id="clientEmail"
+          defaultValue={client.email}
           className="w-full rounded-sm border border-n-400 bg-n-100/50 px-[8px] py-[4px] text-[14px]"
         />
       </div>

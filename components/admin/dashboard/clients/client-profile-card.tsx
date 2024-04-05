@@ -15,7 +15,7 @@ export default function ClientProfileCard({ client, userId }: { client: any; use
   return (
     <div className="flex items-center justify-between rounded-lg border border-n-400 bg-n-100/50 px-[14px] py-[18px]">
       {isEditing ? (
-        <ClientProfileEdit setIsEditing={setIsEditing} />
+        <ClientProfileEdit setIsEditing={setIsEditing} client={client} />
       ) : (
         <div className="flex gap-[4px]">
           <div className="flex items-center gap-[8px]">
