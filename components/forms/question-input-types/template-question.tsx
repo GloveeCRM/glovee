@@ -6,6 +6,7 @@ import { TemplateQuestionType } from '@/lib/types/template'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
 import useQuestionActions from '@/hooks/template/use-question-actions'
 import TemplateQuestionMenuButton from './template-question-menu-button'
+import TextInputQuestion from './text-input-question/text-input-question'
 
 interface TemplateQuestionProps {
   question: TemplateQuestionType
@@ -51,12 +52,7 @@ export default function TemplateQuestion({ question }: TemplateQuestionProps) {
         <div className="mb-[4px]">{question.prompt}</div>
         <TemplateQuestionMenuButton onClickDelete={handleClickDeleteQuestion} />
       </div>
-      <input
-        type="text"
-        className="h-[32px] w-full cursor-default rounded border-[1px] border-n-400 bg-n-100 px-[6px] text-[12px] focus:outline-none"
-        placeholder={question.type}
-        readOnly
-      />
+      <TextInputQuestion question={question} readOnly={true} />
     </div>
   )
 }

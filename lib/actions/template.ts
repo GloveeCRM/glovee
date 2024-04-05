@@ -7,6 +7,7 @@ import { getAuthenticatedUser } from '@/auth'
 import { TemplateSchema } from '../zod/schemas'
 import { TemplateType } from '../types/template'
 import { fetchFullTemplateById } from '../data/template'
+import { TemplateQuestionType } from '@prisma/client'
 
 export async function createTemplate(prevState: any, formDara: FormData) {
   const validatedFields = TemplateSchema.safeParse({
@@ -51,12 +52,12 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                             {
                               prompt: 'What is your full name?',
                               position: 0,
-                              type: 'TEXT_INPUT',
+                              type: TemplateQuestionType.TEXT_INPUT,
                             },
                             {
                               prompt: 'What is your date of birth?',
                               position: 1,
-                              type: 'TEXT_INPUT',
+                              type: TemplateQuestionType.TEXT_INPUT,
                             },
                           ],
                         },
@@ -70,12 +71,12 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                               prompt:
                                 'what is your address? (add any address you have lived in the past 10 years)',
                               position: 0,
-                              type: 'TEXT_INPUT',
+                              type: TemplateQuestionType.TEXT_INPUT,
                             },
                             {
                               prompt: 'job position',
                               position: 1,
-                              type: 'TEXT_INPUT',
+                              type: TemplateQuestionType.TEXT_INPUT,
                             },
                           ],
                         },
@@ -96,12 +97,12 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                             {
                               prompt: 'What is your email address?',
                               position: 0,
-                              type: 'TEXT_INPUT',
+                              type: TemplateQuestionType.TEXT_INPUT,
                             },
                             {
                               prompt: 'What is your phone number?',
                               position: 1,
-                              type: 'TEXT_INPUT',
+                              type: TemplateQuestionType.TEXT_INPUT,
                             },
                           ],
                         },
@@ -114,12 +115,12 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                             {
                               prompt: 'What is your emergency contact?',
                               position: 0,
-                              type: 'TEXT_INPUT',
+                              type: TemplateQuestionType.TEXT_INPUT,
                             },
                             {
                               prompt: 'What is your emergency contact phone number?',
                               position: 1,
-                              type: 'TEXT_INPUT',
+                              type: TemplateQuestionType.TEXT_INPUT,
                             },
                           ],
                         },
@@ -148,17 +149,17 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                             {
                               prompt: 'What is your family member name?',
                               position: 0,
-                              type: 'TEXT_INPUT',
+                              type: TemplateQuestionType.TEXT_INPUT,
                             },
                             {
                               prompt: 'What is your family member date of birth?',
                               position: 1,
-                              type: 'TEXT_INPUT',
+                              type: TemplateQuestionType.TEXT_INPUT,
                             },
                             {
                               prompt: 'What is your family member occupation?',
                               position: 2,
-                              type: 'TEXT_INPUT',
+                              type: TemplateQuestionType.TEXT_INPUT,
                             },
                           ],
                         },
@@ -171,12 +172,12 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                             {
                               prompt: 'father side family members name',
                               position: 1,
-                              type: 'TEXT_INPUT',
+                              type: TemplateQuestionType.TEXT_INPUT,
                             },
                             {
                               prompt: 'mother side family members name',
                               position: 2,
-                              type: 'TEXT_INPUT',
+                              type: TemplateQuestionType.TEXT_INPUT,
                             },
                           ],
                         },
@@ -197,7 +198,7 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                             {
                               prompt: 'What is your family member health history?',
                               position: 1,
-                              type: 'TEXT_INPUT',
+                              type: TemplateQuestionType.TEXT_INPUT,
                             },
                           ],
                         },
