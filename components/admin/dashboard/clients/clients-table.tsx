@@ -15,9 +15,11 @@ export default async function ClientsTable({ orgName, query }: { orgName: string
           <th>Status</th>
         </tr>
         {clients.length === 0 ? (
-          <td colSpan={5} className="py-[12px] text-center text-n-500">
-            No clients found
-          </td>
+          <tr>
+            <td colSpan={5} className="py-[12px] text-center text-n-500">
+              No clients found
+            </td>
+          </tr>
         ) : (
           clients.map((client) => (
             <ClientsTableRow
