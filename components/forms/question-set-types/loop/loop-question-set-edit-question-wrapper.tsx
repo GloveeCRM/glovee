@@ -11,7 +11,7 @@ export default function LoopQuestionSetEditQuestionWrapper({
   return (
     <div className="flex flex-col gap-[6px] rounded bg-r-200/80 px-[6px] py-[8px]">
       {questions.map((question) =>
-        question.type === 'textInput' ? (
+        question.type === 'TEXT_INPUT' ? (
           <TextInputQuestionEdit key={question.id} question={question} />
         ) : (
           <div key={question.id}>{question.type}</div>
