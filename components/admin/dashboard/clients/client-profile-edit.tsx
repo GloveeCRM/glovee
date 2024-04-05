@@ -1,4 +1,6 @@
+import { updateClientById } from '@/lib/actions/user'
 import { MouseEvent } from 'react'
+import { useFormState } from 'react-dom'
 
 interface ClientProfileEditProps {
   setIsEditing: (isEditing: boolean) => void
@@ -9,8 +11,17 @@ export default function ClientProfileEdit({ setIsEditing, client }: ClientProfil
   const fullName = client.name
   const firstName = fullName.split(' ')[0]
   const lastName = fullName.split(' ')[1]
+
+  const updateClient = updateClientById.bind(null, client.id)
+  const [formState, dispatch] = useFormState(updateClient, {})
+
   return (
-    <form action="">
+    <form
+      action={async (formData) => {
+        dispatch(formData)
+        setIsEditing(false)
+      }}
+    >
       <div>
         <div className="mb-[10px] grid grid-flow-col gap-[8px]">
           <div>
@@ -44,7 +55,7 @@ export default function ClientProfileEdit({ setIsEditing, client }: ClientProfil
         <input
           type="text"
           name="clientEmail"
-          id="clientEmail"
+          id="client-email"
           defaultValue={client.email}
           className="w-full rounded-sm border border-n-400 bg-n-100/50 px-[8px] py-[4px] text-[14px]"
         />
@@ -65,7 +76,7 @@ export default function ClientProfileEdit({ setIsEditing, client }: ClientProfil
           type="submit"
           className="rounded-sm bg-n-600 px-[20px] py-[6px] text-[14px] font-bold text-white transition hover:bg-n-700"
         >
-          Create
+          Save
         </button>
       </div>
     </form>
