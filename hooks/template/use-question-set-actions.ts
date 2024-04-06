@@ -6,20 +6,52 @@ import { TemplateQuestionSetType } from '@/lib/types/template'
 export default function useQuestionSetActions() {
   const { template, setTemplate } = useTemplateEditContext()
 
-  function getQuestionSetById(questionSetId: string) {
-    if (!template || !template.categories) return
+  // function getQuestionSetById(questionSetId: string) {
+  //   if (!template || !template.categories) return
 
-    for (const category of template.categories) {
-      if (!category.sections) continue
+  //   for (const category of template.categories) {
+  //     if (!category.sections) continue
 
-      for (const section of category.sections) {
-        if (!section.questionSets) continue
+  //     for (const section of category.sections) {
+  //       if (!section.questionSets) continue
 
-        for (const questionSet of section.questionSets) {
-          if (questionSet.id === questionSetId) return questionSet
-        }
+  //       for (const questionSet of section.questionSets) {
+  //         if (questionSet.id === questionSetId) return questionSet
+  //       }
+  //     }
+  //   }
+  // }
+
+  function getQuestionSetById(
+    questionSetId: string,
+    questionSets: TemplateQuestionSetType[] | null = null
+  ): TemplateQuestionSetType | null {
+    if (!template || !template.categories) return null
+
+    // If this is the initial call, start with the top-level question sets
+    if (!questionSets) {
+      if (!template || !template.categories) return null // No template or categories, return null
+
+      // Flatten to get all top-level question sets
+      questionSets = template.categories.flatMap((category) =>
+        category.sections ? category.sections.flatMap((section) => section.questionSets || []) : []
+      )
+    }
+
+    for (const questionSet of questionSets) {
+      if (questionSet.id === questionSetId) return questionSet
+
+      // If the question set has nested question sets, search recursively
+      if (questionSet.questionSets) {
+        const foundQuestionSet: TemplateQuestionSetType | null = getQuestionSetById(
+          questionSetId,
+          questionSet.questionSets
+        )
+        if (foundQuestionSet) return foundQuestionSet
       }
     }
+
+    return null
   }
 
   function getQuestionSetsInSection(sectionId: string) {
