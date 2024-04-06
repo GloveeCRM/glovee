@@ -220,14 +220,19 @@ enum TemplateQuestionSetType {
 }
 
 model TemplateQuestionSet {
-  id          String @id @default(cuid())
-  type        TemplateQuestionSetType
-  position    Int
-  sectionId   String
+  id            String @id @default(cuid())
+  type          TemplateQuestionSetType
+  position      Int
+  sectionId     String
+  questionSetId String?
 
-  questions   TemplateQuestion[]
+  questions     TemplateQuestion[]
+  questionSets  TemplateQuestionSet[] @relation("QuestionSetRelation")
 
-  section     TemplateSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  section       TemplateSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  questionSet   TemplateQuestionSet? @relation("QuestionSetRelation", fields: [questionSetId], references: [id])
+
+  @@map("template_question_set")
 }
 
 enum TemplateQuestionType {

@@ -5,16 +5,13 @@ import { TemplateQuestionSetType } from '@/lib/types/template'
 import EmptyQuestionSetDropzone from '../empty-question-set-dropzone'
 
 interface LoopQuestionSetEditProps {
-  questionSetId: string
-  questionSets: TemplateQuestionSetType[]
+  questionSet: TemplateQuestionSetType
   selected: boolean
 }
 
-export default function LoopQuestionSetEdit({
-  questionSetId,
-  questionSets,
-  selected,
-}: LoopQuestionSetEditProps) {
+export default function LoopQuestionSetEdit({ questionSet, selected }: LoopQuestionSetEditProps) {
+  const questionSets = questionSet.questionSets || []
+
   return (
     <div
       className={`rounded bg-r-500 ${selected ? 'border-[3px] border-r-700 p-[5px] pt-[13px]' : 'p-[8px] pt-[16px]'}`}
@@ -22,10 +19,7 @@ export default function LoopQuestionSetEdit({
       {questionSets && questionSets.length > 0 ? (
         <div>Question Sets</div>
       ) : (
-        <EmptyQuestionSetDropzone
-          questionSetId={questionSetId}
-          questionSetType={TemplateQuestionSetTypes.LOOP}
-        />
+        <EmptyQuestionSetDropzone questionSet={questionSet} />
       )}
       <LoopQuestionSetEditFooter />
     </div>

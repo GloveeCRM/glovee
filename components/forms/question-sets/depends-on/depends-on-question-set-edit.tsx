@@ -1,14 +1,12 @@
 import { TemplateQuestionSetType } from '@/lib/types/template'
 
 interface DependsOnQuestionSetEditProps {
-  questionSetId: string
-  questionSets: TemplateQuestionSetType[]
+  questionSet: TemplateQuestionSetType
   selected: boolean
 }
 
 export default function DependsOnQuestionSetEdit({
-  questionSetId,
-  questionSets,
+  questionSet,
   selected = false,
 }: DependsOnQuestionSetEditProps) {
   return (

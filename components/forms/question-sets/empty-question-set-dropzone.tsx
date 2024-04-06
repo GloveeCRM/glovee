@@ -13,22 +13,18 @@ import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
 import useQuestionActions from '@/hooks/template/use-question-actions'
 
 interface EmptyQuestionSetDropzone {
-  questionSetId: string
-  questionSetType: TemplateQuestionSetTypes
+  questionSet: TemplateQuestionSetType
 }
 
-export default function EmptyQuestionSetDropzone({
-  questionSetId,
-  questionSetType,
-}: EmptyQuestionSetDropzone) {
+export default function EmptyQuestionSetDropzone({ questionSet }: EmptyQuestionSetDropzone) {
   const [isDraggedOver, setIsDraggedOver] = useState<boolean>(false)
   const { draggedObject, setDraggedObject } = useDragAndDropContext()
   const { createQuestionSetInSection } = useQuestionSetActions()
   const { createQuestionInQuestionSet } = useQuestionActions()
 
-  const isFlat = questionSetType === TemplateQuestionSetTypes.FLAT
-  const isLoop = questionSetType === TemplateQuestionSetTypes.LOOP
-  const isDependsOn = questionSetType === TemplateQuestionSetTypes.DEPENDS_ON
+  const isFlat = questionSet.type === TemplateQuestionSetTypes.FLAT
+  const isLoop = questionSet.type === TemplateQuestionSetTypes.LOOP
+  const isDependsOn = questionSet.type === TemplateQuestionSetTypes.DEPENDS_ON
 
   const isQuestionOverFlat = isFlat && draggedObject?.type === 'question'
   const isQuestionSetOverLoop = isLoop && draggedObject?.type === 'questionSet'
@@ -57,10 +53,18 @@ export default function EmptyQuestionSetDropzone({
           prompt: 'An Untitled Question',
           position: 0,
           helperText: 'No helper text',
-          questionSetId: questionSetId,
+          questionSetId: questionSet.id,
         }
-        createQuestionInQuestionSet(questionSetId, question)
+        createQuestionInQuestionSet(questionSet.id, question)
       } else if (isQuestionSetOverLoop || isQuestionSetOverDependsOn) {
+        const newQuestionSet: TemplateQuestionSetType = {
+          id: uuid4(),
+          type: draggedObject.object.type,
+          position: 0,
+          sectionId: questionSet.sectionId,
+          questionSetId: questionSet.id,
+        }
+        createQuestionSetInSection(questionSet.id, newQuestionSet)
       }
     }
     setDraggedObject(null)
@@ -96,7 +100,7 @@ export default function EmptyQuestionSetDropzone({
 
   return (
     <div
-      className={`rounded border-[1px] border-dashed ${isDraggedOver ? (isDropAllowed ? questionSetClasses[questionSetType].allowed : questionSetClasses[questionSetType].notAllowed) : questionSetClasses[questionSetType].neutral}`}
+      className={`rounded border-[1px] border-dashed ${isDraggedOver ? (isDropAllowed ? questionSetClasses[questionSet.type].allowed : questionSetClasses[questionSet.type].notAllowed) : questionSetClasses[questionSet.type].neutral}`}
     >
       <div
         className="flex h-[65px] items-center justify-center text-center text-[12px]"

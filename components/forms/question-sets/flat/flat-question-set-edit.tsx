@@ -1,20 +1,19 @@
 import { TemplateQuestionSetType as TemplateQuestionSetTypes } from '@prisma/client'
-import { TemplateQuestionType } from '@/lib/types/template'
+import { TemplateQuestionSetType, TemplateQuestionType } from '@/lib/types/template'
 import NonEmptyQuestionSetDropzone from '@/components/admin/template/edit/non-empty-question-set-dropzone'
 import TemplateQuestion from '../../questions/template-question'
 import EmptyQuestionSetDropzone from '../empty-question-set-dropzone'
 
 interface FlatQuestionSetEditProps {
-  questionSetId: string
-  questions: TemplateQuestionType[]
+  questionSet: TemplateQuestionSetType
   selected: boolean
 }
 
 export default function FlatQuestionSetEdit({
-  questionSetId,
-  questions,
+  questionSet,
   selected = false,
 }: FlatQuestionSetEditProps) {
+  const questions = questionSet.questions || []
   return (
     <div
       className={`rounded bg-g-500 ${selected ? 'border-[3px] border-g-700 p-[5px] pt-[13px]' : 'p-[8px] pt-[16px]'}`}
@@ -40,10 +39,7 @@ export default function FlatQuestionSetEdit({
           ))}
         </div>
       ) : (
-        <EmptyQuestionSetDropzone
-          questionSetId={questionSetId}
-          questionSetType={TemplateQuestionSetTypes.FLAT}
-        />
+        <EmptyQuestionSetDropzone questionSet={questionSet} />
       )}
     </div>
   )

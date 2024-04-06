@@ -65,23 +65,11 @@ export default function TemplateQuestionSet({ questionSet }: TemplateQuestionSet
       >
         <TemplateQuestionSetMenuButton onClickDelete={handleClickDeleteQuestionSet} />
         {isFlat ? (
-          <FlatQuestionSetEdit
-            questionSetId={questionSet.id}
-            questions={questions}
-            selected={isQuestionSetSelected}
-          />
+          <FlatQuestionSetEdit questionSet={questionSet} selected={isQuestionSetSelected} />
         ) : isLoop ? (
-          <LoopQuestionSetEdit
-            questionSetId={questionSet.id}
-            questionSets={[]}
-            selected={isQuestionSetSelected}
-          />
+          <LoopQuestionSetEdit questionSet={questionSet} selected={isQuestionSetSelected} />
         ) : isDependsOn ? (
-          <DependsOnQuestionSetEdit
-            questionSetId={questionSet.id}
-            questionSets={[]}
-            selected={isQuestionSetSelected}
-          />
+          <DependsOnQuestionSetEdit questionSet={questionSet} selected={isQuestionSetSelected} />
         ) : (
           <div>TemplateQuestionSet</div>
         )}
