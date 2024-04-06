@@ -134,9 +134,15 @@ model Section {
   category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 }
 
+enum QuestionSetType {
+  FLAT
+  LOOP
+  DEPENDS_ON
+}
+
 model QuestionSet {
   id          String @id @default(cuid())
-  type        String
+  type        QuestionSetType
   position    Int
   sectionId   String
   questions   Question[]
@@ -207,9 +213,15 @@ model TemplateSection {
   category    TemplateCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 }
 
+enum TemplateQuestionSetType {
+  FLAT
+  LOOP
+  DEPENDS_ON
+}
+
 model TemplateQuestionSet {
   id          String @id @default(cuid())
-  type        String
+  type        TemplateQuestionSetType
   position    Int
   sectionId   String
 
