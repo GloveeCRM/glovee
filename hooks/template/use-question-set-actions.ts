@@ -158,16 +158,16 @@ export default function useQuestionSetActions() {
   function removeQuestionSetRecursively(
     existingQuestionSets: TemplateQuestionSetType[],
     questionSetIdToRemove: string,
-    removedQuestionSetPosition: number | null
+    removedQuestionSetPosition: number | null = null // Default to null when not provided
   ): TemplateQuestionSetType[] {
-    // First pass to remove the question set and find the position of the removed question set
     let isRemoved = false
     let updatedQuestionSets = existingQuestionSets.reduce<TemplateQuestionSetType[]>(
       (acc, questionSet) => {
         if (questionSet.id === questionSetIdToRemove) {
+          // Capture the position of the question set being removed
           removedQuestionSetPosition = questionSet.position
-          isRemoved = true
-          return acc // Skip this question set
+          isRemoved = true // Mark as removed, but don't add to accumulator
+          return acc
         }
         acc.push(questionSet)
         return acc
@@ -176,12 +176,16 @@ export default function useQuestionSetActions() {
     )
 
     if (isRemoved && removedQuestionSetPosition !== null) {
-      // Second pass to update positions if a question set was removed
+      // If a question set was removed, decrement positions of subsequent question sets
       updatedQuestionSets = updatedQuestionSets.map((questionSet) => {
-        if (removedQuestionSetPosition && questionSet.position > removedQuestionSetPosition) {
+        if (
+          removedQuestionSetPosition !== null &&
+          questionSet.position > removedQuestionSetPosition
+        ) {
+          // Decrement position by 1 for question sets after the removed one
           return { ...questionSet, position: questionSet.position - 1 }
         } else if (questionSet.questionSets && questionSet.questionSets.length > 0) {
-          // Recursively adjust positions in nested question sets
+          // Recursively adjust positions within nested question sets
           return {
             ...questionSet,
             questionSets: removeQuestionSetRecursively(
@@ -193,8 +197,8 @@ export default function useQuestionSetActions() {
         }
         return questionSet
       })
-    } else {
-      // No question set was removed at this level, recursively try to remove from nested question sets
+    } else if (!isRemoved) {
+      // If no question set was removed at this level, try to remove from nested question sets
       updatedQuestionSets = existingQuestionSets.map((questionSet) => {
         if (questionSet.questionSets && questionSet.questionSets.length > 0) {
           return {
@@ -202,7 +206,7 @@ export default function useQuestionSetActions() {
             questionSets: removeQuestionSetRecursively(
               questionSet.questionSets,
               questionSetIdToRemove,
-              null
+              null // Explicitly pass null to indicate no removal has been done yet
             ),
           }
         }
