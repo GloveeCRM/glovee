@@ -64,7 +64,7 @@ export default function EmptyQuestionSetDropzone({ questionSet }: EmptyQuestionS
           sectionId: questionSet.sectionId,
           questionSetId: questionSet.id,
         }
-        createQuestionSetInSection(questionSet.id, newQuestionSet)
+        createQuestionSetInSection(questionSet.sectionId, newQuestionSet)
       }
     }
     setDraggedObject(null)

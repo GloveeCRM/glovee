@@ -4,7 +4,11 @@ import { Dispatch, SetStateAction, createContext, useContext, useEffect, useStat
 
 import { fetchFullTemplateById } from '@/lib/data/template'
 import { TemplateType } from '@/lib/types/template'
-import { getTemplateFromLocalStorage, setTemplateOnLocalStorage } from '@/lib/functions/template'
+import {
+  formatTemplate,
+  getTemplateFromLocalStorage,
+  setTemplateOnLocalStorage,
+} from '@/lib/functions/template'
 
 type TemplateEditContextType = {
   templateId: string
@@ -65,13 +69,17 @@ export default function TemplateEditProvider({ templateId, children }: TemplateE
   useEffect(() => {
     async function fetchAndSetInitialTemplate() {
       const fetchedTemplate = await fetchFullTemplateById(templateId)
-      setSavedTemplate(fetchedTemplate)
+      let formattedTemplate = null
+      if (fetchedTemplate) {
+        formattedTemplate = formatTemplate(fetchedTemplate)
+      }
+      setSavedTemplate(formattedTemplate)
 
       const localTemplate = getTemplateFromLocalStorage(templateId)
       if (localTemplate) {
         setTemplate(localTemplate)
       } else {
-        setTemplate(fetchedTemplate)
+        setTemplate(formattedTemplate)
       }
     }
 

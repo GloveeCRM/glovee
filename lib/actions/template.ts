@@ -5,9 +5,14 @@ import { revalidatePath } from 'next/cache'
 import { prisma } from '@/prisma/prisma'
 import { getAuthenticatedUser } from '@/auth'
 import { TemplateSchema } from '../zod/schemas'
-import { TemplateType } from '../types/template'
+import {
+  TemplateCategoryType,
+  TemplateSectionType,
+  TemplateType,
+  TemplateQuestionSetType,
+  TemplateQuestionType,
+} from '../types/template'
 import { fetchFullTemplateById } from '../data/template'
-import { TemplateQuestionSetType, TemplateQuestionType } from '@prisma/client'
 
 export async function createTemplate(prevState: any, formDara: FormData) {
   const validatedFields = TemplateSchema.safeParse({
@@ -218,126 +223,129 @@ export async function updateFullTemplateById(
     })
 
     await prisma.template.update({
-      where: {
-        id: templateId,
-      },
+      where: { id: templateId },
       data: {
         title: template.title,
         description: template.description,
-        categories: {
-          upsert: template.categories?.map((category) => ({
-            where: { id: category.id },
-            update: {
-              title: category.title,
-              position: category.position,
-              sections: {
-                upsert: category.sections?.map((section) => ({
-                  where: { id: section.id },
-                  update: {
-                    title: section.title,
-                    position: section.position,
-                    questionSets: {
-                      upsert: section.questionSets?.map((questionSet) => ({
-                        where: { id: questionSet.id },
-                        update: {
-                          type: questionSet.type,
-                          position: questionSet.position,
-                          questions: {
-                            upsert: questionSet.questions?.map((question) => ({
-                              where: { id: question.id },
-                              update: {
-                                type: question.type,
-                                prompt: question.prompt,
-                                position: question.position,
-                                helperText: question.helperText,
-                              },
-                              create: {
-                                id: question.id,
-                                type: question.type,
-                                prompt: question.prompt,
-                                position: question.position,
-                                helperText: question.helperText,
-                              },
-                            })),
-                          },
-                        },
-                        create: {
-                          id: questionSet.id,
-                          type: questionSet.type,
-                          position: questionSet.position,
-                          questions: {
-                            create: questionSet.questions?.map((question) => ({
-                              id: question.id,
-                              type: question.type,
-                              prompt: question.prompt,
-                              position: question.position,
-                              helperText: question.helperText,
-                            })),
-                          },
-                        },
-                      })),
-                    },
-                  },
-                  create: {
-                    id: section.id,
-                    title: section.title,
-                    position: section.position,
-                    questionSets: {
-                      create: section.questionSets?.map((questionSet) => ({
-                        id: questionSet.id,
-                        type: questionSet.type,
-                        position: questionSet.position,
-                        questions: {
-                          create: questionSet.questions?.map((question) => ({
-                            id: question.id,
-                            type: question.type,
-                            prompt: question.prompt,
-                            position: question.position,
-                            helperText: question.helperText,
-                          })),
-                        },
-                      })),
-                    },
-                  },
-                })),
-              },
-            },
-            create: {
-              id: category.id,
-              title: category.title,
-              position: category.position,
-              sections: {
-                create: category.sections?.map((section) => ({
-                  id: section.id,
-                  title: section.title,
-                  position: section.position,
-                  questionSets: {
-                    create: section.questionSets?.map((questionSet) => ({
-                      id: questionSet.id,
-                      type: questionSet.type,
-                      position: questionSet.position,
-                      questions: {
-                        create: questionSet.questions?.map((question) => ({
-                          id: question.id,
-                          type: question.type,
-                          prompt: question.prompt,
-                          position: question.position,
-                          helperText: question.helperText,
-                        })),
-                      },
-                    })),
-                  },
-                })),
-              },
-            },
-          })),
-        },
       },
     })
+
+    for (const category of template.categories ?? []) {
+      await upsertCategoryByTemplateId(templateId, category)
+    }
 
     revalidatePath(`/admin/template/${templateId}/edit`)
     return { success: 'Template updated!' }
   } catch (error) {
     return { error: 'Failed to update template!' }
   }
+}
+
+async function upsertCategoryByTemplateId(
+  templateId: string,
+  category: TemplateCategoryType
+): Promise<TemplateCategoryType> {
+  await prisma.templateCategory.upsert({
+    where: { id: category.id },
+    update: {
+      title: category.title,
+      position: category.position,
+    },
+    create: {
+      id: category.id,
+      title: category.title,
+      position: category.position,
+      templateId,
+    },
+  })
+
+  for (const section of category.sections ?? []) {
+    await upsertSectionByCategoryId(section, category.id)
+  }
+
+  return category
+}
+
+async function upsertSectionByCategoryId(
+  section: TemplateSectionType,
+  categoryId: string
+): Promise<TemplateSectionType> {
+  await prisma.templateSection.upsert({
+    where: { id: section.id },
+    update: {
+      title: section.title,
+      position: section.position,
+    },
+    create: {
+      id: section.id,
+      title: section.title,
+      position: section.position,
+      categoryId,
+    },
+  })
+
+  for (const questionSet of section.questionSets ?? []) {
+    await upsertQuestionSetBySectionIdAndParentQuestionSetId(questionSet, section.id, null)
+  }
+
+  return section
+}
+
+async function upsertQuestionSetBySectionIdAndParentQuestionSetId(
+  questionSet: TemplateQuestionSetType,
+  sectionId: string,
+  parentQuestionSetId: string | null
+): Promise<TemplateQuestionSetType> {
+  await prisma.templateQuestionSet.upsert({
+    where: { id: questionSet.id },
+    update: {
+      type: questionSet.type,
+      position: questionSet.position,
+      questionSetId: parentQuestionSetId,
+    },
+    create: {
+      id: questionSet.id,
+      type: questionSet.type,
+      position: questionSet.position,
+      sectionId: sectionId,
+      questionSetId: parentQuestionSetId,
+    },
+  })
+
+  for (const question of questionSet.questions ?? []) {
+    await upsertQuestionByQuestionSetId(question, questionSet.id)
+  }
+
+  for (const childQuestionSet of questionSet.questionSets ?? []) {
+    await upsertQuestionSetBySectionIdAndParentQuestionSetId(
+      childQuestionSet,
+      sectionId,
+      questionSet.id
+    )
+  }
+
+  return questionSet
+}
+
+async function upsertQuestionByQuestionSetId(
+  question: TemplateQuestionType,
+  questionSetId: string
+): Promise<TemplateQuestionType> {
+  return await prisma.templateQuestion.upsert({
+    where: { id: question.id },
+    update: {
+      type: question.type,
+      prompt: question.prompt,
+      position: question.position,
+      helperText: question.helperText,
+    },
+    create: {
+      id: question.id,
+      type: question.type,
+      prompt: question.prompt,
+      position: question.position,
+      helperText: question.helperText,
+      questionSetId: questionSetId,
+    },
+  })
 }

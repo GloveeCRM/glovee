@@ -34,24 +34,19 @@ export default function useQuestionSetActions() {
     }
   }
 
-  function createQuestionSetInSection(sectionId: string, questionSet: TemplateQuestionSetType) {
+  function createQuestionSetInSection(sectionId: string, newQuestionSet: TemplateQuestionSetType) {
     if (!template || !template.categories) return
 
     const updatedCategories = template.categories.map((category) => {
       if (!category.sections) return category
+
       const updatedSections = category.sections.map((section) => {
         if (section.id !== sectionId) return section
 
-        const existingQuestionSets = section.questionSets || []
-
-        const updatedQuestionSets = existingQuestionSets.map((existingQuestionSet) => {
-          if (existingQuestionSet.position >= questionSet.position) {
-            return { ...existingQuestionSet, position: existingQuestionSet.position + 1 }
-          }
-          return existingQuestionSet
-        })
-
-        updatedQuestionSets.splice(questionSet.position, 0, questionSet)
+        const updatedQuestionSets = insertQuestionSetRecursively(
+          section.questionSets || [],
+          newQuestionSet
+        )
 
         return { ...section, questionSets: updatedQuestionSets }
       })
@@ -60,6 +55,40 @@ export default function useQuestionSetActions() {
     })
 
     setTemplate({ ...template, categories: updatedCategories })
+  }
+
+  function insertQuestionSetRecursively(
+    existingQuestionSets: TemplateQuestionSetType[],
+    newQuestionSet: TemplateQuestionSetType
+  ): TemplateQuestionSetType[] {
+    // If the new question set has a parent ID, try to find the parent and insert the new question set into its children
+    if (newQuestionSet.questionSetId) {
+      return existingQuestionSets.map((existingQuestionSet) => {
+        if (existingQuestionSet.id === newQuestionSet.questionSetId) {
+          // Adjust positions for existing question sets if necessary
+          const updatedChildQuestionSets = existingQuestionSet.questionSets
+            ? [...existingQuestionSet.questionSets, newQuestionSet].sort(
+                (a, b) => a.position - b.position
+              )
+            : [newQuestionSet]
+
+          return { ...existingQuestionSet, questionSets: updatedChildQuestionSets }
+        } else if (existingQuestionSet.questionSets) {
+          // Recursively search for the parent question set
+          return {
+            ...existingQuestionSet,
+            questionSets: insertQuestionSetRecursively(
+              existingQuestionSet.questionSets,
+              newQuestionSet
+            ),
+          }
+        }
+        return existingQuestionSet
+      })
+    } else {
+      // If there is no parent ID, the new question set is being added to the top level
+      return [...existingQuestionSets, newQuestionSet].sort((a, b) => a.position - b.position)
+    }
   }
 
   function removeQuestionSetFromSection(questionSetId: string) {

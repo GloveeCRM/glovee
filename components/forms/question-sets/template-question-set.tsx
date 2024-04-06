@@ -70,9 +70,7 @@ export default function TemplateQuestionSet({ questionSet }: TemplateQuestionSet
           <LoopQuestionSetEdit questionSet={questionSet} selected={isQuestionSetSelected} />
         ) : isDependsOn ? (
           <DependsOnQuestionSetEdit questionSet={questionSet} selected={isQuestionSetSelected} />
-        ) : (
-          <div>TemplateQuestionSet</div>
-        )}
+        ) : null}
       </div>
       <NonEmptySectionDropzone position={questionSet.position + 1} />
     </div>
