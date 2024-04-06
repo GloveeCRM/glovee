@@ -99,14 +99,17 @@ export default function useQuestionSetActions() {
         if (existingQuestionSet.id === newQuestionSet.questionSetId) {
           // Here, you might adjust positions if necessary, before sorting
           let updatedChildQuestionSets = existingQuestionSet.questionSets
-            ? [...existingQuestionSet.questionSets, newQuestionSet]
-            : [newQuestionSet]
+            ? existingQuestionSet.questionSets.map((qs) => ({
+                ...qs,
+                position: qs.position >= newQuestionSet.position ? qs.position + 1 : qs.position,
+              }))
+            : []
 
-          updatedChildQuestionSets = updatePositions(updatedChildQuestionSets)
+          updatedChildQuestionSets.push(newQuestionSet)
 
           return {
             ...existingQuestionSet,
-            questionSets: updatedChildQuestionSets.sort((a, b) => a.position - b.position),
+            questionSets: updatePositions(updatedChildQuestionSets), // Re-index positions cleanly
           }
         } else if (existingQuestionSet.questionSets) {
           // Recursively search for the parent question set

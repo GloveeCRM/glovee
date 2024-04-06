@@ -37,9 +37,10 @@ export default function EmptySectionQuestionSetDropzone() {
     if (isDropAllowed) {
       const questionSet: TemplateQuestionSetType = {
         id: uuidv4(),
-        sectionId: selectedSectionId,
-        position: 0,
         type: draggedObject.object.type,
+        position: 0,
+        sectionId: selectedSectionId,
+        questionSetId: null,
         questions: [],
       }
       createQuestionSetInSection(selectedSectionId, questionSet)

@@ -3,32 +3,41 @@
 import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
-import { TemplateQuestion } from '@prisma/client'
+import {
+  TemplateQuestion,
+  TemplateQuestionSetType as TemplateQuestionSetTypes,
+} from '@prisma/client'
+import { TemplateQuestionSetType } from '@/lib/types/template'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 import useQuestionActions from '@/hooks/template/use-question-actions'
+import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
 
 interface NonEmptyQuestionSetDropzoneProps {
-  questionSetId: string
-  questionSetType: string
+  questionSet: TemplateQuestionSetType
   position: number
 }
 
 export default function NonEmptyQuestionSetDropzone({
-  questionSetId,
-  questionSetType,
+  questionSet,
   position,
 }: NonEmptyQuestionSetDropzoneProps) {
   const [isDraggedOver, setIsDraggedOver] = useState<boolean>(false)
   const { draggedObject, setDraggedObject } = useDragAndDropContext()
   const { getQuestionsInQuestionSet, createQuestionInQuestionSet } = useQuestionActions()
+  const { createQuestionSetInSection } = useQuestionSetActions()
+
+  const isFlat = questionSet.type === TemplateQuestionSetTypes.FLAT
+  const isLoop = questionSet.type === TemplateQuestionSetTypes.LOOP
+  const isDependsOn = questionSet.type === TemplateQuestionSetTypes.DEPENDS_ON
+
+  const isQuestionOverFlat = isFlat && draggedObject?.type === 'question'
+  const isQuestionSetOverLoop = isLoop && draggedObject?.type === 'questionSet'
+  const isQuestionSetOverDependsOn = isDependsOn && draggedObject?.type === 'questionSet'
 
   const isDropAllowed =
-    isDraggedOver &&
-    ((questionSetType === 'flat' && draggedObject?.type === 'question') ||
-      ((questionSetType === 'loop' || questionSetType === 'dependsOn') &&
-        draggedObject?.type === 'questionSet'))
+    isDraggedOver && (isQuestionOverFlat || isQuestionSetOverLoop || isQuestionSetOverDependsOn)
 
-  const questionsInQuestionSet = getQuestionsInQuestionSet(questionSetId)
+  const questionsInQuestionSet = getQuestionsInQuestionSet(questionSet.id)
 
   function handleDragEnter(e: React.DragEvent<HTMLDivElement>) {
     e.preventDefault()
@@ -51,15 +60,26 @@ export default function NonEmptyQuestionSetDropzone({
     e.preventDefault()
     setIsDraggedOver(false)
     if (isDropAllowed) {
-      const question: TemplateQuestion = {
-        id: uuidv4(),
-        type: draggedObject.object.type,
-        prompt: 'An Untitled Question',
-        position: position,
-        helperText: 'No helper text',
-        questionSetId: questionSetId,
+      if (isQuestionOverFlat) {
+        const question: TemplateQuestion = {
+          id: uuidv4(),
+          type: draggedObject.object.type,
+          prompt: 'An Untitled Question',
+          position: position,
+          helperText: 'No helper text',
+          questionSetId: questionSet.id,
+        }
+        createQuestionInQuestionSet(questionSet.id, question)
+      } else if (isQuestionSetOverLoop || isQuestionSetOverDependsOn) {
+        const newQuestionSet: TemplateQuestionSetType = {
+          id: uuidv4(),
+          type: draggedObject.object.type,
+          position: position,
+          sectionId: questionSet.sectionId,
+          questionSetId: questionSet.id,
+        }
+        createQuestionSetInSection(questionSet.sectionId, newQuestionSet)
       }
-      createQuestionInQuestionSet(questionSetId, question)
     }
     setDraggedObject(null)
   }

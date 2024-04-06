@@ -58,7 +58,9 @@ export default function TemplateQuestionSet({ questionSet }: TemplateQuestionSet
 
   return (
     <div>
-      {showDropzoneBefore && <NonEmptySectionDropzone position={questionSet.position} />}
+      {showDropzoneBefore && (
+        <NonEmptySectionDropzone position={questionSet.position} questionSet={questionSet} />
+      )}
       <div
         className="group/questionSet relative rounded"
         onClick={handleClickQuestionSet}
@@ -73,7 +75,7 @@ export default function TemplateQuestionSet({ questionSet }: TemplateQuestionSet
           <DependsOnQuestionSetEdit questionSet={questionSet} selected={isQuestionSetSelected} />
         ) : null}
       </div>
-      <NonEmptySectionDropzone position={questionSet.position + 1} />
+      <NonEmptySectionDropzone position={questionSet.position + 1} questionSet={questionSet} />
     </div>
   )
 }

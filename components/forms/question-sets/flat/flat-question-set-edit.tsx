@@ -23,17 +23,12 @@ export default function FlatQuestionSetEdit({
           {questions.map((question) => (
             <div key={question.id}>
               {question.position === 0 && (
-                <NonEmptyQuestionSetDropzone
-                  position={0}
-                  questionSetId={question.questionSetId}
-                  questionSetType="flat"
-                />
+                <NonEmptyQuestionSetDropzone position={0} questionSet={questionSet} />
               )}
               <TemplateQuestion question={question} />
               <NonEmptyQuestionSetDropzone
                 position={question.position + 1}
-                questionSetId={question.questionSetId}
-                questionSetType="flat"
+                questionSet={questionSet}
               />
             </div>
           ))}
