@@ -10,6 +10,7 @@ import NonEmptySectionDropzone from '@/components/admin/template/edit/non-empty-
 import TemplateQuestionSetMenuButton from './template-question-set-menu-button'
 import FlatQuestionSetEdit from './flat/flat-question-set-edit'
 import LoopQuestionSetEdit from './loop/loop-question-set-edit'
+import DependsOnQuestionSetEdit from './depends-on/depends-on-question-set-edit'
 
 interface TemplateQuestionSetProps {
   questionSet: TemplateQuestionSetType
@@ -24,6 +25,10 @@ export default function TemplateQuestionSet({ questionSet }: TemplateQuestionSet
   const templateQuestionSetRef = useRef<HTMLDivElement>(null)
 
   const questions = questionSet.questions || []
+
+  const isFlat = questionSet.type === TemplateQuestionSetTypes.FLAT
+  const isLoop = questionSet.type === TemplateQuestionSetTypes.LOOP
+  const isDependsOn = questionSet.type === TemplateQuestionSetTypes.DEPENDS_ON
 
   function handleClickQuestionSet() {
     setSelectedQuestionSetId(questionSet.id)
@@ -59,14 +64,20 @@ export default function TemplateQuestionSet({ questionSet }: TemplateQuestionSet
         ref={templateQuestionSetRef}
       >
         <TemplateQuestionSetMenuButton onClickDelete={handleClickDeleteQuestionSet} />
-        {questionSet.type === TemplateQuestionSetTypes.FLAT ? (
+        {isFlat ? (
           <FlatQuestionSetEdit
             questionSetId={questionSet.id}
             questions={questions}
             selected={isQuestionSetSelected}
           />
-        ) : questionSet.type === TemplateQuestionSetTypes.LOOP ? (
+        ) : isLoop ? (
           <LoopQuestionSetEdit
+            questionSetId={questionSet.id}
+            questionSets={[]}
+            selected={isQuestionSetSelected}
+          />
+        ) : isDependsOn ? (
+          <DependsOnQuestionSetEdit
             questionSetId={questionSet.id}
             questionSets={[]}
             selected={isQuestionSetSelected}
