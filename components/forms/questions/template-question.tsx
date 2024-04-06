@@ -40,7 +40,7 @@ export default function TemplateQuestion({ question }: TemplateQuestionProps) {
 
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [])
+  }, [setSelectedQuestionId])
 
   return (
     <div

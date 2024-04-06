@@ -43,7 +43,7 @@ export default function TextareaQuestionEdit({ question }: TextareaQuestionEditP
 
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [])
+  }, [setSelectedQuestionId])
 
   return (
     <div

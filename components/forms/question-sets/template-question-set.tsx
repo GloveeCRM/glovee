@@ -52,7 +52,7 @@ export default function TemplateQuestionSet({ questionSet }: TemplateQuestionSet
 
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [])
+  }, [setSelectedQuestionSetId])
 
   const showDropzoneBefore = questionSet.position === 0
 
