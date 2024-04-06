@@ -92,6 +92,8 @@ export default function EmptyQuestionSetDropzone({
     },
   }
 
+  const text = isFlat ? 'Drag an Input Type Here' : 'Drag a Question Set Type Here'
+
   return (
     <div
       className={`rounded border-[1px] border-dashed ${isDraggedOver ? (isDropAllowed ? questionSetClasses[questionSetType].allowed : questionSetClasses[questionSetType].notAllowed) : questionSetClasses[questionSetType].neutral}`}
@@ -103,7 +105,7 @@ export default function EmptyQuestionSetDropzone({
         onDrop={handleDrop}
         onDragOver={handleDragOver}
       >
-        Drag an Input Type Here
+        {isDropAllowed ? 'Drop it here' : text}
       </div>
     </div>
   )
