@@ -4,21 +4,32 @@ import { useState } from 'react'
 import { v4 as uuid4 } from 'uuid'
 
 import { TemplateQuestion } from '@prisma/client'
+import { TemplateQuestionSetType } from '@/lib/types/template'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
+import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
 import useQuestionActions from '@/hooks/template/use-question-actions'
 
-interface EmptyFlatQuestionSetQuestionDropzoneProps {
+interface EmptyQuestionSetDropzone {
   questionSetId: string
+  questionSetType: string
 }
 
-export default function EmptyFlatQuestionSetQuestionDropzone({
+export default function EmptyQuestionSetDropzone({
   questionSetId,
-}: EmptyFlatQuestionSetQuestionDropzoneProps) {
+  questionSetType,
+}: EmptyQuestionSetDropzone) {
   const [isDraggedOver, setIsDraggedOver] = useState<boolean>(false)
   const { draggedObject, setDraggedObject } = useDragAndDropContext()
+  const { createQuestionSetInSection } = useQuestionSetActions()
   const { createQuestionInQuestionSet } = useQuestionActions()
 
-  const isDropAllowed = isDraggedOver && draggedObject?.type === 'question'
+  const isQuestionOverFlat = questionSetType === 'flat' && draggedObject?.type === 'question'
+  const isQuestionSetOverLoop = questionSetType === 'loop' && draggedObject?.type === 'questionSet'
+  const isQuestionSetOverDependsOn =
+    questionSetType === 'dependsOn' && draggedObject?.type === 'questionSet'
+
+  const isDropAllowed =
+    isDraggedOver && (isQuestionOverFlat || isQuestionSetOverLoop || isQuestionSetOverDependsOn)
 
   function handleDragEnter(e: React.DragEvent<HTMLDivElement>) {
     e.preventDefault()
@@ -32,19 +43,22 @@ export default function EmptyFlatQuestionSetQuestionDropzone({
 
   function handleDrop(e: React.DragEvent<HTMLDivElement>) {
     e.preventDefault()
-    setIsDraggedOver(false)
     if (isDropAllowed) {
-      const question: TemplateQuestion = {
-        id: uuid4(),
-        type: draggedObject.object.type,
-        prompt: 'An Untitled Question',
-        position: 0,
-        helperText: 'No helper text',
-        questionSetId: questionSetId,
+      if (isQuestionOverFlat) {
+        const question: TemplateQuestion = {
+          id: uuid4(),
+          type: draggedObject.object.type,
+          prompt: 'An Untitled Question',
+          position: 0,
+          helperText: 'No helper text',
+          questionSetId: questionSetId,
+        }
+        createQuestionInQuestionSet(questionSetId, question)
+      } else if (isQuestionSetOverLoop || isQuestionSetOverDependsOn) {
       }
-      createQuestionInQuestionSet(questionSetId, question)
     }
     setDraggedObject(null)
+    setIsDraggedOver(false)
   }
 
   function handleDragOver(e: React.DragEvent<HTMLDivElement>) {

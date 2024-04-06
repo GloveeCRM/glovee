@@ -2,13 +2,12 @@
 
 import { useEffect, useRef } from 'react'
 
-import { TemplateQuestionSetType, TemplateQuestionType } from '@/lib/types/template'
+import { TemplateQuestionSetType } from '@/lib/types/template'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
 import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
 import NonEmptySectionDropzone from '@/components/admin/template/edit/non-empty-section-dropzone'
 import TemplateQuestionSetMenuButton from './template-question-set-menu-button'
-import FlatQuestionSetEditQuestionWrapper from './flat/flat-question-set-edit-question-wrapper'
-import EmptyFlatQuestionSetQuestionDropzone from './flat/empty-flat-question-set-question-dropzone'
+import FlatQuestionSetEdit from './flat/flat-question-set-edit'
 
 interface TemplateQuestionSetProps {
   questionSet: TemplateQuestionSetType
@@ -58,37 +57,17 @@ export default function TemplateQuestionSet({ questionSet }: TemplateQuestionSet
         ref={templateQuestionSetRef}
       >
         <TemplateQuestionSetMenuButton onClickDelete={handleClickDeleteQuestionSet} />
-        <FlatQuestionSetEdit
-          questions={questions}
-          questionSetId={questionSet.id}
-          selected={isQuestionSetSelected}
-        />
+        {questionSet.type === 'flat' ? (
+          <FlatQuestionSetEdit
+            questionSetId={questionSet.id}
+            questions={questions}
+            selected={isQuestionSetSelected}
+          />
+        ) : (
+          <div>TemplateQuestionSet</div>
+        )}
       </div>
       <NonEmptySectionDropzone position={questionSet.position + 1} />
-    </div>
-  )
-}
-
-interface FlatQuestionSetEditProps {
-  questions: TemplateQuestionType[]
-  questionSetId: string
-  selected: boolean
-}
-
-function FlatQuestionSetEdit({
-  questions,
-  questionSetId,
-  selected = false,
-}: FlatQuestionSetEditProps) {
-  return (
-    <div
-      className={`rounded bg-g-500 ${selected ? 'border-[3px] border-g-700 p-[5px] pt-[13px]' : 'p-[8px] pt-[16px]'}`}
-    >
-      {questions && questions.length > 0 ? (
-        <FlatQuestionSetEditQuestionWrapper questions={questions} />
-      ) : (
-        <EmptyFlatQuestionSetQuestionDropzone questionSetId={questionSetId} />
-      )}
     </div>
   )
 }
