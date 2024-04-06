@@ -7,7 +7,7 @@ import { getAuthenticatedUser } from '@/auth'
 import { TemplateSchema } from '../zod/schemas'
 import { TemplateType } from '../types/template'
 import { fetchFullTemplateById } from '../data/template'
-import { TemplateQuestionType } from '@prisma/client'
+import { TemplateQuestionSetType, TemplateQuestionType } from '@prisma/client'
 
 export async function createTemplate(prevState: any, formDara: FormData) {
   const validatedFields = TemplateSchema.safeParse({
@@ -45,7 +45,7 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                   questionSets: {
                     create: [
                       {
-                        type: 'flat',
+                        type: TemplateQuestionSetType.FLAT,
                         position: 0,
                         questions: {
                           create: [
@@ -63,7 +63,7 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                         },
                       },
                       {
-                        type: 'loop',
+                        type: TemplateQuestionSetType.LOOP,
                         position: 1,
                         questions: {
                           create: [
@@ -90,7 +90,7 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                   questionSets: {
                     create: [
                       {
-                        type: 'flat',
+                        type: TemplateQuestionSetType.FLAT,
                         position: 0,
                         questions: {
                           create: [
@@ -108,7 +108,7 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                         },
                       },
                       {
-                        type: 'flat',
+                        type: TemplateQuestionSetType.FLAT,
                         position: 1,
                         questions: {
                           create: [
@@ -142,7 +142,7 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                   questionSets: {
                     create: [
                       {
-                        type: 'loop',
+                        type: TemplateQuestionSetType.LOOP,
                         position: 1,
                         questions: {
                           create: [
@@ -165,7 +165,7 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                         },
                       },
                       {
-                        type: 'loop',
+                        type: TemplateQuestionSetType.FLAT,
                         position: 2,
                         questions: {
                           create: [
@@ -191,7 +191,7 @@ export async function createTemplate(prevState: any, formDara: FormData) {
                   questionSets: {
                     create: [
                       {
-                        type: 'flat',
+                        type: TemplateQuestionSetType.FLAT,
                         position: 1,
                         questions: {
                           create: [

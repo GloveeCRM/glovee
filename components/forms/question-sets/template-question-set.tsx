@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 
+import { TemplateQuestionSetType as TemplateQuestionSetTypes } from '@prisma/client'
 import { TemplateQuestionSetType } from '@/lib/types/template'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
 import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
@@ -57,7 +58,7 @@ export default function TemplateQuestionSet({ questionSet }: TemplateQuestionSet
         ref={templateQuestionSetRef}
       >
         <TemplateQuestionSetMenuButton onClickDelete={handleClickDeleteQuestionSet} />
-        {questionSet.type === 'flat' ? (
+        {questionSet.type === TemplateQuestionSetTypes.FLAT ? (
           <FlatQuestionSetEdit
             questionSetId={questionSet.id}
             questions={questions}
