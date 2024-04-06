@@ -57,7 +57,7 @@ export default function TemplateQuestionSet({ questionSet }: TemplateQuestionSet
   const showDropzoneBefore = questionSet.position === 0
 
   return (
-    <div>
+    <div className="py-[2px]">
       {showDropzoneBefore && (
         <NonEmptySectionDropzone position={questionSet.position} questionSet={questionSet} />
       )}
