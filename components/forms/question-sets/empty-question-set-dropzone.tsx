@@ -3,7 +3,10 @@
 import { useState } from 'react'
 import { v4 as uuid4 } from 'uuid'
 
-import { TemplateQuestion } from '@prisma/client'
+import {
+  TemplateQuestion,
+  TemplateQuestionSetType as TemplateQuestionSetTypes,
+} from '@prisma/client'
 import { TemplateQuestionSetType } from '@/lib/types/template'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
@@ -11,7 +14,7 @@ import useQuestionActions from '@/hooks/template/use-question-actions'
 
 interface EmptyQuestionSetDropzone {
   questionSetId: string
-  questionSetType: string
+  questionSetType: TemplateQuestionSetTypes
 }
 
 export default function EmptyQuestionSetDropzone({
@@ -23,10 +26,13 @@ export default function EmptyQuestionSetDropzone({
   const { createQuestionSetInSection } = useQuestionSetActions()
   const { createQuestionInQuestionSet } = useQuestionActions()
 
-  const isQuestionOverFlat = questionSetType === 'flat' && draggedObject?.type === 'question'
-  const isQuestionSetOverLoop = questionSetType === 'loop' && draggedObject?.type === 'questionSet'
-  const isQuestionSetOverDependsOn =
-    questionSetType === 'dependsOn' && draggedObject?.type === 'questionSet'
+  const isFlat = questionSetType === TemplateQuestionSetTypes.FLAT
+  const isLoop = questionSetType === TemplateQuestionSetTypes.LOOP
+  const isDependsOn = questionSetType === TemplateQuestionSetTypes.DEPENDS_ON
+
+  const isQuestionOverFlat = isFlat && draggedObject?.type === 'question'
+  const isQuestionSetOverLoop = isLoop && draggedObject?.type === 'questionSet'
+  const isQuestionSetOverDependsOn = isDependsOn && draggedObject?.type === 'questionSet'
 
   const isDropAllowed =
     isDraggedOver && (isQuestionOverFlat || isQuestionSetOverLoop || isQuestionSetOverDependsOn)
@@ -68,9 +74,27 @@ export default function EmptyQuestionSetDropzone({
     }
   }
 
+  const questionSetClasses = {
+    FLAT: {
+      allowed: 'border-n-700 bg-g-200 font-medium',
+      notAllowed: 'border-n-400 bg-g-200/70 text-n-500',
+      neutral: 'border-n-500 bg-g-200/80',
+    },
+    LOOP: {
+      allowed: 'border-n-700 bg-r-200 font-medium',
+      notAllowed: 'border-n-400 bg-r-200/70 text-n-500',
+      neutral: 'border-n-500 bg-r-200/80',
+    },
+    DEPENDS_ON: {
+      allowed: 'border-n-700 bg-b-300 font-medium',
+      notAllowed: 'border-n-400 bg-b-300/70 text-n-500',
+      neutral: 'border-n-500 bg-b-300/80',
+    },
+  }
+
   return (
     <div
-      className={`rounded border-[1px] border-dashed ${isDraggedOver ? (isDropAllowed ? 'border-n-700 bg-g-200 font-medium' : 'border-n-400 bg-g-200/70 text-n-500') : 'border-n-500 bg-g-200/80'}`}
+      className={`rounded border-[1px] border-dashed ${isDraggedOver ? (isDropAllowed ? questionSetClasses[questionSetType].allowed : questionSetClasses[questionSetType].notAllowed) : questionSetClasses[questionSetType].neutral}`}
     >
       <div
         className="flex h-[65px] items-center justify-center text-center text-[12px]"

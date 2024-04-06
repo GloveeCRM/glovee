@@ -9,6 +9,7 @@ import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
 import NonEmptySectionDropzone from '@/components/admin/template/edit/non-empty-section-dropzone'
 import TemplateQuestionSetMenuButton from './template-question-set-menu-button'
 import FlatQuestionSetEdit from './flat/flat-question-set-edit'
+import LoopQuestionSetEdit from './loop/loop-question-set-edit'
 
 interface TemplateQuestionSetProps {
   questionSet: TemplateQuestionSetType
@@ -62,6 +63,12 @@ export default function TemplateQuestionSet({ questionSet }: TemplateQuestionSet
           <FlatQuestionSetEdit
             questionSetId={questionSet.id}
             questions={questions}
+            selected={isQuestionSetSelected}
+          />
+        ) : questionSet.type === TemplateQuestionSetTypes.LOOP ? (
+          <LoopQuestionSetEdit
+            questionSetId={questionSet.id}
+            questionSets={[]}
             selected={isQuestionSetSelected}
           />
         ) : (

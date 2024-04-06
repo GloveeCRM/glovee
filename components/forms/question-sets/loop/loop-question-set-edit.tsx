@@ -1,69 +1,33 @@
-'use client'
-
-import { useEffect, useRef } from 'react'
 import { FiPlus } from 'react-icons/fi'
 
-import { useTemplateEditContext } from '@/contexts/template-edit-context'
-import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
+import { TemplateQuestionSetType as TemplateQuestionSetTypes } from '@prisma/client'
 import { TemplateQuestionSetType } from '@/lib/types/template'
-import LoopQuestionSetEditQuestionWrapper from './loop-question-set-edit-question-wrapper'
-import LoopQuestionSetEditMenuButton from './loop-question-set-edit-menu-button'
-import EmptyLoopQuestionSetQuestionDropzone from './empty-loop-question-set-question-dropzone'
-import NonEmptySectionDropzone from '@/components/admin/template/edit/non-empty-section-dropzone'
+import EmptyQuestionSetDropzone from '../empty-question-set-dropzone'
 
 interface LoopQuestionSetEditProps {
-  questionSet: TemplateQuestionSetType
+  questionSetId: string
+  questionSets: TemplateQuestionSetType[]
+  selected: boolean
 }
 
-export default function LoopQuestionSetEdit({ questionSet }: LoopQuestionSetEditProps) {
-  const { selectedQuestionSetId, setSelectedQuestionSetId } = useTemplateEditContext()
-  const { removeQuestionSetFromSection } = useQuestionSetActions()
-
-  const isQuestionSetSelected = selectedQuestionSetId === questionSet.id
-
-  const loopQuestionSetRef = useRef<HTMLDivElement>(null)
-
-  const questions = questionSet.questions
-
-  function handleClickQuestionSet() {
-    setSelectedQuestionSetId(questionSet.id)
-  }
-
-  function handleClickDeleteQuestionSet() {
-    removeQuestionSetFromSection(questionSet.id)
-    setSelectedQuestionSetId('')
-  }
-
-  useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (loopQuestionSetRef.current && !loopQuestionSetRef.current.contains(e.target as Node)) {
-        setSelectedQuestionSetId('')
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [])
-
-  const showQuestionSetDropzoneBefore = questionSet.position === 0
-
+export default function LoopQuestionSetEdit({
+  questionSetId,
+  questionSets,
+  selected,
+}: LoopQuestionSetEditProps) {
   return (
-    <div>
-      {showQuestionSetDropzoneBefore && <NonEmptySectionDropzone position={questionSet.position} />}
-      <div
-        className={`group/questionSet rounded bg-r-500 ${isQuestionSetSelected ? 'border-[3px] border-r-700 p-[5px] pt-[13px]' : 'p-[8px] pt-[16px]'}`}
-        onClick={handleClickQuestionSet}
-        ref={loopQuestionSetRef}
-      >
-        <LoopQuestionSetEditMenuButton onClickDelete={handleClickDeleteQuestionSet} />
-        {questions && questions.length > 0 ? (
-          <LoopQuestionSetEditQuestionWrapper questions={questions} />
-        ) : (
-          <EmptyLoopQuestionSetQuestionDropzone />
-        )}
-        <LoopQuestionSetEditFooter />
-      </div>
-      <NonEmptySectionDropzone position={questionSet.position + 1} />
+    <div
+      className={`rounded bg-r-500 ${selected ? 'border-[3px] border-r-700 p-[5px] pt-[13px]' : 'p-[8px] pt-[16px]'}`}
+    >
+      {questionSets && questionSets.length > 0 ? (
+        <div>Question Sets</div>
+      ) : (
+        <EmptyQuestionSetDropzone
+          questionSetId={questionSetId}
+          questionSetType={TemplateQuestionSetTypes.LOOP}
+        />
+      )}
+      <LoopQuestionSetEditFooter />
     </div>
   )
 }
