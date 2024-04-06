@@ -7,7 +7,24 @@ export default function useQuestionActions() {
   const { template, setTemplate } = useTemplateEditContext()
 
   function getQuestionById(questionId: string) {
-    if (!template || !template.categories) return
+    if (!template || !template.categories) return null
+
+    function searchQuestions(questionSets: TemplateQuestionSetType[]): TemplateQuestionType | null {
+      for (const questionSet of questionSets) {
+        if (!questionSet.questions) continue
+
+        for (const question of questionSet.questions) {
+          if (question.id === questionId) return question
+        }
+
+        // Recursively search in nested question sets, if any
+        if (questionSet.questionSets && questionSet.questionSets.length > 0) {
+          const foundQuestion = searchQuestions(questionSet.questionSets)
+          if (foundQuestion) return foundQuestion
+        }
+      }
+      return null
+    }
 
     for (const category of template.categories) {
       if (!category.sections) continue
@@ -15,15 +32,12 @@ export default function useQuestionActions() {
       for (const section of category.sections) {
         if (!section.questionSets) continue
 
-        for (const questionSet of section.questionSets) {
-          if (!questionSet.questions) continue
-
-          for (const question of questionSet.questions) {
-            if (question.id === questionId) return question
-          }
-        }
+        const foundQuestion = searchQuestions(section.questionSets)
+        if (foundQuestion) return foundQuestion
       }
     }
+
+    return null
   }
 
   function getQuestionsInQuestionSet(questionSetId: string) {
