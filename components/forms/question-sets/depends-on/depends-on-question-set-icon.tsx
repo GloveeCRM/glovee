@@ -1,5 +1,6 @@
 'use client'
 
+import { TemplateQuestionSetType } from '@prisma/client'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 
 export default function DependsOnQuestionSetIcon() {
@@ -10,7 +11,7 @@ export default function DependsOnQuestionSetIcon() {
     setDraggedObject({
       type: 'questionSet',
       object: {
-        type: 'dependsOn',
+        type: TemplateQuestionSetType.DEPENDS_ON,
       },
     })
   }

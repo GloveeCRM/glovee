@@ -5,8 +5,13 @@ import { revalidatePath } from 'next/cache'
 import { prisma } from '@/prisma/prisma'
 import { getAuthenticatedUser } from '@/auth'
 import { TemplateSchema } from '../zod/schemas'
-import { TemplateType } from '../types/template'
-import { title } from 'process'
+import {
+  TemplateCategoryType,
+  TemplateSectionType,
+  TemplateType,
+  TemplateQuestionSetType,
+  TemplateQuestionType,
+} from '../types/template'
 import { fetchFullTemplateById } from '../data/template'
 
 export async function createTemplate(prevState: any, formDara: FormData) {
@@ -34,181 +39,8 @@ export async function createTemplate(prevState: any, formDara: FormData) {
       description,
       categories: {
         create: [
-          {
-            title: 'Personal Information',
-            position: 0,
-            sections: {
-              create: [
-                {
-                  title: 'Basic Information',
-                  position: 0,
-                  questionSets: {
-                    create: [
-                      {
-                        type: 'flat',
-                        position: 0,
-                        questions: {
-                          create: [
-                            {
-                              prompt: 'What is your full name?',
-                              position: 0,
-                              type: 'textInput',
-                            },
-                            {
-                              prompt: 'What is your date of birth?',
-                              position: 1,
-                              type: 'textInput',
-                            },
-                          ],
-                        },
-                      },
-                      {
-                        type: 'loop',
-                        position: 1,
-                        questions: {
-                          create: [
-                            {
-                              prompt:
-                                'what is your address? (add any address you have lived in the past 10 years)',
-                              position: 0,
-                              type: 'textInput',
-                            },
-                            {
-                              prompt: 'job position',
-                              position: 1,
-                              type: 'textInput',
-                            },
-                          ],
-                        },
-                      },
-                    ],
-                  },
-                },
-                {
-                  title: 'Contact Information',
-                  position: 1,
-                  questionSets: {
-                    create: [
-                      {
-                        type: 'flat',
-                        position: 0,
-                        questions: {
-                          create: [
-                            {
-                              prompt: 'What is your email address?',
-                              position: 0,
-                              type: 'textInput',
-                            },
-                            {
-                              prompt: 'What is your phone number?',
-                              position: 1,
-                              type: 'textInput',
-                            },
-                          ],
-                        },
-                      },
-                      {
-                        type: 'flat',
-                        position: 1,
-                        questions: {
-                          create: [
-                            {
-                              prompt: 'What is your emergency contact?',
-                              position: 0,
-                              type: 'textInput',
-                            },
-                            {
-                              prompt: 'What is your emergency contact phone number?',
-                              position: 1,
-                              type: 'textInput',
-                            },
-                          ],
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-          {
-            title: 'Family Information',
-            position: 1,
-            sections: {
-              create: [
-                {
-                  title: 'Family Members',
-                  position: 1,
-                  questionSets: {
-                    create: [
-                      {
-                        type: 'loop',
-                        position: 1,
-                        questions: {
-                          create: [
-                            {
-                              prompt: 'What is your family member name?',
-                              position: 0,
-                              type: 'textInput',
-                            },
-                            {
-                              prompt: 'What is your family member date of birth?',
-                              position: 1,
-                              type: 'textInput',
-                            },
-                            {
-                              prompt: 'What is your family member occupation?',
-                              position: 2,
-                              type: 'textInput',
-                            },
-                          ],
-                        },
-                      },
-                      {
-                        type: 'loop',
-                        position: 2,
-                        questions: {
-                          create: [
-                            {
-                              prompt: 'father side family members name',
-                              position: 1,
-                              type: 'textInput',
-                            },
-                            {
-                              prompt: 'mother side family members name',
-                              position: 2,
-                              type: 'textInput',
-                            },
-                          ],
-                        },
-                      },
-                    ],
-                  },
-                },
-                {
-                  title: 'Family Health History',
-                  position: 2,
-                  questionSets: {
-                    create: [
-                      {
-                        type: 'flat',
-                        position: 1,
-                        questions: {
-                          create: [
-                            {
-                              prompt: 'What is your family member health history?',
-                              position: 1,
-                              type: 'textInput',
-                            },
-                          ],
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
+          { title: 'Untitled Category 1', position: 0 },
+          { title: 'Untitled Category 2', position: 1 },
         ],
       },
     },
@@ -391,126 +223,129 @@ export async function updateFullTemplateById(
     })
 
     await prisma.template.update({
-      where: {
-        id: templateId,
-      },
+      where: { id: templateId },
       data: {
         title: template.title,
         description: template.description,
-        categories: {
-          upsert: template.categories?.map((category) => ({
-            where: { id: category.id },
-            update: {
-              title: category.title,
-              position: category.position,
-              sections: {
-                upsert: category.sections?.map((section) => ({
-                  where: { id: section.id },
-                  update: {
-                    title: section.title,
-                    position: section.position,
-                    questionSets: {
-                      upsert: section.questionSets?.map((questionSet) => ({
-                        where: { id: questionSet.id },
-                        update: {
-                          type: questionSet.type,
-                          position: questionSet.position,
-                          questions: {
-                            upsert: questionSet.questions?.map((question) => ({
-                              where: { id: question.id },
-                              update: {
-                                type: question.type,
-                                prompt: question.prompt,
-                                position: question.position,
-                                helperText: question.helperText,
-                              },
-                              create: {
-                                id: question.id,
-                                type: question.type,
-                                prompt: question.prompt,
-                                position: question.position,
-                                helperText: question.helperText,
-                              },
-                            })),
-                          },
-                        },
-                        create: {
-                          id: questionSet.id,
-                          type: questionSet.type,
-                          position: questionSet.position,
-                          questions: {
-                            create: questionSet.questions?.map((question) => ({
-                              id: question.id,
-                              type: question.type,
-                              prompt: question.prompt,
-                              position: question.position,
-                              helperText: question.helperText,
-                            })),
-                          },
-                        },
-                      })),
-                    },
-                  },
-                  create: {
-                    id: section.id,
-                    title: section.title,
-                    position: section.position,
-                    questionSets: {
-                      create: section.questionSets?.map((questionSet) => ({
-                        id: questionSet.id,
-                        type: questionSet.type,
-                        position: questionSet.position,
-                        questions: {
-                          create: questionSet.questions?.map((question) => ({
-                            id: question.id,
-                            type: question.type,
-                            prompt: question.prompt,
-                            position: question.position,
-                            helperText: question.helperText,
-                          })),
-                        },
-                      })),
-                    },
-                  },
-                })),
-              },
-            },
-            create: {
-              id: category.id,
-              title: category.title,
-              position: category.position,
-              sections: {
-                create: category.sections?.map((section) => ({
-                  id: section.id,
-                  title: section.title,
-                  position: section.position,
-                  questionSets: {
-                    create: section.questionSets?.map((questionSet) => ({
-                      id: questionSet.id,
-                      type: questionSet.type,
-                      position: questionSet.position,
-                      questions: {
-                        create: questionSet.questions?.map((question) => ({
-                          id: question.id,
-                          type: question.type,
-                          prompt: question.prompt,
-                          position: question.position,
-                          helperText: question.helperText,
-                        })),
-                      },
-                    })),
-                  },
-                })),
-              },
-            },
-          })),
-        },
       },
     })
+
+    for (const category of template.categories ?? []) {
+      await upsertCategoryByTemplateId(templateId, category)
+    }
 
     revalidatePath(`/admin/template/${templateId}/edit`)
     return { success: 'Template updated!' }
   } catch (error) {
     return { error: 'Failed to update template!' }
   }
+}
+
+async function upsertCategoryByTemplateId(
+  templateId: string,
+  category: TemplateCategoryType
+): Promise<TemplateCategoryType> {
+  await prisma.templateCategory.upsert({
+    where: { id: category.id },
+    update: {
+      title: category.title,
+      position: category.position,
+    },
+    create: {
+      id: category.id,
+      title: category.title,
+      position: category.position,
+      templateId,
+    },
+  })
+
+  for (const section of category.sections ?? []) {
+    await upsertSectionByCategoryId(section, category.id)
+  }
+
+  return category
+}
+
+async function upsertSectionByCategoryId(
+  section: TemplateSectionType,
+  categoryId: string
+): Promise<TemplateSectionType> {
+  await prisma.templateSection.upsert({
+    where: { id: section.id },
+    update: {
+      title: section.title,
+      position: section.position,
+    },
+    create: {
+      id: section.id,
+      title: section.title,
+      position: section.position,
+      categoryId,
+    },
+  })
+
+  for (const questionSet of section.questionSets ?? []) {
+    await upsertQuestionSetBySectionIdAndParentQuestionSetId(questionSet, section.id, null)
+  }
+
+  return section
+}
+
+async function upsertQuestionSetBySectionIdAndParentQuestionSetId(
+  questionSet: TemplateQuestionSetType,
+  sectionId: string,
+  parentQuestionSetId: string | null
+): Promise<TemplateQuestionSetType> {
+  await prisma.templateQuestionSet.upsert({
+    where: { id: questionSet.id },
+    update: {
+      type: questionSet.type,
+      position: questionSet.position,
+      questionSetId: parentQuestionSetId,
+    },
+    create: {
+      id: questionSet.id,
+      type: questionSet.type,
+      position: questionSet.position,
+      sectionId: sectionId,
+      questionSetId: parentQuestionSetId,
+    },
+  })
+
+  for (const question of questionSet.questions ?? []) {
+    await upsertQuestionByQuestionSetId(question, questionSet.id)
+  }
+
+  for (const childQuestionSet of questionSet.questionSets ?? []) {
+    await upsertQuestionSetBySectionIdAndParentQuestionSetId(
+      childQuestionSet,
+      sectionId,
+      questionSet.id
+    )
+  }
+
+  return questionSet
+}
+
+async function upsertQuestionByQuestionSetId(
+  question: TemplateQuestionType,
+  questionSetId: string
+): Promise<TemplateQuestionType> {
+  return await prisma.templateQuestion.upsert({
+    where: { id: question.id },
+    update: {
+      type: question.type,
+      prompt: question.prompt,
+      position: question.position,
+      helperText: question.helperText,
+    },
+    create: {
+      id: question.id,
+      type: question.type,
+      prompt: question.prompt,
+      position: question.position,
+      helperText: question.helperText,
+      questionSetId: questionSetId,
+    },
+  })
 }

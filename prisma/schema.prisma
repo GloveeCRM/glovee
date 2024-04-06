@@ -134,9 +134,15 @@ model Section {
   category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 }
 
+enum QuestionSetType {
+  FLAT
+  LOOP
+  DEPENDS_ON
+}
+
 model QuestionSet {
   id          String @id @default(cuid())
-  type        String
+  type        QuestionSetType
   position    Int
   sectionId   String
   questions   Question[]
@@ -144,9 +150,19 @@ model QuestionSet {
   section     Section @relation(fields: [sectionId], references: [id], onDelete: Cascade)
 }
 
+enum QuestionType {
+  TEXT_INPUT
+  TEXTAREA
+  SELECT
+  DATE_INPUT
+  RADIO
+  CHECKBOX
+  DOCUMENT
+}
+
 model Question {
   id          String @id @default(cuid())
-  type        String
+  type        QuestionType
   prompt      String
   position    Int
   helperText  String?
@@ -197,20 +213,41 @@ model TemplateSection {
   category    TemplateCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 }
 
+enum TemplateQuestionSetType {
+  FLAT
+  LOOP
+  DEPENDS_ON
+}
+
 model TemplateQuestionSet {
-  id          String @id @default(cuid())
-  type        String
-  position    Int
-  sectionId   String
+  id            String @id @default(cuid())
+  type          TemplateQuestionSetType
+  position      Int
+  sectionId     String
+  questionSetId String?
 
-  questions   TemplateQuestion[]
+  questions     TemplateQuestion[]
+  questionSets  TemplateQuestionSet[] @relation("QuestionSetRelation")
 
-  section     TemplateSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  section       TemplateSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  questionSet   TemplateQuestionSet? @relation("QuestionSetRelation", fields: [questionSetId], references: [id])
+
+  @@map("template_question_set")
+}
+
+enum TemplateQuestionType {
+  TEXT_INPUT
+  TEXTAREA
+  SELECT
+  DATE_INPUT
+  RADIO
+  CHECKBOX
+  DOCUMENT
 }
 
 model TemplateQuestion {
   id          String @id @default(cuid())
-  type        String
+  type        TemplateQuestionType
   prompt      String
   position    Int
   helperText  String?

@@ -5,19 +5,19 @@ import { useEffect, useRef } from 'react'
 import { TemplateQuestionType } from '@/lib/types/template'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
 import useQuestionActions from '@/hooks/template/use-question-actions'
-import TextareaQuestionEditMenuButton from './textarea-question-edit-menu-button'
+import TemplateQuestionMenuButton from './template-question-menu-button'
+import TextInputQuestion from './text-input-question/text-input-question'
 
-interface TextareaQuestionEditProps {
+interface TemplateQuestionProps {
   question: TemplateQuestionType
 }
 
-export default function TextareaQuestionEdit({ question }: TextareaQuestionEditProps) {
+export default function TemplateQuestion({ question }: TemplateQuestionProps) {
   const { setSelectedQuestionSetId, selectedQuestionId, setSelectedQuestionId } =
     useTemplateEditContext()
-
   const { removeQuestionFromSection } = useQuestionActions()
 
-  const textareaQuestionEditRef = useRef<HTMLDivElement>(null)
+  const questionEditRef = useRef<HTMLDivElement>(null)
 
   const isQuestionSelected = selectedQuestionId === question.id
 
@@ -33,37 +33,26 @@ export default function TextareaQuestionEdit({ question }: TextareaQuestionEditP
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
-      if (
-        textareaQuestionEditRef.current &&
-        !textareaQuestionEditRef.current.contains(e.target as Node)
-      ) {
+      if (questionEditRef.current && !questionEditRef.current.contains(e.target as Node)) {
         setSelectedQuestionId('')
       }
     }
 
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [])
+  }, [setSelectedQuestionId])
 
   return (
     <div
       className={`group rounded bg-n-100 text-[14px] ${isQuestionSelected ? 'border-[1px] border-n-700 p-[5px]' : 'p-[6px]'}`}
-      ref={textareaQuestionEditRef}
+      ref={questionEditRef}
       onClick={handleClickQuestion}
     >
       <div className="flex justify-between">
         <div className="mb-[4px]">{question.prompt}</div>
-        <TextareaQuestionEditMenuButton
-          onClickDelete={handleClickDeleteQuestion}
-          display={isQuestionSelected}
-        />
+        <TemplateQuestionMenuButton onClickDelete={handleClickDeleteQuestion} />
       </div>
-      <textarea
-        className="w-full rounded border-[1px] border-n-400 bg-n-100 p-[4px] px-[6px] text-[12px] focus:outline-none"
-        placeholder="Type your answer here..."
-        readOnly
-        rows={3}
-      />
+      <TextInputQuestion question={question} readOnly={true} />
     </div>
   )
 }

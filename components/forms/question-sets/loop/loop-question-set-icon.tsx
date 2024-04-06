@@ -1,5 +1,6 @@
 import { FiPlus } from 'react-icons/fi'
 
+import { TemplateQuestionSetType } from '@prisma/client'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 
 export default function LoopQuestionSetIcon() {
@@ -10,7 +11,7 @@ export default function LoopQuestionSetIcon() {
     setDraggedObject({
       type: 'questionSet',
       object: {
-        type: 'loop',
+        type: TemplateQuestionSetType.LOOP,
       },
     })
   }

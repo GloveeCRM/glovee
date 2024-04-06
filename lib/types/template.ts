@@ -19,6 +19,7 @@ export type TemplateSectionType = TemplateSection & {
 }
 
 export type TemplateQuestionSetType = TemplateQuestionSet & {
+  questionSets?: TemplateQuestionSetType[]
   questions?: TemplateQuestionType[]
 }
 

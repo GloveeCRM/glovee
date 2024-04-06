@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuid4 } from 'uuid'
 
 import {
   TemplateQuestion,
@@ -9,22 +9,18 @@ import {
 } from '@prisma/client'
 import { TemplateQuestionSetType } from '@/lib/types/template'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
-import useQuestionActions from '@/hooks/template/use-question-actions'
 import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
+import useQuestionActions from '@/hooks/template/use-question-actions'
 
-interface NonEmptyQuestionSetDropzoneProps {
+interface EmptyQuestionSetDropzone {
   questionSet: TemplateQuestionSetType
-  position: number
 }
 
-export default function NonEmptyQuestionSetDropzone({
-  questionSet,
-  position,
-}: NonEmptyQuestionSetDropzoneProps) {
+export default function EmptyQuestionSetDropzone({ questionSet }: EmptyQuestionSetDropzone) {
   const [isDraggedOver, setIsDraggedOver] = useState<boolean>(false)
   const { draggedObject, setDraggedObject } = useDragAndDropContext()
-  const { getQuestionsInQuestionSet, createQuestionInQuestionSet } = useQuestionActions()
   const { createQuestionSetInSection } = useQuestionSetActions()
+  const { createQuestionInQuestionSet } = useQuestionActions()
 
   const isFlat = questionSet.type === TemplateQuestionSetTypes.FLAT
   const isLoop = questionSet.type === TemplateQuestionSetTypes.LOOP
@@ -37,8 +33,6 @@ export default function NonEmptyQuestionSetDropzone({
   const isDropAllowed =
     isDraggedOver && (isQuestionOverFlat || isQuestionSetOverLoop || isQuestionSetOverDependsOn)
 
-  const questionsInQuestionSet = getQuestionsInQuestionSet(questionSet.id)
-
   function handleDragEnter(e: React.DragEvent<HTMLDivElement>) {
     e.preventDefault()
     setIsDraggedOver(true)
@@ -49,32 +43,24 @@ export default function NonEmptyQuestionSetDropzone({
     setIsDraggedOver(false)
   }
 
-  function handleDragOver(e: React.DragEvent<HTMLDivElement>) {
-    e.preventDefault()
-    if (!isDropAllowed) {
-      e.dataTransfer.dropEffect = 'none'
-    }
-  }
-
   function handleDrop(e: React.DragEvent<HTMLDivElement>) {
     e.preventDefault()
-    setIsDraggedOver(false)
     if (isDropAllowed) {
       if (isQuestionOverFlat) {
         const question: TemplateQuestion = {
-          id: uuidv4(),
+          id: uuid4(),
           type: draggedObject.object.type,
           prompt: 'An Untitled Question',
-          position: position,
+          position: 0,
           helperText: 'No helper text',
           questionSetId: questionSet.id,
         }
         createQuestionInQuestionSet(questionSet.id, question)
       } else if (isQuestionSetOverLoop || isQuestionSetOverDependsOn) {
         const newQuestionSet: TemplateQuestionSetType = {
-          id: uuidv4(),
+          id: uuid4(),
           type: draggedObject.object.type,
-          position: position,
+          position: 0,
           sectionId: questionSet.sectionId,
           questionSetId: questionSet.id,
         }
@@ -82,18 +68,49 @@ export default function NonEmptyQuestionSetDropzone({
       }
     }
     setDraggedObject(null)
+    setIsDraggedOver(false)
   }
 
-  const isTheFirstDropzone = position === 0
-  const isTheLastDropzone = questionsInQuestionSet && questionsInQuestionSet.length === position
+  function handleDragOver(e: React.DragEvent<HTMLDivElement>) {
+    e.preventDefault()
+    if (!isDropAllowed) {
+      e.dataTransfer.dropEffect = 'none'
+    }
+  }
+
+  const questionSetClasses = {
+    FLAT: {
+      allowed: 'border-n-700 bg-g-200 font-medium',
+      notAllowed: 'border-n-400 bg-g-200/70 text-n-500',
+      neutral: 'border-n-500 bg-g-200/80',
+    },
+    LOOP: {
+      allowed: 'border-n-700 bg-r-200 font-medium',
+      notAllowed: 'border-n-400 bg-r-200/70 text-n-500',
+      neutral: 'border-n-500 bg-r-200/80',
+    },
+    DEPENDS_ON: {
+      allowed: 'border-n-700 bg-b-300 font-medium',
+      notAllowed: 'border-n-400 bg-b-300/70 text-n-500',
+      neutral: 'border-n-500 bg-b-300/80',
+    },
+  }
+
+  const text = isFlat ? 'Drag an Input Type Here' : 'Drag a Question Set Type Here'
 
   return (
     <div
-      className={`h-[8px] bg-blue-300 opacity-0 transition-opacity duration-75 ${isTheFirstDropzone ? 'mb-[2px] rounded-tl-full rounded-tr-full' : isTheLastDropzone ? 'mt-[2px] rounded-bl-full rounded-br-full' : 'my-[2px] rounded-full'} ${isDropAllowed && 'bg-blue-500 opacity-100'}`}
-      onDragEnter={handleDragEnter}
-      onDragLeave={handleDragLeave}
-      onDragOver={handleDragOver}
-      onDrop={handleDrop}
-    />
+      className={`rounded border-[1px] border-dashed ${isDraggedOver ? (isDropAllowed ? questionSetClasses[questionSet.type].allowed : questionSetClasses[questionSet.type].notAllowed) : questionSetClasses[questionSet.type].neutral}`}
+    >
+      <div
+        className="flex h-[65px] items-center justify-center text-center text-[12px]"
+        onDragEnter={handleDragEnter}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+        onDragOver={handleDragOver}
+      >
+        {isDropAllowed ? 'Drop it here' : text}
+      </div>
+    </div>
   )
 }

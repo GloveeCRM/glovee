@@ -1,15 +1,15 @@
 import { motion } from 'framer-motion'
 
-import FlatQuestionSetIcon from '@/components/forms/question-set-types/flat/flat-question-set-icon'
-import DependsOnQuestionSetIcon from '@/components/forms/question-set-types/depends-on/depends-on-question-set-icon'
-import LoopQuestionSetIcon from '@/components/forms/question-set-types/loop/loop-question-set-icon'
-import CheckboxQuestionIcon from '@/components/forms/question-input-types/checkbox-question/checkbox-question-icon'
-import TextInputQuestionIcon from '@/components/forms/question-input-types/text-input-question/text-input-question-icon'
-import TextareaQuestionIcon from '@/components/forms/question-input-types/textarea-question/textarea-question-icon'
-import SelectQuestionIcon from '@/components/forms/question-input-types/select-question/select-question-icon'
-import DateInputQuestionIcon from '@/components/forms/question-input-types/date-input-question/date-input-question-icon'
-import RadioQuestionIcon from '@/components/forms/question-input-types/radio-question/radio-question-icon'
-import DocumentQuestionIcon from '@/components/forms/question-input-types/document-question/document-question-icon'
+import FlatQuestionSetIcon from '@/components/forms/question-sets/flat/flat-question-set-icon'
+import DependsOnQuestionSetIcon from '@/components/forms/question-sets/depends-on/depends-on-question-set-icon'
+import LoopQuestionSetIcon from '@/components/forms/question-sets/loop/loop-question-set-icon'
+import CheckboxQuestionIcon from '@/components/forms/questions/checkbox-question/checkbox-question-icon'
+import TextInputQuestionIcon from '@/components/forms/questions/text-input-question/text-input-question-icon'
+import TextareaQuestionIcon from '@/components/forms/questions/textarea-question/textarea-question-icon'
+import SelectQuestionIcon from '@/components/forms/questions/select-question/select-question-icon'
+import DateInputQuestionIcon from '@/components/forms/questions/date-input-question/date-input-question-icon'
+import RadioQuestionIcon from '@/components/forms/questions/radio-question/radio-question-icon'
+import DocumentQuestionIcon from '@/components/forms/questions/document-question/document-question-icon'
 
 export default function TemplateEditDefaultToolbar() {
   return (
