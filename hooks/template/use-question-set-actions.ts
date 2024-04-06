@@ -6,22 +6,6 @@ import { TemplateQuestionSetType } from '@/lib/types/template'
 export default function useQuestionSetActions() {
   const { template, setTemplate } = useTemplateEditContext()
 
-  // function getQuestionSetById(questionSetId: string) {
-  //   if (!template || !template.categories) return
-
-  //   for (const category of template.categories) {
-  //     if (!category.sections) continue
-
-  //     for (const section of category.sections) {
-  //       if (!section.questionSets) continue
-
-  //       for (const questionSet of section.questionSets) {
-  //         if (questionSet.id === questionSetId) return questionSet
-  //       }
-  //     }
-  //   }
-  // }
-
   function getQuestionSetById(
     questionSetId: string,
     questionSets: TemplateQuestionSetType[] | null = null
@@ -61,7 +45,10 @@ export default function useQuestionSetActions() {
       if (!category.sections) continue
 
       for (const section of category.sections) {
-        if (section.id === sectionId) return section.questionSets
+        if (section.id === sectionId) {
+          if (!section.questionSets) return []
+          return section.questionSets.filter((qs) => qs.questionSetId === null)
+        }
       }
     }
   }

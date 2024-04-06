@@ -20,13 +20,16 @@ export default function NonEmptySectionDropzone({
   const [isDraggedOver, setIsDraggedOver] = useState<boolean>(false)
   const { selectedSectionId } = useTemplateEditContext()
   const { draggedObject, setDraggedObject } = useDragAndDropContext()
-  const { getQuestionSetsInSection, createQuestionSetInSection } = useQuestionSetActions()
+  const { getQuestionSetById, getQuestionSetsInSection, createQuestionSetInSection } =
+    useQuestionSetActions()
 
   const isDropAllowed = isDraggedOver && draggedObject?.type === 'questionSet'
 
   const isInQuestionSet = questionSet.questionSetId !== null
 
   const questionSetsInSection = getQuestionSetsInSection(selectedSectionId)
+  const questionSetsInQuestionSet =
+    questionSet.questionSetId && getQuestionSetById(questionSet.questionSetId)?.questionSets
 
   function handleDragEnter(e: React.DragEvent<HTMLDivElement>) {
     e.preventDefault()
@@ -49,7 +52,6 @@ export default function NonEmptySectionDropzone({
     e.preventDefault()
     setIsDraggedOver(false)
     if (isDropAllowed) {
-      console.log('Dropped', position)
       const newQuestionSet: TemplateQuestionSetType = {
         id: uuidv4(),
         type: draggedObject.object.type,
@@ -64,7 +66,9 @@ export default function NonEmptySectionDropzone({
   }
 
   const isTheFirstDropzone = position === 0
-  const isTheLastDropzone = questionSetsInSection && questionSetsInSection.length === position
+  const isTheLastDropzone = isInQuestionSet
+    ? questionSetsInQuestionSet && questionSetsInQuestionSet.length === position
+    : questionSetsInSection && questionSetsInSection.length === position
 
   return (
     <div
