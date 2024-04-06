@@ -1,7 +1,7 @@
 'use client'
 
-import { useTemplateEditContext } from '@/contexts/template-edit-context'
 import { TemplateQuestionSetType, TemplateQuestionType } from '@/lib/types/template'
+import { useTemplateEditContext } from '@/contexts/template-edit-context'
 
 export default function useQuestionActions() {
   const { template, setTemplate } = useTemplateEditContext()
@@ -43,17 +43,37 @@ export default function useQuestionActions() {
   function getQuestionsInQuestionSet(questionSetId: string) {
     if (!template || !template.categories) return
 
+    // Recursive helper function to search within nested question sets
+    function searchQuestionSets(
+      questionSets: TemplateQuestionSetType[]
+    ): TemplateQuestionType[] | null {
+      for (const questionSet of questionSets) {
+        // Base case: if the current question set matches, return its questions
+        if (questionSet.id === questionSetId) return questionSet.questions || null
+
+        // Recursive case: if the question set has nested question sets, search within them
+        if (questionSet.questionSets && questionSet.questionSets.length > 0) {
+          const foundQuestions = searchQuestionSets(questionSet.questionSets)
+          if (foundQuestions) return foundQuestions // If questions are found in deeper layers, return them
+        }
+      }
+      return null // Return null if no matching question set is found at any level
+    }
+
+    // Iterating through categories and sections to find and search within the question sets
     for (const category of template.categories) {
       if (!category.sections) continue
 
       for (const section of category.sections) {
         if (!section.questionSets) continue
 
-        for (const questionSet of section.questionSets) {
-          if (questionSet.id === questionSetId) return questionSet.questions
-        }
+        // Call the recursive helper function to search within this section's question sets
+        const foundQuestions = searchQuestionSets(section.questionSets)
+        if (foundQuestions) return foundQuestions // If the matching question set was found, return its questions
       }
     }
+
+    return null // Return null if no matching question set is found in any section
   }
 
   function createQuestionInQuestionSet(questionSetId: string, newQuestion: TemplateQuestionType) {
