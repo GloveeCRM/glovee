@@ -30,7 +30,8 @@ export default function TemplateQuestionSet({ questionSet }: TemplateQuestionSet
   const isLoop = questionSet.type === TemplateQuestionSetTypes.LOOP
   const isDependsOn = questionSet.type === TemplateQuestionSetTypes.DEPENDS_ON
 
-  function handleClickQuestionSet() {
+  function handleClickQuestionSet(e: React.MouseEvent<HTMLDivElement>) {
+    e.stopPropagation()
     setSelectedQuestionSetId(questionSet.id)
   }
 

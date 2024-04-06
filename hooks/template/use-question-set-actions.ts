@@ -61,18 +61,21 @@ export default function useQuestionSetActions() {
     existingQuestionSets: TemplateQuestionSetType[],
     newQuestionSet: TemplateQuestionSetType
   ): TemplateQuestionSetType[] {
-    // If the new question set has a parent ID, try to find the parent and insert the new question set into its children
+    // If the new question set has a parent ID, the logic for nesting inside a specific parent is applied
     if (newQuestionSet.questionSetId) {
       return existingQuestionSets.map((existingQuestionSet) => {
         if (existingQuestionSet.id === newQuestionSet.questionSetId) {
-          // Adjust positions for existing question sets if necessary
-          const updatedChildQuestionSets = existingQuestionSet.questionSets
-            ? [...existingQuestionSet.questionSets, newQuestionSet].sort(
-                (a, b) => a.position - b.position
-              )
+          // Here, you might adjust positions if necessary, before sorting
+          let updatedChildQuestionSets = existingQuestionSet.questionSets
+            ? [...existingQuestionSet.questionSets, newQuestionSet]
             : [newQuestionSet]
 
-          return { ...existingQuestionSet, questionSets: updatedChildQuestionSets }
+          updatedChildQuestionSets = updatePositions(updatedChildQuestionSets)
+
+          return {
+            ...existingQuestionSet,
+            questionSets: updatedChildQuestionSets.sort((a, b) => a.position - b.position),
+          }
         } else if (existingQuestionSet.questionSets) {
           // Recursively search for the parent question set
           return {
@@ -86,9 +89,26 @@ export default function useQuestionSetActions() {
         return existingQuestionSet
       })
     } else {
-      // If there is no parent ID, the new question set is being added to the top level
-      return [...existingQuestionSets, newQuestionSet].sort((a, b) => a.position - b.position)
+      // Adjust positions of all question sets that come after the new question set's position
+      const updatedExistingQuestionSets = existingQuestionSets.map((questionSet) => {
+        if (questionSet.position >= newQuestionSet.position) {
+          return { ...questionSet, position: questionSet.position + 1 }
+        }
+        return questionSet
+      })
+
+      // Then, add the new question set to the collection
+      updatedExistingQuestionSets.push(newQuestionSet)
+
+      // Finally, return the updated list, sorted by position
+      return updatedExistingQuestionSets.sort((a, b) => a.position - b.position)
     }
+  }
+
+  function updatePositions(questionSets: TemplateQuestionSetType[]): TemplateQuestionSetType[] {
+    return questionSets
+      .sort((a, b) => a.position - b.position)
+      .map((questionSet, index) => ({ ...questionSet, position: index }))
   }
 
   function removeQuestionSetFromSection(questionSetId: string) {
