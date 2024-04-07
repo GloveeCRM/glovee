@@ -6,10 +6,9 @@ import useSearchByParams from '@/hooks/use-search-by-params'
 
 interface SearchByParamsProps {
   placeholder?: string
-  className?: string
 }
 
-export default function SearchByParams({ placeholder, className }: SearchByParamsProps) {
+export default function SearchByParams({ placeholder }: SearchByParamsProps) {
   const { updateSearchParams, initialValue } = useSearchByParams()
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -18,12 +17,9 @@ export default function SearchByParams({ placeholder, className }: SearchByParam
 
   return (
     <div className="relative flex flex-1 flex-shrink-0">
-      <label htmlFor="search" className="sr-only">
-        Search
-      </label>
       <input
         type="text"
-        className={`${className} block h-[40px] w-[300px] rounded border border-n-400 py-[9px] pl-[35px] text-[14px] placeholder:text-gray-500 focus:border-n-500 focus:outline-none`}
+        className="block h-[40px] w-full rounded border border-n-400 py-[9px] pl-[35px] text-[14px] placeholder:text-gray-500 focus:border-n-500 focus:outline-none"
         onChange={handleChange}
         placeholder={placeholder}
         defaultValue={initialValue}
