@@ -2,11 +2,13 @@
 
 import { useEffect, useRef } from 'react'
 
+import { TemplateQuestionType as TemplateQuestionTypes } from '@prisma/client'
 import { TemplateQuestionType } from '@/lib/types/template'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
 import useQuestionActions from '@/hooks/template/use-question-actions'
 import TemplateQuestionMenuButton from './template-question-menu-button'
 import TextInputQuestion from './text-input-question/text-input-question'
+import TextareaQuestion from './textarea-question/textarea-question'
 
 interface TemplateQuestionProps {
   question: TemplateQuestionType
@@ -52,7 +54,11 @@ export default function TemplateQuestion({ question }: TemplateQuestionProps) {
         <div className="mb-[4px]">{question.prompt}</div>
         <TemplateQuestionMenuButton onClickDelete={handleClickDeleteQuestion} />
       </div>
-      <TextInputQuestion question={question} readOnly={true} />
+      {question.type === TemplateQuestionTypes.TEXT_INPUT ? (
+        <TextInputQuestion question={question} readOnly={true} />
+      ) : question.type === TemplateQuestionTypes.TEXTAREA ? (
+        <TextareaQuestion question={question} readOnly={true} />
+      ) : null}
     </div>
   )
 }

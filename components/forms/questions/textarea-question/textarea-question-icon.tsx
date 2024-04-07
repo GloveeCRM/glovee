@@ -1,7 +1,8 @@
 'use client'
 
-import Divider from '@/components/ui/divider'
+import { TemplateQuestionType } from '@prisma/client'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
+import Divider from '@/components/ui/divider'
 
 export default function TextareaQuestionIcon() {
   const { setDraggedObject } = useDragAndDropContext()
@@ -11,7 +12,7 @@ export default function TextareaQuestionIcon() {
     setDraggedObject({
       type: 'question',
       object: {
-        type: 'textarea',
+        type: TemplateQuestionType.TEXTAREA,
       },
     })
   }
