@@ -4,10 +4,10 @@ import { useState } from 'react'
 import { v4 as uuid4 } from 'uuid'
 
 import {
-  TemplateQuestion,
   TemplateQuestionSetType as TemplateQuestionSetTypes,
+  TemplateQuestionType as TemplateQuestionTypes,
 } from '@prisma/client'
-import { TemplateQuestionSetType } from '@/lib/types/template'
+import { TemplateQuestionSetType, TemplateQuestionType } from '@/lib/types/template'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
 import useQuestionActions from '@/hooks/template/use-question-actions'
@@ -47,12 +47,24 @@ export default function EmptyQuestionSetDropzone({ questionSet }: EmptyQuestionS
     e.preventDefault()
     if (isDropAllowed) {
       if (isQuestionOverFlat) {
-        const question: TemplateQuestion = {
+        const isRadioOrCheckbox =
+          draggedObject.object.type === TemplateQuestionTypes.RADIO ||
+          draggedObject.object.type === TemplateQuestionTypes.CHECKBOX
+        const question: TemplateQuestionType = {
           id: uuid4(),
           type: draggedObject.object.type,
           prompt: 'An Untitled Question',
           position: 0,
           helperText: 'No helper text',
+          settings: isRadioOrCheckbox
+            ? {
+                options: [
+                  { position: 0, value: 'Option 1' },
+                  { position: 1, value: 'Option 2' },
+                ],
+                display: 'block',
+              }
+            : {},
           questionSetId: questionSet.id,
         }
         createQuestionInQuestionSet(questionSet.id, question)

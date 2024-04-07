@@ -4,10 +4,10 @@ import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
 import {
-  TemplateQuestion,
   TemplateQuestionSetType as TemplateQuestionSetTypes,
+  TemplateQuestionType as TemplateQuestionTypes,
 } from '@prisma/client'
-import { TemplateQuestionSetType } from '@/lib/types/template'
+import { TemplateQuestionSetType, TemplateQuestionType } from '@/lib/types/template'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 import useQuestionActions from '@/hooks/template/use-question-actions'
 import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
@@ -61,15 +61,27 @@ export default function NonEmptyQuestionSetDropzone({
     setIsDraggedOver(false)
     if (isDropAllowed) {
       if (isQuestionOverFlat) {
-        const question: TemplateQuestion = {
+        const isRadioOrCheckbox =
+          draggedObject.object.type === TemplateQuestionTypes.RADIO ||
+          draggedObject.object.type === TemplateQuestionTypes.CHECKBOX
+        const newQuestion: TemplateQuestionType = {
           id: uuidv4(),
           type: draggedObject.object.type,
           prompt: 'An Untitled Question',
           position: position,
           helperText: 'No helper text',
+          settings: isRadioOrCheckbox
+            ? {
+                options: [
+                  { position: 0, value: 'Option 1' },
+                  { position: 1, value: 'Option 2' },
+                ],
+                display: 'block',
+              }
+            : {},
           questionSetId: questionSet.id,
         }
-        createQuestionInQuestionSet(questionSet.id, question)
+        createQuestionInQuestionSet(questionSet.id, newQuestion)
       } else if (isQuestionSetOverLoop || isQuestionSetOverDependsOn) {
         const newQuestionSet: TemplateQuestionSetType = {
           id: uuidv4(),

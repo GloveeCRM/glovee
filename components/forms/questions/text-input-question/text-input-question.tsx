@@ -1,7 +1,7 @@
-import { TemplateQuestionType } from '@/lib/types/template'
+import { TextInputQuestionType } from '@/lib/types/qusetion'
 
 interface TextInputQuestionProps {
-  question: TemplateQuestionType
+  question: TextInputQuestionType
   readOnly?: boolean
 }
 
