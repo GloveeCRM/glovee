@@ -16,11 +16,13 @@ import CheckboxQuestion from './checkbox-question/checkbox-question'
 import {
   isCheckboxQuestionType,
   isDateInputQuestionType,
+  isDocumentQuestionType,
   isRadioQuestionType,
   isSelectQuestionType,
   isTextInputQuestionType,
   isTextareaQuestionType,
 } from '@/lib/types/qusetion'
+import DocumentQuestion from './document-question/document-question'
 
 interface TemplateQuestionProps {
   question: TemplateQuestionType
@@ -78,6 +80,8 @@ export default function TemplateQuestion({ question }: TemplateQuestionProps) {
         <RadioQuestion question={question} readOnly={true} />
       ) : isCheckboxQuestionType(question) ? (
         <CheckboxQuestion question={question} readOnly={true} />
+      ) : isDocumentQuestionType(question) ? (
+        <DocumentQuestion question={question} readOnly={true} />
       ) : null}
     </div>
   )
