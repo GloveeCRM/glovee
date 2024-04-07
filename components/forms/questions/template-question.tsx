@@ -9,6 +9,7 @@ import useQuestionActions from '@/hooks/template/use-question-actions'
 import TemplateQuestionMenuButton from './template-question-menu-button'
 import TextInputQuestion from './text-input-question/text-input-question'
 import TextareaQuestion from './textarea-question/textarea-question'
+import SelectQuestion from './select-question/select-question'
 
 interface TemplateQuestionProps {
   question: TemplateQuestionType
@@ -58,6 +59,8 @@ export default function TemplateQuestion({ question }: TemplateQuestionProps) {
         <TextInputQuestion question={question} readOnly={true} />
       ) : question.type === TemplateQuestionTypes.TEXTAREA ? (
         <TextareaQuestion question={question} readOnly={true} />
+      ) : question.type === TemplateQuestionTypes.SELECT ? (
+        <SelectQuestion question={question} readOnly={true} />
       ) : null}
     </div>
   )
