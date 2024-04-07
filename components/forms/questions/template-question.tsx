@@ -10,6 +10,7 @@ import TemplateQuestionMenuButton from './template-question-menu-button'
 import TextInputQuestion from './text-input-question/text-input-question'
 import TextareaQuestion from './textarea-question/textarea-question'
 import SelectQuestion from './select-question/select-question'
+import DateInputQuestion from './date-input-question/date-input-question'
 
 interface TemplateQuestionProps {
   question: TemplateQuestionType
@@ -61,6 +62,8 @@ export default function TemplateQuestion({ question }: TemplateQuestionProps) {
         <TextareaQuestion question={question} readOnly={true} />
       ) : question.type === TemplateQuestionTypes.SELECT ? (
         <SelectQuestion question={question} readOnly={true} />
+      ) : question.type === TemplateQuestionTypes.DATE_INPUT ? (
+        <DateInputQuestion question={question} readOnly={true} />
       ) : null}
     </div>
   )

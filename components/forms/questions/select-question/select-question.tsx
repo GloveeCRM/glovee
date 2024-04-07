@@ -8,7 +8,7 @@ interface SelectQuestionProps {
 export default function SelectQuestion({ question, readOnly }: SelectQuestionProps) {
   return (
     <select
-      className="w-full rounded border-[1px] border-n-400 bg-n-100 p-[4px] px-[6px] text-[12px] focus:outline-none"
+      className="w-full rounded-sm border-[1px] border-n-400 bg-n-100 p-[4px] px-[6px] text-[12px] focus:outline-none"
       placeholder={question.type}
       disabled={readOnly}
     >
