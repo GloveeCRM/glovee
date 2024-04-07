@@ -47,16 +47,16 @@ export default function EmptyQuestionSetDropzone({ questionSet }: EmptyQuestionS
     e.preventDefault()
     if (isDropAllowed) {
       if (isQuestionOverFlat) {
-        const isRadioOrCheckbox =
-          draggedObject.object.type === TemplateQuestionTypes.RADIO ||
-          draggedObject.object.type === TemplateQuestionTypes.CHECKBOX
-        const question: TemplateQuestionType = {
+        const isRadio = draggedObject.object.type === TemplateQuestionTypes.RADIO
+        const isCheckbox = draggedObject.object.type === TemplateQuestionTypes.CHECKBOX
+
+        const newQuestion: TemplateQuestionType = {
           id: uuid4(),
           type: draggedObject.object.type,
           prompt: 'An Untitled Question',
           position: 0,
           helperText: 'No helper text',
-          settings: isRadioOrCheckbox
+          settings: isRadio
             ? {
                 options: [
                   { position: 0, value: 'Option 1' },
@@ -64,10 +64,15 @@ export default function EmptyQuestionSetDropzone({ questionSet }: EmptyQuestionS
                 ],
                 display: 'block',
               }
-            : {},
+            : isCheckbox
+              ? {
+                  options: [{ position: 0, value: 'Option 1' }],
+                  display: 'block',
+                }
+              : {},
           questionSetId: questionSet.id,
         }
-        createQuestionInQuestionSet(questionSet.id, question)
+        createQuestionInQuestionSet(questionSet.id, newQuestion)
       } else if (isQuestionSetOverLoop || isQuestionSetOverDependsOn) {
         const newQuestionSet: TemplateQuestionSetType = {
           id: uuid4(),

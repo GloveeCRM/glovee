@@ -1,11 +1,11 @@
-import { RadioQuestionType } from '@/lib/types/qusetion'
+import { CheckboxQuestionType } from '@/lib/types/qusetion'
 
-interface RadioQuestionProps {
-  question: RadioQuestionType
+interface CheckboxQuestionProps {
+  question: CheckboxQuestionType
   readOnly?: boolean
 }
 
-export default function RadioQuestion({ question, readOnly }: RadioQuestionProps) {
+export default function CheckboxQuestion({ question, readOnly }: CheckboxQuestionProps) {
   const inline = question.settings.display === 'inline'
   const options = question.settings.options
 
@@ -14,7 +14,7 @@ export default function RadioQuestion({ question, readOnly }: RadioQuestionProps
       {options.map((option) => (
         <div key={option.position} className="flex items-center gap-[4px]">
           <input
-            type="radio"
+            type="checkbox"
             id={option.value}
             name={question.id}
             value={option.value}

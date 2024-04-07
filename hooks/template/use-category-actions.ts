@@ -1,6 +1,6 @@
 'use client'
 
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuid4 } from 'uuid'
 
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
 
@@ -14,7 +14,7 @@ export default function useCategoryActions() {
     const updatedCategories = [
       ...templateCategories,
       {
-        id: uuidv4(),
+        id: uuid4(),
         title: 'Untitled Category',
         position: templateCategories.length + 1,
         templateId: templateId,

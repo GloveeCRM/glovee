@@ -17,7 +17,7 @@ export default function QuestionSettingsToolbar({ questionId }: QuestionSettings
       {question &&
         Object.entries(question).map(([key, value]) => (
           <div key={key}>
-            {key}: {value}
+            {key}: {JSON.stringify(value)}
           </div>
         ))}
     </motion.div>

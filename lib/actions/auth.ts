@@ -1,7 +1,7 @@
 'use server'
 
 import bcrypt from 'bcryptjs'
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuid4 } from 'uuid'
 import { AuthError } from 'next-auth'
 
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
@@ -243,7 +243,7 @@ export async function generateAndStoreVerificationToken(
   email: string,
   expiresInSeconds: number
 ): Promise<VerificationToken> {
-  const token = uuidv4()
+  const token = uuid4()
   const expires = new Date(new Date().getTime() + expiresInSeconds * 1000)
   const verificationToken = await upsertVerificationToken(email, token, expires)
   return verificationToken
@@ -282,7 +282,7 @@ export async function generateAndStoreResetPasswordToken(
   email: string,
   expiresInSeconds: number
 ): Promise<VerificationToken> {
-  const token = uuidv4()
+  const token = uuid4()
   const expires = new Date(new Date().getTime() + expiresInSeconds * 1000)
   const resetPasswordToken = await upsertResetPasswordToken(email, token, expires)
   return resetPasswordToken

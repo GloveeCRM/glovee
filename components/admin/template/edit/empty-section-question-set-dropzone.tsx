@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuid4 } from 'uuid'
 
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
@@ -36,7 +36,7 @@ export default function EmptySectionQuestionSetDropzone() {
     setIsDraggedOver(false)
     if (isDropAllowed) {
       const questionSet: TemplateQuestionSetType = {
-        id: uuidv4(),
+        id: uuid4(),
         type: draggedObject.object.type,
         position: 0,
         sectionId: selectedSectionId,

@@ -12,6 +12,15 @@ import TextareaQuestion from './textarea-question/textarea-question'
 import SelectQuestion from './select-question/select-question'
 import DateInputQuestion from './date-input-question/date-input-question'
 import RadioQuestion from './radio-question/radio-question'
+import CheckboxQuestion from './checkbox-question/checkbox-question'
+import {
+  isCheckboxQuestionType,
+  isDateInputQuestionType,
+  isRadioQuestionType,
+  isSelectQuestionType,
+  isTextInputQuestionType,
+  isTextareaQuestionType,
+} from '@/lib/types/qusetion'
 
 interface TemplateQuestionProps {
   question: TemplateQuestionType
@@ -57,16 +66,18 @@ export default function TemplateQuestion({ question }: TemplateQuestionProps) {
         <div className="mb-[4px]">{question.prompt}</div>
         <TemplateQuestionMenuButton onClickDelete={handleClickDeleteQuestion} />
       </div>
-      {question.type === TemplateQuestionTypes.TEXT_INPUT ? (
+      {isTextInputQuestionType(question) ? (
         <TextInputQuestion question={question} readOnly={true} />
-      ) : question.type === TemplateQuestionTypes.TEXTAREA ? (
+      ) : isTextareaQuestionType(question) ? (
         <TextareaQuestion question={question} readOnly={true} />
-      ) : question.type === TemplateQuestionTypes.SELECT ? (
+      ) : isSelectQuestionType(question) ? (
         <SelectQuestion question={question} readOnly={true} />
-      ) : question.type === TemplateQuestionTypes.DATE_INPUT ? (
+      ) : isDateInputQuestionType(question) ? (
         <DateInputQuestion question={question} readOnly={true} />
-      ) : question.type === TemplateQuestionTypes.RADIO ? (
+      ) : isRadioQuestionType(question) ? (
         <RadioQuestion question={question} readOnly={true} />
+      ) : isCheckboxQuestionType(question) ? (
+        <CheckboxQuestion question={question} readOnly={true} />
       ) : null}
     </div>
   )

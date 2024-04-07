@@ -1,6 +1,6 @@
 'use client'
 
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuid4 } from 'uuid'
 
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
 
@@ -17,7 +17,7 @@ export default function useSectionActions() {
       const updatedSections = [
         ...(category.sections || []),
         {
-          id: uuidv4(),
+          id: uuid4(),
           title: 'Untitled Section',
           position: (category.sections?.length || 0) + 1,
           categoryId: category.id,

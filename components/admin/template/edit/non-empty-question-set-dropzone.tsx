@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuid4 } from 'uuid'
 
 import {
   TemplateQuestionSetType as TemplateQuestionSetTypes,
@@ -61,16 +61,16 @@ export default function NonEmptyQuestionSetDropzone({
     setIsDraggedOver(false)
     if (isDropAllowed) {
       if (isQuestionOverFlat) {
-        const isRadioOrCheckbox =
-          draggedObject.object.type === TemplateQuestionTypes.RADIO ||
-          draggedObject.object.type === TemplateQuestionTypes.CHECKBOX
+        const isRadio = draggedObject.object.type === TemplateQuestionTypes.RADIO
+        const isCheckbox = draggedObject.object.type === TemplateQuestionTypes.CHECKBOX
+
         const newQuestion: TemplateQuestionType = {
-          id: uuidv4(),
+          id: uuid4(),
           type: draggedObject.object.type,
           prompt: 'An Untitled Question',
           position: position,
           helperText: 'No helper text',
-          settings: isRadioOrCheckbox
+          settings: isRadio
             ? {
                 options: [
                   { position: 0, value: 'Option 1' },
@@ -78,13 +78,18 @@ export default function NonEmptyQuestionSetDropzone({
                 ],
                 display: 'block',
               }
-            : {},
+            : isCheckbox
+              ? {
+                  options: [{ position: 0, value: 'Option 1' }],
+                  display: 'block',
+                }
+              : {},
           questionSetId: questionSet.id,
         }
         createQuestionInQuestionSet(questionSet.id, newQuestion)
       } else if (isQuestionSetOverLoop || isQuestionSetOverDependsOn) {
         const newQuestionSet: TemplateQuestionSetType = {
-          id: uuidv4(),
+          id: uuid4(),
           type: draggedObject.object.type,
           position: position,
           sectionId: questionSet.sectionId,
