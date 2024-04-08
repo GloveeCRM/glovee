@@ -83,7 +83,7 @@ export function PopoverTrigger({
 }
 
 const getPositionClasses = (position: string) => {
-  const baseClass = 'absolute z-10'
+  const baseClass = 'absolute z-50'
   switch (position) {
     case 'bottom-left':
       return `${baseClass} right-0` // Align to left and just below the trigger
