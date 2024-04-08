@@ -338,6 +338,7 @@ async function upsertQuestionByQuestionSetId(
       prompt: question.prompt,
       position: question.position,
       helperText: question.helperText,
+      settings: question.settings ?? {},
     },
     create: {
       id: question.id,
@@ -345,6 +346,7 @@ async function upsertQuestionByQuestionSetId(
       prompt: question.prompt,
       position: question.position,
       helperText: question.helperText,
+      settings: question.settings ?? {},
       questionSetId: questionSetId,
     },
   })
