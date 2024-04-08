@@ -35,15 +35,21 @@ export default function SignUpForm() {
 
       <div id="form-inputs" className="mb-[26px] flex flex-col gap-[14px]">
         <FormInput id="name-input" error={nameError}>
-          <InputLabel htmlFor="name">Name</InputLabel>
+          <InputLabel htmlFor="name" text="md" weight="semibold">
+            Name
+          </InputLabel>
           <TextInput id="name" name="name" placeholder="John Doe" />
         </FormInput>
         <FormInput id="email-input" error={emailError}>
-          <InputLabel htmlFor="email">Email</InputLabel>
+          <InputLabel htmlFor="email" text="md" weight="semibold">
+            Email
+          </InputLabel>
           <TextInput id="email" name="email" placeholder="example@gmail.com" />
         </FormInput>
         <FormInput id="password-input" error={passwordError}>
-          <InputLabel htmlFor="password">Password</InputLabel>
+          <InputLabel htmlFor="password" text="md" weight="semibold">
+            Password
+          </InputLabel>
           <PasswordInput id="password" name="password" placeholder="Password" />
         </FormInput>
       </div>

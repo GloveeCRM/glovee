@@ -2,11 +2,41 @@ interface InputLabelProps {
   htmlFor: string
   children: React.ReactNode
   className?: string
+  text?: 'sm' | 'md' | 'lg'
+  weight?: 'normal' | 'medium' | 'bold' | 'semibold'
 }
 
-export function InputLabel({ htmlFor, children, className }: InputLabelProps) {
+export function InputLabel({
+  htmlFor,
+  children,
+  className,
+  text = 'sm',
+  weight = 'normal',
+}: InputLabelProps) {
+  const textSize =
+    text === 'sm'
+      ? 'text-[14px]'
+      : text === 'md'
+        ? 'text-[16px]'
+        : text === 'lg'
+          ? 'text-[18px]'
+          : 'text-[14px]'
+
+  const fontWeight =
+    weight === 'normal'
+      ? 'font-normal'
+      : weight === 'medium'
+        ? 'font-medium'
+        : weight === 'bold'
+          ? 'font-bold'
+          : weight === 'semibold'
+            ? 'font-semibold'
+            : 'font-normal'
   return (
-    <label htmlFor={htmlFor} className={`${className} block font-semibold text-n-600`}>
+    <label
+      htmlFor={htmlFor}
+      className={`${className} ${textSize} ${fontWeight} block font-semibold text-n-600`}
+    >
       {children}
     </label>
   )
@@ -14,7 +44,7 @@ export function InputLabel({ htmlFor, children, className }: InputLabelProps) {
 
 interface TextInputProps {
   id?: string
-  size?: 'sm' | 'md' | 'lg'
+  size?: 'xs' | 'sm' | 'md' | 'lg'
   name?: string
   placeholder: string
   value?: string
@@ -33,7 +63,14 @@ export function TextInput({
   onChange,
   className,
 }: TextInputProps) {
-  const height = size === 'sm' ? 'h-[36px]' : size === 'md' ? 'h-[42px]' : 'h-[54px]'
+  const height =
+    size === 'xs'
+      ? 'h-[30px]'
+      : size === 'sm'
+        ? 'h-[36px]'
+        : size === 'md'
+          ? 'h-[42px]'
+          : 'h-[54px]'
 
   return (
     <input
@@ -95,14 +132,25 @@ interface FormInputProps {
   children: React.ReactNode
   id?: string
   className?: string
+  gap?: 'sm' | 'md' | 'lg'
   error?: string
 }
 
-export function FormInput({ children, id, className, error }: FormInputProps) {
+export function FormInput({ children, id, className, gap = 'md', error }: FormInputProps) {
+  const gapSize =
+    gap === 'sm'
+      ? 'gap-[4px]'
+      : gap === 'md'
+        ? 'gap-[8px]'
+        : gap === 'lg'
+          ? 'gap-[12px]'
+          : 'gap-[8px]'
+  const errorMt =
+    gap === 'sm' ? 'mt-[2px]' : gap === 'md' ? 'mt-[4px]' : gap === 'lg' ? 'mt-[6px]' : 'mt-[4px]'
   return (
     <div id={id} className={`${className}`}>
-      <div className="flex flex-col gap-[10px]">{children}</div>
-      {error && <InputError className="mt-[6px]">{error}</InputError>}
+      <div className={`flex flex-col ${gapSize}`}>{children}</div>
+      {error && <InputError className={`${errorMt}`}>{error}</InputError>}
     </div>
   )
 }

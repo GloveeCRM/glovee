@@ -41,11 +41,15 @@ export default function LoginForm() {
 
       <div id="form-inputs" className="mb-[26px] flex flex-col gap-[14px]">
         <FormInput id="email-input" error={emailError}>
-          <InputLabel htmlFor="email">Email</InputLabel>
+          <InputLabel htmlFor="email" text="md" weight="semibold">
+            Email
+          </InputLabel>
           <TextInput id="email" name="email" placeholder="example@gmail.com" />
         </FormInput>
         <FormInput id="password-input" error={passwordError}>
-          <InputLabel htmlFor="password">Password</InputLabel>
+          <InputLabel htmlFor="password" text="md" weight="semibold">
+            Password
+          </InputLabel>
           <PasswordInput id="password" name="password" placeholder="Password" />
         </FormInput>
       </div>

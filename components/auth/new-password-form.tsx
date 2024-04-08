@@ -36,7 +36,9 @@ export default function NewPasswordForm({ resetPasswordToken }: NewPasswordFormP
       <Divider className="mb-[16px] border-n-300" />
 
       <FormInput id="password-input" error={passwordError} className="mb-[20px]">
-        <InputLabel htmlFor="password">New Password</InputLabel>
+        <InputLabel htmlFor="password" text="md" weight="semibold">
+          New Password
+        </InputLabel>
         <PasswordInput id="password" name="password" placeholder="Password" />
       </FormInput>
 

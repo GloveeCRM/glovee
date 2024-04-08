@@ -31,7 +31,9 @@ export function ResetPasswordForm() {
       <Divider className="mb-[16px] border-n-300" />
 
       <FormInput id="emai-input" error={emailError} className="mb-[20px]">
-        <InputLabel htmlFor="email">Email</InputLabel>
+        <InputLabel htmlFor="email" text="md" weight="semibold">
+          Email
+        </InputLabel>
         <TextInput id="email" name="email" placeholder="example@gmail.com" />
       </FormInput>
 
