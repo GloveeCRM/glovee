@@ -6,6 +6,7 @@ import { useFormState } from 'react-dom'
 import { createClient } from '@/lib/actions/user'
 import { Modal, useModal } from '@/components/ui/modal'
 import { FormInput, InputLabel, TextInput } from '@/components/ui/inputs'
+import { SubmitButton } from '@/components/ui/buttons'
 
 export default function CreateNewClientModal() {
   const [formState, dispatch] = useFormState(createClient, {})
@@ -59,9 +60,6 @@ export default function CreateNewClientModal() {
               className="rounded-sm border-n-400 px-[8px] py-[3px] text-[14px]"
             />
           </FormInput>
-          {/* {formState.error?.clientEmail && (
-            <div className="text-red-500">{formState.errors.clientEmail}</div>
-          )} */}
         </div>
         <div className="mt-[10px] flex justify-center gap-[8px]">
           <button
@@ -74,12 +72,12 @@ export default function CreateNewClientModal() {
           >
             Cancel
           </button>
-          <button
-            type="submit"
-            className="w-full rounded-md bg-n-600 px-[12px] py-[6px] text-[14px] font-bold text-white transition hover:bg-n-700"
+          <SubmitButton
+            size="full"
+            className="rounded-md bg-n-600 px-[12px] py-[6px] text-[14px] font-bold text-white hover:bg-n-700"
           >
             Create
-          </button>
+          </SubmitButton>
         </div>
       </form>
     </Modal>
