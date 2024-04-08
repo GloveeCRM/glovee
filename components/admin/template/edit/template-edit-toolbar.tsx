@@ -10,8 +10,10 @@ export default function TemplateEditToolbar() {
   const { selectedQuestionSetId, selectedQuestionId } = useTemplateEditContext()
 
   return (
-    <div className="sticky top-0 flex h-screen w-[240px] flex-shrink-0 flex-col bg-n-700 p-[8px] text-n-100">
-      <SaveTemplateButton />
+    <div className="flex h-svh w-[240px] flex-shrink-0 flex-col overflow-y-scroll bg-n-700 px-[6px] text-n-100">
+      <div className="sticky top-0 z-10 bg-n-700 py-[6px]">
+        <SaveTemplateButton />
+      </div>
       {selectedQuestionSetId ? (
         <QuestionSetSettingsToolbar questionSetId={selectedQuestionSetId} />
       ) : selectedQuestionId ? (

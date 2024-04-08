@@ -21,7 +21,9 @@ export default async function RootLayout({ children }: RootLayoutProps) {
     <SessionProvider session={session}>
       <DragAndDropProvider>
         <html lang="en">
-          <body id="skyBoundCRM">{children}</body>
+          <body id="skybound-crm" className="h-svh overflow-hidden">
+            {children}
+          </body>
         </html>
       </DragAndDropProvider>
     </SessionProvider>

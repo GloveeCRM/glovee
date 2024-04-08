@@ -83,7 +83,7 @@ export function PopoverTrigger({
 }
 
 const getPositionClasses = (position: string) => {
-  const baseClass = 'absolute z-50'
+  const baseClass = 'absolute z-20'
   switch (position) {
     case 'bottom-left':
       return `${baseClass} right-0` // Align to left and just below the trigger
@@ -106,15 +106,13 @@ const getPositionClasses = (position: string) => {
   }
 }
 
-export function PopoverContent({
-  children,
-  position = 'bottom',
-  className,
-}: {
+interface PopoverContentProps {
   children: ReactNode
   position?: string
   className?: string
-}) {
+}
+
+export function PopoverContent({ children, position = 'bottom', className }: PopoverContentProps) {
   const { isOpen } = usePopover()
 
   return (
