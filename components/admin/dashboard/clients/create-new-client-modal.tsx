@@ -6,7 +6,7 @@ import { useFormState } from 'react-dom'
 import { createClient } from '@/lib/actions/user'
 import { Modal, useModal } from '@/components/ui/modal'
 import { FormInput, InputLabel, TextInput } from '@/components/ui/inputs'
-import { SubmitButton } from '@/components/ui/buttons'
+import { Button, SubmitButton } from '@/components/ui/buttons'
 
 export default function CreateNewClientModal() {
   const [formState, dispatch] = useFormState(createClient, {})
@@ -67,13 +67,14 @@ export default function CreateNewClientModal() {
           </FormInput>
         </div>
         <div className="mt-[10px] flex justify-center gap-[8px]">
-          <button
-            className="w-full rounded-md bg-n-200 px-[12px] py-[6px] text-[14px] font-bold text-n-700 transition hover:bg-n-400"
+          <Button
+            size="full"
             type="reset"
+            className="rounded-md px-[12px] py-[6px] text-[14px] font-bold text-n-700"
             onClick={handleCloseModal}
           >
             Cancel
-          </button>
+          </Button>
           <SubmitButton
             size="full"
             className="rounded-md bg-n-600 px-[12px] py-[6px] text-[14px] font-bold text-white hover:bg-n-700"
