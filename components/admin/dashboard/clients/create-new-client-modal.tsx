@@ -12,6 +12,11 @@ export default function CreateNewClientModal() {
   const [formState, dispatch] = useFormState(createClient, {})
   const { closeModal } = useModal()
 
+  const handleCloseModal = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation()
+    closeModal()
+  }
+
   return (
     <Modal title="Create a new client">
       <form
@@ -65,10 +70,7 @@ export default function CreateNewClientModal() {
           <button
             className="w-full rounded-md bg-n-200 px-[12px] py-[6px] text-[14px] font-bold text-n-700 transition hover:bg-n-400"
             type="reset"
-            onClick={(e: MouseEvent<HTMLButtonElement>) => {
-              e.stopPropagation()
-              closeModal()
-            }}
+            onClick={handleCloseModal}
           >
             Cancel
           </button>
