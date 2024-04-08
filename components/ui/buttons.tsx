@@ -18,8 +18,6 @@ export function Button({
   disabled,
   onClick,
 }: ButtonProps) {
-  const { pending } = useFormStatus()
-
   const width =
     size === 'sm'
       ? 'w-[100px]'
@@ -33,11 +31,11 @@ export function Button({
   return (
     <button
       type={type}
-      disabled={pending || disabled}
+      disabled={disabled}
       className={`${className} ${height} ${width} cursor-pointer rounded bg-n-300 p-[8px] transition duration-200 hover:bg-n-400 disabled:cursor-not-allowed disabled:bg-n-200 disabled:text-n-500 disabled:hover:bg-n-200`}
       onClick={onClick}
     >
-      {pending ? <ImSpinner2 className="mx-auto h-[20px] w-[20px] animate-spin" /> : children}
+      {children}
     </button>
   )
 }

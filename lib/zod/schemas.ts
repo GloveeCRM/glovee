@@ -13,9 +13,9 @@ export const UpdateClientSchema = z.object({
 })
 
 export const CreateClientSchema = z.object({
-  clientFirstName: z.string(),
-  clientLastName: z.string(),
-  clientEmail: z.string().email(),
+  clientFirstName: z.string().min(1, { message: 'First name is required' }),
+  clientLastName: z.string().min(1, { message: 'Last name is required' }),
+  clientEmail: z.string().min(1, { message: 'Email is required' }).email(),
 })
 
 export const ApplicationSchema = z.object({

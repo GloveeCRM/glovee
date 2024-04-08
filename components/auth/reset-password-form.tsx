@@ -30,7 +30,7 @@ export function ResetPasswordForm() {
 
       <Divider className="mb-[16px] border-n-300" />
 
-      <FormInput id="emai-input" error={emailError} className="mb-[20px]">
+      <FormInput id="emai-input" errors={emailError} className="mb-[20px]">
         <InputLabel htmlFor="email" text="md" weight="semibold">
           Email
         </InputLabel>

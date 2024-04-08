@@ -75,9 +75,10 @@ export function ModalTrigger({ children }: ModalTriggerProps) {
 interface ModalProps {
   title?: string
   children: ReactNode
+  onClose?: () => void
 }
 
-export function Modal({ title, children }: ModalProps) {
+export function Modal({ title, children, onClose }: ModalProps) {
   const { isModalOpen, closeModal } = useModal()
 
   if (!isModalOpen) {
@@ -96,6 +97,7 @@ export function Modal({ title, children }: ModalProps) {
             className="cursor-pointer pt-[4px]"
             onClick={(e: MouseEvent<HTMLButtonElement>) => {
               e.stopPropagation()
+              onClose?.()
               closeModal()
             }}
           >

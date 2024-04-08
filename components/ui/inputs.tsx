@@ -133,10 +133,10 @@ interface FormInputProps {
   id?: string
   className?: string
   gap?: 'sm' | 'md' | 'lg'
-  error?: string
+  errors?: string[] | string
 }
 
-export function FormInput({ children, id, className, gap = 'md', error }: FormInputProps) {
+export function FormInput({ children, id, className, gap = 'md', errors }: FormInputProps) {
   const gapSize =
     gap === 'sm'
       ? 'gap-[4px]'
@@ -150,7 +150,15 @@ export function FormInput({ children, id, className, gap = 'md', error }: FormIn
   return (
     <div id={id} className={`${className}`}>
       <div className={`flex flex-col ${gapSize}`}>{children}</div>
-      {error && <InputError className={`${errorMt}`}>{error}</InputError>}
+      {Array.isArray(errors) ? (
+        errors.map((error, index) => (
+          <InputError key={index} className={errorMt}>
+            {error}
+          </InputError>
+        ))
+      ) : (
+        <InputError className={errorMt}>{errors}</InputError>
+      )}
     </div>
   )
 }
