@@ -112,7 +112,7 @@ export default function TemplateEditProvider({ templateId, children }: TemplateE
     }
 
     detectAndSetIsTemplateChanged()
-  }, [template, savedTemplate])
+  }, [template, savedTemplate, selectedCategoryId, selectedSectionId, templateId])
 
   const value = {
     templateId,
