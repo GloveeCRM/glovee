@@ -14,7 +14,6 @@ import { validateFormDataAgainstSchema } from '../utils/validation'
 export async function createApplication(
   clientId: string,
   templateId: string,
-  prevState: any,
   formData: FormData
 ): Promise<{ success?: string; error?: string; errors?: any }> {
   const { data, errors } = await validateFormDataAgainstSchema(ApplicationSchema, formData)
@@ -37,10 +36,6 @@ export async function createApplication(
   }
 
   const { role, applicantFirstName, applicantLastName } = data
-
-  if (!role || !applicantFirstName || !applicantLastName) {
-    return { error: 'Role, first name and last name are required!' }
-  }
 
   const client = await fetchUserById(clientId)
 
@@ -97,7 +92,7 @@ export async function createApplication(
   })
 
   revalidatePath('/admin/applications')
-  return { success: 'Template created!' }
+  return { success: 'Application created!' }
 }
 
 /**

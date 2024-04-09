@@ -8,13 +8,22 @@ import TemplateSelect from './template-select'
 import ClientSearchDropdown from './clients-search-dropdown'
 import { useFormState } from 'react-dom'
 import { createApplication } from '@/lib/actions/application'
-import { InputLabel, TextInput } from '@/components/ui/inputs'
+import { FormInput, InputLabel, TextInput } from '@/components/ui/inputs'
 import { Button, SubmitButton } from '@/components/ui/buttons'
+import { Select } from '@/components/ui/select'
 
 interface CreateNewApplicationModalProps {
   templates: Template[]
   orgName: string
 }
+
+const options = [
+  { index: 0, value: '', name: '--Select--' },
+  { index: 1, value: 'MAIN', name: 'Main' },
+  { index: 2, value: 'SPOUSE', name: 'Spouse' },
+  { index: 3, value: 'CHILD', name: 'Child' },
+  { index: 4, value: 'OTHER', name: 'Other' },
+]
 
 export default function CreateNewApplicationModal({
   templates,
@@ -22,38 +31,49 @@ export default function CreateNewApplicationModal({
 }: CreateNewApplicationModalProps) {
   const [selectedClientId, setSelectedClientId] = useState<string>('')
   const [selectedTemplateId, setSelectedTemplateId] = useState<string>('')
-  const createApplicationWithClient = createApplication.bind(
-    null,
-    selectedClientId,
-    selectedTemplateId
-  )
-  const [formState, dispatch] = useFormState(createApplicationWithClient, {})
+  //TODO: cleanup application creation server action
+
+  // TODO: change the formState to be able to show errors, similar to client creation form
+  // make action have return type of {success: boolean, errors?: any}
+
+  const [formState, setFormState] = useState<any>({})
   const { closeModal } = useModal()
 
-  const handleClientSelect = (client: string) => {
+  async function handleCreateApplication(formData: FormData) {
+    createApplication(selectedClientId, selectedTemplateId, formData).then((res) => {
+      if (res.success) {
+        resetForm()
+        closeModal()
+      } else {
+        setFormState(res)
+      }
+    })
+  }
+
+  function resetForm() {
+    setFormState({})
+  }
+
+  function handleClientSelect(client: string) {
     setSelectedClientId(client)
   }
 
-  const handleTemplateSelect = (template: string) => {
+  function handleTemplateSelect(template: string) {
     setSelectedTemplateId(template)
   }
 
-  const handleCloseModal = (e: MouseEvent<HTMLButtonElement>) => {
+  function handleCloseModal(e: MouseEvent<HTMLButtonElement>) {
     e.stopPropagation()
     setSelectedClientId('')
     setSelectedTemplateId('')
+    resetForm()
     closeModal()
   }
-
+  console.log(formState)
+  //TODO: Add error handling and display errors
   return (
-    <Modal title="Create a new application">
-      <form
-        className="w-[35vw] max-w-[570px]"
-        action={async (formData: FormData) => {
-          dispatch(formData)
-          closeModal()
-        }}
-      >
+    <Modal title="Create a new application" onClose={resetForm}>
+      <form className="w-[35vw] max-w-[570px]" action={handleCreateApplication}>
         <ClientSearchDropdown
           orgName={orgName}
           selectedClientId={selectedClientId}
@@ -63,23 +83,16 @@ export default function CreateNewApplicationModal({
           <InputLabel htmlFor="role" className="mb-[4px]">
             Role
           </InputLabel>
-          <select
-            name="role"
-            id="role"
-            className="w-full rounded-sm border border-n-400 px-[8px] py-[3px]"
-            defaultValue=""
-          >
-            <option value="" disabled>
-              --Select--
-            </option>
-            <option value="MAIN">Main</option>
-            <option value="SPOUSE">Spouse</option>
-            <option value="CHILD">Child</option>
-            <option value="OTHER">Other</option>
-          </select>
+          {/* TODO: create a custom select component */}
+          <Select name="role" id="role" options={options} />
         </div>
         <div className="mb-[14px] grid grid-flow-col gap-[14px] text-[14px]">
-          <div>
+          {/* TODO: add formInput ui component */}
+          <FormInput
+            id="applicant-first-name"
+            gap="sm"
+            errors={formState.errors?.applicantFirstName}
+          >
             <InputLabel htmlFor="applicantFirstName" className="mb-[4px]">
               Applicant First Name
             </InputLabel>
@@ -90,20 +103,27 @@ export default function CreateNewApplicationModal({
               size="xs"
               className="rounded-sm border-n-400 px-[8px] py-[3px]"
             />
-          </div>
+          </FormInput>
           <div>
-            <InputLabel htmlFor="applicantLastName" className="mb-[4px]">
-              Applicant Last Name
-            </InputLabel>
-            <TextInput
-              name="applicantLastName"
+            <FormInput
               id="applicant-last-name"
-              placeholder="Cooper"
-              size="xs"
-              className="rounded-sm border-n-400 px-[8px] py-[3px]"
-            />
+              gap="sm"
+              errors={formState.errors?.applicantLastName}
+            >
+              <InputLabel htmlFor="applicantLastName" className="mb-[4px]">
+                Applicant Last Name
+              </InputLabel>
+              <TextInput
+                name="applicantLastName"
+                id="applicant-last-name"
+                placeholder="Cooper"
+                size="xs"
+                className="rounded-sm border-n-400 px-[8px] py-[3px]"
+              />
+            </FormInput>
           </div>
         </div>
+
         <TemplateSelect
           templates={templates}
           selectedTemplateId={selectedTemplateId}

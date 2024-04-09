@@ -43,8 +43,6 @@ export default function ClientSearchDropdown({
             client.id.includes(searchTerm)
         )
 
-  console.log(filteredClients)
-
   const handleSelectClient = (clientId: string) => {
     setSelectedClientId(clientId)
   }
