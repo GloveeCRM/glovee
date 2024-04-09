@@ -8,6 +8,8 @@ import TemplateSelect from './template-select'
 import ClientSearchDropdown from './clients-search-dropdown'
 import { useFormState } from 'react-dom'
 import { createApplication } from '@/lib/actions/application'
+import { InputLabel, TextInput } from '@/components/ui/inputs'
+import { Button, SubmitButton } from '@/components/ui/buttons'
 
 interface CreateNewApplicationModalProps {
   templates: Template[]
@@ -32,6 +34,17 @@ export default function CreateNewApplicationModal({
     setSelectedClientId(client)
   }
 
+  const handleTemplateSelect = (template: string) => {
+    setSelectedTemplateId(template)
+  }
+
+  const handleCloseModal = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation()
+    setSelectedClientId('')
+    setSelectedTemplateId('')
+    closeModal()
+  }
+
   return (
     <Modal title="Create a new application">
       <form
@@ -47,9 +60,9 @@ export default function CreateNewApplicationModal({
           setSelectedClientId={handleClientSelect}
         />
         <div className="my-[14px] text-[14px]">
-          <label htmlFor="role" className="mb-[4px] block text-n-700">
+          <InputLabel htmlFor="role" className="mb-[4px]">
             Role
-          </label>
+          </InputLabel>
           <select
             name="role"
             id="role"
@@ -67,51 +80,50 @@ export default function CreateNewApplicationModal({
         </div>
         <div className="mb-[14px] grid grid-flow-col gap-[14px] text-[14px]">
           <div>
-            <label htmlFor="applicantFirstName" className="mb-[4px] block text-n-700">
+            <InputLabel htmlFor="applicantFirstName" className="mb-[4px]">
               Applicant First Name
-            </label>
-            <input
-              type="text"
+            </InputLabel>
+            <TextInput
               name="applicantFirstName"
               id="applicant-first-name"
               placeholder="Jane"
-              className="w-full rounded-sm border border-n-400 px-[8px] py-[3px]"
+              size="xs"
+              className="rounded-sm border-n-400 px-[8px] py-[3px]"
             />
           </div>
           <div>
-            <label htmlFor="applicantLastName" className="mb-[4px] block text-n-700">
+            <InputLabel htmlFor="applicantLastName" className="mb-[4px]">
               Applicant Last Name
-            </label>
-            <input
-              type="text"
+            </InputLabel>
+            <TextInput
               name="applicantLastName"
               id="applicant-last-name"
               placeholder="Cooper"
-              className="w-full rounded-sm border border-n-400 px-[8px] py-[3px]"
+              size="xs"
+              className="rounded-sm border-n-400 px-[8px] py-[3px]"
             />
           </div>
         </div>
         <TemplateSelect
           templates={templates}
           selectedTemplateId={selectedTemplateId}
-          setSelectedTemplateId={setSelectedTemplateId}
+          setSelectedTemplateId={handleTemplateSelect}
         />
         <div className="mt-[10px] flex justify-center gap-[8px]">
-          <button
-            className="w-full rounded-md bg-n-200 px-[12px] py-[6px] text-[14px] font-bold text-n-700 transition hover:bg-n-400"
+          <Button
+            size="full"
             type="reset"
-            onClick={(e: MouseEvent<HTMLButtonElement>) => {
-              e.stopPropagation()
-              setSelectedClientId('')
-              setSelectedTemplateId('')
-              closeModal()
-            }}
+            className="rounded-md px-[12px] py-[6px] text-[14px] font-bold text-n-700"
+            onClick={handleCloseModal}
           >
             Cancel
-          </button>
-          <button className="w-full rounded-md bg-n-600 px-[12px] py-[6px] text-[14px] font-bold text-white transition hover:bg-n-700">
+          </Button>
+          <SubmitButton
+            size="full"
+            className="rounded-md bg-n-600 px-[12px] py-[6px] text-[14px] font-bold text-white hover:bg-n-700"
+          >
             Create
-          </button>
+          </SubmitButton>
         </div>
       </form>
     </Modal>

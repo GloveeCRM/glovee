@@ -1,9 +1,9 @@
 import { GoPlus } from 'react-icons/go'
 
-import { fetchTemplatesByUserId } from '@/lib/data/template'
+import { fetchTemplatesByOrgId } from '@/lib/data/template'
 import CreateNewApplicationModal from './create-new-application-modal'
 import { ModalProvider, ModalTrigger } from '../../../ui/modal'
-import { getAuthenticatedUser } from '@/auth'
+import { fetchCurrentOrgId } from '@/lib/utils/server'
 
 interface CreateNewApplicationButtonProp {
   orgName: string
@@ -12,13 +12,11 @@ interface CreateNewApplicationButtonProp {
 export default async function CreateNewApplicationButton({
   orgName,
 }: CreateNewApplicationButtonProp) {
-  const user = await getAuthenticatedUser()
+  const orgId = await fetchCurrentOrgId()
+  if (!orgId) return null
 
-  if (!user || !user.id) {
-    return null
-  }
-
-  const templates = (await fetchTemplatesByUserId(user.id)) || []
+  const templates = await fetchTemplatesByOrgId(orgId)
+  if (!templates) return null
 
   return (
     <ModalProvider>

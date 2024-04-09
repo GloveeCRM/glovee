@@ -33,10 +33,7 @@ export function InputLabel({
             ? 'font-semibold'
             : 'font-normal'
   return (
-    <label
-      htmlFor={htmlFor}
-      className={`${className} ${textSize} ${fontWeight} block font-semibold text-n-600`}
-    >
+    <label htmlFor={htmlFor} className={`${className} ${textSize} ${fontWeight} block text-n-600`}>
       {children}
     </label>
   )
