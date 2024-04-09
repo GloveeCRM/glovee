@@ -17,7 +17,7 @@ export default function LoopQuestionSetEdit({ questionSet, selected }: LoopQuest
       className={`rounded bg-r-500 ${selected ? 'border-[3px] border-r-700 p-[5px] pt-[13px]' : 'p-[8px] pt-[16px]'}`}
     >
       {questionSets && questionSets.length > 0 ? (
-        <div className="bg-r-200 px-[6px]">
+        <div className="bg-r-200 px-[4px]">
           {questionSets.map((questionSet) => (
             <TemplateQuestionSet key={questionSet.id} questionSet={questionSet} />
           ))}

@@ -125,13 +125,14 @@ model Category {
 }
 
 model Section {
-  id          String @id @default(cuid())
-  title       String
-  position    Int
-  categoryId  String
-  questionSets   QuestionSet[]
+  id            String @id @default(cuid())
+  title         String
+  position      Int
+  categoryId    String
+  
+  questionSets  QuestionSet[]
 
-  category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  category      Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 }
 
 enum QuestionSetType {
@@ -141,13 +142,20 @@ enum QuestionSetType {
 }
 
 model QuestionSet {
-  id          String @id @default(cuid())
-  type        QuestionSetType
-  position    Int
-  sectionId   String
-  questions   Question[]
+  id            String @id @default(cuid())
+  type          QuestionSetType
+  position      Int
+  sectionId     String
+  questionSetId String?
 
-  section     Section @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  questions     Question[]
+  questionSets  QuestionSet[] @relation("QuestionSetRelation")
+
+  section       Section @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  questionSet   QuestionSet? @relation("QuestionSetRelation", fields: [questionSetId], references: [id])
+
+  @@map("question_set")
+
 }
 
 enum QuestionType {
@@ -161,15 +169,16 @@ enum QuestionType {
 }
 
 model Question {
-  id          String @id @default(cuid())
-  type        QuestionType
-  prompt      String
-  position    Int
-  helperText  String?
+  id            String @id @default(cuid())
+  type          QuestionType
+  prompt        String
+  position      Int
+  helperText    String?
+  settings      Json @default("{}")
   questionSetId String
-  answer      Answer?
+  answer        Answer?
 
-  questionSet QuestionSet @relation(fields: [questionSetId], references: [id], onDelete: Cascade)
+  questionSet   QuestionSet @relation(fields: [questionSetId], references: [id], onDelete: Cascade)
 }
 
 model Answer {
@@ -227,10 +236,10 @@ model TemplateQuestionSet {
   questionSetId String?
 
   questions     TemplateQuestion[]
-  questionSets  TemplateQuestionSet[] @relation("QuestionSetRelation")
+  questionSets  TemplateQuestionSet[] @relation("TemplateQuestionSetRelation")
 
   section       TemplateSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
-  questionSet   TemplateQuestionSet? @relation("QuestionSetRelation", fields: [questionSetId], references: [id])
+  questionSet   TemplateQuestionSet? @relation("TemplateQuestionSetRelation", fields: [questionSetId], references: [id])
 
   @@map("template_question_set")
 }
@@ -246,11 +255,12 @@ enum TemplateQuestionType {
 }
 
 model TemplateQuestion {
-  id          String @id @default(cuid())
-  type        TemplateQuestionType
-  prompt      String
-  position    Int
-  helperText  String?
+  id            String @id @default(cuid())
+  type          TemplateQuestionType
+  prompt        String
+  position      Int
+  helperText    String?
+  settings      Json @default("{}")
   questionSetId String
 
   questionSet TemplateQuestionSet @relation(fields: [questionSetId], references: [id], onDelete: Cascade)

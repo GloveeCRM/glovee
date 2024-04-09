@@ -2,8 +2,9 @@
 
 import { PiCheckBold } from 'react-icons/pi'
 
-import Divider from '@/components/ui/divider'
+import { TemplateQuestionType } from '@prisma/client'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
+import Divider from '@/components/ui/divider'
 
 export default function CheckboxQuestionIcon() {
   const { setDraggedObject } = useDragAndDropContext()
@@ -13,7 +14,7 @@ export default function CheckboxQuestionIcon() {
     setDraggedObject({
       type: 'question',
       object: {
-        type: 'checkbox',
+        type: TemplateQuestionType.CHECKBOX,
       },
     })
   }

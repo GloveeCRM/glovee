@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuid4 } from 'uuid'
 
 import { TemplateQuestionSetType } from '@/lib/types/template'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
@@ -53,7 +53,7 @@ export default function NonEmptySectionDropzone({
     setIsDraggedOver(false)
     if (isDropAllowed) {
       const newQuestionSet: TemplateQuestionSetType = {
-        id: uuidv4(),
+        id: uuid4(),
         type: draggedObject.object.type,
         position: position,
         sectionId: selectedSectionId,

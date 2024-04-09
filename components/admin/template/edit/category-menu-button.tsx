@@ -17,9 +17,9 @@ export default function CategoryMenuButton({
       <Popover>
         <MenuButton />
         <PopoverContent
-          position="right"
-          className="w-[140px] rounded-[3px] bg-n-700 p-[4px]
-                   text-[14px] text-n-100 shadow-[0px_0px_0px_1px_rgba(15,15,15,0.05),0px_3px_6px_rgba(15,15,15,0.2),0px_9px_24px_rgba(15,15,15,0.2)] transition duration-100"
+          position="bottom-left"
+          className="mt-[2px] w-[140px] rounded-sm bg-n-100 p-[4px]
+                   text-[14px] text-n-700 shadow-[0px_0px_0px_1px_rgba(15,15,15,0.05),0px_3px_6px_rgba(15,15,15,0.2),0px_9px_24px_rgba(15,15,15,0.2)] transition duration-100"
         >
           <RenameCategory onClick={onClickRename} />
           <DeleteCategory onClick={onClickDelete} />
@@ -34,7 +34,7 @@ function MenuButton() {
 
   return (
     <PopoverTrigger
-      className={`rounded-sm bg-n-700 p-[2px] group-hover/category:opacity-100 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
+      className={`rounded-sm bg-n-100 p-[2px] text-n-700 transition duration-100 group-hover/category:opacity-100 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
     >
       <span>
         <FiMoreHorizontal className="h-[18px] w-[18px]" />
@@ -54,7 +54,7 @@ function RenameCategory({ onClick }: { onClick: () => void }) {
   return (
     <div
       onClick={handleClickRenameCategory}
-      className="flex items-center gap-[6px] rounded-sm p-[4px] text-n-100 hover:bg-n-600/70"
+      className="flex items-center gap-[6px] rounded-sm p-[4px] hover:bg-n-300"
     >
       <FiEdit className="h-[20px] w-[20px]" /> Rename
     </div>
@@ -72,7 +72,7 @@ function DeleteCategory({ onClick }: { onClick: () => void }) {
   return (
     <div
       onClick={handleClickDeleteCategory}
-      className="flex items-center gap-[6px] rounded-sm p-[4px] transition hover:bg-n-600/70 hover:text-red-500"
+      className="flex items-center gap-[6px] rounded-sm p-[4px] transition hover:bg-red-100 hover:text-red-500"
     >
       <BiTrash className="h-[20px] w-[20px]" /> Delete
     </div>

@@ -1,10 +1,13 @@
+import { Template, TemplateCategory, TemplateQuestionSet, TemplateSection } from '@prisma/client'
 import {
-  Template,
-  TemplateCategory,
-  TemplateQuestionSet,
-  TemplateSection,
-  TemplateQuestion,
-} from '@prisma/client'
+  CheckboxQuestionType,
+  DateInputQuestionType,
+  DocumentQuestionType,
+  RadioQuestionType,
+  SelectQuestionType,
+  TextInputQuestionType,
+  TextareaQuestionType,
+} from './qusetion'
 
 export type TemplateType = Template & {
   categories?: TemplateCategoryType[]
@@ -23,4 +26,11 @@ export type TemplateQuestionSetType = TemplateQuestionSet & {
   questions?: TemplateQuestionType[]
 }
 
-export type TemplateQuestionType = TemplateQuestion & {}
+export type TemplateQuestionType =
+  | TextInputQuestionType
+  | TextareaQuestionType
+  | SelectQuestionType
+  | DateInputQuestionType
+  | RadioQuestionType
+  | CheckboxQuestionType
+  | DocumentQuestionType

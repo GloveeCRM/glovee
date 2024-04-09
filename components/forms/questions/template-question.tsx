@@ -2,11 +2,27 @@
 
 import { useEffect, useRef } from 'react'
 
+import { TemplateQuestionType as TemplateQuestionTypes } from '@prisma/client'
 import { TemplateQuestionType } from '@/lib/types/template'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
 import useQuestionActions from '@/hooks/template/use-question-actions'
 import TemplateQuestionMenuButton from './template-question-menu-button'
 import TextInputQuestion from './text-input-question/text-input-question'
+import TextareaQuestion from './textarea-question/textarea-question'
+import SelectQuestion from './select-question/select-question'
+import DateInputQuestion from './date-input-question/date-input-question'
+import RadioQuestion from './radio-question/radio-question'
+import CheckboxQuestion from './checkbox-question/checkbox-question'
+import {
+  isCheckboxQuestionType,
+  isDateInputQuestionType,
+  isDocumentQuestionType,
+  isRadioQuestionType,
+  isSelectQuestionType,
+  isTextInputQuestionType,
+  isTextareaQuestionType,
+} from '@/lib/types/qusetion'
+import DocumentQuestion from './document-question/document-question'
 
 interface TemplateQuestionProps {
   question: TemplateQuestionType
@@ -52,7 +68,21 @@ export default function TemplateQuestion({ question }: TemplateQuestionProps) {
         <div className="mb-[4px]">{question.prompt}</div>
         <TemplateQuestionMenuButton onClickDelete={handleClickDeleteQuestion} />
       </div>
-      <TextInputQuestion question={question} readOnly={true} />
+      {isTextInputQuestionType(question) ? (
+        <TextInputQuestion question={question} readOnly={true} />
+      ) : isTextareaQuestionType(question) ? (
+        <TextareaQuestion question={question} readOnly={true} />
+      ) : isSelectQuestionType(question) ? (
+        <SelectQuestion question={question} readOnly={true} />
+      ) : isDateInputQuestionType(question) ? (
+        <DateInputQuestion question={question} readOnly={true} />
+      ) : isRadioQuestionType(question) ? (
+        <RadioQuestion question={question} readOnly={true} />
+      ) : isCheckboxQuestionType(question) ? (
+        <CheckboxQuestion question={question} readOnly={true} />
+      ) : isDocumentQuestionType(question) ? (
+        <DocumentQuestion question={question} readOnly={true} />
+      ) : null}
     </div>
   )
 }
