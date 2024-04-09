@@ -6,11 +6,11 @@ import { TemplateCategoryType, TemplateQuestionSetType, TemplateType } from '@/l
 
 // TODO: Change this to ORG ID.
 /**
- * Fetch all templates by user id
+ * Fetch all templates by org id
  */
-export async function fetchTemplatesByUserId(userId: string): Promise<Template[] | null> {
+export async function fetchTemplatesByOrgId(orgId: string): Promise<Template[] | null> {
   try {
-    const templates = await prisma.template.findMany({ where: { userId: userId } })
+    const templates = await prisma.template.findMany({ where: { orgId: orgId } })
     return templates
   } catch {
     return null

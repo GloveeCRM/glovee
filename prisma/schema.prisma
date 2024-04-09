@@ -28,6 +28,7 @@ model Organization {
 
   users User[]
   applications    Application[]
+  templates       Template[]
 }
 
 model User {
@@ -43,7 +44,6 @@ model User {
   
   accounts        Account[]
   organization    Organization? @relation(fields: [organizationId], references: [id])
-  templates       Template[]
   assignedClients Application[] @relation("AssignedClient")
 
   @@unique([organizationId, email])
@@ -191,13 +191,13 @@ model Answer {
 
 model Template {
   id      String @id @default(cuid())
-  userId  String
+  orgId   String
   title   String @default("Untitled")
   description String?
 
   categories TemplateCategory[]
   
-  user    User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  org Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
 }
 
 model TemplateCategory {

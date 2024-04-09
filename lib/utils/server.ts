@@ -14,14 +14,16 @@ export function getCurrentOrgName() {
   return subdomain
 }
 
-export async function fetchCurrentOrgId() {
+export async function fetchCurrentOrgId(): Promise<string | null> {
   'use server'
   const orgName = getCurrentOrgName()
+  if (!orgName) return null
   const org = await prisma.organization.findUnique({
     where: {
-      orgName: orgName!,
+      orgName: orgName,
     },
   })
+  if (!org) return null
 
-  return org?.id
+  return org.id
 }

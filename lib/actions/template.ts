@@ -3,7 +3,6 @@
 import { revalidatePath } from 'next/cache'
 
 import { prisma } from '@/prisma/prisma'
-import { getAuthenticatedUser } from '@/auth'
 import { TemplateSchema } from '../zod/schemas'
 import {
   TemplateCategoryType,
@@ -13,7 +12,11 @@ import {
   TemplateQuestionType,
 } from '../types/template'
 import { fetchFullTemplateById } from '../data/template'
+import { fetchCurrentOrgId } from '../utils/server'
 
+/**
+ * Create a new template
+ */
 export async function createTemplate(prevState: any, formDara: FormData) {
   const validatedFields = TemplateSchema.safeParse({
     title: formDara.get('title'),
@@ -26,15 +29,15 @@ export async function createTemplate(prevState: any, formDara: FormData) {
 
   const { title, description } = validatedFields.data
 
-  const user = await getAuthenticatedUser()
+  const orgId = await fetchCurrentOrgId()
 
-  if (!user) {
-    return { error: 'User not found! logout and login again.' }
+  if (!orgId) {
+    return { error: 'Failed to fetch organization ID!' }
   }
 
   const template = await prisma.template.create({
     data: {
-      userId: user.id!,
+      orgId,
       title,
       description,
       categories: {
@@ -241,6 +244,9 @@ export async function updateFullTemplateById(
   }
 }
 
+/**
+ * Upsert category by template id
+ */
 async function upsertCategoryByTemplateId(
   templateId: string,
   category: TemplateCategoryType
@@ -266,6 +272,9 @@ async function upsertCategoryByTemplateId(
   return category
 }
 
+/**
+ * Upsert section by category id
+ */
 async function upsertSectionByCategoryId(
   section: TemplateSectionType,
   categoryId: string
@@ -291,6 +300,9 @@ async function upsertSectionByCategoryId(
   return section
 }
 
+/**
+ * Upsert questionSet by section id and parent questionSet id
+ */
 async function upsertQuestionSetBySectionIdAndParentQuestionSetId(
   questionSet: TemplateQuestionSetType,
   sectionId: string,
@@ -327,6 +339,9 @@ async function upsertQuestionSetBySectionIdAndParentQuestionSetId(
   return questionSet
 }
 
+/**
+ * Upsert question by questionSet id
+ */
 async function upsertQuestionByQuestionSetId(
   question: TemplateQuestionType,
   questionSetId: string
