@@ -20,8 +20,8 @@ export const CreateClientSchema = z.object({
 
 export const ApplicationSchema = z.object({
   role: z.string(),
-  applicantFirstName: z.string(),
-  applicantLastName: z.string(),
+  applicantFirstName: z.string().min(1, { message: 'First name is required' }),
+  applicantLastName: z.string().min(1, { message: 'Last name is required' }),
 })
 
 export const TemplateSchema = z.object({
