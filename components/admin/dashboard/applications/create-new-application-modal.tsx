@@ -29,7 +29,6 @@ export default function CreateNewApplicationModal({
   orgName,
 }: CreateNewApplicationModalProps) {
   const [selectedClientId, setSelectedClientId] = useState<string>('')
-  const [selectedTemplateId, setSelectedTemplateId] = useState<string>('')
   //TODO: cleanup application creation server action
 
   // TODO: change the formState to be able to show errors, similar to client creation form
@@ -39,7 +38,7 @@ export default function CreateNewApplicationModal({
   const { closeModal } = useModal()
 
   async function handleCreateApplication(formData: FormData) {
-    createApplication(selectedClientId, selectedTemplateId, formData).then((res) => {
+    createApplication(selectedClientId, formData).then((res) => {
       if (res.success) {
         resetForm()
         closeModal()
@@ -57,19 +56,14 @@ export default function CreateNewApplicationModal({
     setSelectedClientId(client)
   }
 
-  function handleTemplateSelect(template: string) {
-    setSelectedTemplateId(template)
-  }
-
   function handleCloseModal(e: MouseEvent<HTMLButtonElement>) {
     e.stopPropagation()
     setSelectedClientId('')
-    setSelectedTemplateId('')
     resetForm()
     closeModal()
   }
   console.log(formState)
-  //TODO: Add error handling and display errors
+  console.log(formState.error)
   return (
     <Modal title="Create a new application" onClose={resetForm}>
       <form className="w-[35vw] max-w-[570px]" action={handleCreateApplication}>
@@ -78,8 +72,7 @@ export default function CreateNewApplicationModal({
           selectedClientId={selectedClientId}
           setSelectedClientId={handleClientSelect}
         />
-
-        <div className="my-[14px] text-[14px]">
+        <div className="my-[14px]">
           <FormInput errors={formState.errors?.role}>
             <InputLabel htmlFor="role">Role</InputLabel>
             <Select name="role" id="role" options={roleOptions} />
@@ -118,11 +111,7 @@ export default function CreateNewApplicationModal({
           </div>
         </div>
 
-        <TemplateSelect
-          templates={templates}
-          selectedTemplateId={selectedTemplateId}
-          setSelectedTemplateId={handleTemplateSelect}
-        />
+        <TemplateSelect templates={templates} errors={formState.errors?.templateId} />
         <div className="mt-[10px] flex justify-center gap-[8px]">
           <Button
             size="full"

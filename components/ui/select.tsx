@@ -2,6 +2,7 @@ interface Option {
   id: number | string
   value: string
   name: string
+  title?: string
 }
 
 interface SelectProps {
@@ -22,7 +23,7 @@ export function Select({
   weight = 'normal',
   size = 'full',
   className,
-  defaultValue,
+  defaultValue = '',
   options,
 }: SelectProps) {
   const textSize =
@@ -60,12 +61,12 @@ export function Select({
       className={`${className} ${textSize} ${fontWeight} ${width} 'h-[30px]' rounded-sm border-[1px] border-n-400 px-[8px] py-[3px] transition autofill:bg-none autofill:outline-n-400 focus:border-n-400 focus:outline focus:outline-[1px] focus:outline-n-400`}
       defaultValue={defaultValue}
     >
-      <option value="" disabled selected>
+      <option value="" disabled>
         --Select--
       </option>
       {options.map((option) => (
-        <option key={option.id} value={option.value}>
-          {option.name}
+        <option key={option.id} value={option.value || option.id}>
+          {option.name || option.title}
         </option>
       ))}
     </select>

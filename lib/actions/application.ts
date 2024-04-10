@@ -5,19 +5,18 @@ import { revalidatePath } from 'next/cache'
 import { prisma } from '@/prisma/prisma'
 import { UserRole } from '@prisma/client'
 import { getAuthenticatedUser } from '@/auth'
-import { fetchUserByEmailAndOrgName, fetchUserById } from '../data/user'
+import { fetchUserById } from '../data/user'
 import { ApplicationSchema } from '../zod/schemas'
 import { fetchFullTemplateById } from '../data/template'
-import { fetchCurrentOrgId, getCurrentOrgName } from '../utils/server'
+import { fetchCurrentOrgId } from '../utils/server'
 import { validateFormDataAgainstSchema } from '../utils/validation'
 
 export async function createApplication(
   clientId: string,
-  templateId: string,
   formData: FormData
 ): Promise<{ success?: string; error?: string; errors?: any }> {
+  console.log(formData)
   const { data, errors } = await validateFormDataAgainstSchema(ApplicationSchema, formData)
-
   if (errors) {
     return { errors }
   }
@@ -28,14 +27,13 @@ export async function createApplication(
     return { error: 'You are not authorized to create application!' }
   }
 
-  const orgName = getCurrentOrgName()
   const orgId = await fetchCurrentOrgId()
 
-  if (!orgName || !orgId) {
+  if (!orgId) {
     return { error: 'Organization not found!' }
   }
 
-  const { role, applicantFirstName, applicantLastName } = data
+  const { role, applicantFirstName, applicantLastName, templateId } = data
 
   const client = await fetchUserById(clientId)
 
@@ -53,7 +51,7 @@ export async function createApplication(
     return { error: 'Template not found!' }
   }
 
-  const application = await prisma.application.create({
+  await prisma.application.create({
     data: {
       clientId: client.id,
       orgId: orgId,
