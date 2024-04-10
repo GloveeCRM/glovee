@@ -1,5 +1,5 @@
 interface Option {
-  index: number
+  id: number | string
   value: string
   name: string
 }
@@ -57,11 +57,14 @@ export function Select({
     <select
       name={name}
       id={id}
-      className={`${className} ${textSize} ${fontWeight} ${width} rounded-sm border border-n-400 px-[8px] py-[3px]`}
+      className={`${className} ${textSize} ${fontWeight} ${width} 'h-[30px]' rounded-sm border-[1px] border-n-400 px-[8px] py-[3px] transition autofill:bg-none autofill:outline-n-400 focus:border-n-400 focus:outline focus:outline-[1px] focus:outline-n-400`}
       defaultValue={defaultValue}
     >
+      <option value="" disabled selected>
+        --Select--
+      </option>
       {options.map((option) => (
-        <option key={option.index} value={option.value}>
+        <option key={option.id} value={option.value}>
           {option.name}
         </option>
       ))}
