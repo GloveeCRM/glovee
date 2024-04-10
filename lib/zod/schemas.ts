@@ -19,7 +19,7 @@ export const CreateClientSchema = z.object({
 })
 
 export const ApplicationSchema = z.object({
-  role: z.string(),
+  role: z.string().min(1, { message: 'Role is required' }),
   applicantFirstName: z.string().min(1, { message: 'First name is required' }),
   applicantLastName: z.string().min(1, { message: 'Last name is required' }),
 })

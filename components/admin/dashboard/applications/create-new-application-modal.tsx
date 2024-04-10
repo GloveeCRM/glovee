@@ -17,12 +17,11 @@ interface CreateNewApplicationModalProps {
   orgName: string
 }
 
-const options = [
-  { index: 0, value: '', name: '--Select--' },
-  { index: 1, value: 'MAIN', name: 'Main' },
-  { index: 2, value: 'SPOUSE', name: 'Spouse' },
-  { index: 3, value: 'CHILD', name: 'Child' },
-  { index: 4, value: 'OTHER', name: 'Other' },
+const roleOptions = [
+  { id: 1, value: 'MAIN', name: 'Main' },
+  { id: 2, value: 'SPOUSE', name: 'Spouse' },
+  { id: 3, value: 'CHILD', name: 'Child' },
+  { id: 4, value: 'OTHER', name: 'Other' },
 ]
 
 export default function CreateNewApplicationModal({
@@ -79,23 +78,20 @@ export default function CreateNewApplicationModal({
           selectedClientId={selectedClientId}
           setSelectedClientId={handleClientSelect}
         />
+
         <div className="my-[14px] text-[14px]">
-          <InputLabel htmlFor="role" className="mb-[4px]">
-            Role
-          </InputLabel>
-          {/* TODO: create a custom select component */}
-          <Select name="role" id="role" options={options} />
+          <FormInput errors={formState.errors?.role}>
+            <InputLabel htmlFor="role">Role</InputLabel>
+            <Select name="role" id="role" options={roleOptions} />
+          </FormInput>
         </div>
         <div className="mb-[14px] grid grid-flow-col gap-[14px] text-[14px]">
-          {/* TODO: add formInput ui component */}
           <FormInput
             id="applicant-first-name"
             gap="sm"
             errors={formState.errors?.applicantFirstName}
           >
-            <InputLabel htmlFor="applicantFirstName" className="mb-[4px]">
-              Applicant First Name
-            </InputLabel>
+            <InputLabel htmlFor="applicantFirstName">Applicant First Name</InputLabel>
             <TextInput
               name="applicantFirstName"
               id="applicant-first-name"
@@ -110,9 +106,7 @@ export default function CreateNewApplicationModal({
               gap="sm"
               errors={formState.errors?.applicantLastName}
             >
-              <InputLabel htmlFor="applicantLastName" className="mb-[4px]">
-                Applicant Last Name
-              </InputLabel>
+              <InputLabel htmlFor="applicantLastName">Applicant Last Name</InputLabel>
               <TextInput
                 name="applicantLastName"
                 id="applicant-last-name"
