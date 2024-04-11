@@ -1,3 +1,5 @@
+import { Children } from 'react'
+
 interface IconSkeletonProps {
   className?: string
   size?: 'sm' | 'md' | 'lg'
@@ -296,6 +298,43 @@ export function TemplateEditTopbarSectionWrapperSkeleton() {
       <div className="flex items-center border-l-[1px] border-r-[1px] border-n-500/50 bg-n-600/50 px-[2px]">
         <IconSkeleton className="bg-n-500/50" size="sm" />
       </div>
+    </div>
+  )
+}
+
+interface FlatQuestionSetSkeletonProps {
+  children?: React.ReactNode
+  empty?: boolean
+}
+function FlatQuestionSetSkeleton({ children, empty = false }: FlatQuestionSetSkeletonProps) {
+  return (
+    <div className="animate-pulse rounded-md bg-n-300 p-[6px]">
+      <div
+        className={`relative min-h-[100px] rounded border-[2px] border-dashed border-n-400 ${empty && 'bg-n-200/80'}`}
+      >
+        {!empty ? (
+          <div className="flex flex-col gap-[8px] p-[4px]">
+            <div className="flex flex-col gap-[8px] rounded bg-n-200/80 px-[8px] py-[12px]">
+              <TitleSkeleton size="md" className="bg-n-400" />
+              <TextInputFieldSkeleton className="bg-n-300" />
+            </div>
+            <div className="flex flex-col gap-[8px] rounded bg-n-200/80 px-[8px] py-[12px]">
+              <TitleSkeleton size="md" className="bg-n-400" />
+              <TextInputFieldSkeleton className="bg-n-300" />
+            </div>
+          </div>
+        ) : (
+          <div className="absolute left-1/2 top-1/2 h-[18px] w-[160px] -translate-x-1/2 -translate-y-1/2 rounded bg-n-300" />
+        )}
+      </div>
+    </div>
+  )
+}
+
+export function QuestionsEditBoardSkeleton() {
+  return (
+    <div className="rounded-lg bg-n-200 p-[4px]">
+      <FlatQuestionSetSkeleton></FlatQuestionSetSkeleton>
     </div>
   )
 }
