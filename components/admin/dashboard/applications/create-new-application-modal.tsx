@@ -3,14 +3,13 @@
 import { MouseEvent, useState } from 'react'
 
 import { Template } from '@prisma/client'
+import { createApplication } from '@/lib/actions/application'
 import { Modal, useModal } from '@/components/ui/modal'
+import { FormInput, InputLabel, TextInput } from '@/components/ui/inputs'
+import { Select } from '@/components/ui/select'
+import { Button, SubmitButton } from '@/components/ui/buttons'
 import TemplateSelect from './template-select'
 import ClientSearchDropdown from './clients-search-dropdown'
-import { useFormState } from 'react-dom'
-import { createApplication } from '@/lib/actions/application'
-import { FormInput, InputLabel, TextInput } from '@/components/ui/inputs'
-import { Button, SubmitButton } from '@/components/ui/buttons'
-import { Select } from '@/components/ui/select'
 
 interface CreateNewApplicationModalProps {
   templates: Template[]
@@ -29,11 +28,6 @@ export default function CreateNewApplicationModal({
   orgName,
 }: CreateNewApplicationModalProps) {
   const [selectedClientId, setSelectedClientId] = useState<string>('')
-  //TODO: cleanup application creation server action
-
-  // TODO: change the formState to be able to show errors, similar to client creation form
-  // make action have return type of {success: boolean, errors?: any}
-
   const [formState, setFormState] = useState<any>({})
   const { closeModal } = useModal()
 
