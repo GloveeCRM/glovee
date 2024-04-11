@@ -62,8 +62,7 @@ export default function CreateNewApplicationModal({
     resetForm()
     closeModal()
   }
-  console.log(formState)
-  console.log(formState.error)
+
   return (
     <Modal title="Create a new application" onClose={resetForm}>
       <form className="w-[35vw] max-w-[570px]" action={handleCreateApplication}>
