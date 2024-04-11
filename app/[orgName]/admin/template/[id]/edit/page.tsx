@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 
 import { fetchTemplateById } from '@/lib/data/template'
 import QuestionsEditBoard from '@/components/admin/template/edit/questions-edit-board'
-import { QuestionsEditBoardSkeleton } from '@/components/skeletons'
+import { LoopQuestionSetSkeleton, QuestionsEditBoardSkeleton } from '@/components/skeletons'
 
 interface TemplateEditPageProps {
   params: {
@@ -22,6 +22,7 @@ export default async function TemplateEditPage({ params }: TemplateEditPageProps
     <div className="p-[4px]">
       <QuestionsEditBoard />
       <QuestionsEditBoardSkeleton />
+      <LoopQuestionSetSkeleton />
     </div>
   )
 }
