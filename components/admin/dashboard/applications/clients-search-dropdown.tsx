@@ -61,7 +61,7 @@ export default function ClientSearchDropdown({
           type="text"
           id="client-name"
           name="clientName"
-          className="mb-[4px] w-full rounded-sm border border-n-400 px-[8px] py-[3px] text-[14px]  text-gray-700 focus:outline-none"
+          className="w-full rounded-sm border border-n-400 px-[8px] py-[3px] text-[14px]  text-gray-700 focus:outline-none"
           placeholder="Search..."
           onChange={(e) => setSearchTerm(e.target.value)}
           value={searchTerm}

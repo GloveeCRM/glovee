@@ -15,9 +15,12 @@ export async function createApplication(
   clientId: string,
   formData: FormData
 ): Promise<{ success?: string; error?: string; errors?: any }> {
-  console.log(formData)
   const { data, errors } = await validateFormDataAgainstSchema(ApplicationSchema, formData)
-  if (errors) {
+  if (errors || clientId.length === 0) {
+    if (clientId.length === 0) {
+      const combinedErrors = { ...errors, clientId: 'Client is required' }
+      return { errors: combinedErrors }
+    }
     return { errors }
   }
 

@@ -67,11 +67,13 @@ export default function CreateNewApplicationModal({
   return (
     <Modal title="Create a new application" onClose={resetForm}>
       <form className="w-[35vw] max-w-[570px]" action={handleCreateApplication}>
-        <ClientSearchDropdown
-          orgName={orgName}
-          selectedClientId={selectedClientId}
-          setSelectedClientId={handleClientSelect}
-        />
+        <FormInput errors={formState.errors?.clientId}>
+          <ClientSearchDropdown
+            orgName={orgName}
+            selectedClientId={selectedClientId}
+            setSelectedClientId={handleClientSelect}
+          />
+        </FormInput>
         <div className="my-[14px]">
           <FormInput errors={formState.errors?.role}>
             <InputLabel htmlFor="role">Role</InputLabel>
