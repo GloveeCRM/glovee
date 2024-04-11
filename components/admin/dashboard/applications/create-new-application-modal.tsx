@@ -65,8 +65,9 @@ export default function CreateNewApplicationModal({
 
   return (
     <Modal title="Create a new application" onClose={resetForm}>
-      <form className="w-[35vw] max-w-[570px]" action={handleCreateApplication}>
-        <FormInput errors={formState.errors?.clientId}>
+      <form className="w-full" action={handleCreateApplication}>
+        <FormInput errors={formState.errors?.clientId} gap="sm">
+          <InputLabel htmlFor="clientId">Client Name</InputLabel>
           <ClientSearchDropdown
             orgName={orgName}
             selectedClientId={selectedClientId}
@@ -74,7 +75,7 @@ export default function CreateNewApplicationModal({
           />
         </FormInput>
         <div className="my-[14px]">
-          <FormInput errors={formState.errors?.role}>
+          <FormInput errors={formState.errors?.role} gap="sm">
             <InputLabel htmlFor="role">Role</InputLabel>
             <Select name="role" id="role" options={roleOptions} />
           </FormInput>
@@ -111,9 +112,8 @@ export default function CreateNewApplicationModal({
             </FormInput>
           </div>
         </div>
-
         <TemplateSelect templates={templates} errors={formState.errors?.templateId} />
-        <div className="mt-[10px] flex justify-center gap-[8px]">
+        <div className="mt-[26px] flex justify-center gap-[8px]">
           <Button
             size="full"
             type="reset"

@@ -1,4 +1,5 @@
 import { FormInput, InputLabel } from '@/components/ui/inputs'
+import { Select } from '@/components/ui/select'
 import { Template } from '@prisma/client'
 
 interface TemplateSelectProps {
@@ -7,26 +8,17 @@ interface TemplateSelectProps {
 }
 
 export default function TemplateSelect({ templates, errors }: TemplateSelectProps) {
+  const options = templates.map((template) => ({
+    id: template.id,
+    value: template.id,
+    name: template.title,
+  }))
+
   return (
     <div>
-      <FormInput errors={errors}>
-        <InputLabel htmlFor="templateId">Choose a template</InputLabel>
-        {/* TODO: add select ui component */}
-        <select
-          name="templateId"
-          id="template"
-          className="w-full rounded-sm border border-n-400 px-[8px] py-[3px] text-[14px]"
-          defaultValue=""
-        >
-          <option value="" disabled>
-            --Select--
-          </option>
-          {templates?.map((template) => (
-            <option key={template.id} value={template.id}>
-              {template.title}
-            </option>
-          ))}
-        </select>
+      <FormInput errors={errors} gap="sm">
+        <InputLabel htmlFor="templateId">Select a template</InputLabel>
+        <Select id="template" name="templateId" options={options} />
       </FormInput>
     </div>
   )
