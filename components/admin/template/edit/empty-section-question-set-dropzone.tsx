@@ -57,7 +57,7 @@ export default function EmptySectionQuestionSetDropzone() {
 
   return (
     <div
-      className={`flex h-[150px] items-center justify-center font-medium text-n-600 transition duration-75 ${isDraggedOver ? (isDropAllowed ? 'text-n-700' : 'bg-n-300/50 text-n-700/50') : ''}`}
+      className={`flex h-[220px] items-center justify-center font-medium text-n-600 transition duration-75 ${isDraggedOver ? (isDropAllowed ? 'text-n-700' : 'bg-n-300/50 text-n-700/50') : ''}`}
       style={customDashedBorderStyle}
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
