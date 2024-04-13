@@ -30,22 +30,34 @@ export default function QuestionSettingsToolbar({ questionId }: QuestionSettings
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.05 }}>
       <div>Question Settings</div>
-      {question &&
-        (isTextInputQuestionType(question) ? (
-          <TextInputQuestionSettingsCard question={question} />
-        ) : isTextareaQuestionType(question) ? (
-          <TextareaQuestionSettingsCard question={question} />
-        ) : isSelectQuestionType(question) ? (
-          <SelectQuestionSettingsCard question={question} />
-        ) : isDateInputQuestionType(question) ? (
-          <DateInputQuestionSettingsCard question={question} />
-        ) : isRadioQuestionType(question) ? (
-          <RadioQuestionSettingsCard question={question} />
-        ) : isCheckboxQuestionType(question) ? (
-          <CheckboxQuestionSettingsCard question={question} />
-        ) : isDocumentQuestionType(question) ? (
-          <DocumentQuestionSettingsCard question={question} />
-        ) : null)}
+      <div className="bg-n-600">
+        {question &&
+          (isTextInputQuestionType(question) ? (
+            <TextInputQuestionSettingsCard question={question} />
+          ) : isTextareaQuestionType(question) ? (
+            <TextareaQuestionSettingsCard question={question} />
+          ) : isSelectQuestionType(question) ? (
+            <SelectQuestionSettingsCard question={question} />
+          ) : isDateInputQuestionType(question) ? (
+            <DateInputQuestionSettingsCard question={question} />
+          ) : isRadioQuestionType(question) ? (
+            <RadioQuestionSettingsCard question={question} />
+          ) : isCheckboxQuestionType(question) ? (
+            <CheckboxQuestionSettingsCard question={question} />
+          ) : isDocumentQuestionType(question) ? (
+            <DocumentQuestionSettingsCard question={question} />
+          ) : null)}
+        <div>
+          <div className="">
+            <div>Required</div>
+            <input type="checkbox" />
+          </div>
+          <div className="">
+            <div>Guide</div>
+            <input type="text" className="w-full rounded-sm bg-n-500 p-2" />
+          </div>
+        </div>
+      </div>
     </motion.div>
   )
 }
