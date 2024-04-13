@@ -15,6 +15,7 @@ import SelectQuestionSettingsCard from '@/components/forms/questions/select-ques
 import TextareaQuestionSettingsCard from '@/components/forms/questions/textarea-question/textarea-question-settings-card'
 import DateInputQuestionSettingsCard from '@/components/forms/questions/date-input-question/date-input-question-settings-card'
 import RadioQuestionSettingsCard from '@/components/forms/questions/radio-question/radio-question-settings-card'
+import CheckboxQuestionSettingsCard from '@/components/forms/questions/checkbox-question/checkbox-question-settings'
 
 interface QuestionSettingsToolbarProps {
   questionId: string
@@ -40,7 +41,7 @@ export default function QuestionSettingsToolbar({ questionId }: QuestionSettings
         ) : isRadioQuestionType(question) ? (
           <RadioQuestionSettingsCard question={question} />
         ) : isCheckboxQuestionType(question) ? (
-          <div>Checkbox</div>
+          <CheckboxQuestionSettingsCard question={question} />
         ) : isDocumentQuestionType(question) ? (
           <div>Document</div>
         ) : null)}
