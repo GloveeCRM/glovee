@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import useQuestionActions from '@/hooks/template/use-question-actions'
 import { TemplateQuestionType } from '@prisma/client'
 import TextInputQuestionSettingsCard from '@/components/forms/questions/text-input-question/text-input-question-settings-card'
+import SelectQuestionSettingsCard from '@/components/forms/questions/select-question/select-question-settings-card'
 
 interface QuestionSettingsToolbarProps {
   questionId: string
@@ -29,7 +30,7 @@ export default function QuestionSettingsToolbar({ questionId }: QuestionSettings
       ) : isTextarea ? (
         <div>Textarea</div>
       ) : isSelect ? (
-        <div>Select</div>
+        <SelectQuestionSettingsCard question={question} />
       ) : isDate ? (
         <div>Date</div>
       ) : isRadio ? (
