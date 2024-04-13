@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from 'react'
 
-import { TemplateQuestionType as TemplateQuestionTypes } from '@prisma/client'
 import { TemplateQuestionType } from '@/lib/types/template'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
 import useQuestionActions from '@/hooks/template/use-question-actions'
@@ -65,7 +64,7 @@ export default function TemplateQuestion({ question }: TemplateQuestionProps) {
       onClick={handleClickQuestion}
     >
       <div className="flex justify-between">
-        <div className="mb-[4px]">{question.prompt}</div>
+        <div className="mb-[4px] cursor-default">{question.prompt}</div>
         <TemplateQuestionMenuButton onClickDelete={handleClickDeleteQuestion} />
       </div>
       {isTextInputQuestionType(question) ? (
