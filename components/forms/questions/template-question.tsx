@@ -100,12 +100,20 @@ function TemplateQuestionPrompt({ question }: TemplateQuestionPromptProps) {
     console.log('Edit prompt')
   }
 
+  function handleClickEnter(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      setIsEditing(false)
+    }
+  }
+
   return isEditing ? (
     <div>
       <input
         type="text"
         className="w-full cursor-default rounded-sm border-[1px] border-n-400 bg-n-100 p-[4px] px-[6px] text-[12px] focus:outline-none"
         defaultValue={question.prompt}
+        onKeyDown={handleClickEnter}
       />
     </div>
   ) : (
