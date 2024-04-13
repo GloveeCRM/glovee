@@ -1,6 +1,7 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { TbEdit } from 'react-icons/tb'
 
 import { TemplateQuestionType } from '@/lib/types/template'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
@@ -64,7 +65,7 @@ export default function TemplateQuestion({ question }: TemplateQuestionProps) {
       onClick={handleClickQuestion}
     >
       <div className="flex justify-between">
-        <div className="mb-[4px] cursor-default">{question.prompt}</div>
+        <TemplateQuestionPrompt question={question} />
         <TemplateQuestionMenuButton onClickDelete={handleClickDeleteQuestion} />
       </div>
       {isTextInputQuestionType(question) ? (
@@ -82,6 +83,39 @@ export default function TemplateQuestion({ question }: TemplateQuestionProps) {
       ) : isDocumentQuestionType(question) ? (
         <DocumentQuestion question={question} readOnly={true} />
       ) : null}
+    </div>
+  )
+}
+
+interface TemplateQuestionPromptProps {
+  question: TemplateQuestionType
+}
+
+function TemplateQuestionPrompt({ question }: TemplateQuestionPromptProps) {
+  const [isEditing, setIsEditing] = useState(false)
+
+  function handleClickEditPrompt(e: React.MouseEvent<SVGElement>) {
+    e.stopPropagation()
+    setIsEditing(true)
+    console.log('Edit prompt')
+  }
+
+  return isEditing ? (
+    <div>
+      <input
+        type="text"
+        className="w-full cursor-default rounded-sm border-[1px] border-n-400 bg-n-100 p-[4px] px-[6px] text-[12px] focus:outline-none"
+        defaultValue={question.prompt}
+      />
+    </div>
+  ) : (
+    <div className="group/title relative ">
+      <div className="group/title-hover:opacity-100 mb-[4px] cursor-default pr-[24px]">
+        {question.prompt}
+      </div>
+      <div className="absolute right-0 top-0 cursor-pointer opacity-0 transition-opacity duration-100 group-hover/title:opacity-100">
+        <TbEdit className="h-[22px] w-[22px]" onClick={handleClickEditPrompt} />
+      </div>
     </div>
   )
 }
