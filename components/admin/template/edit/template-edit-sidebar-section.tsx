@@ -87,7 +87,7 @@ export default function TemplateEditSidebarSection({
 
   return (
     <div
-      className={`group/section relative flex cursor-pointer gap-[4px] text-[14px] ${active && 'bg-n-500/50'} ${isEditing ? 'py-[5px]' : 'py-[6px]'}`}
+      className={`group/section relative flex cursor-pointer gap-[4px] text-[14px] hover:bg-n-600 ${active && 'bg-n-500/50'} ${isEditing ? 'py-[5px]' : 'py-[6px]'}`}
       onClick={handleClickSection}
     >
       {isEditing ? (

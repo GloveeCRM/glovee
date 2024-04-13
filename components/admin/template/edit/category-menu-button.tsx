@@ -1,3 +1,5 @@
+'use client'
+
 import { FiEdit, FiMoreHorizontal } from 'react-icons/fi'
 import { BiTrash } from 'react-icons/bi'
 
@@ -13,7 +15,7 @@ export default function CategoryMenuButton({
   onClickDelete,
 }: CategoryMenuButtonProps) {
   return (
-    <div className="absolute right-[14px]">
+    <div className="absolute right-[6px]">
       <Popover>
         <MenuButton />
         <PopoverContent
@@ -34,7 +36,7 @@ function MenuButton() {
 
   return (
     <PopoverTrigger
-      className={`rounded-sm bg-n-100 p-[2px] text-n-700 transition duration-100 group-hover/category:opacity-100 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
+      className={`rounded-sm bg-n-100 p-[2px] text-n-700 opacity-0 transition duration-100 group-hover/category:opacity-100 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
     >
       <span>
         <FiMoreHorizontal className="h-[18px] w-[18px]" />

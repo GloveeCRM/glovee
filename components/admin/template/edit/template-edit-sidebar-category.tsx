@@ -103,7 +103,10 @@ export default function TemplateEditSidebarCategory({
           onKeyDown={handleKeyDown}
         />
       ) : (
-        <div className="group/category flex cursor-pointer py-[6px]" onClick={handleClickCategory}>
+        <div
+          className="group/category relative flex cursor-pointer py-[6px] hover:bg-n-600"
+          onClick={handleClickCategory}
+        >
           <div>
             {isExpanded ? (
               <IoMdArrowDropdown className="h-[22px] w-[22px]" />
