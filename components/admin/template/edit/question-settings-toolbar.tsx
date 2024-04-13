@@ -4,6 +4,7 @@ import useQuestionActions from '@/hooks/template/use-question-actions'
 import { TemplateQuestionType } from '@prisma/client'
 import TextInputQuestionSettingsCard from '@/components/forms/questions/text-input-question/text-input-question-settings-card'
 import SelectQuestionSettingsCard from '@/components/forms/questions/select-question/select-question-settings-card'
+import TextareaQuestionSettingsCard from '@/components/forms/questions/textarea-question/textarea-question-settings-card'
 
 interface QuestionSettingsToolbarProps {
   questionId: string
@@ -28,7 +29,7 @@ export default function QuestionSettingsToolbar({ questionId }: QuestionSettings
       {isTextInput ? (
         <TextInputQuestionSettingsCard question={question} />
       ) : isTextarea ? (
-        <div>Textarea</div>
+        <TextareaQuestionSettingsCard question={question} />
       ) : isSelect ? (
         <SelectQuestionSettingsCard question={question} />
       ) : isDate ? (
