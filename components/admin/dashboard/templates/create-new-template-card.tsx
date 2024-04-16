@@ -3,7 +3,11 @@ import { AiOutlineFileAdd } from 'react-icons/ai'
 import CreateNewTemplateModal from './create-new-template-modal'
 import { ModalProvider, ModalTrigger } from '../../../ui/modal'
 
-export default function CreateNewTemplateCard() {
+interface CreateNewTemplateCardProps {
+  orgName: string
+}
+
+export default function CreateNewTemplateCard({ orgName }: CreateNewTemplateCardProps) {
   return (
     <ModalProvider>
       <ModalTrigger>
@@ -12,7 +16,7 @@ export default function CreateNewTemplateCard() {
           <span>Create a new template</span>
         </div>
       </ModalTrigger>
-      <CreateNewTemplateModal />
+      <CreateNewTemplateModal orgName={orgName} />
     </ModalProvider>
   )
 }

@@ -12,7 +12,8 @@ export async function fetchTemplatesByOrgId(orgId: string): Promise<Template[] |
   try {
     const templates = await prisma.template.findMany({ where: { orgId: orgId } })
     return templates
-  } catch {
+  } catch (error) {
+    console.error(error)
     return null
   }
 }
@@ -24,7 +25,8 @@ export async function fetchTemplateById(id: string): Promise<Template | null> {
   try {
     const template = await prisma.template.findUnique({ where: { id: id } })
     return template
-  } catch {
+  } catch (error) {
+    console.error(error)
     return null
   }
 }
