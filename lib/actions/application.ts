@@ -8,10 +8,11 @@ import { getAuthenticatedUser } from '@/auth'
 import { fetchUserById } from '../data/user'
 import { ApplicationSchema } from '../zod/schemas'
 import { fetchFullTemplateById } from '../data/template'
-import { fetchCurrentOrgId } from '../utils/server'
 import { validateFormDataAgainstSchema } from '../utils/validation'
+import { fetchOrganizationByOrgName } from '../data/organization'
 
-export async function createApplication(
+export async function createApplicationInOrganization(
+  orgName: string,
   clientId: string,
   formData: FormData
 ): Promise<{ success?: string; error?: string; errors?: any }> {
@@ -30,9 +31,9 @@ export async function createApplication(
     return { error: 'You are not authorized to create application!' }
   }
 
-  const orgId = await fetchCurrentOrgId()
+  const org = await fetchOrganizationByOrgName(orgName)
 
-  if (!orgId) {
+  if (!org) {
     return { error: 'Organization not found!' }
   }
 
@@ -57,7 +58,7 @@ export async function createApplication(
   await prisma.application.create({
     data: {
       clientId: client.id,
-      orgId: orgId,
+      orgId: org.id,
       templateName: template.title,
       applicantFirstName: applicantFirstName,
       applicantLastName: applicantLastName,

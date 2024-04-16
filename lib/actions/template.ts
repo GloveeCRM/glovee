@@ -12,12 +12,12 @@ import {
   TemplateQuestionType,
 } from '../types/template'
 import { fetchFullTemplateById } from '../data/template'
-import { fetchCurrentOrgId } from '../utils/server'
+import { fetchOrganizationByOrgName } from '../data/organization'
 
 /**
  * Create a new template
  */
-export async function createTemplate(prevState: any, formDara: FormData) {
+export async function createTemplateInOrganization(orgName: string, formDara: FormData) {
   const validatedFields = TemplateSchema.safeParse({
     title: formDara.get('title'),
     description: formDara.get('description'),
@@ -29,15 +29,15 @@ export async function createTemplate(prevState: any, formDara: FormData) {
 
   const { title, description } = validatedFields.data
 
-  const orgId = await fetchCurrentOrgId()
+  const org = await fetchOrganizationByOrgName(orgName)
 
-  if (!orgId) {
+  if (!org) {
     return { error: 'Failed to fetch organization ID!' }
   }
 
   const template = await prisma.template.create({
     data: {
-      orgId,
+      orgId: org.id,
       title,
       description,
       categories: {

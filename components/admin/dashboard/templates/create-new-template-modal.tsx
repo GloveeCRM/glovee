@@ -1,24 +1,37 @@
 'use client'
 
-import { MouseEvent } from 'react'
+import { MouseEvent, useState } from 'react'
 import { useFormState } from 'react-dom'
 
-import { createTemplate } from '@/lib/actions/template'
+import { createTemplateInOrganization } from '@/lib/actions/template'
 import { Modal, useModal } from '../../../ui/modal'
 
-export default function CreateNewTemplateModal() {
-  const [formState, dispatch] = useFormState(createTemplate, {})
+interface CreateNewTemplateModalProps {
+  orgName: string
+}
+
+export default function CreateNewTemplateModal({ orgName }: CreateNewTemplateModalProps) {
+  const [formState, setFormState] = useState<any>({})
   const { closeModal } = useModal()
 
+  async function handleCreateTemplate(formData: FormData) {
+    createTemplateInOrganization(orgName, formData).then((res) => {
+      if (res.success) {
+        resetForm()
+        closeModal()
+      } else {
+        setFormState(res)
+      }
+    })
+  }
+
+  function resetForm() {
+    setFormState({})
+  }
+
   return (
-    <Modal title="Create a new template">
-      <form
-        action={async (formData) => {
-          dispatch(formData)
-          closeModal()
-        }}
-        className="w-[85vw] max-w-[570px]"
-      >
+    <Modal title="Create a new template" onClose={resetForm}>
+      <form action={handleCreateTemplate} className="w-[85vw] max-w-[570px]">
         <div className="mb-[12px]">
           <label className="mb-[4px] block text-[14px] text-n-700" htmlFor="title">
             Title

@@ -3,7 +3,7 @@
 import { MouseEvent, useState } from 'react'
 
 import { Template } from '@prisma/client'
-import { createApplication } from '@/lib/actions/application'
+import { createApplicationInOrganization } from '@/lib/actions/application'
 import { Modal, useModal } from '@/components/ui/modal'
 import { FormInput, InputLabel, TextInput } from '@/components/ui/inputs'
 import { Select } from '@/components/ui/select'
@@ -32,7 +32,7 @@ export default function CreateNewApplicationModal({
   const { closeModal } = useModal()
 
   async function handleCreateApplication(formData: FormData) {
-    createApplication(selectedClientId, formData).then((res) => {
+    createApplicationInOrganization(orgName, selectedClientId, formData).then((res) => {
       if (res.success) {
         resetForm()
         closeModal()
