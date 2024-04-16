@@ -21,7 +21,7 @@ export default async function ClientPage({ params }: ClientsPageProps) {
     <div>
       <h1 className="mb-[15px] text-[24px] font-bold">Client</h1>
       <ClientProfileCard client={client} userId={userId} />
-      <ClientApplicationsTable applications={applications || []} />
+      <ClientApplicationsTable applications={applications} />
     </div>
   )
 }
