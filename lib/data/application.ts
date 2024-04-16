@@ -1,4 +1,5 @@
 import { prisma } from '@/prisma/prisma'
+import { Application } from '@prisma/client'
 
 export async function fetchApplicationByOrgNameandSearchQuery(orgName: string, query: string) {
   try {
@@ -48,6 +49,7 @@ export async function fetchApplicationByOrgNameandSearchQuery(orgName: string, q
         },
       },
     })
+
     return applications
   } catch (error) {
     console.error(error)
@@ -74,7 +76,7 @@ export async function fetchApplications() {
   }
 }
 
-export async function fetchApplicationsByUserId(id: string) {
+export async function fetchApplicationsByUserId(id: string): Promise<Application[] | null> {
   try {
     const application = await prisma.application.findMany({
       where: {
@@ -83,13 +85,10 @@ export async function fetchApplicationsByUserId(id: string) {
     })
 
     return application
-  } catch {
+  } catch (error) {
+    console.error(error)
     return null
   }
-}
-
-interface Application {
-  clientId: string
 }
 
 export async function fetchApplicationById(id: string) {
@@ -105,11 +104,7 @@ export async function fetchApplicationById(id: string) {
               include: {
                 questionSets: {
                   include: {
-                    questions: {
-                      //     include: {
-                      //       answer: true,
-                      //     },
-                    },
+                    questions: {},
                   },
                 },
               },
