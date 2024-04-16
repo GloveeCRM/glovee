@@ -39,12 +39,13 @@ export async function fetchUserById(id: string): Promise<User | null> {
   try {
     const user = await prisma.user.findUnique({ where: { id: id } })
     return user
-  } catch {
+  } catch (error) {
+    console.error(error)
     return null
   }
 }
 
-export async function fetchClientsByOrgName(orgName: string) {
+export async function fetchClientsByOrgName(orgName: string): Promise<User[] | null> {
   try {
     const clients = await prisma.user.findMany({
       where: {
@@ -56,8 +57,9 @@ export async function fetchClientsByOrgName(orgName: string) {
     })
 
     return clients
-  } catch {
-    return []
+  } catch (error) {
+    console.error(error)
+    return null
   }
 }
 
@@ -92,30 +94,6 @@ export async function fetchClientsByOrgNameandSearchQuery(orgName: string, query
     })
 
     return clients
-  } catch {
-    return []
-  }
-}
-
-// not sure
-export async function fetchClientsByOrgNameAndName(orgName: string, name: string) {
-  try {
-    const clients = await prisma.user.findMany({
-      where: {
-        role: UserRole.ORG_CLIENT,
-        organization: {
-          orgName: orgName,
-        },
-        OR: [
-          {
-            name: {
-              contains: name,
-              mode: 'insensitive',
-            },
-          },
-        ],
-      },
-    })
   } catch {
     return []
   }

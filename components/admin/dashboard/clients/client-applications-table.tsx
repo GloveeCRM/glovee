@@ -1,6 +1,11 @@
+import { Application } from '@prisma/client'
 import { GoPlus } from 'react-icons/go'
 
-export default function ClientApplicationsTable({ applications }: { applications: any[] }) {
+interface ClientApplicationsTableProps {
+  applications: Application[] | null
+}
+
+export default function ClientApplicationsTable({ applications }: ClientApplicationsTableProps) {
   return (
     <div>
       <div className="mt-[20px] flex justify-between">
