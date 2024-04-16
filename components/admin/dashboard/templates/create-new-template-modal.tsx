@@ -1,7 +1,6 @@
 'use client'
 
 import { MouseEvent, useState } from 'react'
-import { useFormState } from 'react-dom'
 
 import { createTemplateInOrganization } from '@/lib/actions/template'
 import { Modal, useModal } from '../../../ui/modal'
