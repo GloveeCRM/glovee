@@ -1,6 +1,5 @@
 import { updateClientById } from '@/lib/actions/user'
-import { MouseEvent } from 'react'
-import { useFormState } from 'react-dom'
+import { MouseEvent, useState } from 'react'
 
 interface ClientProfileEditProps {
   setIsEditing: (isEditing: boolean) => void
@@ -12,16 +11,25 @@ export default function ClientProfileEdit({ setIsEditing, client }: ClientProfil
   const firstName = fullName.split(' ')[0]
   const lastName = fullName.split(' ')[1]
 
-  const updateClient = updateClientById.bind(null, client.id)
-  const [formState, dispatch] = useFormState(updateClient, {})
+  const [formState, setFormState] = useState<any>({})
+
+  async function handleUpdateClientById(formData: FormData) {
+    updateClientById(client.id, formData).then((res) => {
+      if (res.success) {
+        resetForm()
+        setIsEditing(false)
+      } else {
+        setFormState(res)
+      }
+    })
+  }
+
+  function resetForm() {
+    setFormState({})
+  }
 
   return (
-    <form
-      action={async (formData) => {
-        dispatch(formData)
-        setIsEditing(false)
-      }}
-    >
+    <form action={handleUpdateClientById}>
       <div>
         <div className="mb-[10px] grid grid-flow-col gap-[8px]">
           <div>
