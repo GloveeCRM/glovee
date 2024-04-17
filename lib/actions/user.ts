@@ -41,18 +41,20 @@ export async function createClientInOrg(
   return { success: 'Client created!' }
 }
 
-export async function updateClientById(clientId: string, prevState: any, formData: FormData) {
-  const validatedFields = UpdateClientSchema.safeParse({
-    clientFirstName: formData.get('clientFirstName'),
-    clientLastName: formData.get('clientLastName'),
-    clientEmail: formData.get('clientEmail'),
-  })
-
-  if (!validatedFields.success) {
-    return { errors: validatedFields.error.flatten().fieldErrors }
+export async function updateClientById(
+  clientId: string,
+  formData: FormData
+): Promise<{ success?: string; error?: string; errors?: any }> {
+  const { data, errors } = await validateFormDataAgainstSchema(UpdateClientSchema, formData)
+  if (errors || clientId.length === 0) {
+    if (clientId.length === 0) {
+      const combinedErrors = { ...errors, clientId: 'Client is required' }
+      return { errors: combinedErrors }
+    }
+    return { errors }
   }
 
-  const { clientFirstName, clientLastName, clientEmail } = validatedFields.data
+  const { clientFirstName, clientLastName, clientEmail } = data
 
   await prisma.user.update({
     where: {
