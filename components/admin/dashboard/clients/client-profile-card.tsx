@@ -1,16 +1,20 @@
 'use client'
 import Image from 'next/image'
+import { useState } from 'react'
 
 import { UserStatus } from '@prisma/client'
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
 import DeactiveButton from './deactive-button'
 import ActiveButton from './active-button'
+import ClientProfileEdit from './client-profile-edit'
 import { HiOutlinePencilSquare } from 'react-icons/hi2'
 
-import { useState } from 'react'
-import ClientProfileEdit from './client-profile-edit'
+interface ClientProfileCardProps {
+  client: any
+  userId: string
+}
 
-export default function ClientProfileCard({ client, userId }: { client: any; userId: string }) {
+export default function ClientProfileCard({ client, userId }: ClientProfileCardProps) {
   const [isEditing, setIsEditing] = useState(false)
   return (
     <div className="flex items-center justify-between rounded-lg border border-n-400 bg-n-100/50 px-[14px] py-[18px]">
