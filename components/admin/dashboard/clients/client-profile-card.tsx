@@ -2,7 +2,7 @@
 import Image from 'next/image'
 import { useState } from 'react'
 
-import { UserStatus } from '@prisma/client'
+import { User, UserStatus } from '@prisma/client'
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
 import DeactiveButton from './deactive-button'
 import ActiveButton from './active-button'
@@ -10,7 +10,7 @@ import ClientProfileEdit from './client-profile-edit'
 import { HiOutlinePencilSquare } from 'react-icons/hi2'
 
 interface ClientProfileCardProps {
-  client: any
+  client: User
   userId: string
 }
 

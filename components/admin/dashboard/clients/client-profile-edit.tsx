@@ -1,13 +1,15 @@
-import { updateClientById } from '@/lib/actions/user'
 import { MouseEvent, useState } from 'react'
+
+import { User } from '@prisma/client'
+import { updateClientById } from '@/lib/actions/user'
 
 interface ClientProfileEditProps {
   setIsEditing: (isEditing: boolean) => void
-  client: any
+  client: User
 }
 
 export default function ClientProfileEdit({ setIsEditing, client }: ClientProfileEditProps) {
-  const fullName = client.name
+  const fullName = client.name || ''
   const firstName = fullName.split(' ')[0]
   const lastName = fullName.split(' ')[1]
 
@@ -64,7 +66,7 @@ export default function ClientProfileEdit({ setIsEditing, client }: ClientProfil
           type="text"
           name="clientEmail"
           id="client-email"
-          defaultValue={client.email}
+          defaultValue={client.email || ''}
           className="w-full rounded-sm border border-n-400 bg-n-100/50 px-[8px] py-[4px] text-[14px]"
         />
       </div>
