@@ -2,6 +2,8 @@ import { MouseEvent, useState } from 'react'
 
 import { User } from '@prisma/client'
 import { updateClientById } from '@/lib/actions/user'
+import { FormInput, InputLabel, TextInput } from '@/components/ui/inputs'
+import { Button, SubmitButton } from '@/components/ui/buttons'
 
 interface ClientProfileEditProps {
   setIsEditing: (isEditing: boolean) => void
@@ -34,60 +36,58 @@ export default function ClientProfileEdit({ setIsEditing, client }: ClientProfil
     <form action={handleUpdateClientById}>
       <div>
         <div className="mb-[10px] grid grid-flow-col gap-[8px]">
-          <div>
-            <label htmlFor="clientFirstName" className="mb-[4px] block text-[14px] text-n-700">
-              First Name
-            </label>
-            <input
-              type="text"
-              name="clientFirstName"
+          <FormInput id="client-name" gap="sm" errors={formState.errors?.clientName}>
+            <InputLabel htmlFor="clientFirstName">First Name</InputLabel>
+            <TextInput
+              placeholder="first name"
               id="client-first-name"
+              name="clientFirstName"
               defaultValue={firstName}
-              className="w-full rounded-sm border border-n-400 bg-n-100/50 px-[8px] py-[4px] text-[14px]"
+              size="xs"
+              className="bg-n-100/50 px-[8px] py-[4px] text-[14px]"
             />
-          </div>
-          <div>
-            <label htmlFor="clientLastName" className="mb-[4px] block text-[14px] text-n-700">
-              Last Name
-            </label>
-            <input
-              type="text"
-              name="clientLastName"
+          </FormInput>
+          <FormInput id="client-last-name" gap="sm" errors={formState.errors?.clientLastName}>
+            <InputLabel htmlFor="clientLastName">Last Name</InputLabel>
+            <TextInput
+              placeholder="last name"
               id="client-last-name"
+              name="clientLastName"
               defaultValue={lastName}
-              className="w-full rounded-sm border border-n-400 bg-n-100/50 px-[8px] py-[4px] text-[14px]"
+              size="xs"
+              className="bg-n-100/50 px-[8px] py-[4px] text-[14px]"
             />
-          </div>
+          </FormInput>
         </div>
-        <label htmlFor="clientEmail" className="mb-[4px] block text-[14px] text-n-700">
-          Email
-        </label>
-        <input
-          type="text"
-          name="clientEmail"
-          id="client-email"
-          defaultValue={client.email || ''}
-          className="w-full rounded-sm border border-n-400 bg-n-100/50 px-[8px] py-[4px] text-[14px]"
-        />
+        <FormInput id="client-email" gap="sm" errors={formState.errors?.clientEmail[0]}>
+          <InputLabel htmlFor="clientEmail">Email</InputLabel>
+          <TextInput
+            placeholder="email"
+            name="clientEmail"
+            id="client-email"
+            defaultValue={client.email || ''}
+            className="bg-n-100/50 px-[8px] py-[4px] text-[14px]"
+          />
+        </FormInput>
       </div>
-
       <div className="mt-[10px] flex justify-center gap-[8px]">
-        <button
-          className="rounded-sm bg-n-200 px-[20px] py-[6px] text-[14px] font-bold text-n-700 transition hover:bg-n-400"
+        <Button
           type="reset"
+          size="full"
+          className="px-[20px] py-[6px] font-bold text-n-700"
           onClick={(e: MouseEvent<HTMLButtonElement>) => {
             e.stopPropagation()
             setIsEditing(false)
           }}
         >
           Cancel
-        </button>
-        <button
-          type="submit"
-          className="rounded-sm bg-n-600 px-[20px] py-[6px] text-[14px] font-bold text-white transition hover:bg-n-700"
+        </Button>
+        <SubmitButton
+          size="full"
+          className="bg-n-600 px-[20px] py-[6px] font-bold text-white hover:bg-n-700"
         >
           Save
-        </button>
+        </SubmitButton>
       </div>
     </form>
   )

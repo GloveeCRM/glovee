@@ -3,13 +3,9 @@ import { z } from 'zod'
 import { UserRole } from '@prisma/client'
 
 export const UpdateClientSchema = z.object({
-  clientFirstName: z.string({
-    required_error: 'First name is required',
-  }),
-  clientLastName: z.string({
-    required_error: 'Last name is required',
-  }),
-  clientEmail: z.string().email().min(1, { message: 'Email is required' }),
+  clientFirstName: z.string().min(1, { message: 'First name is required' }),
+  clientLastName: z.string().min(1, { message: 'Last name is required' }),
+  clientEmail: z.string().min(1, { message: 'Email is required' }).email(),
 })
 
 export const CreateClientSchema = z.object({
