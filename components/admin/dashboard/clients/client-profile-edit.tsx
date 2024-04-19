@@ -31,12 +31,12 @@ export default function ClientProfileEdit({ setIsEditing, client }: ClientProfil
   function resetForm() {
     setFormState({})
   }
-
+  console.log(formState)
   return (
     <form action={handleUpdateClientById}>
       <div>
         <div className="mb-[10px] grid grid-flow-col gap-[8px]">
-          <FormInput id="client-name" gap="sm" errors={formState.errors?.clientName}>
+          <FormInput id="client-name" gap="sm" errors={formState.errors?.clientFirstName}>
             <InputLabel htmlFor="clientFirstName">First Name</InputLabel>
             <TextInput
               placeholder="first name"
