@@ -1,12 +1,12 @@
 'use client'
 
-import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
-import { fetchClientsByOrgName } from '@/lib/data/user'
-import { User } from '@prisma/client'
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
-
 import { IoCloseOutline } from 'react-icons/io5'
+
+import { User } from '@prisma/client'
+import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
+import { fetchClientsByOrgName } from '@/lib/data/user'
 
 interface ClientSearchDropdownProps {
   orgName: string
