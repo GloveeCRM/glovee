@@ -37,7 +37,7 @@ interface TitleSkeletonProps {
   className?: string
   size?: 'sm' | 'md' | 'lg' | 'full'
 }
-function TitleSkeleton({ className, size = 'md' }: TitleSkeletonProps) {
+export function TitleSkeleton({ className, size = 'md' }: TitleSkeletonProps) {
   const width =
     size === 'sm'
       ? 'w-[100px]'

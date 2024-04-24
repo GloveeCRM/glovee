@@ -8,16 +8,14 @@ interface TemplateCardWrapperProps {
 }
 
 export default async function TemplateCardWrapper({ orgName }: TemplateCardWrapperProps) {
-  // TODO: Change this to be ORG ID
-  // const templates = await fetchTemplatesByUserId(user.id)
-
   const org = await fetchOrganizationByOrgName(orgName)
   if (!org) return null
   const templates = await fetchTemplatesByOrgId(org.id)
 
   return (
     <div className="grid grid-cols-1 gap-[8px] md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      <CreateNewTemplateCard orgName={orgName} />
+      {/* TODO: Temporarily disabled the ability to create a new template. Reactivate or remove. */}
+      {/* <CreateNewTemplateCard orgName={orgName} /> */}
       {templates?.map((template) => (
         <TemplateCard
           key={template.id}
