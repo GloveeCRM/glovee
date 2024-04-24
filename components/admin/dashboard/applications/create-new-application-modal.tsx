@@ -1,8 +1,11 @@
 'use client'
 
+import Image from 'next/image'
 import { MouseEvent, useState } from 'react'
 
-import { Template } from '@prisma/client'
+import { Template, User } from '@prisma/client'
+import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
+import { ApplicantRoleOptions } from '@/lib/constants/applications'
 import { createApplicationInOrganization } from '@/lib/actions/application'
 import { Modal, useModal } from '@/components/ui/modal'
 import { FormInput, InputLabel, TextInput } from '@/components/ui/inputs'
@@ -14,20 +17,15 @@ import ClientSearchDropdown from './clients-search-dropdown'
 interface CreateNewApplicationModalProps {
   templates: Template[]
   orgName: string
+  client?: User
 }
-
-const roleOptions = [
-  { id: 1, value: 'MAIN', name: 'Main' },
-  { id: 2, value: 'SPOUSE', name: 'Spouse' },
-  { id: 3, value: 'CHILD', name: 'Child' },
-  { id: 4, value: 'OTHER', name: 'Other' },
-]
 
 export default function CreateNewApplicationModal({
   templates,
   orgName,
+  client,
 }: CreateNewApplicationModalProps) {
-  const [selectedClientId, setSelectedClientId] = useState<string>('')
+  const [selectedClientId, setSelectedClientId] = useState<string>(client?.id || '')
   const [formState, setFormState] = useState<any>({})
   const { closeModal } = useModal()
 
@@ -61,17 +59,34 @@ export default function CreateNewApplicationModal({
     <Modal title="Create a new application" onClose={resetForm}>
       <form className="w-full" action={handleCreateApplication}>
         <FormInput errors={formState.errors?.clientId} gap="sm">
-          <InputLabel htmlFor="clientId">Client Name</InputLabel>
-          <ClientSearchDropdown
-            orgName={orgName}
-            selectedClientId={selectedClientId}
-            setSelectedClientId={handleClientSelect}
-          />
+          <InputLabel htmlFor="clientId">Client</InputLabel>
+          {client ? (
+            <div className="flex items-center gap-[4px] text-[14px] text-gray-700">
+              {client.image === null ? (
+                <Image
+                  src={DEFAULT_MALE_CLIENT_LOGO_URL}
+                  alt="CLient Logo"
+                  width={20}
+                  height={20}
+                  className="rounded-full"
+                />
+              ) : (
+                client.image
+              )}
+              {client.name}
+            </div>
+          ) : (
+            <ClientSearchDropdown
+              orgName={orgName}
+              selectedClientId={selectedClientId}
+              setSelectedClientId={handleClientSelect}
+            />
+          )}
         </FormInput>
         <div className="my-[14px]">
           <FormInput errors={formState.errors?.role} gap="sm">
             <InputLabel htmlFor="role">Role</InputLabel>
-            <Select name="role" id="role" options={roleOptions} />
+            <Select name="role" id="role" options={ApplicantRoleOptions} />
           </FormInput>
         </div>
         <div className="mb-[14px] grid grid-flow-col gap-[14px] text-[14px]">

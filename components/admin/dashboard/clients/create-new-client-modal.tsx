@@ -35,7 +35,6 @@ export default function CreateNewClientModal() {
     resetForm()
     closeModal()
   }
-
   return (
     <Modal title="Create a new client" onClose={resetForm}>
       <form action={handleCreateClient} className="w-[85vw] max-w-[450px]">
