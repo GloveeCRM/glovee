@@ -84,9 +84,14 @@ export const {
 })
 
 export async function getAuthenticatedUser(): Promise<User | null> {
-  const session = await auth()
-  if (!session || !session.user) return null
-  return session.user
+  try {
+    const session = await auth()
+    if (!session || !session.user) return null
+    return session.user
+  } catch (error) {
+    console.error(error)
+    return null
+  }
 }
 
 export async function getAuthenticatedUserRole() {

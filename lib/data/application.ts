@@ -77,16 +77,40 @@ export async function fetchApplications() {
 }
 
 export async function fetchApplicationsByUserId(id: string): Promise<Application[] | null> {
-  try {
-    const application = await prisma.application.findMany({
-      where: {
-        clientId: id,
-      },
-    })
+  if (id) {
+    try {
+      const application = await prisma.application.findMany({
+        where: {
+          clientId: id,
+        },
+        include: {
+          categories: {
+            include: {
+              sections: {
+                include: {
+                  questionSets: {
+                    include: {
+                      questions: {},
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      })
 
-    return application
-  } catch (error) {
-    console.error(error)
+      if (!application) {
+        return null
+      }
+
+      return application
+    } catch (error) {
+      console.error(error)
+      return null
+    }
+  } else {
+    console.error('User id is not provided', id)
     return null
   }
 }
