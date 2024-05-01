@@ -1,6 +1,7 @@
 import { ApplicationCategoryType } from '@/lib/types/application'
+import Divider from '../ui/divider'
 
-const percentages = [20, 20, 20]
+const percentages = [20, 20, 20, 20, 20, 20, 20, 20]
 
 export default function ApplicationCategoriesProgress({
   categories,
@@ -10,10 +11,17 @@ export default function ApplicationCategoriesProgress({
   if (categories) {
     return (
       <div className="flex flex-col items-center">
-        <div className="flex justify-center space-x-4">
+        <div className=" flex w-full justify-between">
           {percentages.map((percentage, index) => (
-            <div key={index} className="flex h-8 w-20 items-center justify-center  text-[10px]">
-              <div className="rounded-full border px-[2px] py-[5px]">{percentage}%</div>
+            <div key={index} className=" w-full">
+              <div className=" flex items-center text-[10px]">
+                <div className="rounded-full border border-n-300 px-[2px] py-[5px]">
+                  {percentage}%
+                </div>
+                {index < percentages.length - 1 && (
+                  <Divider size={2} className=" w-full border-n-400" />
+                )}
+              </div>
             </div>
           ))}
         </div>
