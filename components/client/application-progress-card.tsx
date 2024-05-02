@@ -18,7 +18,7 @@ export default function ApplicationProgressCard({ applications }: ApplicationPro
       {applications?.map((application) => (
         <div key={application.id}>
           <div className="flex justify-between">
-            <div className="flex items-center gap-[6px] bg-red-500">
+            <div className="flex items-center gap-[6px]">
               <Image
                 src={DEFAULT_MALE_CLIENT_LOGO_URL}
                 alt="CLient Logo"
@@ -26,17 +26,15 @@ export default function ApplicationProgressCard({ applications }: ApplicationPro
                 height={45}
                 className="rounded-full"
               />
-              <div className="bg-purple-300">
+              <div>
                 <Link href={`applications/${application.id}`}>
                   <div className="text-[14px]">{`${application.applicantFirstName} ${application.applicantLastName}`}</div>
                 </Link>
                 <span className="text-[12px]">{application.role}</span>
               </div>
             </div>
-            <div className="bg-red-500">
-              <div className="rounded-full border bg-purple-300 px-[3px] py-[7px] text-[14px]">
-                20%
-              </div>
+            <div>
+              <div className="rounded-full border px-[3px] py-[7px] text-[14px]">20%</div>
             </div>
           </div>
           {application.categories && (
