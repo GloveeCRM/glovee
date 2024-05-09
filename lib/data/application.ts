@@ -1,5 +1,6 @@
 import { prisma } from '@/prisma/prisma'
 import { Application } from '@prisma/client'
+import { ApplicationSummaryType, ApplicationType } from '../types/application'
 
 export async function fetchApplicationByOrgNameandSearchQuery(orgName: string, query: string) {
   try {
@@ -76,41 +77,71 @@ export async function fetchApplications() {
   }
 }
 
-export async function fetchApplicationsByUserId(id: string): Promise<Application[] | null> {
-  if (id) {
-    try {
-      const application = await prisma.application.findMany({
-        where: {
-          clientId: id,
-        },
-        include: {
-          categories: {
-            include: {
-              sections: {
-                include: {
-                  questionSets: {
-                    include: {
-                      questions: {},
-                    },
+export async function fetchApplicationSummariesByUserId(
+  id: string
+): Promise<ApplicationSummaryType[] | null> {
+  try {
+    const applications = await prisma.application.findMany({
+      where: {
+        clientId: id,
+      },
+      include: {
+        categories: true,
+      },
+    })
+
+    if (!applications) {
+      return null
+    }
+
+    const applicationSummaries = applications.map((application) => ({
+      id: application.id,
+      applicantFirstName: application.applicantFirstName,
+      applicantLastName: application.applicantLastName,
+      role: application.role,
+      completionRate: 25,
+      categories: application.categories.map((category) => ({
+        name: category.title,
+        completionRate: 12,
+      })),
+    }))
+
+    return applicationSummaries
+  } catch (error) {
+    return null
+  }
+}
+
+export async function fetchApplicationsByUserId(id: string): Promise<ApplicationType[] | null> {
+  try {
+    const application = await prisma.application.findMany({
+      where: {
+        clientId: id,
+      },
+      include: {
+        categories: {
+          include: {
+            sections: {
+              include: {
+                questionSets: {
+                  include: {
+                    questions: {},
                   },
                 },
               },
             },
           },
         },
-      })
+      },
+    })
 
-      if (!application) {
-        return null
-      }
-
-      return application
-    } catch (error) {
-      console.error(error)
+    if (!application) {
       return null
     }
-  } else {
-    console.error('User id is not provided', id)
+
+    return application
+  } catch (error) {
+    console.error(error)
     return null
   }
 }

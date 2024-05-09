@@ -34,3 +34,12 @@ export type ApplicationQuestionType =
   | RadioQuestionType
   | CheckboxQuestionType
   | DocumentQuestionType
+
+export type ApplicationSummaryType = {
+  id: string
+  applicantFirstName: string
+  applicantLastName: string
+  role: string
+  completionRate: number
+  categories: { name: string; completionRate: number }[]
+}
