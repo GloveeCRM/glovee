@@ -1,14 +1,12 @@
 'use client'
 
-import Image from 'next/image'
-
-import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
 import { ApplicationSummaryType } from '@/lib/types/application'
 import { submitApplicationById } from '@/lib/actions/application'
-import ApplicationCategoriesProgress from './application-categories-progress'
-import { SubmitButton } from '../ui/buttons'
+import ApplicationCardCategorySummariesWrapper from './application-card-category-summaries-wrapper'
+import { Button, SubmitButton } from '../ui/buttons'
 import ProgressIndicatorRing from '../ui/progress-indicator-ring'
 import ApplicationSummaryCardApplicantInfo from './application-summary-card-applicant-info'
+import Link from 'next/link'
 
 interface ClientApplicationSummaryCardProps {
   applicationSummary: ApplicationSummaryType
@@ -31,11 +29,22 @@ export default function ClientApplicationSummaryCard({
           </div>
         </div>
         {applicationSummary.categories && (
-          <ApplicationCategoriesProgress categories={applicationSummary.categories} />
+          <ApplicationCardCategorySummariesWrapper
+            categorySummaries={applicationSummary.categories}
+          />
         )}
-        <SubmitButton size="sm" onClick={() => submitApplicationById(applicationSummary.id)}>
-          Submit
-        </SubmitButton>
+        <div className="flex gap-[8px]">
+          <SubmitButton
+            size="sm"
+            onClick={() => submitApplicationById(applicationSummary.id)}
+            disabled={applicationSummary.completionRate !== 100}
+          >
+            Submit
+          </SubmitButton>
+          <Link href={`/application/${applicationSummary.id}`}>
+            <Button size="sm">View</Button>
+          </Link>
+        </div>
       </div>
     </div>
   )

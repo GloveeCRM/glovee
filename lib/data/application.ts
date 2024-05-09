@@ -101,6 +101,7 @@ export async function fetchApplicationSummariesByUserId(
       role: application.role,
       completionRate: 25,
       categories: application.categories.map((category) => ({
+        id: category.id,
         name: category.title,
         completionRate: 12,
       })),

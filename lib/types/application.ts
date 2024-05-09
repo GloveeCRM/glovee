@@ -41,5 +41,5 @@ export type ApplicationSummaryType = {
   applicantLastName: string
   role: string
   completionRate: number
-  categories: { name: string; completionRate: number }[]
+  categories: { id: string; name: string; completionRate: number }[]
 }
