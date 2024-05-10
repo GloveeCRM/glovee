@@ -35,14 +35,17 @@ export default function ClientApplicationSummaryCard({
         )}
         <div className="flex gap-[8px]">
           <SubmitButton
-            size="sm"
+            size="xs"
+            hsize="sm"
             onClick={() => submitApplicationById(applicationSummary.id)}
             disabled={applicationSummary.completionRate !== 100}
           >
             Submit
           </SubmitButton>
           <Link href={`/application/${applicationSummary.id}`}>
-            <Button size="sm">View</Button>
+            <Button size="xs" hsize="sm">
+              View
+            </Button>
           </Link>
         </div>
       </div>

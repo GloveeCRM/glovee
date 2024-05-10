@@ -60,7 +60,9 @@ export default function NewPasswordForm({ resetPasswordToken }: NewPasswordFormP
         </Callout>
       )}
 
-      <SubmitButton size="full">Set New Password</SubmitButton>
+      <SubmitButton size="full" className="p-[8px]">
+        Set New Password
+      </SubmitButton>
 
       <p id="back-to-login-page" className="mt-[16px]">
         <Link href="/login" className="cursor-pointer text-[14px] text-blue-500 hover:underline">

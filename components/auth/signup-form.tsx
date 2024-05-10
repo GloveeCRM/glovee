@@ -73,7 +73,9 @@ export default function SignUpForm() {
       )}
 
       <div id="form-buttons" className="flex flex-col gap-[10px]">
-        <SubmitButton size="full">Sign Up</SubmitButton>
+        <SubmitButton size="full" className="p-[8px]">
+          Sign Up
+        </SubmitButton>
         <GoogleSignInButton className="rounded p-[10px]" />
       </div>
 
