@@ -96,12 +96,18 @@ export const LoginSchema = z.object({
 })
 
 export const SignUpSchema = z.object({
-  name: z
+  firstname: z
     .string({
-      required_error: 'Name is required',
-      invalid_type_error: 'Name is not valid',
+      required_error: 'First Name is required',
+      invalid_type_error: 'First Name is not valid',
     })
-    .min(1, { message: 'Name is required' }),
+    .min(1, { message: 'First Name is required' }),
+  lastname: z
+    .string({
+      required_error: 'Last Name is required',
+      invalid_type_error: 'Last Name is not valid',
+    })
+    .min(1, { message: 'Last Name is required' }),
   email: z
     .string()
     .min(1, { message: 'Email is required' })
