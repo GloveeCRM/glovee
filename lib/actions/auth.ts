@@ -27,6 +27,7 @@ import { fetchResetPasswordTokenByToken } from '@/lib/data/reset-password-token'
 import { validateFormDataAgainstSchema } from '@/lib/utils/validation'
 import { getCurrentOrgName } from '@/lib/utils/server'
 import { getSessionPayload, removeSession, setSession } from '../auth/session'
+import { GLOVEE_API_URL } from '../constants/api'
 
 export async function login(
   // prevState: any,
@@ -47,16 +48,13 @@ export async function login(
   }
 
   try {
-    const response = await fetch(
-      `https://glovee-api-9ocdg.ondigitalocean.app/api/${orgName}/user/client/login`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      }
-    )
+    const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/client/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    })
 
     const data = await response.json()
 
@@ -166,16 +164,13 @@ export async function signUp(
   }
 
   try {
-    const response = await fetch(
-      `https://glovee-api-9ocdg.ondigitalocean.app/api/${orgName}/user/client/register`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password, firstName: firstname, lastName: lastname }),
-      }
-    )
+    const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/client/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password, firstName: firstname, lastName: lastname }),
+    })
 
     const data = await response.json()
 
