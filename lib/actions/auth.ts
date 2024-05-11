@@ -48,7 +48,7 @@ export async function login(
 
   try {
     const response = await fetch(
-      'https://glovee-api-9ocdg.ondigitalocean.app/api/71479523812472/user/client/login',
+      `https://glovee-api-9ocdg.ondigitalocean.app/api/${orgName}/user/client/login`,
       {
         method: 'POST',
         headers: {
@@ -167,7 +167,7 @@ export async function signUp(
 
   try {
     const response = await fetch(
-      `https://glovee-api-9ocdg.ondigitalocean.app/api/71479523812472/user/client/register`,
+      `https://glovee-api-9ocdg.ondigitalocean.app/api/${orgName}/user/client/register`,
       {
         method: 'POST',
         headers: {
