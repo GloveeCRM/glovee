@@ -17,21 +17,21 @@ export default async function ClientApplicationsWrapper() {
   ) : (
     <div>
       <div>
-        <h3>Main Applicant</h3>
+        <h3 className="font-semibold">Main Applicant</h3>
         {applicationSummaries
           .filter((application) => application.role === ApplicationRole.MAIN)
           .map((application) => (
-            <div key={application.id}>
+            <div key={application.id} className="my-[20px]">
               <ClientApplicationSummaryCard applicationSummary={application} />
             </div>
           ))}
       </div>
       <div>
-        <h3>Dependents</h3>
+        <h3 className="font-semibold">Dependents</h3>
         {applicationSummaries
           .filter((application) => application.role !== ApplicationRole.MAIN)
           .map((application) => (
-            <div key={application.id}>
+            <div key={application.id} className="my-[20px]">
               <ClientApplicationSummaryCard applicationSummary={application} />
             </div>
           ))}

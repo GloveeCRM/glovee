@@ -99,6 +99,7 @@ export async function fetchApplicationSummariesByUserId(
       applicantFirstName: application.applicantFirstName,
       applicantLastName: application.applicantLastName,
       role: application.role,
+      status: application.status,
       completionRate: 25,
       categories: application.categories.map((category) => ({
         id: category.id,

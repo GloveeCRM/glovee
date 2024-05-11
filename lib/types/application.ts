@@ -40,6 +40,7 @@ export type ApplicationSummaryType = {
   applicantFirstName: string
   applicantLastName: string
   role: string
+  status: string
   completionRate: number
   categories: { id: string; name: string; completionRate: number }[]
 }
