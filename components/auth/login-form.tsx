@@ -1,28 +1,34 @@
 'use client'
 
 import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
-import { useFormState } from 'react-dom'
+import { redirect } from 'next/navigation'
+import { useState } from 'react'
 
 import { FaRegCheckCircle } from 'react-icons/fa'
 import { BiMessageSquareError } from 'react-icons/bi'
 
 import { login } from '@/lib/actions/auth'
 
-import GoogleSignInButton from './google-sign-in-button'
 import { FormInput, InputLabel, PasswordInput, TextInput } from '../ui/inputs'
 import { Callout } from '../ui/callout'
 import { SubmitButton } from '../ui/buttons'
 import Divider from '../ui/divider'
 
 export default function LoginForm() {
-  const [formState, dispatch] = useFormState(login, {})
+  const [formState, setFormState] = useState<any>({})
 
-  const searchParams = useSearchParams()
-  const urlError =
-    searchParams.get('error') === 'OAuthAccountNotLinked'
-      ? 'Email already in use with different provider!'
-      : ''
+  async function handleLogin(formData: FormData) {
+    login(formData).then((res) => {
+      if (res.success) {
+        setFormState({ success: res.success })
+        setTimeout(() => {
+          window.location.href = res.data?.redirectLink
+        }, 1000)
+      } else {
+        setFormState(res)
+      }
+    })
+  }
 
   const emailError = formState?.errors?.email ? formState?.errors?.email[0] : ''
   const passwordError = formState?.errors?.password ? formState?.errors?.password[0] : ''
@@ -30,7 +36,7 @@ export default function LoginForm() {
   return (
     <form
       id="login-form"
-      action={dispatch}
+      action={handleLogin}
       className="w-full max-w-[420px] rounded-md border border-n-300 p-[20px] shadow-sm"
     >
       <h1 id="login-form-title" className="mb-[8px] text-center text-xl font-bold text-n-700">
@@ -63,20 +69,19 @@ export default function LoginForm() {
         </Callout>
       )}
 
-      {(formState?.error || urlError) && (
+      {formState?.error && (
         <Callout variant="error" className="mb-[12px]">
           <div className="flex items-center gap-[4px]">
             <BiMessageSquareError className="h-[16px] w-[16px]" />
-            <span>{formState.error || urlError}</span>
+            <span>{formState.error}</span>
           </div>
         </Callout>
       )}
 
-      <div id="form-buttons" className="flex flex-col gap-[10px]">
+      <div id="form-buttons">
         <SubmitButton size="full" className="p-[8px]">
           Login
         </SubmitButton>
-        <GoogleSignInButton className="rounded p-[10px]" />
       </div>
 
       <p id="forgot-password" className="mt-[8px]">

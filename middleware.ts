@@ -6,12 +6,12 @@ import {
   ADMIN_ROUTES_PREFIX,
 } from '@/lib/constants/routes'
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from './auth'
 import { UserRole } from '@prisma/client'
 import { getCurrentOrgName } from './lib/utils/server'
+import { getSessionPayload } from './lib/auth/session'
 
 export async function middleware(request: NextRequest) {
-  const session = await auth()
+  const session = await getSessionPayload()
   const isLoggedIn = !!session?.user
   const role = session?.user?.role
   const { nextUrl } = request

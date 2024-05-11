@@ -26,11 +26,65 @@ import { getVerificationTokenByToken } from '@/lib/data/verification-token'
 import { fetchResetPasswordTokenByToken } from '@/lib/data/reset-password-token'
 import { validateFormDataAgainstSchema } from '@/lib/utils/validation'
 import { getCurrentOrgName } from '@/lib/utils/server'
+import { getSessionPayload, removeSession, setSession } from '../auth/session'
+
+export async function login(
+  // prevState: any,
+  formData: FormData
+): Promise<{ success?: string; data?: Record<string, any>; error?: string; errors?: any }> {
+  const { data, errors } = await validateFormDataAgainstSchema(LoginSchema, formData)
+
+  if (errors) {
+    return { errors }
+  }
+
+  const { email, password } = data
+
+  const orgName = getCurrentOrgName()
+
+  if (!orgName) {
+    return { error: 'Organization not found!' }
+  }
+
+  try {
+    const response = await fetch(
+      'https://glovee-api-9ocdg.ondigitalocean.app/api/71479523812472/user/client/login',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      }
+    )
+
+    const data = await response.json()
+
+    if (data.status === 'error') {
+      return { error: data.error }
+    } else {
+      await setSession(data.data.accessToken)
+      const tokenPayload = await getSessionPayload()
+      const redirectLink =
+        tokenPayload?.organization?.orgName === 'org'
+          ? DEFAULT_ORG_MANAGEMENT_LOGIN_REDIRECT
+          : tokenPayload?.user.role === UserRole.ORG_ADMIN ||
+              tokenPayload?.user.role === UserRole.ORG_OWNER
+            ? DEFAULT_ORG_ADMIN_LOGIN_REDIRECT
+            : tokenPayload?.user.role === UserRole.ORG_CLIENT
+              ? DEFAULT_ORG_CLIENT_LOGIN_REDIRECT
+              : '/'
+      return { success: 'Login Successful!', data: { redirectLink: redirectLink } }
+    }
+  } catch (error) {
+    return { error: 'Something went wrong!' }
+  }
+}
 
 /**
  * Logs in a user with the provided form data.
  */
-export async function login(
+export async function login2(
   prevState: any,
   formData: FormData
 ): Promise<{
@@ -95,10 +149,61 @@ export async function login(
   }
 }
 
+export async function signUp(
+  formData: FormData
+): Promise<{ success?: string; data?: Record<string, any>; error?: string; errors?: any }> {
+  const { data, errors } = await validateFormDataAgainstSchema(SignUpSchema, formData)
+
+  if (errors) {
+    return { errors }
+  }
+
+  const { email, password, firstname, lastname } = data
+
+  const orgName = getCurrentOrgName()
+  if (!orgName) {
+    return { error: 'Organization not found!' }
+  }
+
+  try {
+    const response = await fetch(
+      `https://glovee-api-9ocdg.ondigitalocean.app/api/71479523812472/user/client/register`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password, firstName: firstname, lastName: lastname }),
+      }
+    )
+
+    const data = await response.json()
+
+    if (data.status === 'error') {
+      return { error: data.error }
+    } else {
+      await setSession(data.data.accessToken)
+      const tokenPayload = await getSessionPayload()
+      const redirectLink =
+        tokenPayload?.organization?.orgName === 'org'
+          ? DEFAULT_ORG_MANAGEMENT_LOGIN_REDIRECT
+          : tokenPayload?.user.role === UserRole.ORG_ADMIN ||
+              tokenPayload?.user.role === UserRole.ORG_OWNER
+            ? DEFAULT_ORG_ADMIN_LOGIN_REDIRECT
+            : tokenPayload?.user.role === UserRole.ORG_CLIENT
+              ? DEFAULT_ORG_CLIENT_LOGIN_REDIRECT
+              : '/'
+      return { success: 'Registration Successful!', data: { redirectLink: redirectLink } }
+    }
+  } catch (error) {
+    return { error: 'Something went wrong!' }
+  }
+}
+
 /**
  * Sign up a user with the provided form data.
  */
-export async function signUp(prevState: any, formData: FormData) {
+export async function signUp2(prevState: any, formData: FormData) {
   const { data, errors } = await validateFormDataAgainstSchema(SignUpSchema, formData)
 
   if (errors) {
@@ -156,9 +261,7 @@ export async function signUp(prevState: any, formData: FormData) {
  * Logs out the user.
  */
 export async function logout() {
-  return await signOut({
-    redirectTo: '/login',
-  })
+  return await removeSession()
 }
 
 /**

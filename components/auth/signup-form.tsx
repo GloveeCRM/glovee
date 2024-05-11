@@ -1,30 +1,43 @@
 'use client'
 
 import Link from 'next/link'
-import { useFormState } from 'react-dom'
+import { useState } from 'react'
 
 import { FaRegCheckCircle } from 'react-icons/fa'
 import { BiMessageSquareError } from 'react-icons/bi'
 
 import { signUp } from '@/lib/actions/auth'
 
-import GoogleSignInButton from './google-sign-in-button'
 import { SubmitButton } from '../ui/buttons'
 import { Callout } from '../ui/callout'
 import { FormInput, InputLabel, PasswordInput, TextInput } from '../ui/inputs'
 import Divider from '../ui/divider'
 
 export default function SignUpForm() {
-  const [formState, dispatch] = useFormState(signUp, {})
+  const [formState, setFormState] = useState<any>({})
 
-  const nameError = formState?.errors?.name ? formState?.errors?.name[0] : ''
+  async function handleSignUp(formData: FormData) {
+    signUp(formData).then((res) => {
+      if (res.success) {
+        setFormState({ success: res.success })
+        setTimeout(() => {
+          window.location.href = res.data?.redirectLink
+        }, 1000)
+      } else {
+        setFormState(res)
+      }
+    })
+  }
+
+  const firstnameError = formState?.errors?.firstname ? formState?.errors?.firstname[0] : ''
+  const lastnameError = formState?.errors?.lastname ? formState?.errors?.lastname[0] : ''
   const emailError = formState?.errors?.email ? formState?.errors?.email[0] : ''
   const passwordError = formState?.errors?.password ? formState?.errors?.password[0] : ''
 
   return (
     <form
       id="signup-form"
-      action={dispatch}
+      action={handleSignUp}
       className="w-full max-w-[420px] rounded-md border border-n-300 p-[20px] shadow-sm"
     >
       <h1 id="signup-form-title" className="mb-[8px] text-center text-xl font-bold text-n-700">
@@ -34,11 +47,17 @@ export default function SignUpForm() {
       <Divider className="mb-[16px] border-n-300" />
 
       <div id="form-inputs" className="mb-[26px] flex flex-col gap-[14px]">
-        <FormInput id="name-input" errors={nameError}>
-          <InputLabel htmlFor="name" text="md" weight="semibold">
-            Name
+        <FormInput id="firstname-input" errors={firstnameError}>
+          <InputLabel htmlFor="firstname" text="md" weight="semibold">
+            First Name
           </InputLabel>
-          <TextInput id="name" name="name" placeholder="John Doe" />
+          <TextInput id="firstname" name="firstname" placeholder="John" />
+        </FormInput>
+        <FormInput id="lastname-input" errors={lastnameError}>
+          <InputLabel htmlFor="lastname" text="md" weight="semibold">
+            Last Name
+          </InputLabel>
+          <TextInput id="lastname" name="lastname" placeholder="Doe" />
         </FormInput>
         <FormInput id="email-input" errors={emailError}>
           <InputLabel htmlFor="email" text="md" weight="semibold">
@@ -72,11 +91,10 @@ export default function SignUpForm() {
         </Callout>
       )}
 
-      <div id="form-buttons" className="flex flex-col gap-[10px]">
+      <div id="form-buttons" className="">
         <SubmitButton size="full" className="p-[8px]">
           Sign Up
         </SubmitButton>
-        <GoogleSignInButton className="rounded p-[10px]" />
       </div>
 
       <div className="mt-[10px] flex justify-center gap-[5px] text-[12px]">
