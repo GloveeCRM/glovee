@@ -1,24 +1,35 @@
 'use client'
 
 import Link from 'next/link'
-import { triggerResetPasswordEmail } from '@/lib/actions/auth'
-import { useFormState } from 'react-dom'
-import { FormInput, InputLabel, TextInput } from '../ui/inputs'
-import { Callout } from '../ui/callout'
+import { useState } from 'react'
 import { FaRegCheckCircle } from 'react-icons/fa'
-import { SubmitButton } from '../ui/buttons'
-import Divider from '../ui/divider'
 import { BiMessageSquareError } from 'react-icons/bi'
 
+import { resetPassword } from '@/lib/actions/auth'
+import { FormInput, InputLabel, TextInput } from '../ui/inputs'
+import { Callout } from '../ui/callout'
+import { SubmitButton } from '../ui/buttons'
+import Divider from '../ui/divider'
+
 export function ResetPasswordForm() {
-  const [formState, dispatch] = useFormState(triggerResetPasswordEmail, {})
+  const [formState, setFormState] = useState<any>({})
+
+  async function handleResetPassword(formData: FormData) {
+    resetPassword(formData).then((res) => {
+      if (res.success) {
+        setFormState({ success: res.success })
+      } else {
+        setFormState(res)
+      }
+    })
+  }
 
   const emailError = formState?.errors?.email ? formState?.errors?.email[0] : ''
 
   return (
     <form
       id="reset-password-form"
-      action={dispatch}
+      action={handleResetPassword}
       className="w-full max-w-[420px] rounded-md border border-n-300 p-[20px] shadow-sm"
     >
       <h1
