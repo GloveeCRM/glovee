@@ -30,7 +30,6 @@ import { getSessionPayload, removeSession, setSession } from '../auth/session'
 import { GLOVEE_API_URL } from '../constants/api'
 
 export async function login(
-  // prevState: any,
   formData: FormData
 ): Promise<{ success?: string; data?: Record<string, any>; error?: string; errors?: any }> {
   const { data, errors } = await validateFormDataAgainstSchema(LoginSchema, formData)
@@ -76,74 +75,6 @@ export async function login(
     }
   } catch (error) {
     return { error: 'Something went wrong!' }
-  }
-}
-
-/**
- * Logs in a user with the provided form data.
- */
-export async function login2(
-  prevState: any,
-  formData: FormData
-): Promise<{
-  success?: string
-  error?: string
-  errors?: any
-}> {
-  const { data, errors } = await validateFormDataAgainstSchema(LoginSchema, formData)
-
-  if (errors) {
-    return { errors }
-  }
-
-  const { email, password } = data
-
-  const orgName = getCurrentOrgName()
-
-  if (!orgName) {
-    return { error: 'Organization not found!' }
-  }
-
-  const existingUser = await fetchUserByEmailAndOrgName(email, orgName)
-
-  if (!existingUser) {
-    return { error: 'Email does not exist!' }
-  }
-
-  if (!existingUser.emailVerified) {
-    const verificationToken = await generateAndStoreVerificationToken(email, 3600)
-    await sendVerificationEmail(verificationToken.email, verificationToken.token)
-    return { success: 'Confirmation email sent! Check your email to login.' }
-  }
-
-  try {
-    const redirectLink =
-      existingUser.organization?.orgName === 'org'
-        ? DEFAULT_ORG_MANAGEMENT_LOGIN_REDIRECT
-        : existingUser.role === UserRole.ORG_ADMIN || existingUser.role === UserRole.ORG_OWNER
-          ? DEFAULT_ORG_ADMIN_LOGIN_REDIRECT
-          : existingUser.role === UserRole.ORG_CLIENT
-            ? DEFAULT_ORG_CLIENT_LOGIN_REDIRECT
-            : '/'
-
-    await signIn('credentials', {
-      email,
-      password,
-      redirectTo: redirectLink,
-    })
-
-    return { success: 'Login Successful!' }
-  } catch (error) {
-    if (error instanceof AuthError) {
-      switch (error.type) {
-        case 'CredentialsSignin':
-          return { error: 'Invalid Credentials!' }
-        default:
-          return { error: 'somethig went wrong!' }
-      }
-    }
-
-    throw error
   }
 }
 
@@ -196,16 +127,20 @@ export async function signUp(
 }
 
 /**
- * Sign up a user with the provided form data.
+ * Logs out the user.
  */
-export async function signUp2(prevState: any, formData: FormData) {
-  const { data, errors } = await validateFormDataAgainstSchema(SignUpSchema, formData)
+export async function logout() {
+  return await removeSession()
+}
+
+export async function resetPassword(formData: FormData) {
+  const { data, errors } = await validateFormDataAgainstSchema(ResetPasswordSchema, formData)
 
   if (errors) {
     return { errors }
   }
 
-  const { email, password, name } = data
+  const { email } = data
 
   const orgName = getCurrentOrgName()
 
@@ -213,50 +148,25 @@ export async function signUp2(prevState: any, formData: FormData) {
     return { error: 'Organization not found!' }
   }
 
-  const existingUser = await fetchUserByEmailAndOrgName(email, orgName)
-
-  if (existingUser) {
-    return { error: 'Email already in use!' }
-  }
-
-  const hashedPassword = await bcrypt.hash(password, 10)
-
   try {
-    await prisma.user.create({
-      data: {
-        name,
-        email,
-        password: hashedPassword,
-        role: UserRole.ORG_CLIENT,
-        organization: {
-          connect: {
-            orgName: orgName,
-          },
-        },
+    const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/client/forgot-password`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify({ email }),
     })
 
-    const verificationToken = await generateAndStoreVerificationToken(email, 3600)
-    await sendVerificationEmail(verificationToken.email, verificationToken.token)
-    return { success: 'Confirmation email sent! Check your email to login.' }
-  } catch (error) {
-    if (
-      error instanceof PrismaClientKnownRequestError &&
-      error.meta?.cause ==
-        "No 'Organization' record(s) (needed to inline the relation on 'User' record(s)) was found for a nested connect on one-to-many relation 'OrganizationToUser'."
-    ) {
-      return { error: 'Organization does not exist!' }
-    } else {
-      return { error: 'Something went wrong!' }
-    }
-  }
-}
+    const data = await response.json()
 
-/**
- * Logs out the user.
- */
-export async function logout() {
-  return await removeSession()
+    if (data.status === 'error') {
+      return { error: data.error }
+    } else {
+      return { success: 'Reset password email sent!', data: { redirectLink: '/login' } }
+    }
+  } catch (error) {
+    return { error: 'Something went wrong!' }
+  }
 }
 
 /**
@@ -428,61 +338,61 @@ export async function triggerResetPasswordEmail(
 /**
  * Resets the password for a user.
  */
-export async function resetPassword(token: string, prevState: any, formData: FormData) {
-  if (!token) {
-    return { error: 'Missing token!' }
-  }
+// export async function resetPassword(token: string, prevState: any, formData: FormData) {
+//   if (!token) {
+//     return { error: 'Missing token!' }
+//   }
 
-  const { data, errors } = await validateFormDataAgainstSchema(NewPasswordSchema, formData)
+//   const { data, errors } = await validateFormDataAgainstSchema(NewPasswordSchema, formData)
 
-  if (errors) {
-    return { errors }
-  }
+//   if (errors) {
+//     return { errors }
+//   }
 
-  const existingToken = await fetchResetPasswordTokenByToken(token)
+//   const existingToken = await fetchResetPasswordTokenByToken(token)
 
-  if (!existingToken) {
-    return { error: 'Invalid Token!' }
-  }
-  const { password } = data
+//   if (!existingToken) {
+//     return { error: 'Invalid Token!' }
+//   }
+//   const { password } = data
 
-  const tokenHasExpired = new Date(existingToken.expires) < new Date()
+//   const tokenHasExpired = new Date(existingToken.expires) < new Date()
 
-  if (tokenHasExpired) {
-    return { error: 'Token has expired!' }
-  }
+//   if (tokenHasExpired) {
+//     return { error: 'Token has expired!' }
+//   }
 
-  const orgName = getCurrentOrgName()
+//   const orgName = getCurrentOrgName()
 
-  if (!orgName) {
-    return { error: 'Organization not found!' }
-  }
+//   if (!orgName) {
+//     return { error: 'Organization not found!' }
+//   }
 
-  const existingUser = await fetchUserByEmailAndOrgName(existingToken.email, orgName)
+//   const existingUser = await fetchUserByEmailAndOrgName(existingToken.email, orgName)
 
-  if (!existingUser) {
-    return { error: 'Email does not exist!' }
-  }
+//   if (!existingUser) {
+//     return { error: 'Email does not exist!' }
+//   }
 
-  const hashedPassword = await bcrypt.hash(password, 10)
+//   const hashedPassword = await bcrypt.hash(password, 10)
 
-  try {
-    await prisma.user.update({
-      where: { id: existingUser.id },
-      data: {
-        password: hashedPassword,
-      },
-    })
-  } catch (error) {
-    return { error: 'Unable to set a new password!' }
-  }
+//   try {
+//     await prisma.user.update({
+//       where: { id: existingUser.id },
+//       data: {
+//         password: hashedPassword,
+//       },
+//     })
+//   } catch (error) {
+//     return { error: 'Unable to set a new password!' }
+//   }
 
-  await prisma.resetPasswordToken.delete({
-    where: { id: existingToken.id },
-  })
+//   await prisma.resetPasswordToken.delete({
+//     where: { id: existingToken.id },
+//   })
 
-  return { success: 'Password Updated!' }
-}
+//   return { success: 'Password Updated!' }
+// }
 
 // TODO: Clean up the following code
 export async function admin() {
