@@ -1,4 +1,4 @@
-import { QuestionSet } from '@/app/[orgName]/(client)/applications/[id]/page'
+import { QuestionSet } from '@/app/[orgName]/(client)/application/[id]/page'
 import TextInputQuestion from '../../questionType/text-input-question'
 
 export default function LoopQuestionSet({ questionSet }: { questionSet: QuestionSet }) {
