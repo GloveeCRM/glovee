@@ -6,8 +6,8 @@ import ApplicantInfoCard from './application/applicant-info-card'
 export default function ClientApplicationSidebar({ applicationId }: { applicationId: string }) {
   return (
     <div
-      id="clientApplicationSidebar"
-      className="sticky top-0 h-screen w-[320px] bg-n-700 px-[8px] text-white"
+      id="clientapplication-sidebar"
+      className="sticky top-0 flex h-screen w-[230px] flex-shrink-0 flex-col bg-n-700 px-[8px] text-white"
     >
       <div id="sidebarHeader" className="py-[8px]">
         <Link href="/applications/" className="mb-[8px] flex w-fit items-center gap-[4px]">

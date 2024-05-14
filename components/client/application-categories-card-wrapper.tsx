@@ -45,7 +45,7 @@ export default function ApplicationCategoriesCardWrapper({
 
   return (
     <>
-      {categories.map((category: any) => (
+      {categories.map((category: Category) => (
         <ClientApplicationCategoryCard
           key={category.id}
           category={category}

@@ -10,9 +10,9 @@ export default function ApplicationLayout({
   }
 }>) {
   return (
-    <div id="clientApp" className="flex">
+    <div id="clientApp" className="flex overflow-hidden">
       <ClientApplicationSidebar applicationId={params.id} />
-      <div className="w-full p-[8px]">{children}</div>
+      <div className="flex-1 overflow-auto p-[8px]">{children}</div>
     </div>
   )
 }

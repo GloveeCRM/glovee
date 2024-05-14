@@ -17,9 +17,5 @@ export interface Section {
 export default async function ApplicationCategories({ applicationId }: { applicationId: string }) {
   const categories = (await fetchCategorieByApplicationId(applicationId)) as Category[]
 
-  return (
-    <div className="px-[6px]">
-      <ApplicationCategoriesCardWrapper categories={categories} />
-    </div>
-  )
+  return <ApplicationCategoriesCardWrapper categories={categories} />
 }
