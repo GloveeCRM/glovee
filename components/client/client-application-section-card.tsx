@@ -1,9 +1,9 @@
 'use client'
 
+import { ApplicationSectionType } from '@/lib/types/application'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { Section } from './application-categories'
 
-export default function ClientSidebarSectionCard({ section }: { section: Section }) {
+export default function ClientSidebarSectionCard({ section }: { section: ApplicationSectionType }) {
   const searchParams = useSearchParams()
   const selectedSectionId = searchParams.get('section')
   const pathname = usePathname()
@@ -21,7 +21,7 @@ export default function ClientSidebarSectionCard({ section }: { section: Section
 
   return (
     <div
-      className={`cursor-pointer ${selectedSectionId === section.id && 'bg-n-600'} p-[4px] text-[12px] text-n-300`}
+      className={`cursor-pointer rounded-sm ${selectedSectionId === section.id && 'bg-n-600'} p-[4px] text-[12px] text-n-300`}
       onClick={(e) => {
         e.stopPropagation()
         handleClick(section.id)

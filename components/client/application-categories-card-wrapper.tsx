@@ -2,8 +2,9 @@
 
 import ClientApplicationCategoryCard from './client-application-category-card'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useEffect } from 'react'
+import { Fragment, useEffect } from 'react'
 import { ApplicationCategoryType } from '@/lib/types/application'
+import Divider from '../ui/divider'
 
 export default function ApplicationCategoriesCardWrapper({
   categories,
@@ -44,15 +45,17 @@ export default function ApplicationCategoriesCardWrapper({
   }
 
   return (
-    <>
+    <div className="flex flex-col gap-[4px]">
       {categories.map((category: ApplicationCategoryType) => (
-        <ClientApplicationCategoryCard
-          key={category.id}
-          category={category}
-          isExpanded={expandedCategory.id === category.id}
-          onClick={handleCategoryClick}
-        />
+        <Fragment key={category.id}>
+          <ClientApplicationCategoryCard
+            category={category}
+            isExpanded={expandedCategory.id === category.id}
+            onClick={handleCategoryClick}
+          />
+          <Divider className="border-n-500" />
+        </Fragment>
       ))}
-    </>
+    </div>
   )
 }

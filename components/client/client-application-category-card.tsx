@@ -16,22 +16,22 @@ export default function ClientApplicationCategoryCard({
 }) {
   return (
     <div
-      className="cursor-pointer text-wrap text-[14px] text-n-300"
+      className={`cursor-pointer text-wrap rounded px-[2px] pb-[4px] text-[12px] text-n-300 ${isExpanded && 'bg-n-600/60'}`}
       onClick={() => onClick(category.id)}
     >
-      <div className="flex items-center">
+      <div className="flex gap-[4px]">
         <ProgressIndicatorRing
           completionRate={12}
           baseCircleColor="text-n-500"
           progressCircleColor="text-n-300"
         />
-        <div className="flex w-full justify-between truncate">
-          <div className="truncate">{category.title}</div>
+        <div className="mt-[10px] flex w-full justify-between">
+          <div>{category.title}</div>
           <div>
             {isExpanded ? (
-              <IoChevronDown className="h-[22px] w-[22px]" />
+              <IoChevronDown className="h-[20px] w-[20px]" />
             ) : (
-              <IoChevronForward className="h-[22px] w-[22px]" />
+              <IoChevronForward className="h-[20px] w-[20px]" />
             )}
           </div>
         </div>
