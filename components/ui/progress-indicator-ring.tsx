@@ -1,8 +1,15 @@
 interface ProgressIndicatorRingProps {
   completionRate: number
+  className?: string
+  baseCircleColor?: string
+  progressCircleColor?: string
 }
 
-export default function ProgressIndicatorRing({ completionRate }: ProgressIndicatorRingProps) {
+export default function ProgressIndicatorRing({
+  completionRate,
+  baseCircleColor = 'text-n-300',
+  progressCircleColor = 'text-n-700',
+}: ProgressIndicatorRingProps) {
   // Calculate the length of the circumference
   const circumference = Math.PI * 20 // Circumference of a circle with radius 10
 
@@ -14,7 +21,7 @@ export default function ProgressIndicatorRing({ completionRate }: ProgressIndica
     <div className="relative h-[40px] w-[40px]">
       <svg className="h-full w-full" viewBox="0 0 24 24" fill="none">
         <circle
-          className="stroke-current text-n-300"
+          className={`stroke-current ${baseCircleColor}`}
           cx="12"
           cy="12"
           r="10"
@@ -22,7 +29,7 @@ export default function ProgressIndicatorRing({ completionRate }: ProgressIndica
           strokeLinecap="round"
         />
         <circle
-          className="stroke-current text-n-700"
+          className={`stroke-current ${progressCircleColor}`}
           cx="12"
           cy="12"
           r="10"
