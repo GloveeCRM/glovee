@@ -15,33 +15,28 @@ export default function ClientApplicationCategoryCard({
   onClick: (categoryId: string) => void
 }) {
   return (
-    <div className="flex gap-[4px]">
-      <div>
+    <div className="cursor-pointer text-[14px] text-n-300" onClick={() => onClick(category.id)}>
+      <div className="flex items-center">
         <ProgressIndicatorRing
           completionRate={12}
           baseCircleColor="text-n-500"
           progressCircleColor="text-n-300"
         />
-      </div>
-      <div
-        className="flex flex-grow cursor-pointer text-[14px] text-n-300"
-        onClick={() => onClick(category.id)}
-      >
-        <div className="w-full">
-          <span>{category.title}</span>
-          {isExpanded &&
-            category.sections?.map((section: Section) => (
-              <ClientSidebarSectionCard key={section.id} section={section} />
-            ))}
+        <div className="flex w-full justify-between">
+          <div>{category.title}</div>
+          <div>
+            {isExpanded ? (
+              <IoChevronDown className="h-[22px] w-[22px]" />
+            ) : (
+              <IoChevronForward className="h-[22px] w-[22px]" />
+            )}
+          </div>
         </div>
-        <span>
-          {isExpanded ? (
-            <IoChevronDown className="h-[22px] w-[22px]" />
-          ) : (
-            <IoChevronForward className="h-[22px] w-[22px]" />
-          )}
-        </span>
       </div>
+      {isExpanded &&
+        category.sections?.map((section: Section) => (
+          <ClientSidebarSectionCard key={section.id} section={section} />
+        ))}
     </div>
   )
 }
