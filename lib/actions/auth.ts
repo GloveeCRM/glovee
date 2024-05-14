@@ -47,7 +47,7 @@ export async function login(
   }
 
   try {
-    const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/client/login`, {
+    const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -149,7 +149,7 @@ export async function resetPassword(formData: FormData) {
   }
 
   try {
-    const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/client/forgot-password`, {
+    const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/forgot-password`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
