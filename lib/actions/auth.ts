@@ -2,19 +2,11 @@
 
 import bcrypt from 'bcryptjs'
 import { v4 as uuid4 } from 'uuid'
-import { AuthError } from 'next-auth'
 
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import { ResetPasswordToken, UserRole, VerificationToken } from '@prisma/client'
 import { prisma } from '@/prisma/prisma'
 import { getAuthenticatedUser, getAuthenticatedUserRole, signIn, signOut } from '@/auth'
-import {
-  LoginSchema,
-  NewPasswordSchema,
-  SignUpSchema,
-  ResetPasswordSchema,
-  SettingsSchema,
-} from '@/lib/zod/schemas'
+import { LoginSchema, SignUpSchema, ResetPasswordSchema, SettingsSchema } from '@/lib/zod/schemas'
 import { fetchUserByEmailAndOrgName, fetchUserById } from '@/lib/data/user'
 import {
   DEFAULT_ORG_ADMIN_LOGIN_REDIRECT,
@@ -23,10 +15,9 @@ import {
 } from '@/lib/constants/routes'
 import { sendResetPasswordEmail, sendVerificationEmail } from '@/lib/mail/mail'
 import { getVerificationTokenByToken } from '@/lib/data/verification-token'
-import { fetchResetPasswordTokenByToken } from '@/lib/data/reset-password-token'
 import { validateFormDataAgainstSchema } from '@/lib/utils/validation'
 import { getCurrentOrgName } from '@/lib/utils/server'
-import { getSessionPayload, removeSession, setSession } from '../auth/session'
+import { getSession, getSessionPayload, removeSession, setSession } from '../auth/session'
 import { GLOVEE_API_URL } from '../constants/api'
 
 export async function login(
@@ -72,6 +63,39 @@ export async function login(
               ? DEFAULT_ORG_CLIENT_LOGIN_REDIRECT
               : '/'
       return { success: 'Login Successful!', data: { redirectLink: redirectLink } }
+    }
+  } catch (error) {
+    return { error: 'Something went wrong!' }
+  }
+}
+
+export async function refreshToken() {
+  const accessToken = await getSession()
+
+  if (!accessToken) {
+    return { error: 'Token not found!' }
+  }
+
+  const orgName = getCurrentOrgName()
+
+  if (!orgName) {
+    return { error: 'Organization not found!' }
+  }
+
+  try {
+    const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/refresh-token`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ accessToken }),
+    })
+
+    const data = await response.json()
+
+    if (data.status === 'error') {
+      return { error: data.error }
+    } else {
+      await setSession(data.data.accessToken)
+      return { success: 'Token refreshed!' }
     }
   } catch (error) {
     return { error: 'Something went wrong!' }
