@@ -9,9 +9,9 @@ export default function ClientLayout({ children, params }: ClientLayoutProps) {
   const orgName = params.orgName
 
   return (
-    <div id="client" className="flex">
+    <div id="client" className="flex overflow-hidden">
       <ClientSidebar orgName={orgName} />
-      <div className="flex-1 p-[8px]">{children}</div>
+      <div className="max-h-screen flex-1 overflow-y-auto p-[8px]">{children}</div>
     </div>
   )
 }

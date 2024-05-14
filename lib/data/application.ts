@@ -177,6 +177,24 @@ export async function fetchApplicationById(id: string) {
   }
 }
 
+export async function fetchApplicantByApplicationId(id: string) {
+  try {
+    const applicant = await prisma.application.findFirst({
+      where: {
+        id,
+      },
+      select: {
+        applicantFirstName: true,
+        applicantLastName: true,
+      },
+    })
+
+    return applicant
+  } catch {
+    return null
+  }
+}
+
 export async function fetchCategorieByApplicationId(id: string) {
   try {
     const category = await prisma.category.findMany({
