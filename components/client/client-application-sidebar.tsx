@@ -1,12 +1,22 @@
-import { IoChevronBackOutline } from 'react-icons/io5'
-import ApplicationCategories from './application-categories'
-
 import Link from 'next/link'
+import { IoChevronBackOutline } from 'react-icons/io5'
+
+import { fetchCategorieByApplicationId } from '@/lib/data/application'
 import ApplicantInfoCard from './application/applicant-info-card'
-export default function ClientApplicationSidebar({ applicationId }: { applicationId: string }) {
+import ApplicationCategoriesCardWrapper from './application-categories-card-wrapper'
+
+interface ClientApplicationSidebarProps {
+  applicationId: string
+}
+
+export default async function ClientApplicationSidebar({
+  applicationId,
+}: ClientApplicationSidebarProps) {
+  const categories = (await fetchCategorieByApplicationId(applicationId)) || []
+
   return (
     <div
-      id="clientapplication-sidebar"
+      id="client-application-sidebar"
       className="sticky top-0 flex h-screen w-[230px] flex-shrink-0 flex-col bg-n-700 px-[8px] text-white"
     >
       <div id="sidebarHeader" className="py-[8px]">
@@ -16,7 +26,7 @@ export default function ClientApplicationSidebar({ applicationId }: { applicatio
         </Link>
         <ApplicantInfoCard applicationId={applicationId} />
       </div>
-      <ApplicationCategories applicationId={applicationId} />
+      <ApplicationCategoriesCardWrapper categories={categories} />
     </div>
   )
 }

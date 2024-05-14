@@ -1,14 +1,14 @@
 'use client'
 
 import ClientApplicationCategoryCard from './client-application-category-card'
-import { Category } from './application-categories'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
+import { ApplicationCategoryType } from '@/lib/types/application'
 
 export default function ApplicationCategoriesCardWrapper({
   categories,
 }: {
-  categories: Category[]
+  categories: ApplicationCategoryType[]
 }) {
   const searchParams = useSearchParams()
   const pathname = usePathname()
@@ -17,13 +17,13 @@ export default function ApplicationCategoriesCardWrapper({
 
   const expandedCategory =
     categories.find((category) =>
-      category.sections.some((section) => section.id === selectedSectionId)
+      category.sections?.some((section) => section.id === selectedSectionId)
     ) || categories[0]
 
   useEffect(() => {
     if (!selectedSectionId && categories.length > 0) {
       const params = new URLSearchParams(searchParams)
-      const firstSectionId = categories[0].sections[0]?.id
+      const firstSectionId = categories[0].sections?.[0]?.id
       if (firstSectionId) {
         params.set('section', firstSectionId)
         replace(`${pathname}?${params.toString()}`)
@@ -34,8 +34,8 @@ export default function ApplicationCategoriesCardWrapper({
   const handleCategoryClick = (categoryId: string) => {
     if (expandedCategory.id !== categoryId) {
       const params = new URLSearchParams(searchParams)
-      const firstSectionId = categories.find((category) => category.id === categoryId)?.sections[0]
-        .id
+      const firstSectionId = categories.find((category) => category.id === categoryId)
+        ?.sections?.[0].id
       if (firstSectionId) {
         params.set('section', firstSectionId)
         replace(`${pathname}?${params.toString()}`)
@@ -45,7 +45,7 @@ export default function ApplicationCategoriesCardWrapper({
 
   return (
     <>
-      {categories.map((category: Category) => (
+      {categories.map((category: ApplicationCategoryType) => (
         <ClientApplicationCategoryCard
           key={category.id}
           category={category}
