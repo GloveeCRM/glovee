@@ -1,7 +1,10 @@
 'use client'
 
+import { refreshToken } from '@/lib/actions/auth'
+import { removeSession } from '@/lib/auth/session'
+import { DEFAULT_LOGOUT_REDIRECT } from '@/lib/constants/routes'
+import { redirect } from 'next/navigation'
 import { createContext, useContext, useEffect } from 'react'
-import { updateSession } from '@/lib/auth/session'
 
 type AuthContextType = {
   token: string | null
@@ -24,12 +27,22 @@ export default function AuthProvider({ token, children }: AuthProviderProps) {
   }
 
   useEffect(() => {
-    async function refreshToken() {
-      await updateSession()
+    async function updateSession() {
+      refreshToken()
+        .then(async (data) => {
+          if (data.error) {
+            await removeSession()
+            window.location.href = DEFAULT_LOGOUT_REDIRECT
+          }
+        })
+        .catch(async () => {
+          await removeSession()
+          window.location.href = DEFAULT_LOGOUT_REDIRECT
+        })
     }
 
     if (token) {
-      refreshToken()
+      updateSession()
     }
   }, [token])
 

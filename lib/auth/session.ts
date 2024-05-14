@@ -1,18 +1,22 @@
 'use server'
 
 import { cookies } from 'next/headers'
-import { generateJWT, parseJWT } from './jwt'
-import { jwtExpirySeconds } from '../constants/jwt'
+import { parseJWT } from './jwt'
 
 export async function setSession(token: string) {
-  const jwtExpiryDate = new Date(Date.now() + jwtExpirySeconds * 1000)
-  cookies().set('session', token, {
-    expires: jwtExpiryDate,
-    httpOnly: true,
-    secure: true,
-    sameSite: 'lax',
-    path: '/',
-  })
+  const payload = await parseJWT(token)
+  if (payload) {
+    const jwtExpiryDate = new Date(payload.exp * 1000)
+    cookies().set('session', token, {
+      expires: jwtExpiryDate,
+      httpOnly: true,
+      secure: true,
+      sameSite: 'lax',
+      path: '/',
+    })
+  } else {
+    await removeSession()
+  }
 }
 
 export async function getSession(): Promise<string | null> {
@@ -24,20 +28,9 @@ export async function getSession(): Promise<string | null> {
 export async function getSessionPayload() {
   const session = await getSession()
   if (!session) return null
-  return await parseJWT(session)
+  return parseJWT(session)
 }
 
 export async function removeSession() {
   cookies().set('session', '', { expires: new Date(0) })
-}
-
-export async function updateSession() {
-  const session = await getSession()
-  if (!session) return
-
-  const payload = await parseJWT(session)
-  if (!payload) return
-
-  const newToken = await generateJWT(payload)
-  await setSession(newToken)
 }
