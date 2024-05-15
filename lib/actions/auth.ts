@@ -1,11 +1,9 @@
 'use server'
 
-import bcrypt from 'bcryptjs'
 import { v4 as uuid4 } from 'uuid'
 
 import { ResetPasswordToken, UserRole, VerificationToken } from '@prisma/client'
 import { prisma } from '@/prisma/prisma'
-import { getAuthenticatedUser, getAuthenticatedUserRole, signIn, signOut } from '@/auth'
 import {
   LoginSchema,
   SignUpSchema,
@@ -13,7 +11,7 @@ import {
   SettingsSchema,
   ForgotPasswordSchema,
 } from '@/lib/zod/schemas'
-import { fetchUserByEmailAndOrgName, fetchUserById } from '@/lib/data/user'
+import { fetchUserByEmailAndOrgName } from '@/lib/data/user'
 import {
   DEFAULT_ORG_ADMIN_LOGIN_REDIRECT,
   DEFAULT_ORG_CLIENT_LOGIN_REDIRECT,
@@ -411,73 +409,11 @@ export async function triggerResetPasswordEmail(
 
 // TODO: Clean up the following code
 export async function admin() {
-  const role = await getAuthenticatedUserRole()
+  const payload = await getSessionPayload()
 
-  if (role === UserRole.ORG_ADMIN) {
+  if (payload?.user.role === UserRole.ORG_ADMIN) {
     return { success: 'Allowed!' }
   }
 
   return { error: 'Forbidden!' }
-}
-
-// TODO: Clean up the following code
-export async function settings(prevState: any, formData: FormData) {
-  const validatedFields = await validateFormDataAgainstSchema(SettingsSchema, formData)
-
-  const user = await getAuthenticatedUser()
-
-  if (!user) {
-    return { error: 'Unauthorized' }
-  }
-
-  const dbUser = await fetchUserById(user.id!)
-
-  if (!dbUser) {
-    return { error: 'Unauthorized' }
-  }
-
-  let { name, email, password, newPassword, role } = validatedFields.data
-
-  if (email && email !== user.email) {
-    const orgName = getCurrentOrgName()
-
-    if (!orgName) {
-      return { error: 'Organization not found!' }
-    }
-
-    const existingUser = await fetchUserByEmailAndOrgName(email, orgName)
-
-    if (existingUser && existingUser.id !== user.id) {
-      return { error: 'Email already in use!' }
-    }
-
-    const verificationToken = await generateAndStoreVerificationToken(email, 3600)
-    await sendVerificationEmail(verificationToken.email, verificationToken.token)
-
-    return { success: 'Confirmation email sent!' }
-  }
-
-  if (password && newPassword && dbUser.password) {
-    const passwordsMatch = await bcrypt.compare(password, dbUser.password)
-
-    if (!passwordsMatch) {
-      return { error: 'Icorrect Password!' }
-    }
-
-    const hashedPassword = await bcrypt.hash(newPassword, 10)
-
-    password = hashedPassword
-    newPassword = undefined
-  }
-  await prisma.user.update({
-    where: { id: user.id },
-    data: {
-      name,
-      email,
-      password,
-      role,
-    },
-  })
-
-  return { success: 'Settings Updated!' }
 }

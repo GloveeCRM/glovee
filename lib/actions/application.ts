@@ -4,12 +4,12 @@ import { revalidatePath } from 'next/cache'
 
 import { prisma } from '@/prisma/prisma'
 import { UserRole } from '@prisma/client'
-import { getAuthenticatedUser } from '@/auth'
 import { fetchUserById } from '../data/user'
 import { ApplicationSchema } from '../zod/schemas'
 import { fetchFullTemplateById } from '../data/template'
 import { validateFormDataAgainstSchema } from '../utils/validation'
 import { fetchOrganizationByOrgName } from '../data/organization'
+import { getSessionPayload } from '../auth/session'
 
 export async function createApplicationInOrganization(
   orgName: string,
@@ -25,9 +25,12 @@ export async function createApplicationInOrganization(
     return { errors }
   }
 
-  const user = await getAuthenticatedUser()
+  const payload = await getSessionPayload()
 
-  if (!user || (user.role !== UserRole.ORG_ADMIN && user.role !== UserRole.ORG_OWNER)) {
+  if (
+    !payload?.user ||
+    (payload.user.role !== UserRole.ORG_ADMIN && payload.user.role !== UserRole.ORG_OWNER)
+  ) {
     return { error: 'You are not authorized to create application!' }
   }
 
