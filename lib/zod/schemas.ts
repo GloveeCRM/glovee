@@ -70,7 +70,7 @@ export const SettingsSchema = z
     }
   )
 
-export const NewPasswordSchema = z.object({
+export const ResetPasswordSchema = z.object({
   password: z
     .string()
     .min(1, {
@@ -81,7 +81,7 @@ export const NewPasswordSchema = z.object({
     }),
 })
 
-export const ResetPasswordSchema = z.object({
+export const ForgotPasswordSchema = z.object({
   email: z.string().email({
     message: 'Email is required',
   }),

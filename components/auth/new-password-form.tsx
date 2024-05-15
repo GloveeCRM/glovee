@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useFormState } from 'react-dom'
+import { useState } from 'react'
 import { BiMessageSquareError } from 'react-icons/bi'
 import { FaRegCheckCircle } from 'react-icons/fa'
 
@@ -15,15 +15,27 @@ interface NewPasswordFormProps {
   resetPasswordToken: string
 }
 export default function NewPasswordForm({ resetPasswordToken }: NewPasswordFormProps) {
-  const newPasswordWithToken = resetPassword.bind(null, resetPasswordToken)
-  const [formState, dispatch] = useFormState(newPasswordWithToken, {})
+  const [formState, setFormState] = useState<any>({})
+
+  async function handleSetNewPassword(formData: FormData) {
+    resetPassword(resetPasswordToken, formData).then((res) => {
+      if (res.success) {
+        setFormState(res)
+        setTimeout(() => {
+          window.location.href = res.data?.redirectLink
+        }, 1000)
+      } else {
+        setFormState(res)
+      }
+    })
+  }
 
   const passwordError = formState?.errors?.password ? formState?.errors?.password[0] : ''
 
   return (
     <form
       id="new-password-form"
-      action={dispatch}
+      action={handleSetNewPassword}
       className="w-full max-w-[420px] rounded-md border border-n-300 p-[20px] shadow-sm"
     >
       <h1

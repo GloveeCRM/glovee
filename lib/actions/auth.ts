@@ -6,7 +6,13 @@ import { v4 as uuid4 } from 'uuid'
 import { ResetPasswordToken, UserRole, VerificationToken } from '@prisma/client'
 import { prisma } from '@/prisma/prisma'
 import { getAuthenticatedUser, getAuthenticatedUserRole, signIn, signOut } from '@/auth'
-import { LoginSchema, SignUpSchema, ResetPasswordSchema, SettingsSchema } from '@/lib/zod/schemas'
+import {
+  LoginSchema,
+  SignUpSchema,
+  ResetPasswordSchema,
+  SettingsSchema,
+  ForgotPasswordSchema,
+} from '@/lib/zod/schemas'
 import { fetchUserByEmailAndOrgName, fetchUserById } from '@/lib/data/user'
 import {
   DEFAULT_ORG_ADMIN_LOGIN_REDIRECT,
@@ -157,8 +163,8 @@ export async function logout() {
   return await removeSession()
 }
 
-export async function resetPassword(formData: FormData) {
-  const { data, errors } = await validateFormDataAgainstSchema(ResetPasswordSchema, formData)
+export async function forgotPassword(formData: FormData) {
+  const { data, errors } = await validateFormDataAgainstSchema(ForgotPasswordSchema, formData)
 
   if (errors) {
     return { errors }
@@ -187,6 +193,50 @@ export async function resetPassword(formData: FormData) {
       return { error: data.error }
     } else {
       return { success: 'Reset password email sent!', data: { redirectLink: '/login' } }
+    }
+  } catch (error) {
+    return { error: 'Something went wrong!' }
+  }
+}
+
+export async function resetPassword(
+  resetPasswordToken: string,
+  formData: FormData
+): Promise<{
+  success?: string
+  error?: string
+  errors?: any
+  data?: Record<string, any>
+}> {
+  const { data, errors } = await validateFormDataAgainstSchema(ResetPasswordSchema, formData)
+
+  if (errors) {
+    return { errors }
+  }
+
+  const { password } = data
+
+  const orgName = getCurrentOrgName()
+
+  if (!orgName) {
+    return { error: 'Organization not found!' }
+  }
+
+  try {
+    const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/reset-password`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ resetPasswordToken, newPassword: password }),
+    })
+
+    const data = await response.json()
+
+    if (data.status === 'error') {
+      return { error: data.error }
+    } else {
+      return { success: 'Password Reset Successful!', data: { redirectLink: '/login' } }
     }
   } catch (error) {
     return { error: 'Something went wrong!' }
@@ -358,65 +408,6 @@ export async function triggerResetPasswordEmail(
     return { error: 'Unable to send reset password email!' }
   }
 }
-
-/**
- * Resets the password for a user.
- */
-// export async function resetPassword(token: string, prevState: any, formData: FormData) {
-//   if (!token) {
-//     return { error: 'Missing token!' }
-//   }
-
-//   const { data, errors } = await validateFormDataAgainstSchema(NewPasswordSchema, formData)
-
-//   if (errors) {
-//     return { errors }
-//   }
-
-//   const existingToken = await fetchResetPasswordTokenByToken(token)
-
-//   if (!existingToken) {
-//     return { error: 'Invalid Token!' }
-//   }
-//   const { password } = data
-
-//   const tokenHasExpired = new Date(existingToken.expires) < new Date()
-
-//   if (tokenHasExpired) {
-//     return { error: 'Token has expired!' }
-//   }
-
-//   const orgName = getCurrentOrgName()
-
-//   if (!orgName) {
-//     return { error: 'Organization not found!' }
-//   }
-
-//   const existingUser = await fetchUserByEmailAndOrgName(existingToken.email, orgName)
-
-//   if (!existingUser) {
-//     return { error: 'Email does not exist!' }
-//   }
-
-//   const hashedPassword = await bcrypt.hash(password, 10)
-
-//   try {
-//     await prisma.user.update({
-//       where: { id: existingUser.id },
-//       data: {
-//         password: hashedPassword,
-//       },
-//     })
-//   } catch (error) {
-//     return { error: 'Unable to set a new password!' }
-//   }
-
-//   await prisma.resetPasswordToken.delete({
-//     where: { id: existingToken.id },
-//   })
-
-//   return { success: 'Password Updated!' }
-// }
 
 // TODO: Clean up the following code
 export async function admin() {

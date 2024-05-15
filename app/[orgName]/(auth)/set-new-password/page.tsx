@@ -1,5 +1,6 @@
-import NewPasswordForm from '@/components/auth/new-password-form'
 import { notFound } from 'next/navigation'
+
+import NewPasswordForm from '@/components/auth/new-password-form'
 
 interface NewPasswordPageProps {
   searchParams: { resetPasswordToken?: string }

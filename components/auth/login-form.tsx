@@ -23,7 +23,7 @@ export default function LoginForm() {
         setFormState({ success: res.success })
         setTimeout(() => {
           window.location.href = res.data?.redirectLink
-        }, 1000)
+        }, 500)
       } else {
         setFormState(res)
       }
@@ -86,7 +86,7 @@ export default function LoginForm() {
 
       <p id="forgot-password" className="mt-[8px]">
         <Link
-          href="/reset-password"
+          href="/forgot-password"
           className="cursor-pointer text-[14px] text-blue-500 hover:underline"
         >
           Forgot password?
