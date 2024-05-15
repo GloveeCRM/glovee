@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
-import { SessionProvider } from 'next-auth/react'
+import { getSession } from '@/lib/auth/session'
 
-import { auth } from '@/auth'
-import '../globals.css'
+import AuthProvider from '@/contexts/auth-context'
 import OrgSidebar from '@/components/org/org-sidebar'
+import '../globals.css'
 
 export const metadata: Metadata = {
   title: 'Immigration CRM',
@@ -11,10 +11,10 @@ export const metadata: Metadata = {
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const session = await auth()
+  const session = await getSession()
 
   return (
-    <SessionProvider session={session}>
+    <AuthProvider token={session}>
       <html lang="en">
         <body id="admin-app" className="">
           <div className="flex">
@@ -23,6 +23,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           </div>
         </body>
       </html>
-    </SessionProvider>
+    </AuthProvider>
   )
 }

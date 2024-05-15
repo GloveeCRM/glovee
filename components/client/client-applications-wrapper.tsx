@@ -1,11 +1,11 @@
-import { getAuthenticatedUser } from '@/auth'
 import { fetchApplicationSummariesByUserId } from '@/lib/data/application'
 import ClientApplicationSummaryCard from './client-application-summary-card'
 import { ApplicationRole } from '@prisma/client'
+import { getSessionPayload } from '@/lib/auth/session'
 
 export default async function ClientApplicationsWrapper() {
-  const client = await getAuthenticatedUser()
-  const clientId = client?.id || ''
+  const payload = await getSessionPayload()
+  const clientId = String(payload?.user.id)
   const applicationSummaries = await fetchApplicationSummariesByUserId(clientId)
 
   const hasApplications = applicationSummaries !== null && applicationSummaries?.length > 0
