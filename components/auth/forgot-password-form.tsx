@@ -5,17 +5,17 @@ import { useState } from 'react'
 import { FaRegCheckCircle } from 'react-icons/fa'
 import { BiMessageSquareError } from 'react-icons/bi'
 
-import { resetPassword } from '@/lib/actions/auth'
+import { forgotPassword } from '@/lib/actions/auth'
 import { FormInput, InputLabel, TextInput } from '../ui/inputs'
 import { Callout } from '../ui/callout'
 import { SubmitButton } from '../ui/buttons'
 import Divider from '../ui/divider'
 
-export function ResetPasswordForm() {
+export default function ForgotPasswordForm() {
   const [formState, setFormState] = useState<any>({})
 
-  async function handleResetPassword(formData: FormData) {
-    resetPassword(formData).then((res) => {
+  async function handleForgotPassword(formData: FormData) {
+    forgotPassword(formData).then((res) => {
       if (res.success) {
         setFormState({ success: res.success })
       } else {
@@ -28,12 +28,12 @@ export function ResetPasswordForm() {
 
   return (
     <form
-      id="reset-password-form"
-      action={handleResetPassword}
+      id="forgot-password-form"
+      action={handleForgotPassword}
       className="w-full max-w-[420px] rounded-md border border-n-300 p-[20px] shadow-sm"
     >
       <h1
-        id="reset-password-form-title"
+        id="forgot-password-form-title"
         className="mb-[8px] text-center text-xl font-bold text-n-700"
       >
         Reset Password
