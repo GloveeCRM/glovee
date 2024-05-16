@@ -6,6 +6,9 @@ import { prisma } from '@/prisma/prisma'
 import { Organization, User } from '@prisma/client'
 import { UserRole } from '@prisma/client'
 import { UserStatus } from '@prisma/client'
+import { GLOVEE_API_URL } from '../constants/api'
+import { getSession } from '../auth/session'
+import { UserType } from '../types/user'
 
 /**
  * Fetches a user by email and organization name.
@@ -60,6 +63,41 @@ export async function fetchClientsByOrgName(orgName: string): Promise<User[] | n
   } catch (error) {
     console.error(error)
     return null
+  }
+}
+
+export async function searchClients(
+  orgName: string,
+  query: string,
+  limit: number,
+  offset: number
+): Promise<UserType[]> {
+  try {
+    const accessToken = await getSession()
+    if (!accessToken) {
+      return []
+    }
+
+    const response = await fetch(
+      `${GLOVEE_API_URL}/v1/${orgName}/user/client/search?query=${query}&limit=${limit}&offset=${offset}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    )
+
+    const data = await response.json()
+
+    if (data.status === 'error') {
+      return []
+    } else {
+      return data.data.clients || []
+    }
+  } catch (error) {
+    return []
   }
 }
 

@@ -1,6 +1,4 @@
-import Table from '@/components/ui/table'
 import { Application } from '@prisma/client'
-import { GoPlus } from 'react-icons/go'
 
 interface ClientApplicationsTableProps {
   applications: Application[] | null
