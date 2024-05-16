@@ -1,53 +1,76 @@
-import { fetchClientsByOrgNameandSearchQuery } from '@/lib/data/user'
-import ClientsTableRow from './clients-table-row'
-import Table from '@/components/ui/table'
+import Image from 'next/image'
+import Link from 'next/link'
 
-const theaders = ['', 'Full Name', 'Email', 'ID', 'Status']
+import { UserType } from '@/lib/types/user'
+import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
+import { searchClients } from '@/lib/data/user'
+import { TBody, TD, TH, THead, TR, Table } from '@/components/ui/table'
 
-export default async function ClientsTable({ orgName, query }: { orgName: string; query: string }) {
-  const clients = await fetchClientsByOrgNameandSearchQuery(orgName, query)
+interface ClientsTableProps {
+  orgName: string
+  query: string
+}
+
+export default async function ClientsTable({ orgName, query }: ClientsTableProps) {
+  const clients = await searchClients(orgName, query, 10, 0)
 
   return (
-    <Table theaders={theaders} tableName="clients" items={clients}>
-      {clients.map((client) => (
-        <ClientsTableRow
-          image={client.image!}
-          id={client.id}
-          name={client.name!}
-          email={client.email!}
-          status={client.status}
-          key={client.id}
-        />
-      ))}
+    <Table className="mt-[20px]">
+      <THead>
+        <TR>
+          <TH>{''}</TH>
+          <TH>Name</TH>
+          <TH>Email</TH>
+          <TH>ID</TH>
+          <TH>Status</TH>
+        </TR>
+      </THead>
+      <TBody>
+        {clients.length === 0 ? (
+          <TR>
+            <TD colSpan={5} className="py-[12px] text-center text-n-500">
+              No clients found
+            </TD>
+          </TR>
+        ) : (
+          clients.map((client) => <ClientsTableRow client={client} key={client.id} />)
+        )}
+      </TBody>
     </Table>
-    // <table className="mt-[28px] w-full text-[14px]">
-    //   <tbody>
-    //     <tr className="border-b-2 border-n-700 text-left">
-    //       <th></th>
-    //       <th>Full Name</th>
-    //       <th>Email</th>
-    //       <th>ID</th>
-    //       <th>Status</th>
-    //     </tr>
-    //     {clients.length === 0 ? (
-    //       <tr>
-    //         <td colSpan={5} className="py-[12px] text-center text-n-500">
-    //           No clients found
-    //         </td>
-    //       </tr>
-    //     ) : (
-    //       clients.map((client) => (
-    //         <ClientsTableRow
-    //           image={client.image!}
-    //           id={client.id}
-    //           name={client.name!}
-    //           email={client.email!}
-    //           status={client.status}
-    //           key={client.id}
-    //         />
-    //       ))
-    //     )}
-    //   </tbody>
-    // </table>
+  )
+}
+
+interface ClientsTableRowProps {
+  client: UserType
+}
+
+function ClientsTableRow({ client }: ClientsTableRowProps) {
+  return (
+    <TR className="hover:bg-n-100">
+      <TD>
+        <Image
+          src={client.avatarURL || DEFAULT_MALE_CLIENT_LOGO_URL}
+          alt="CLient Logo"
+          width={45}
+          height={45}
+          className="rounded-full"
+        />
+      </TD>
+      <TD>
+        <Link
+          className="cursor-pointer font-medium hover:text-blue-600"
+          href={`/admin/clients/${client.id}`}
+        >
+          {client.firstName} {client.lastName}
+        </Link>
+      </TD>
+      <TD>{client.email}</TD>
+      <TD>{client.id}</TD>
+      <TD>
+        <span className="rounded-full bg-n-600 px-[6px] py-[2px] text-[12px] text-white">
+          {client.status}
+        </span>
+      </TD>
+    </TR>
   )
 }
