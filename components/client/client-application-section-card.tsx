@@ -26,7 +26,7 @@ export default function ClientSidebarSectionCard({ section }: { section: Applica
 
   return (
     <div
-      className={`cursor-pointer rounded-sm ${selectedSectionId === section.id && 'bg-n-600'} p-[4px] text-[12px] text-n-300`}
+      className={`cursor-pointer rounded-sm ${selectedSectionId === section.id && 'bg-n-600'} p-[4px] pl-[26px] text-[12px] text-n-300`}
       onClick={(e) => {
         e.stopPropagation()
         handleClick(section.id)
@@ -34,12 +34,11 @@ export default function ClientSidebarSectionCard({ section }: { section: Applica
     >
       <div className="flex items-center gap-[4px]">
         {compeltationRate == 100 ? (
-          <FaRegCircleCheck className="h-[16px] w-[16px]" />
+          <FaRegCircleCheck className="h-[14px] w-[14px]" />
         ) : (
-          <FaRegCircle className="h-[16px] w-[16px]" />
+          <FaRegCircle className="h-[14px] w-[14px]" />
         )}
-
-        {section.title}
+        <div className="text-[10px]">{section.title}</div>
       </div>
     </div>
   )
