@@ -32,13 +32,15 @@ export default function ClientSidebarSectionCard({ section }: { section: Applica
         handleClick(section.id)
       }}
     >
-      <div className="flex items-center gap-[4px]">
-        {compeltationRate == 100 ? (
-          <FaRegCircleCheck className="h-[14px] w-[14px]" />
-        ) : (
-          <FaRegCircle className="h-[14px] w-[14px]" />
-        )}
-        <div className="text-[10px]">{section.title}</div>
+      <div className="flex gap-[4px]">
+        <div className="mt-[2px]">
+          {compeltationRate == 100 ? (
+            <FaRegCircleCheck className="h-[13px] w-[13px] text-green-500" />
+          ) : (
+            <FaRegCircle className="h-[13px] w-[13px]" />
+          )}
+        </div>
+        <div className="text-[12px]">{section.title}</div>
       </div>
     </div>
   )
