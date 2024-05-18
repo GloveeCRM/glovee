@@ -23,7 +23,7 @@ export default function TextInputQuestion({
         id="text-question"
         type="text"
         className="border border-black"
-        defaultValue={''}
+        // defaultValue={question.answer?.text || ''}
         onChange={handleChange}
       />
     </div>

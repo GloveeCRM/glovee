@@ -2,6 +2,7 @@ import { prisma } from '@/prisma/prisma'
 import { Application, Category } from '@prisma/client'
 import {
   ApplicationCategoryType,
+  ApplicationQuestionSetType,
   ApplicationSummaryType,
   ApplicationType,
 } from '../types/application'
@@ -235,7 +236,9 @@ export async function fetchSectionsById(id: string) {
   }
 }
 
-export async function fetchQuestionSetsBySectionId(id: string) {
+export async function fetchQuestionSetsBySectionId(
+  id: string
+): Promise<ApplicationQuestionSetType[] | null> {
   if (!id) {
     return []
   }
@@ -243,7 +246,7 @@ export async function fetchQuestionSetsBySectionId(id: string) {
   try {
     const questionSets = await prisma.questionSet.findMany({
       where: {
-        sectionId: id,
+        sectionId: String(id),
       },
       include: {
         questions: {
@@ -254,7 +257,7 @@ export async function fetchQuestionSetsBySectionId(id: string) {
       },
     })
 
-    return questionSets
+    return null
   } catch {
     return null
   }

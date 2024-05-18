@@ -32,6 +32,7 @@ export default function CreateNewApplicationModal({
 
   async function handleCreateApplication(formData: FormData) {
     createApplicationInOrganization(orgName, selectedClientId, formData).then((res) => {
+      console.log(res)
       if (res.success) {
         resetForm()
         closeModal()
