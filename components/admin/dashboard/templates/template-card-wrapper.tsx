@@ -1,5 +1,5 @@
 import { fetchTemplatesByOrgId } from '@/lib/data/template'
-import { fetchOrganizationByOrgName } from '@/lib/data/organization'
+import { fetchOrganizationProfile } from '@/lib/data/organization'
 import CreateNewTemplateCard from './create-new-template-card'
 import TemplateCard from './template-card'
 
@@ -8,7 +8,7 @@ interface TemplateCardWrapperProps {
 }
 
 export default async function TemplateCardWrapper({ orgName }: TemplateCardWrapperProps) {
-  const org = await fetchOrganizationByOrgName(orgName)
+  const org = await fetchOrganizationProfile(orgName)
   if (!org) return null
   const templates = await fetchTemplatesByOrgId(org.id)
 
