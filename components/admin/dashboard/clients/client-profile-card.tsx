@@ -17,6 +17,7 @@ interface ClientProfileCardProps {
 
 export default function ClientProfileCard({ client, userId }: ClientProfileCardProps) {
   const [isEditing, setIsEditing] = useState(false)
+
   return (
     <div className="flex items-center justify-between rounded-lg border border-n-400 bg-n-100/50 px-[14px] py-[18px]">
       <div className="flex gap-[8px]">

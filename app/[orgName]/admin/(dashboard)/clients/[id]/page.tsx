@@ -16,7 +16,6 @@ export default async function ClientPage({ params }: ClientsPageProps) {
   const orgName = params.orgName
   const userId = params.id
   const client = await fetchClientProfileById(userId, orgName)
-  console.log(client)
   const applications = await fetchApplicationsByUserId(userId)
 
   if (!client) {

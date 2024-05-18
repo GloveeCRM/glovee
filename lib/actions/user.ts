@@ -6,6 +6,9 @@ import { revalidatePath } from 'next/cache'
 import { validateFormDataAgainstSchema } from '../utils/validation'
 import { fetchUserByEmailAndOrgName } from '../data/user'
 import { UserRole } from '@prisma/client'
+import { GLOVEE_API_URL } from '../constants/api'
+import { getCurrentOrgName } from '../utils/server'
+import { getSession } from '../auth/session'
 
 export async function createClientInOrg(
   formData: FormData,
@@ -41,31 +44,82 @@ export async function createClientInOrg(
   return { success: 'Client created!' }
 }
 
-export async function updateClientById(
-  clientId: string,
+// export async function updateClientById(
+//   clientId: number,
+//   formData: FormData
+// ): Promise<{ success?: string; error?: string; errors?: any }> {
+//   const { data, errors } = await validateFormDataAgainstSchema(UpdateClientSchema, formData)
+
+//   if (errors) {
+//     return { errors }
+//   }
+
+//   if (!clientId || clientId === 0) {
+//     return { errors: { clientId: 'Client is required' } }
+//   }
+
+//   const { clientFirstName, clientLastName, clientEmail } = data
+
+//   await prisma.user.update({
+//     where: {
+//       id: clientId,
+//     },
+//     data: {
+//       name: clientFirstName + ' ' + clientLastName,
+//       email: clientEmail,
+//     },
+//   })
+
+//   revalidatePath(`/admin/clients/${clientId}`)
+//   return { success: 'Client updated!' }
+// }
+
+export async function updateClientProfile(
+  clientId: number,
   formData: FormData
 ): Promise<{ success?: string; error?: string; errors?: any }> {
   const { data, errors } = await validateFormDataAgainstSchema(UpdateClientSchema, formData)
-  if (errors || clientId.length === 0) {
-    if (clientId.length === 0) {
-      const combinedErrors = { ...errors, clientId: 'Client is required' }
-      return { errors: combinedErrors }
-    }
+
+  if (errors) {
     return { errors }
+  }
+
+  if (!clientId || clientId === 0) {
+    return { errors: { clientId: 'Client is required' } }
   }
 
   const { clientFirstName, clientLastName, clientEmail } = data
 
-  await prisma.user.update({
-    where: {
-      id: clientId,
-    },
-    data: {
-      name: clientFirstName + ' ' + clientLastName,
-      email: clientEmail,
-    },
-  })
+  const accessToken = await getSession()
 
-  revalidatePath(`/admin/clients/${clientId}`)
-  return { success: 'Client updated!' }
+  const orgName = await getCurrentOrgName()
+
+  try {
+    const response = await fetch(
+      `${GLOVEE_API_URL}/v1/${orgName}/user/admin/client/${clientId}/profile`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          firstName: clientFirstName,
+          lastName: clientLastName,
+          email: clientEmail,
+        }),
+      }
+    )
+
+    const data = await response.json()
+
+    if (data.status === 'error') {
+      return { error: data.message }
+    } else {
+      revalidatePath(`/admin/clients/${clientId}`)
+      return { success: 'Client updated!' }
+    }
+  } catch (error) {
+    return { error: 'Something went wrong!' }
+  }
 }
