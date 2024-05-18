@@ -1,6 +1,6 @@
 import { GoPlus } from 'react-icons/go'
 
-import { User } from '@prisma/client'
+import { UserType } from '@/lib/types/user'
 import { fetchTemplatesByOrgId } from '@/lib/data/template'
 import { fetchOrganizationByOrgName } from '@/lib/data/organization'
 import CreateNewApplicationModal from './create-new-application-modal'
@@ -8,7 +8,7 @@ import { ModalProvider, ModalTrigger } from '../../../ui/modal'
 
 interface CreateNewApplicationButtonProp {
   orgName: string
-  client?: User
+  client?: UserType
 }
 
 export default async function CreateNewApplicationButton({

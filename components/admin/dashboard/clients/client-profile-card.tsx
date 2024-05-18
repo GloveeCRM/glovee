@@ -2,15 +2,16 @@
 import Image from 'next/image'
 import { useState } from 'react'
 
-import { User, UserStatus } from '@prisma/client'
+import { UserStatus } from '@prisma/client'
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
 import DeactiveButton from './deactive-button'
 import ActiveButton from './active-button'
 import ClientProfileEdit from './client-profile-edit'
 import { HiOutlinePencilSquare } from 'react-icons/hi2'
+import { UserType } from '@/lib/types/user'
 
 interface ClientProfileCardProps {
-  client: User
+  client: UserType
   userId: string
 }
 
@@ -21,7 +22,7 @@ export default function ClientProfileCard({ client, userId }: ClientProfileCardP
       <div className="flex gap-[8px]">
         <div>
           <Image
-            src={client.image || DEFAULT_MALE_CLIENT_LOGO_URL}
+            src={client.avatarURL || DEFAULT_MALE_CLIENT_LOGO_URL}
             alt="CLient Logo"
             width={75}
             height={75}
@@ -34,7 +35,9 @@ export default function ClientProfileCard({ client, userId }: ClientProfileCardP
           <div className="flex gap-[4px]">
             <div className="flex items-center gap-[8px]">
               <div className="text-[16px]">
-                <p>{client.name}</p>
+                <p>
+                  {client.firstName} {client.lastName}
+                </p>
                 <p>{client.email}</p>
                 <p>
                   <span className="rounded-full border bg-n-200 px-[6px] py-[2px] text-[12px]">

@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 
-import { fetchUserById } from '@/lib/data/user'
+import { fetchClientProfileById } from '@/lib/data/user'
 import { fetchApplicationsByUserId } from '@/lib/data/application'
 import ClientProfileCard from '@/components/admin/dashboard/clients/client-profile-card'
 import ClientApplicationsTable from '@/components/admin/dashboard/clients/client-applications-table'
@@ -15,7 +15,8 @@ interface ClientsPageProps {
 export default async function ClientPage({ params }: ClientsPageProps) {
   const orgName = params.orgName
   const userId = params.id
-  const client = await fetchUserById(userId)
+  const client = await fetchClientProfileById(userId, orgName)
+  console.log(client)
   const applications = await fetchApplicationsByUserId(userId)
 
   if (!client) {
