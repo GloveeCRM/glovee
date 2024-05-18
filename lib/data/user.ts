@@ -79,7 +79,7 @@ export async function searchClients(
     }
 
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/user/client/search?query=${query}&limit=${limit}&offset=${offset}`,
+      `${GLOVEE_API_URL}/v1/${orgName}/user/admin/client/search?query=${query}&limit=${limit}&offset=${offset}`,
       {
         method: 'GET',
         headers: {
