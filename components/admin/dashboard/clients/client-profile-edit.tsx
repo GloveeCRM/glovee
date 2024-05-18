@@ -1,24 +1,22 @@
 import { MouseEvent, useState } from 'react'
 
-import { User } from '@prisma/client'
 import { updateClientById } from '@/lib/actions/user'
 import { FormInput, InputLabel, TextInput } from '@/components/ui/inputs'
 import { Button, SubmitButton } from '@/components/ui/buttons'
+import { UserType } from '@/lib/types/user'
 
 interface ClientProfileEditProps {
   setIsEditing: (isEditing: boolean) => void
-  client: User
+  client: UserType
 }
 
 export default function ClientProfileEdit({ setIsEditing, client }: ClientProfileEditProps) {
-  const fullName = client.name || ''
-  const firstName = fullName.split(' ')[0]
-  const lastName = fullName.split(' ')[1]
+  const fullName = client.firstName + ' ' + client.lastName
 
   const [formState, setFormState] = useState<any>({})
 
   async function handleUpdateClientById(formData: FormData) {
-    updateClientById(client.id, formData).then((res) => {
+    updateClientById(String(client.id), formData).then((res) => {
       if (res.success) {
         resetForm()
         setIsEditing(false)
@@ -42,7 +40,7 @@ export default function ClientProfileEdit({ setIsEditing, client }: ClientProfil
               placeholder="first name"
               id="client-first-name"
               name="clientFirstName"
-              defaultValue={firstName}
+              defaultValue={client.firstName}
               size="xs"
               className="bg-n-100/50 px-[8px] py-[4px] text-[14px]"
             />
@@ -53,7 +51,7 @@ export default function ClientProfileEdit({ setIsEditing, client }: ClientProfil
               placeholder="last name"
               id="client-last-name"
               name="clientLastName"
-              defaultValue={lastName}
+              defaultValue={client.lastName}
               size="xs"
               className="bg-n-100/50 px-[8px] py-[4px] text-[14px]"
             />

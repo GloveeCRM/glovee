@@ -3,7 +3,8 @@
 import Image from 'next/image'
 import { MouseEvent, useState } from 'react'
 
-import { Template, User } from '@prisma/client'
+import { Template } from '@prisma/client'
+import { UserType } from '@/lib/types/user'
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
 import { ApplicantRoleOptions } from '@/lib/constants/applications'
 import { createApplicationInOrganization } from '@/lib/actions/application'
@@ -17,7 +18,7 @@ import ClientSearchDropdown from './clients-search-dropdown'
 interface CreateNewApplicationModalProps {
   templates: Template[]
   orgName: string
-  client?: User
+  client?: UserType
 }
 
 export default function CreateNewApplicationModal({
@@ -25,7 +26,7 @@ export default function CreateNewApplicationModal({
   orgName,
   client,
 }: CreateNewApplicationModalProps) {
-  const [selectedClientId, setSelectedClientId] = useState<string>(client?.id || '')
+  const [selectedClientId, setSelectedClientId] = useState<string>(String(client?.id) || '')
   const [formState, setFormState] = useState<any>({})
   const { closeModal } = useModal()
 
@@ -62,7 +63,7 @@ export default function CreateNewApplicationModal({
           <InputLabel htmlFor="clientId">Client</InputLabel>
           {client ? (
             <div className="flex items-center gap-[4px] text-[14px] text-gray-700">
-              {client.image === null ? (
+              {client.avatarURL === null ? (
                 <Image
                   src={DEFAULT_MALE_CLIENT_LOGO_URL}
                   alt="CLient Logo"
@@ -71,9 +72,9 @@ export default function CreateNewApplicationModal({
                   className="rounded-full"
                 />
               ) : (
-                client.image
+                client.avatarURL
               )}
-              {client.name}
+              {client.firstName} {client.lastName}
             </div>
           ) : (
             <ClientSearchDropdown

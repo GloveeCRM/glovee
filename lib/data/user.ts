@@ -35,19 +35,6 @@ export async function fetchUserByEmailAndOrgName(
   }
 }
 
-/**
- * Fetches a user by their ID.
- */
-export async function fetchUserById(id: string): Promise<User | null> {
-  try {
-    const user = await prisma.user.findUnique({ where: { id: id } })
-    return user
-  } catch (error) {
-    console.error(error)
-    return null
-  }
-}
-
 export async function fetchClientsByOrgName(orgName: string): Promise<User[] | null> {
   try {
     const clients = await prisma.user.findMany({
@@ -62,6 +49,42 @@ export async function fetchClientsByOrgName(orgName: string): Promise<User[] | n
     return clients
   } catch (error) {
     console.error(error)
+    return null
+  }
+}
+
+/**
+ * Fetches a user by their ID.
+ */
+export async function fetchClientProfileById(
+  id: string,
+  orgName: string
+): Promise<UserType | null> {
+  try {
+    const accessToken = await getSession()
+    if (!accessToken) {
+      return null
+    }
+
+    const response = await fetch(
+      `${GLOVEE_API_URL}/v1/${orgName}/user/admin/client/${id}/profile`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    )
+
+    const data = await response.json()
+
+    if (data.status === 'error') {
+      return null
+    } else {
+      return data.data.user
+    }
+  } catch (error) {
     return null
   }
 }
