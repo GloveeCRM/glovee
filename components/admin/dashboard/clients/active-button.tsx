@@ -1,10 +1,15 @@
 'use client'
 
-import { activateClientById } from '@/lib/data/user'
+import { updateClientStatus } from '@/lib/actions/user'
+import { UserStatusEnum } from '@/lib/types/user'
 
 export default function ActiveButton({ CLientId }: { CLientId: string }) {
   async function handleClickReactivate() {
-    await activateClientById(CLientId)
+    updateClientStatus(CLientId, UserStatusEnum.ACTIVE).then((res) => {
+      if (res.error) {
+        alert(res.error)
+      }
+    })
   }
   return (
     <button

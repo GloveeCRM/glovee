@@ -7,5 +7,10 @@ export type UserType = {
   emailVerified: string
   avatarURL: string
   role: string
-  status: string
+  status: UserStatusEnum
+}
+
+export enum UserStatusEnum {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
 }

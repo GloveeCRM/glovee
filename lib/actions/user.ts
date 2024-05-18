@@ -9,6 +9,7 @@ import { UserRole } from '@prisma/client'
 import { GLOVEE_API_URL } from '../constants/api'
 import { getCurrentOrgName } from '../utils/server'
 import { getSession } from '../auth/session'
+import { UserStatusEnum } from '../types/user'
 
 export async function createClientInOrg(
   formData: FormData,
@@ -118,6 +119,39 @@ export async function updateClientProfile(
     } else {
       revalidatePath(`/admin/clients/${clientId}`)
       return { success: 'Client updated!' }
+    }
+  } catch (error) {
+    return { error: 'Something went wrong!' }
+  }
+}
+
+export async function updateClientStatus(
+  id: string,
+  status: UserStatusEnum
+): Promise<{ success?: string; error?: string }> {
+  const accessToken = await getSession()
+  if (!accessToken) {
+    return { error: 'Unauthorized' }
+  }
+
+  const orgName = await getCurrentOrgName()
+  try {
+    const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/admin/client/${id}/status`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({ status }),
+    })
+
+    const data = await response.json()
+
+    if (data.status === 'error') {
+      return { error: data.message }
+    } else {
+      revalidatePath(`/admin/clients/${id}`)
+      return { success: 'Client status updated!' }
     }
   } catch (error) {
     return { error: 'Something went wrong!' }
