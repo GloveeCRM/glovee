@@ -1,6 +1,6 @@
 import { MouseEvent, useState } from 'react'
 
-import { updateClientById } from '@/lib/actions/user'
+import { updateClientProfile } from '@/lib/actions/user'
 import { FormInput, InputLabel, TextInput } from '@/components/ui/inputs'
 import { Button, SubmitButton } from '@/components/ui/buttons'
 import { UserType } from '@/lib/types/user'
@@ -11,12 +11,10 @@ interface ClientProfileEditProps {
 }
 
 export default function ClientProfileEdit({ setIsEditing, client }: ClientProfileEditProps) {
-  const fullName = client.firstName + ' ' + client.lastName
-
   const [formState, setFormState] = useState<any>({})
 
   async function handleUpdateClientById(formData: FormData) {
-    updateClientById(String(client.id), formData).then((res) => {
+    updateClientProfile(client.id, formData).then((res) => {
       if (res.success) {
         resetForm()
         setIsEditing(false)
@@ -29,7 +27,9 @@ export default function ClientProfileEdit({ setIsEditing, client }: ClientProfil
   function resetForm() {
     setFormState({})
   }
-  console.log(formState)
+
+  console.log(JSON.stringify(formState, null, 2))
+
   return (
     <form action={handleUpdateClientById}>
       <div>
@@ -57,7 +57,7 @@ export default function ClientProfileEdit({ setIsEditing, client }: ClientProfil
             />
           </FormInput>
         </div>
-        <FormInput id="client-email" gap="sm" errors={formState.errors?.clientEmail[0]}>
+        <FormInput id="client-email" gap="sm" errors={formState.errors?.clientEmail}>
           <InputLabel htmlFor="clientEmail">Email</InputLabel>
           <TextInput
             placeholder="email"
