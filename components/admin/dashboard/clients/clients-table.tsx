@@ -50,10 +50,10 @@ function ClientsTableRow({ client }: ClientsTableRowProps) {
       <TD>
         <Image
           src={client.avatarURL || DEFAULT_MALE_CLIENT_LOGO_URL}
-          alt="CLient Logo"
           width={45}
+          alt={`${client.firstName[0]} ${client.lastName[0]}`}
           height={45}
-          className="min-w-[45px] rounded-full"
+          className="min-w-[45px] rounded-full text-sm"
         />
       </TD>
       <TD className="whitespace-nowrap">

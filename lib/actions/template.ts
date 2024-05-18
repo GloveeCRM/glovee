@@ -12,7 +12,7 @@ import {
   TemplateQuestionType,
 } from '../types/template'
 import { fetchFullTemplateById } from '../data/template'
-import { fetchOrganizationByOrgName } from '../data/organization'
+import { fetchOrganizationProfile } from '../data/organization'
 
 /**
  * Create a new template
@@ -29,7 +29,7 @@ export async function createTemplateInOrganization(orgName: string, formDara: Fo
 
   const { title, description } = validatedFields.data
 
-  const org = await fetchOrganizationByOrgName(orgName)
+  const org = await fetchOrganizationProfile(orgName)
 
   if (!org) {
     return { error: 'Failed to fetch organization ID!' }

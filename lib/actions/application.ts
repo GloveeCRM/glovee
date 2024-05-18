@@ -8,7 +8,7 @@ import { fetchClientProfileById } from '../data/user'
 import { ApplicationSchema } from '../zod/schemas'
 import { fetchFullTemplateById } from '../data/template'
 import { validateFormDataAgainstSchema } from '../utils/validation'
-import { fetchOrganizationByOrgName } from '../data/organization'
+import { fetchOrganizationProfile } from '../data/organization'
 import { getSessionPayload } from '../auth/session'
 
 export async function createApplicationInOrganization(
@@ -34,7 +34,7 @@ export async function createApplicationInOrganization(
     return { error: 'You are not authorized to create application!' }
   }
 
-  const org = await fetchOrganizationByOrgName(orgName)
+  const org = await fetchOrganizationProfile(orgName)
 
   if (!org) {
     return { error: 'Organization not found!' }
