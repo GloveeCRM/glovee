@@ -53,19 +53,19 @@ function ClientsTableRow({ client }: ClientsTableRowProps) {
           alt="CLient Logo"
           width={45}
           height={45}
-          className="rounded-full"
+          className="min-w-[45px] rounded-full"
         />
       </TD>
-      <TD>
+      <TD className="whitespace-nowrap">
         <Link
-          className="cursor-pointer font-medium hover:text-blue-600"
+          className="cursor-pointer pr-[16px] font-medium hover:text-blue-600"
           href={`/admin/clients/${client.id}`}
         >
           {client.firstName} {client.lastName}
         </Link>
       </TD>
-      <TD>{client.email}</TD>
-      <TD>{client.id}</TD>
+      <TD className="pr-[16px]">{client.email}</TD>
+      <TD className="pr-[16px]">{client.id}</TD>
       <TD>
         <span className="rounded-full bg-n-600 px-[6px] py-[2px] text-[12px] text-white">
           {client.status}
