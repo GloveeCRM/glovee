@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache'
 
 import { prisma } from '@/prisma/prisma'
 import { UserRole } from '@prisma/client'
-import { fetchUserById } from '../data/user'
+import { fetchClientProfileById } from '../data/user'
 import { ApplicationSchema } from '../zod/schemas'
 import { fetchFullTemplateById } from '../data/template'
 import { validateFormDataAgainstSchema } from '../utils/validation'
@@ -42,7 +42,8 @@ export async function createApplicationInOrganization(
 
   const { role, applicantFirstName, applicantLastName, templateId } = data
 
-  const client = await fetchUserById(clientId)
+  const client = await fetchClientProfileById(clientId, orgName)
+  console.log(client)
 
   if (!client) {
     return { error: 'Client not found!' }
@@ -60,7 +61,7 @@ export async function createApplicationInOrganization(
 
   await prisma.application.create({
     data: {
-      clientId: client.id,
+      clientId: String(client.id),
       orgId: org.id,
       templateName: template.title,
       applicantFirstName: applicantFirstName,
