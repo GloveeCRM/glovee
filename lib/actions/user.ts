@@ -157,3 +157,44 @@ export async function updateClientStatus(
     return { error: 'Something went wrong!' }
   }
 }
+
+export async function createNewClient(
+  formData: FormData,
+  orgName: string
+): Promise<{ success?: string; error?: string; errors?: any }> {
+  const { data, errors } = await validateFormDataAgainstSchema(CreateClientSchema, formData)
+  if (errors) {
+    return { errors }
+  }
+
+  const { clientFirstName, clientLastName, clientEmail } = data
+
+  const accessToken = await getSession()
+
+  try {
+    const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/admin/client/create`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({
+        firstName: clientFirstName,
+        lastName: clientLastName,
+        email: clientEmail,
+      }),
+    })
+
+    const data = await response.json()
+    console.log(data)
+
+    if (data.status === 'error') {
+      return { error: data.error }
+    } else {
+      revalidatePath('/admin/clients')
+      return { success: 'Client created!' }
+    }
+  } catch (error) {
+    return { error: 'Something went wrong!' }
+  }
+}

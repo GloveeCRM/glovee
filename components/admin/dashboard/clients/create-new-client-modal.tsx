@@ -2,7 +2,7 @@
 
 import { MouseEvent, useState } from 'react'
 
-import { createClientInOrg } from '@/lib/actions/user'
+import { createNewClient } from '@/lib/actions/user'
 import { Modal, useModal } from '@/components/ui/modal'
 import { FormInput, InputLabel, TextInput } from '@/components/ui/inputs'
 import { Button, SubmitButton } from '@/components/ui/buttons'
@@ -16,7 +16,7 @@ export default function CreateNewClientModal() {
   const { closeModal } = useModal()
 
   async function handleCreateClient(formData: FormData) {
-    createClientInOrg(formData, orgName).then((res) => {
+    createNewClient(formData, orgName).then((res) => {
       if (res.success) {
         resetForm()
         closeModal()
@@ -35,6 +35,7 @@ export default function CreateNewClientModal() {
     resetForm()
     closeModal()
   }
+
   return (
     <Modal title="Create a new client" onClose={resetForm}>
       <form action={handleCreateClient} className="w-[85vw] max-w-[450px]">
@@ -65,7 +66,7 @@ export default function CreateNewClientModal() {
               />
             </FormInput>
           </div>
-          <FormInput id="client-email" gap="sm" errors={formState.errors?.clientEmail[0]}>
+          <FormInput id="client-email" gap="sm" errors={formState.errors?.clientEmail?.[0]}>
             <InputLabel htmlFor="clientEmail" className="text-n-700">
               Client Email
             </InputLabel>
