@@ -2,7 +2,14 @@
 
 import { prisma } from '@/prisma/prisma'
 import { Template } from '@prisma/client'
-import { TemplateCategoryType, TemplateQuestionSetType, TemplateType } from '@/lib/types/template'
+import {
+  TemplateCategoryType,
+  TemplateQuestionSetType,
+  TemplateType,
+  TemplateType2,
+} from '@/lib/types/template'
+import { GLOVEE_API_URL } from '../constants/api'
+import { getSession } from '../auth/session'
 
 // TODO: Change this to ORG ID.
 /**
@@ -15,6 +22,35 @@ export async function fetchTemplatesByOrgId(orgId: string): Promise<Template[] |
   } catch (error) {
     console.error(error)
     return null
+  }
+}
+
+export async function searchTemplates(
+  orgName: string,
+  query?: string,
+  limit?: number,
+  offset?: number
+): Promise<TemplateType2[]> {
+  const accessToken = await getSession()
+  if (!accessToken) {
+    return []
+  }
+
+  try {
+    const response = await fetch(
+      `${GLOVEE_API_URL}/v1/${orgName}/template/admin/search?q=${query}&limit=${limit}&offset=${offset}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    )
+    const data = await response.json()
+    return data.data.templates
+  } catch (error) {
+    return []
   }
 }
 
