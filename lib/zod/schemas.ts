@@ -26,7 +26,7 @@ export const ApplicationSchema = z.object({
 })
 
 export const TemplateSchema = z.object({
-  title: z
+  name: z
     .string({
       required_error: 'Title is required',
       invalid_type_error: 'Title is not valid',

@@ -2,7 +2,7 @@
 
 import { MouseEvent, useState } from 'react'
 
-import { createTemplateInOrganization } from '@/lib/actions/template'
+import { createNewTemplate } from '@/lib/actions/template'
 import { Modal, useModal } from '../../../ui/modal'
 
 interface CreateNewTemplateModalProps {
@@ -14,7 +14,7 @@ export default function CreateNewTemplateModal({ orgName }: CreateNewTemplateMod
   const { closeModal } = useModal()
 
   async function handleCreateTemplate(formData: FormData) {
-    createTemplateInOrganization(orgName, formData).then((res) => {
+    createNewTemplate(orgName, formData).then((res) => {
       if (res.success) {
         resetForm()
         closeModal()
@@ -32,17 +32,17 @@ export default function CreateNewTemplateModal({ orgName }: CreateNewTemplateMod
     <Modal title="Create a new template" onClose={resetForm}>
       <form action={handleCreateTemplate} className="w-[85vw] max-w-[570px]">
         <div className="mb-[12px]">
-          <label className="mb-[4px] block text-[14px] text-n-700" htmlFor="title">
-            Title
+          <label className="mb-[4px] block text-[14px] text-n-700" htmlFor="name">
+            Name
           </label>
           <input
             className="w-full rounded border border-n-400 px-[8px] py-[3px] text-[14px] leading-tight"
             placeholder="College Application"
             type="text"
-            name="title"
-            id="title"
+            name="name"
+            id="name"
           />
-          {formState.errors?.title && <div className="text-red-500">{formState.errors.title}</div>}
+          {formState.errors?.name && <div className="text-red-500">{formState.errors.name}</div>}
         </div>
         <div>
           <label className="mb-[4px] block text-[14px] text-n-700" htmlFor="description">
