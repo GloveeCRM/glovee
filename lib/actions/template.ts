@@ -13,44 +13,83 @@ import {
 } from '../types/template'
 import { fetchFullTemplateById } from '../data/template'
 import { fetchOrganizationProfile } from '../data/organization'
+import { validateFormDataAgainstSchema } from '../utils/validation'
+import { getSession } from '../auth/session'
+import { GLOVEE_API_URL } from '../constants/api'
 
 /**
  * Create a new template
  */
-export async function createTemplateInOrganization(orgName: string, formDara: FormData) {
-  const validatedFields = TemplateSchema.safeParse({
-    title: formDara.get('title'),
-    description: formDara.get('description'),
-  })
+// export async function createTemplateInOrganization(orgName: string, formDara: FormData) {
+//   const validatedFields = TemplateSchema.safeParse({
+//     title: formDara.get('title'),
+//     description: formDara.get('description'),
+//   })
 
-  if (!validatedFields.success) {
-    return { errors: validatedFields.error.flatten().fieldErrors }
+//   if (!validatedFields.success) {
+//     return { errors: validatedFields.error.flatten().fieldErrors }
+//   }
+
+//   const { title, description } = validatedFields.data
+
+//   const org = await fetchOrganizationProfile(orgName)
+
+//   if (!org) {
+//     return { error: 'Failed to fetch organization ID!' }
+//   }
+
+//   const template = await prisma.template.create({
+//     data: {
+//       orgId: org.id,
+//       title,
+//       description,
+//       categories: {
+//         create: [
+//           { title: 'Untitled Category 1', position: 0 },
+//           { title: 'Untitled Category 2', position: 1 },
+//         ],
+//       },
+//     },
+//   })
+
+//   revalidatePath('/admin/templates')
+//   return { success: 'Template created!', data: template }
+// }
+
+export async function createNewTemplate(orgName: string, formData: FormData) {
+  const { data, errors } = await validateFormDataAgainstSchema(TemplateSchema, formData)
+  if (errors) {
+    return { errors }
   }
 
-  const { title, description } = validatedFields.data
+  const { name, description } = data
 
-  const org = await fetchOrganizationProfile(orgName)
-
-  if (!org) {
-    return { error: 'Failed to fetch organization ID!' }
+  const accessToken = await getSession()
+  if (!accessToken) {
+    return { error: 'Failed to get access token!' }
   }
 
-  const template = await prisma.template.create({
-    data: {
-      orgId: org.id,
-      title,
-      description,
-      categories: {
-        create: [
-          { title: 'Untitled Category 1', position: 0 },
-          { title: 'Untitled Category 2', position: 1 },
-        ],
+  try {
+    const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/template/admin/create`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
       },
-    },
-  })
+      body: JSON.stringify({ name, description }),
+    })
 
-  revalidatePath('/admin/templates')
-  return { success: 'Template created!', data: template }
+    const data = await response.json()
+
+    if (data.status === 'error') {
+      return { error: data.error }
+    } else {
+      revalidatePath('/admin/templates')
+      return { success: 'Template created!' }
+    }
+  } catch (error) {
+    return { error: 'Failed to create template!' }
+  }
 }
 
 /**
