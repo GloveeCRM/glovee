@@ -10,6 +10,7 @@ import {
 } from '@/lib/types/template'
 import { GLOVEE_API_URL } from '../constants/api'
 import { getSession } from '../auth/session'
+import { getCurrentOrgName } from '../utils/server'
 
 // TODO: Change this to ORG ID.
 /**
@@ -57,12 +58,34 @@ export async function searchTemplates(
 /**
  * Fetch template info by id
  */
-export async function fetchTemplateById(id: string): Promise<Template | null> {
+export async function fetchTemplateById(id: string): Promise<TemplateType2 | null> {
+  const accessToken = await getSession()
+  if (!accessToken) {
+    return null
+  }
+
+  const orgName = await getCurrentOrgName()
+
   try {
-    const template = await prisma.template.findUnique({ where: { id: id } })
-    return template
-  } catch (error) {
-    console.error(error)
+    const response = await fetch(
+      `${GLOVEE_API_URL}/v1/${orgName}/template/admin/information/${id}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    )
+
+    const data = await response.json()
+
+    if (data.error) {
+      return null
+    } else {
+      return data.data.template
+    }
+  } catch {
     return null
   }
 }

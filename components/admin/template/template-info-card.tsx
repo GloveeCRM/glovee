@@ -18,7 +18,7 @@ export default async function TemplateInfoCard({
     <div className={`${className} rounded bg-n-600`}>
       <TemplateInfoCardTitle
         templateId={templateId}
-        title={template?.title || 'Untitled Template'}
+        title={template?.name || 'Untitled Template'}
         editable={editable}
       />
 
