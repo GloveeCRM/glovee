@@ -110,5 +110,13 @@ export default async function ClientApplicationPage({
     sectionId
   )) as ApplicationQuestionSetType[]
 
-  return <div></div>
+  return (
+    <div>
+      {applicationQuestionSets.map((questionSet) => (
+        <div key={questionSet.id}>
+          <h2>{questionSet.type}</h2>
+        </div>
+      ))}
+    </div>
+  )
 }
