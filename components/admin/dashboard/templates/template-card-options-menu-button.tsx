@@ -6,7 +6,7 @@ import { FiMoreHorizontal } from 'react-icons/fi'
 import { deleteTemplateById } from '@/lib/actions/template'
 import { Popover, PopoverContent, PopoverTrigger } from '../../../ui/popover'
 
-export default function TemplateCardOptionsMenuButton({ templateId }: { templateId: string }) {
+export default function TemplateCardOptionsMenuButton({ templateID }: { templateID: number }) {
   return (
     <Popover>
       <PopoverTrigger
@@ -23,7 +23,7 @@ export default function TemplateCardOptionsMenuButton({ templateId }: { template
         <ul>
           <li
             onClick={() => {
-              deleteTemplateById(templateId).then((data) => {
+              deleteTemplateById(String(templateID)).then((data) => {
                 if (data?.error) {
                   console.error(data.error)
                 }
