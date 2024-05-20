@@ -19,14 +19,14 @@ export default function TemplateEditSidebarSection({
 }: TemplateEditSidebarSectionProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false)
 
-  const { setSelectedSectionId } = useTemplateEditContext()
+  const { setSelectedSectionID } = useTemplateEditContext()
   const { updateSectionTitle, removeSectionFromCategory } = useSectionActions()
 
   const sectionInputRef = useRef<HTMLTextAreaElement>(null)
 
   function handleClickSection(e: React.MouseEvent<HTMLDivElement>) {
     e.stopPropagation()
-    setSelectedSectionId(section.id)
+    setSelectedSectionID(section.id)
   }
 
   function handleClickRename() {
@@ -94,7 +94,7 @@ export default function TemplateEditSidebarSection({
         <textarea
           ref={sectionInputRef}
           className="ml-[28px] block w-[186px] resize-none overflow-hidden rounded border-[1px] border-n-500 bg-n-700/70 px-[4px] pb-[2px] focus:border-[1px] focus:border-n-500 focus:outline-none"
-          defaultValue={section.title}
+          defaultValue={section.name}
           onChange={handleTitleChange}
           onKeyDown={handleKeyDown}
         />
@@ -104,7 +104,7 @@ export default function TemplateEditSidebarSection({
             <PiDotsSixVerticalBold className="h-[22px] w-[22px] text-n-300 opacity-0 transition-opacity duration-150 group-hover/section:opacity-100" />
           </span>
           <div className="flex items-start">
-            <div className="pr-[6px]">{section.title}</div>
+            <div className="pr-[6px]">{section.name}</div>
             <SectionMenuButton
               onClickRename={handleClickRename}
               onClickDelete={handleClickDelete}

@@ -10,8 +10,8 @@ interface TemplateEditPageProps {
 }
 
 export default async function TemplateEditPage({ params }: TemplateEditPageProps) {
-  const templateId = params.id
-  const template = await fetchTemplateById(templateId)
+  const templateID = parseInt(params.id)
+  const template = await fetchTemplateById(templateID)
 
   if (!template) {
     notFound()

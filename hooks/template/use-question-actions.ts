@@ -6,7 +6,7 @@ import { useTemplateEditContext } from '@/contexts/template-edit-context'
 export default function useQuestionActions() {
   const { template, setTemplate } = useTemplateEditContext()
 
-  function getQuestionById(questionId: string) {
+  function getQuestionById(questionID: number) {
     if (!template || !template.categories) return null
 
     function searchQuestions(questionSets: TemplateQuestionSetType[]): TemplateQuestionType | null {
@@ -14,7 +14,7 @@ export default function useQuestionActions() {
         if (!questionSet.questions) continue
 
         for (const question of questionSet.questions) {
-          if (question.id === questionId) return question
+          if (question.id === questionID) return question
         }
 
         // Recursively search in nested question sets, if any
@@ -40,7 +40,7 @@ export default function useQuestionActions() {
     return null
   }
 
-  function getQuestionsInQuestionSet(questionSetId: string) {
+  function getQuestionsInQuestionSet(questionSetID: number) {
     if (!template || !template.categories) return
 
     // Recursive helper function to search within nested question sets
@@ -49,7 +49,7 @@ export default function useQuestionActions() {
     ): TemplateQuestionType[] | null {
       for (const questionSet of questionSets) {
         // Base case: if the current question set matches, return its questions
-        if (questionSet.id === questionSetId) return questionSet.questions || null
+        if (questionSet.id === questionSetID) return questionSet.questions || null
 
         // Recursive case: if the question set has nested question sets, search within them
         if (questionSet.questionSets && questionSet.questionSets.length > 0) {
@@ -76,7 +76,7 @@ export default function useQuestionActions() {
     return null // Return null if no matching question set is found in any section
   }
 
-  function createQuestionInQuestionSet(questionSetId: string, newQuestion: TemplateQuestionType) {
+  function createQuestionInQuestionSet(questionSetID: number, newQuestion: TemplateQuestionType) {
     if (!template || !template.categories) return
 
     const updatedCategories = template.categories.map((category) => {
@@ -85,7 +85,7 @@ export default function useQuestionActions() {
       const updatedSections = category.sections.map((section) => {
         const updatedQuestionSets = updateQuestionSetsWithNewQuestion(
           section.questionSets || [],
-          questionSetId,
+          questionSetID,
           newQuestion
         )
 
@@ -100,12 +100,12 @@ export default function useQuestionActions() {
 
   function updateQuestionSetsWithNewQuestion(
     questionSets: TemplateQuestionSetType[],
-    questionSetId: string,
+    questionSetID: number,
     newQuestion: TemplateQuestionType
   ): TemplateQuestionSetType[] {
     return questionSets.map((questionSet) => {
       // If this is the target question set
-      if (questionSet.id === questionSetId) {
+      if (questionSet.id === questionSetID) {
         // Adjust positions for existing questions if necessary
         const updatedQuestions = [...(questionSet.questions || []), newQuestion]
           .map((question, index, arr) => {
@@ -125,7 +125,7 @@ export default function useQuestionActions() {
           ...questionSet,
           questionSets: updateQuestionSetsWithNewQuestion(
             questionSet.questionSets,
-            questionSetId,
+            questionSetID,
             newQuestion
           ),
         }
@@ -134,7 +134,7 @@ export default function useQuestionActions() {
     })
   }
 
-  function removeQuestionFromQuestionSet(questionId: string) {
+  function removeQuestionFromQuestionSet(questionID: number) {
     if (!template || !template.categories) return
 
     const updatedCategories = template.categories.map((category) => {
@@ -143,7 +143,7 @@ export default function useQuestionActions() {
       const updatedSections = category.sections.map((section) => {
         const updatedQuestionSets = removeQuestionFromQuestionSetsRecursively(
           section.questionSets || [],
-          questionId
+          questionID
         )
 
         return { ...section, questionSets: updatedQuestionSets }
@@ -157,7 +157,7 @@ export default function useQuestionActions() {
 
   function removeQuestionFromQuestionSetsRecursively(
     questionSets: TemplateQuestionSetType[],
-    questionId: string
+    questionID: number
   ) {
     return questionSets.map((questionSet) => {
       if (questionSet.questions) {
@@ -165,7 +165,7 @@ export default function useQuestionActions() {
 
         // Filter out the question to be removed and capture its position
         const filteredQuestions = questionSet.questions.filter((question) => {
-          if (question.id === questionId) {
+          if (question.id === questionID) {
             removedQuestionPosition = question.position
             return false // Remove this question
           }
@@ -189,7 +189,7 @@ export default function useQuestionActions() {
           ...questionSet,
           questionSets: removeQuestionFromQuestionSetsRecursively(
             questionSet.questionSets,
-            questionId
+            questionID
           ),
         }
       }

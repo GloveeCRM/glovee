@@ -1,12 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { v4 as uuid4 } from 'uuid'
 
 import { TemplateQuestionSetType } from '@/lib/types/template'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
+import { generateRandomId } from '@/lib/utils/id'
 
 interface NonEmptySectionDropzoneProps {
   position: number
@@ -18,18 +18,18 @@ export default function NonEmptySectionDropzone({
   questionSet,
 }: NonEmptySectionDropzoneProps) {
   const [isDraggedOver, setIsDraggedOver] = useState<boolean>(false)
-  const { selectedSectionId } = useTemplateEditContext()
+  const { selectedSectionID } = useTemplateEditContext()
   const { draggedObject, setDraggedObject } = useDragAndDropContext()
   const { getQuestionSetById, getQuestionSetsInSection, createQuestionSetInSection } =
     useQuestionSetActions()
 
   const isDropAllowed = isDraggedOver && draggedObject?.type === 'questionSet'
 
-  const isInQuestionSet = questionSet.questionSetId !== null
+  const isInQuestionSet = questionSet.questionSetID !== null
 
-  const questionSetsInSection = getQuestionSetsInSection(selectedSectionId)
+  const questionSetsInSection = getQuestionSetsInSection(selectedSectionID)
   const questionSetsInQuestionSet =
-    questionSet.questionSetId && getQuestionSetById(questionSet.questionSetId)?.questionSets
+    questionSet.questionSetID && getQuestionSetById(questionSet.questionSetID)?.questionSets
 
   function handleDragEnter(e: React.DragEvent<HTMLDivElement>) {
     e.preventDefault()
@@ -53,14 +53,14 @@ export default function NonEmptySectionDropzone({
     setIsDraggedOver(false)
     if (isDropAllowed) {
       const newQuestionSet: TemplateQuestionSetType = {
-        id: uuid4(),
+        id: generateRandomId(),
         type: draggedObject.object.type,
         position: position,
-        sectionId: selectedSectionId,
-        questionSetId: isInQuestionSet ? questionSet.questionSetId : null,
+        sectionID: selectedSectionID,
+        questionSetID: isInQuestionSet ? questionSet.questionSetID : null,
         questions: [],
       }
-      createQuestionSetInSection(selectedSectionId, newQuestionSet)
+      createQuestionSetInSection(selectedSectionID, newQuestionSet)
     }
     setDraggedObject(null)
   }

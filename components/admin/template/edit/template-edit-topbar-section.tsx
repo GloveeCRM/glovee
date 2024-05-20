@@ -9,10 +9,10 @@ export default function TemplateEditTopbarSection({
   section,
   active,
 }: TemplateEditTopbarSectionProps) {
-  const { setSelectedSectionId } = useTemplateEditContext()
+  const { setSelectedSectionID } = useTemplateEditContext()
 
   function handleClickSection() {
-    setSelectedSectionId(section.id)
+    setSelectedSectionID(section.id)
   }
 
   return (
@@ -21,7 +21,7 @@ export default function TemplateEditTopbarSection({
       className={`flex min-w-fit cursor-pointer items-center border-l-[1px] border-n-600 px-[6px] ${active ? 'bg-n-600/75' : ''}`}
       onClick={handleClickSection}
     >
-      {section.title}
+      {section.name}
     </div>
   )
 }

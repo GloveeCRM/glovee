@@ -1,55 +1,68 @@
-import { Question, TemplateQuestion, TemplateQuestionType } from '@prisma/client'
-import { JsonValue } from '@prisma/client/runtime/library'
-
-type BaseSettings = JsonValue
+import { BaseSettings, TemplateQuestionType, TemplateQuestionTypes } from './template'
+import { ApplicationQuestionType, ApplicationQuestionTypes } from './application'
 
 export function isTextInputQuestionType(
-  question: TemplateQuestion | Question
+  question: TemplateQuestionType | ApplicationQuestionType
 ): question is TextInputQuestionType {
-  return question.type === TemplateQuestionType.TEXT_INPUT
+  return (
+    question.type === TemplateQuestionTypes.TEXT_INPUT ||
+    question.type === ApplicationQuestionTypes.TEXT_INPUT
+  )
 }
 
-export type TextInputQuestionType = (TemplateQuestion | Question) & {
+export type TextInputQuestionType = (TemplateQuestionType | ApplicationQuestionType) & {
   settings: BaseSettings
 }
 
 export function isTextareaQuestionType(
-  question: TemplateQuestion | Question
+  question: TemplateQuestionType | ApplicationQuestionType
 ): question is TextareaQuestionType {
-  return question.type === TemplateQuestionType.TEXTAREA
+  return (
+    question.type === TemplateQuestionTypes.TEXTAREA ||
+    question.type === ApplicationQuestionTypes.TEXTAREA
+  )
 }
 
-export type TextareaQuestionType = (TemplateQuestion | Question) & {
+export type TextareaQuestionType = (TemplateQuestionType | ApplicationQuestionType) & {
   settings: BaseSettings
 }
 
 export function isSelectQuestionType(
-  question: TemplateQuestion | Question
+  question: TemplateQuestionType | ApplicationQuestionType
 ): question is SelectQuestionType {
-  return question.type === TemplateQuestionType.SELECT
+  return (
+    question.type === TemplateQuestionTypes.SELECT ||
+    question.type === ApplicationQuestionTypes.SELECT
+  )
 }
 
-export type SelectQuestionType = (TemplateQuestion | Question) & {
+export type SelectQuestionType = (TemplateQuestionType | ApplicationQuestionType) & {
   settings: BaseSettings
 }
 
 export function isDateInputQuestionType(
-  question: TemplateQuestion | Question
+  question: TemplateQuestionType | ApplicationQuestionType
 ): question is DateInputQuestionType {
-  return question.type === TemplateQuestionType.DATE_INPUT
+  return (
+    question.type === TemplateQuestionTypes.DATE_INPUT ||
+    question.type === ApplicationQuestionTypes.DATE_INPUT
+  )
 }
 
-export type DateInputQuestionType = (TemplateQuestion | Question) & {
+export type DateInputQuestionType = (TemplateQuestionType | ApplicationQuestionType) & {
   settings: BaseSettings
 }
 
 export function isRadioQuestionType(
-  question: TemplateQuestion | Question
+  question: TemplateQuestionType | ApplicationQuestionType
 ): question is RadioQuestionType {
-  return question.type === TemplateQuestionType.RADIO
+  return (
+    question.type === TemplateQuestionTypes.RADIO ||
+    question.type === ApplicationQuestionTypes.RADIO
+  )
 }
 
-export type RadioQuestionType = (TemplateQuestion | Question) & {
+export type RadioQuestionType = (TemplateQuestionType | ApplicationQuestionType) & {
   settings: BaseSettings & {
     display: 'inline' | 'block'
     options: {
@@ -60,12 +73,15 @@ export type RadioQuestionType = (TemplateQuestion | Question) & {
 }
 
 export function isCheckboxQuestionType(
-  question: TemplateQuestion | Question
+  question: TemplateQuestionType | ApplicationQuestionType
 ): question is CheckboxQuestionType {
-  return question.type === TemplateQuestionType.CHECKBOX
+  return (
+    question.type === TemplateQuestionTypes.CHECKBOX ||
+    question.type === ApplicationQuestionTypes.CHECKBOX
+  )
 }
 
-export type CheckboxQuestionType = (TemplateQuestion | Question) & {
+export type CheckboxQuestionType = (TemplateQuestionType | ApplicationQuestionType) & {
   settings: BaseSettings & {
     display: 'inline' | 'block'
     options: {
@@ -76,11 +92,14 @@ export type CheckboxQuestionType = (TemplateQuestion | Question) & {
 }
 
 export function isDocumentQuestionType(
-  question: TemplateQuestion | Question
+  question: TemplateQuestionType | ApplicationQuestionType
 ): question is DocumentQuestionType {
-  return question.type === TemplateQuestionType.DOCUMENT
+  return (
+    question.type === TemplateQuestionTypes.DOCUMENT ||
+    question.type === ApplicationQuestionTypes.DOCUMENT
+  )
 }
 
-export type DocumentQuestionType = (TemplateQuestion | Question) & {
+export type DocumentQuestionType = (TemplateQuestionType | ApplicationQuestionType) & {
   settings: BaseSettings
 }

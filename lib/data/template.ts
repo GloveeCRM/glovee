@@ -2,12 +2,7 @@
 
 import { prisma } from '@/prisma/prisma'
 import { Template } from '@prisma/client'
-import {
-  TemplateCategoryType,
-  TemplateQuestionSetType,
-  TemplateType,
-  TemplateType2,
-} from '@/lib/types/template'
+import { TemplateType } from '@/lib/types/template'
 import { GLOVEE_API_URL } from '../constants/api'
 import { getSession } from '../auth/session'
 import { getCurrentOrgName } from '../utils/server'
@@ -31,7 +26,7 @@ export async function searchTemplates(
   query?: string,
   limit?: number,
   offset?: number
-): Promise<TemplateType2[]> {
+): Promise<TemplateType[]> {
   const accessToken = await getSession()
   if (!accessToken) {
     return []
@@ -58,7 +53,7 @@ export async function searchTemplates(
 /**
  * Fetch template info by id
  */
-export async function fetchTemplateById(id: string): Promise<TemplateType2 | null> {
+export async function fetchTemplateById(id: number): Promise<TemplateType | null> {
   const accessToken = await getSession()
   if (!accessToken) {
     return null
@@ -91,49 +86,9 @@ export async function fetchTemplateById(id: string): Promise<TemplateType2 | nul
 }
 
 /**
- * Fetch all template categoriies including sections by template id
- */
-export async function fetchTemplateCategoriesWithSectionsByTemplateId(
-  templateId: string
-): Promise<TemplateCategoryType[] | null> {
-  try {
-    const categories = await prisma.templateCategory.findMany({
-      where: { templateId: templateId },
-      include: {
-        sections: true,
-      },
-    })
-    return categories
-  } catch {
-    return null
-  }
-}
-
-/**
- * Fetch all template question sets by section id
- */
-export async function fetchTemplateQuestionSetsWithQuestionsBySectionId(
-  sectionId: string
-): Promise<TemplateQuestionSetType[] | null> {
-  try {
-    const questionSets = await prisma.templateQuestionSet.findMany({
-      where: {
-        sectionId: sectionId,
-      },
-      include: {
-        questions: true,
-      },
-    })
-    return questionSets
-  } catch {
-    return null
-  }
-}
-
-/**
  * Fetch a template by id with all of its categories, sections, question sets, and questions
  */
-export async function fetchFullTemplateById(id: string): Promise<TemplateType | null> {
+export async function fetchFullTemplateById(id: string) {
   try {
     const template = await prisma.template.findUnique({
       where: { id: id },
@@ -155,6 +110,38 @@ export async function fetchFullTemplateById(id: string): Promise<TemplateType | 
     })
     return template
   } catch {
+    return null
+  }
+}
+
+export async function fetchFullTemplateById2(id: number): Promise<TemplateType | null> {
+  const accessToken = await getSession()
+  if (!accessToken) {
+    return null
+  }
+
+  const orgName = await getCurrentOrgName()
+
+  try {
+    const response = await fetch(
+      `${GLOVEE_API_URL}/v1/${orgName}/template/admin/full-template/${id}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    )
+
+    const data = await response.json()
+
+    if (data.status === 'error') {
+      return null
+    } else {
+      return data.data.template
+    }
+  } catch (error) {
     return null
   }
 }

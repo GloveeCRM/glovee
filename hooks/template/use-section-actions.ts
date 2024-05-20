@@ -1,26 +1,25 @@
 'use client'
 
-import { v4 as uuid4 } from 'uuid'
-
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
+import { generateRandomId } from '@/lib/utils/id'
 
 export default function useSectionActions() {
-  const { template, setTemplate, selectedCategoryId } = useTemplateEditContext()
+  const { template, setTemplate, selectedCategoryID } = useTemplateEditContext()
   const templateCategories = template?.categories
 
-  function createSectionInCategory(categoryId: string) {
+  function createSectionInCategory(categoryID: number) {
     if (!templateCategories) return
 
     const updatedCategories = templateCategories.map((category) => {
-      if (category.id !== categoryId) return category
+      if (category.id !== categoryID) return category
 
       const updatedSections = [
         ...(category.sections || []),
         {
-          id: uuid4(),
-          title: 'Untitled Section',
+          id: generateRandomId(),
+          name: 'Untitled Section',
           position: (category.sections?.length || 0) + 1,
-          categoryId: category.id,
+          categoryID: category.id,
           questionSets: [],
         },
       ]
@@ -31,14 +30,14 @@ export default function useSectionActions() {
     setTemplate({ ...template, categories: updatedCategories })
   }
 
-  function removeSectionFromCategory(sectionId: string) {
+  function removeSectionFromCategory(sectionID: number) {
     if (!templateCategories) return
 
     const updatedCategories = templateCategories.map((category) => {
-      if (category.id !== selectedCategoryId) return category
+      if (category.id !== selectedCategoryID) return category
 
       const updatedSections = (category.sections || []).filter(
-        (section) => section.id !== sectionId
+        (section) => section.id !== sectionID
       )
 
       return { ...category, sections: updatedSections }
@@ -47,14 +46,14 @@ export default function useSectionActions() {
     setTemplate({ ...template, categories: updatedCategories })
   }
 
-  function updateSectionTitle(sectionId: string, title: string) {
+  function updateSectionTitle(sectionID: number, title: string) {
     if (!templateCategories) return
 
     const updatedCategories = templateCategories.map((category) => {
-      if (category.id !== selectedCategoryId) return category
+      if (category.id !== selectedCategoryID) return category
 
       const updatedSections = (category.sections || []).map((section) => {
-        if (section.id !== sectionId) return section
+        if (section.id !== sectionID) return section
 
         return { ...section, title }
       })

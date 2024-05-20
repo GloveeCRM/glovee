@@ -7,9 +7,10 @@ export default async function TemplatePreviewLayout({
   params: { orgName: string; id: string }
   children: React.ReactNode
 }) {
+  const templateID = parseInt(params.id)
   return (
     <div id="templatePreviewLayout" className="flex">
-      <TemplatePreviewSidebar templateId={params.id} />
+      <TemplatePreviewSidebar templateID={templateID} />
       <div className="w-full p-[8px]">{children}</div>
     </div>
   )

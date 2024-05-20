@@ -21,20 +21,20 @@ export default function TemplateEditSidebarCategory({
   const [isEditing, setIsEditing] = useState<boolean>(false)
   const categoryTitleInputRef = useRef<HTMLTextAreaElement>(null)
 
-  const { selectedCategoryId, setSelectedCategoryId, setSelectedSectionId } =
+  const { selectedCategoryID, setSelectedCategoryID, setSelectedSectionID } =
     useTemplateEditContext()
   const { removeCategoryFromTemplate, updateCategoryTitle } = useCategoryActions()
 
   function handleClickCategory() {
-    if (selectedCategoryId !== category.id) {
-      setSelectedCategoryId(category.id)
-      setSelectedSectionId(category.sections?.[0]?.id || '')
+    if (selectedCategoryID !== category.id) {
+      setSelectedCategoryID(category.id)
+      setSelectedSectionID(category.sections?.[0]?.id || 0)
     }
   }
 
   function handleClickDeleteCategory() {
     removeCategoryFromTemplate(category.id)
-    setSelectedCategoryId('')
+    setSelectedCategoryID(0)
   }
 
   function handleClickRenameCategory() {
@@ -98,7 +98,7 @@ export default function TemplateEditSidebarCategory({
         <textarea
           ref={categoryTitleInputRef}
           className="my-[4px] ml-[17px] block w-[204px] resize-none overflow-hidden rounded border-[1px] border-n-500 bg-n-700/70 px-[4px] pb-[2px] pt-[1px] focus:border-[1px] focus:border-n-500 focus:outline-none"
-          defaultValue={category.title}
+          defaultValue={category.name}
           onChange={handleTitleChange}
           onKeyDown={handleKeyDown}
         />
@@ -111,7 +111,7 @@ export default function TemplateEditSidebarCategory({
               <IoMdArrowDropright className="h-[22px] w-[22px]" />
             )}
           </div>
-          <div className="pr-[6px]">{category.title}</div>
+          <div className="pr-[6px]">{category.name}</div>
           <CategoryMenuButton
             onClickDelete={handleClickDeleteCategory}
             onClickRename={handleClickRenameCategory}
@@ -120,7 +120,7 @@ export default function TemplateEditSidebarCategory({
       )}
       {isExpanded && (
         <TemplateEditSidebarSectionWrapper
-          categoryId={category.id}
+          categoryID={category.id}
           sections={category.sections || []}
         />
       )}

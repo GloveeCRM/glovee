@@ -7,10 +7,11 @@ import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
 import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
 import { TemplateQuestionSetType } from '@/lib/types/template'
+import { generateRandomId } from '@/lib/utils/id'
 
 export default function EmptySectionQuestionSetDropzone() {
   const [isDraggedOver, setIsDraggedOver] = useState<boolean>(false)
-  const { selectedSectionId } = useTemplateEditContext()
+  const { selectedSectionID } = useTemplateEditContext()
   const { draggedObject, setDraggedObject } = useDragAndDropContext()
   const { createQuestionSetInSection } = useQuestionSetActions()
 
@@ -36,14 +37,14 @@ export default function EmptySectionQuestionSetDropzone() {
     setIsDraggedOver(false)
     if (isDropAllowed) {
       const questionSet: TemplateQuestionSetType = {
-        id: uuid4(),
+        id: generateRandomId(),
         type: draggedObject.object.type,
         position: 0,
-        sectionId: selectedSectionId,
-        questionSetId: null,
+        sectionID: selectedSectionID,
+        questionSetID: null,
         questions: [],
       }
-      createQuestionSetInSection(selectedSectionId, questionSet)
+      createQuestionSetInSection(selectedSectionID, questionSet)
       setDraggedObject(null)
     }
   }

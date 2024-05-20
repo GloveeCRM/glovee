@@ -1,10 +1,10 @@
 import { TemplateCategoryType, TemplateQuestionSetType, TemplateType } from '../types/template'
 
-export function setTemplateOnLocalStorage(templateId: string, template: TemplateType) {
+export function setTemplateOnLocalStorage(templateId: number, template: TemplateType) {
   localStorage.setItem(`template_${templateId}`, JSON.stringify(template))
 }
 
-export function getTemplateFromLocalStorage(templateId: string): TemplateType | null {
+export function getTemplateFromLocalStorage(templateId: number): TemplateType | null {
   const localTemplate = localStorage.getItem(`template_${templateId}`)
   return localTemplate ? JSON.parse(localTemplate) : null
 }
@@ -22,16 +22,16 @@ export function formatTemplate(template: TemplateType): TemplateType {
     questionSets.forEach((qs) => {
       qs.questionSets = [] // Prepare for nesting
       questionSetMap[qs.id] = qs
-      if (!qs.questionSetId) {
+      if (!qs.questionSetID) {
         nestedQuestionSets.push(qs)
       }
     })
 
     // Nest question sets
     questionSets.forEach((qs) => {
-      if (!qs.questionSetId) return
-      if (qs.questionSetId && questionSetMap[qs.questionSetId]) {
-        questionSetMap[qs.questionSetId].questionSets?.push(qs)
+      if (!qs.questionSetID) return
+      if (qs.questionSetID && questionSetMap[qs.questionSetID]) {
+        questionSetMap[qs.questionSetID].questionSets?.push(qs)
       }
     })
 

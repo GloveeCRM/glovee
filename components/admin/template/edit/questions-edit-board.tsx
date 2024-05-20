@@ -5,11 +5,11 @@ import TemplateQuestionSet from '@/components/forms/question-sets/template-quest
 import EmptySectionQuestionSetDropzone from './empty-section-question-set-dropzone'
 
 export default function QuestionsEditBoard() {
-  const { template, selectedCategoryId, selectedSectionId } = useTemplateEditContext()
+  const { template, selectedCategoryID, selectedSectionID } = useTemplateEditContext()
 
   const templateQuestionSets = template?.categories
-    ?.find((category) => category.id === selectedCategoryId)
-    ?.sections?.find((section) => section.id === selectedSectionId)?.questionSets
+    ?.find((category) => category.id === selectedCategoryID)
+    ?.sections?.find((section) => section.id === selectedSectionID)?.questionSets
 
   return (
     <div id="questions-edit-board" className="rounded-lg bg-white p-[4px]">
