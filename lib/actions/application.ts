@@ -43,7 +43,6 @@ export async function createApplicationInOrganization(
   const { role, applicantFirstName, applicantLastName, templateId } = data
 
   const client = await fetchClientProfileById(clientId, orgName)
-  console.log(client)
 
   if (!client) {
     return { error: 'Client not found!' }

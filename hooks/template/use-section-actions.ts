@@ -46,7 +46,7 @@ export default function useSectionActions() {
     setTemplate({ ...template, categories: updatedCategories })
   }
 
-  function updateSectionTitle(sectionID: number, title: string) {
+  function updateSectionTitle(sectionID: number, name: string) {
     if (!templateCategories) return
 
     const updatedCategories = templateCategories.map((category) => {
@@ -55,7 +55,7 @@ export default function useSectionActions() {
       const updatedSections = (category.sections || []).map((section) => {
         if (section.id !== sectionID) return section
 
-        return { ...section, title }
+        return { ...section, name }
       })
 
       return { ...category, sections: updatedSections }

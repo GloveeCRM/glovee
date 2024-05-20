@@ -186,7 +186,6 @@ export async function createNewClient(
     })
 
     const data = await response.json()
-    console.log(data)
 
     if (data.status === 'error') {
       return { error: data.error }

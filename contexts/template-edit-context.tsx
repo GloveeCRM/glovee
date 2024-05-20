@@ -69,17 +69,14 @@ export default function TemplateEditProvider({ templateID, children }: TemplateE
   useEffect(() => {
     async function fetchAndSetInitialTemplate() {
       const fetchedTemplate = await fetchFullTemplateById2(templateID)
-      let formattedTemplate = null
-      if (fetchedTemplate) {
-        formattedTemplate = formatTemplate(fetchedTemplate)
-      }
-      setSavedTemplate(formattedTemplate)
+      console.log('fetchedTemplate', fetchedTemplate)
+      setSavedTemplate(fetchedTemplate)
 
       const localTemplate = getTemplateFromLocalStorage(templateID)
       if (localTemplate) {
         setTemplate(localTemplate)
       } else {
-        setTemplate(formattedTemplate)
+        setTemplate(fetchedTemplate)
       }
     }
 

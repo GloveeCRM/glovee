@@ -28,8 +28,6 @@ export default function ClientProfileEdit({ setIsEditing, client }: ClientProfil
     setFormState({})
   }
 
-  console.log(JSON.stringify(formState, null, 2))
-
   return (
     <form action={handleUpdateClientById}>
       <div>

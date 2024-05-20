@@ -34,13 +34,13 @@ export default function useCategoryActions() {
     setTemplate({ ...template, categories: updatedCategories })
   }
 
-  function updateCategoryTitle(categoryID: number, title: string) {
+  function updateCategoryTitle(categoryID: number, name: string) {
     if (!template) return
 
     const updatedCategories = templateCategories.map((category) => {
       if (category.id !== categoryID) return category
 
-      return { ...category, title }
+      return { ...category, name }
     })
 
     setTemplate({ ...template, categories: updatedCategories })
