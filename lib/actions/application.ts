@@ -58,7 +58,7 @@ export async function createApplicationInOrganization(
     return { error: 'Template not found!' }
   }
 
-  const application = await prisma.application.create({
+  await prisma.application.create({
     data: {
       clientId: String(client.id),
       orgId: org.id,
@@ -76,7 +76,18 @@ export async function createApplicationInOrganization(
               title: section.title,
               position: section.position,
               questionSets: {
-                create: createQuestionSetsRecursively(section.questionSets || []),
+                create: section.questionSets?.map((questionSet) => ({
+                  type: questionSet.type,
+                  position: questionSet.position,
+                  questions: {
+                    create: questionSet.questions?.map((question) => ({
+                      type: question.type,
+                      prompt: question.prompt,
+                      position: question.position,
+                      helperText: question.helperText,
+                    })),
+                  },
+                })),
               },
             })),
           },
@@ -87,24 +98,6 @@ export async function createApplicationInOrganization(
 
   revalidatePath('/admin/applications')
   return { success: 'Application created!' }
-}
-
-function createQuestionSetsRecursively(templateQuestionSets: any[]): any[] {
-  return templateQuestionSets?.map((templateQuestionSet) => ({
-    type: templateQuestionSet.type,
-    position: templateQuestionSet.position,
-    questions: {
-      create: templateQuestionSet.questions.map((question: any) => ({
-        type: question.type,
-        prompt: question.prompt,
-        position: question.position,
-        helperText: question.helperText,
-      })),
-    },
-    questionSets: {
-      create: createQuestionSetsRecursively(templateQuestionSet.questionSets),
-    },
-  }))
 }
 
 /**
