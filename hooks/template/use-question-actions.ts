@@ -11,9 +11,7 @@ export default function useQuestionActions() {
 
     function searchQuestions(questionSets: TemplateQuestionSetType[]): TemplateQuestionType | null {
       for (const questionSet of questionSets) {
-        if (!questionSet.questions) continue
-
-        for (const question of questionSet.questions) {
+        for (const question of questionSet.questions || []) {
           if (question.id === questionID) return question
         }
 
