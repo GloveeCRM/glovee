@@ -187,9 +187,6 @@ export async function updateFullTemplateById(
 
     const data = await response.json()
 
-    console.log('Data', JSON.stringify(data, null, 2))
-    console.log(JSON.stringify(template, null, 2))
-
     if (data.status === 'error') {
       return { error: data.error }
     } else {
