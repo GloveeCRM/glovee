@@ -6,7 +6,7 @@ import TemplateCardOptionsMenuButton from './template-card-options-menu-button'
 
 interface TemplateCardProps {
   title: string
-  id: string
+  id: number
   description?: string
 }
 

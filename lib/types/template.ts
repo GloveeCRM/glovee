@@ -1,43 +1,61 @@
-import { Template, TemplateCategory, TemplateQuestionSet, TemplateSection } from '@prisma/client'
-import {
-  CheckboxQuestionType,
-  DateInputQuestionType,
-  DocumentQuestionType,
-  RadioQuestionType,
-  SelectQuestionType,
-  TextInputQuestionType,
-  TextareaQuestionType,
-} from './qusetion'
-
-export type TemplateType = Template & {
+export type TemplateType = {
+  id: number
+  organizationID: number
+  name: string
+  description?: string
   categories?: TemplateCategoryType[]
 }
 
-export type TemplateType2 = {
-  id: string
-  organizationID: string
+export type TemplateCategoryType = {
+  id: number
   name: string
-  description: string
-}
-
-export type TemplateCategoryType = TemplateCategory & {
+  position: number
+  templateID: number
   sections?: TemplateSectionType[]
 }
 
-export type TemplateSectionType = TemplateSection & {
+export type TemplateSectionType = {
+  id: number
+  name: string
+  position: number
+  categoryID: number
   questionSets?: TemplateQuestionSetType[]
 }
 
-export type TemplateQuestionSetType = TemplateQuestionSet & {
+export enum TemplateQuestionSetTypes {
+  FLAT = 'FLAT',
+  LOOP = 'LOOP',
+  DEPENDS_ON = 'DEPENDS_ON',
+}
+
+export type TemplateQuestionSetType = {
+  id: number
+  type: TemplateQuestionSetTypes
+  position: number
+  sectionID: number
+  questionSetID?: number | null
   questionSets?: TemplateQuestionSetType[]
   questions?: TemplateQuestionType[]
 }
 
-export type TemplateQuestionType =
-  | TextInputQuestionType
-  | TextareaQuestionType
-  | SelectQuestionType
-  | DateInputQuestionType
-  | RadioQuestionType
-  | CheckboxQuestionType
-  | DocumentQuestionType
+export enum TemplateQuestionTypes {
+  TEXT_INPUT = 'TEXT_INPUT',
+  TEXTAREA = 'TEXTAREA',
+  SELECT = 'SELECT',
+  DATE_INPUT = 'DATE_INPUT',
+  RADIO = 'RADIO',
+  CHECKBOX = 'CHECKBOX',
+  DOCUMENT = 'DOCUMENT',
+}
+
+export type BaseSettings = Record<string, any>
+
+export type TemplateQuestionType = {
+  id: number
+  type: TemplateQuestionTypes
+  prompt: string
+  position: number
+  helperText?: string
+  settings?: BaseSettings
+  questionSetId: number
+}

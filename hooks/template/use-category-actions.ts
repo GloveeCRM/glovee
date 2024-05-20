@@ -3,21 +3,22 @@
 import { v4 as uuid4 } from 'uuid'
 
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
+import { generateRandomId } from '@/lib/utils/id'
 
 export default function useCategoryActions() {
   const { template, setTemplate } = useTemplateEditContext()
   const templateCategories = template?.categories || []
 
-  function createCategoryInTemplate(templateId: string) {
+  function createCategoryInTemplate(templateID: number) {
     if (!template) return
 
     const updatedCategories = [
       ...templateCategories,
       {
-        id: uuid4(),
-        title: 'Untitled Category',
+        id: generateRandomId(),
+        name: 'Untitled Category',
         position: templateCategories.length + 1,
-        templateId: templateId,
+        templateID: templateID,
         sections: [],
       },
     ]
@@ -25,19 +26,19 @@ export default function useCategoryActions() {
     setTemplate({ ...template, categories: updatedCategories })
   }
 
-  function removeCategoryFromTemplate(categoryId: string) {
+  function removeCategoryFromTemplate(categoryID: number) {
     if (!template) return
 
-    const updatedCategories = templateCategories.filter((category) => category.id !== categoryId)
+    const updatedCategories = templateCategories.filter((category) => category.id !== categoryID)
 
     setTemplate({ ...template, categories: updatedCategories })
   }
 
-  function updateCategoryTitle(categoryId: string, title: string) {
+  function updateCategoryTitle(categoryID: number, title: string) {
     if (!template) return
 
     const updatedCategories = templateCategories.map((category) => {
-      if (category.id !== categoryId) return category
+      if (category.id !== categoryID) return category
 
       return { ...category, title }
     })

@@ -1,7 +1,7 @@
-import { QuestionSet } from '@/app/[orgName]/(client)/application/[id]/page'
 import TextInputQuestion from '../../questionType/text-input-question'
+import { TemplateQuestionSetType } from '@/lib/types/template'
 
-export default function FlatQuestionSet({ questionSet }: { questionSet: QuestionSet }) {
+export default function FlatQuestionSet({ questionSet }: { questionSet: TemplateQuestionSetType }) {
   return (
     <div className="bg-green-500 p-[8px]">
       {questionSet?.questions?.map((question) => (

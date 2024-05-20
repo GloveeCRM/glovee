@@ -114,7 +114,7 @@ export async function fetchApplicationSummariesByUserId(
   }
 }
 
-export async function fetchApplicationsByUserId(id: string): Promise<ApplicationType[] | null> {
+export async function fetchApplicationsByUserId(id: string) {
   try {
     const application = await prisma.application.findMany({
       where: {

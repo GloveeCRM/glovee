@@ -7,13 +7,13 @@ import { PiCheckBold } from 'react-icons/pi'
 import { updateTemplateDescriptionById } from '@/lib/actions/template'
 
 interface TemplateInfoCardDescriptionProps {
-  templateId: string
+  templateID: number
   description: string
   editable?: boolean
 }
 
 export default function TemplateInfoCardDescription({
-  templateId,
+  templateID,
   description,
   editable = false,
 }: TemplateInfoCardDescriptionProps) {
@@ -29,7 +29,7 @@ export default function TemplateInfoCardDescription({
   function handleSave() {
     const newDescription = descriptionInputRef.current?.value || ''
     setIsEditing(false)
-    updateTemplateDescriptionById(templateId, newDescription)
+    updateTemplateDescriptionById(String(templateID), newDescription)
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {

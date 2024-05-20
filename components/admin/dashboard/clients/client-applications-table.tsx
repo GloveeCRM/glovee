@@ -1,7 +1,7 @@
-import { Application } from '@prisma/client'
+import { ApplicationType } from '@/lib/types/application'
 
 interface ClientApplicationsTableProps {
-  applications: Application[] | null
+  applications: ApplicationType[] | null
 }
 
 export default function ClientApplicationsTable({ applications }: ClientApplicationsTableProps) {

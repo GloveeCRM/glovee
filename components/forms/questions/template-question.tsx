@@ -29,13 +29,13 @@ interface TemplateQuestionProps {
 }
 
 export default function TemplateQuestion({ question }: TemplateQuestionProps) {
-  const { setSelectedQuestionSetId, selectedQuestionId, setSelectedQuestionId } =
+  const { setSelectedQuestionSetID, selectedQuestionID, setSelectedQuestionID } =
     useTemplateEditContext()
   const { removeQuestionFromSection } = useQuestionActions()
 
   const questionEditRef = useRef<HTMLDivElement>(null)
 
-  const isQuestionSelected = selectedQuestionId === question.id
+  const isQuestionSelected = selectedQuestionID === question.id
 
   function handleClickDeleteQuestion() {
     removeQuestionFromSection(question.id)
@@ -43,20 +43,20 @@ export default function TemplateQuestion({ question }: TemplateQuestionProps) {
 
   function handleClickQuestion(e: React.MouseEvent<HTMLDivElement>) {
     e.stopPropagation()
-    setSelectedQuestionSetId('')
-    setSelectedQuestionId(question.id)
+    setSelectedQuestionSetID(0)
+    setSelectedQuestionID(question.id)
   }
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (questionEditRef.current && !questionEditRef.current.contains(e.target as Node)) {
-        setSelectedQuestionId('')
+        setSelectedQuestionID(0)
       }
     }
 
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [setSelectedQuestionId])
+  }, [setSelectedQuestionID])
 
   return (
     <div

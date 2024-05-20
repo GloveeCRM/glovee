@@ -7,13 +7,13 @@ import { MdOutlineModeEdit } from 'react-icons/md'
 import { updateTemplateTitleById } from '@/lib/actions/template'
 
 interface TemplateInfoCardTitleProps {
-  templateId: string
+  templateID: number
   title: string
   editable?: boolean
 }
 
 export default function TemplateInfoCardTitle({
-  templateId,
+  templateID,
   title,
   editable = false,
 }: TemplateInfoCardTitleProps) {
@@ -28,7 +28,7 @@ export default function TemplateInfoCardTitle({
   function handleSave() {
     const newTitle = titleInputRef.current?.value || 'Untitled'
     setIsEditing(false)
-    updateTemplateTitleById(templateId, newTitle)
+    updateTemplateTitleById(String(templateID), newTitle)
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {

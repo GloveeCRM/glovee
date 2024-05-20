@@ -5,14 +5,14 @@ import { FiPlus } from 'react-icons/fi'
 
 interface CreateSectionButtonProps {
   type: 'add' | 'create' | 'plus'
-  categoryId: string
+  categoryID: number
 }
 
-export default function CreateSectionButton({ type, categoryId }: CreateSectionButtonProps) {
+export default function CreateSectionButton({ type, categoryID }: CreateSectionButtonProps) {
   const { createSectionInCategory } = useSectionActions()
 
   function handleClick() {
-    createSectionInCategory(categoryId)
+    createSectionInCategory(categoryID)
   }
 
   if (type === 'plus') {

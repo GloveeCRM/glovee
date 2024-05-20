@@ -1,12 +1,17 @@
 'use client'
 
-import { Question } from '@/app/[orgName]/(client)/application/[id]/page'
 import { saveTextInputAnswer } from '@/lib/actions/form'
+import { ApplicationQuestionType } from '@/lib/types/application'
+import { TemplateQuestionType } from '@/lib/types/template'
 import { useDebouncedCallback } from 'use-debounce'
 
-export default function TextInputQuestion({ question }: { question: Question }) {
+export default function TextInputQuestion({
+  question,
+}: {
+  question: ApplicationQuestionType | TemplateQuestionType
+}) {
   const handleChange = useDebouncedCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    saveTextInputAnswer({ input: e.target.value, questionId: question.id })
+    saveTextInputAnswer({ input: e.target.value, questionId: String(question.id) })
   }, 500)
 
   return (
@@ -18,7 +23,7 @@ export default function TextInputQuestion({ question }: { question: Question }) 
         id="text-question"
         type="text"
         className="border border-black"
-        defaultValue={question.answer?.text || ''}
+        defaultValue={''}
         onChange={handleChange}
       />
     </div>

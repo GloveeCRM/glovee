@@ -3,13 +3,13 @@ import { motion } from 'framer-motion'
 import useQuestionActions from '@/hooks/template/use-question-actions'
 
 interface QuestionSettingsToolbarProps {
-  questionId: string
+  questionID: number
 }
 
-export default function QuestionSettingsToolbar({ questionId }: QuestionSettingsToolbarProps) {
+export default function QuestionSettingsToolbar({ questionID }: QuestionSettingsToolbarProps) {
   const { getQuestionById } = useQuestionActions()
 
-  const question = getQuestionById(questionId)
+  const question = getQuestionById(questionID)
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.05 }}>

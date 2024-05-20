@@ -9,12 +9,12 @@ interface templateEditLayoutProps {
 }
 
 export default function templateEditLayout({ params, children }: templateEditLayoutProps) {
-  const templateId = params.id
+  const templateID = parseInt(params.id)
 
   return (
     <div id="template-edit-layout" className="flex">
-      <TemplateEditProvider templateId={templateId}>
-        <TemplateEditSidebar templateId={templateId} />
+      <TemplateEditProvider templateID={templateID}>
+        <TemplateEditSidebar templateID={templateID} />
         <div className="h-svh w-full min-w-0 overflow-y-scroll bg-n-400">
           <div className="sticky top-0 z-10">
             <TemplateEditTopbar />

@@ -2,7 +2,7 @@
 
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react'
 
-import { fetchFullTemplateById } from '@/lib/data/template'
+import { fetchFullTemplateById2 } from '@/lib/data/template'
 import { TemplateType } from '@/lib/types/template'
 import {
   formatTemplate,
@@ -11,71 +11,71 @@ import {
 } from '@/lib/functions/template'
 
 type TemplateEditContextType = {
-  templateId: string
+  templateID: number
   template: TemplateType | null
   setTemplate: Dispatch<SetStateAction<TemplateType | null>>
   savedTemplate: TemplateType | null
   setSavedTemplate: Dispatch<SetStateAction<TemplateType | null>>
   isTemplateChanged: boolean
   setIsTemplateChanged: Dispatch<SetStateAction<boolean>>
-  selectedCategoryId: string
-  setSelectedCategoryId: Dispatch<SetStateAction<string>>
-  selectedSectionId: string
-  setSelectedSectionId: Dispatch<SetStateAction<string>>
-  selectedQuestionSetId: string
-  setSelectedQuestionSetId: Dispatch<SetStateAction<string>>
-  selectedQuestionId: string
-  setSelectedQuestionId: Dispatch<SetStateAction<string>>
+  selectedCategoryID: number
+  setSelectedCategoryID: Dispatch<SetStateAction<number>>
+  selectedSectionID: number
+  setSelectedSectionID: Dispatch<SetStateAction<number>>
+  selectedQuestionSetID: number
+  setSelectedQuestionSetID: Dispatch<SetStateAction<number>>
+  selectedQuestionID: number
+  setSelectedQuestionID: Dispatch<SetStateAction<number>>
 }
 
 const templateEditContextDefaultValues: TemplateEditContextType = {
-  templateId: '',
+  templateID: 0,
   template: null,
   setTemplate: () => {},
   savedTemplate: null,
   setSavedTemplate: () => {},
   isTemplateChanged: false,
   setIsTemplateChanged: () => {},
-  selectedCategoryId: '',
-  setSelectedCategoryId: () => {},
-  selectedSectionId: '',
-  setSelectedSectionId: () => {},
-  selectedQuestionSetId: '',
-  setSelectedQuestionSetId: () => {},
-  selectedQuestionId: '',
-  setSelectedQuestionId: () => {},
+  selectedCategoryID: 0,
+  setSelectedCategoryID: () => {},
+  selectedSectionID: 0,
+  setSelectedSectionID: () => {},
+  selectedQuestionSetID: 0,
+  setSelectedQuestionSetID: () => {},
+  selectedQuestionID: 0,
+  setSelectedQuestionID: () => {},
 }
 
 const TemplateEditContext = createContext<TemplateEditContextType>(templateEditContextDefaultValues)
 
 interface TemplateEditProviderProps {
-  templateId: string
+  templateID: number
   children: React.ReactNode
 }
 
-export default function TemplateEditProvider({ templateId, children }: TemplateEditProviderProps) {
+export default function TemplateEditProvider({ templateID, children }: TemplateEditProviderProps) {
   const [template, setTemplate] = useState<TemplateType | null>(null)
   const [savedTemplate, setSavedTemplate] = useState<TemplateType | null>(null)
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string>(
-    template?.categories?.[0]?.id || ''
+  const [selectedCategoryID, setSelectedCategoryID] = useState<number>(
+    template?.categories?.[0]?.id || 0
   )
-  const [selectedSectionId, setSelectedSectionId] = useState<string>(
-    template?.categories?.[0]?.sections?.[0]?.id || ''
+  const [selectedSectionID, setSelectedSectionID] = useState<number>(
+    template?.categories?.[0]?.sections?.[0]?.id || 0
   )
-  const [selectedQuestionSetId, setSelectedQuestionSetId] = useState<string>('')
-  const [selectedQuestionId, setSelectedQuestionId] = useState<string>('')
+  const [selectedQuestionSetID, setSelectedQuestionSetID] = useState<number>(0)
+  const [selectedQuestionID, setSelectedQuestionID] = useState<number>(0)
   const [isTemplateChanged, setIsTemplateChanged] = useState<boolean>(false)
 
   useEffect(() => {
     async function fetchAndSetInitialTemplate() {
-      const fetchedTemplate = await fetchFullTemplateById(templateId)
+      const fetchedTemplate = await fetchFullTemplateById2(templateID)
       let formattedTemplate = null
       if (fetchedTemplate) {
         formattedTemplate = formatTemplate(fetchedTemplate)
       }
       setSavedTemplate(formattedTemplate)
 
-      const localTemplate = getTemplateFromLocalStorage(templateId)
+      const localTemplate = getTemplateFromLocalStorage(templateID)
       if (localTemplate) {
         setTemplate(localTemplate)
       } else {
@@ -84,22 +84,22 @@ export default function TemplateEditProvider({ templateId, children }: TemplateE
     }
 
     fetchAndSetInitialTemplate()
-  }, [templateId])
+  }, [templateID])
 
   useEffect(() => {
     if (template) {
-      setTemplateOnLocalStorage(templateId, template)
+      setTemplateOnLocalStorage(templateID, template)
     }
 
     function setDefaultSelections() {
       if (!template || !template.categories) return
 
-      if (!selectedCategoryId) {
-        setSelectedCategoryId(template.categories?.[0]?.id)
+      if (!selectedCategoryID) {
+        setSelectedCategoryID(template.categories?.[0]?.id)
       }
 
-      if (!selectedSectionId && template.categories?.[0]?.sections) {
-        setSelectedSectionId(template.categories[0].sections[0]?.id || '')
+      if (!selectedSectionID && template.categories?.[0]?.sections) {
+        setSelectedSectionID(template.categories[0].sections[0]?.id || 0)
       }
     }
 
@@ -112,24 +112,24 @@ export default function TemplateEditProvider({ templateId, children }: TemplateE
     }
 
     detectAndSetIsTemplateChanged()
-  }, [template, savedTemplate, selectedCategoryId, selectedSectionId, templateId])
+  }, [template, savedTemplate, selectedCategoryID, selectedSectionID, templateID])
 
   const value = {
-    templateId,
+    templateID,
     template,
     setTemplate,
     savedTemplate,
     setSavedTemplate,
     isTemplateChanged,
     setIsTemplateChanged,
-    selectedCategoryId,
-    setSelectedCategoryId,
-    selectedSectionId,
-    setSelectedSectionId,
-    selectedQuestionSetId,
-    setSelectedQuestionSetId,
-    selectedQuestionId,
-    setSelectedQuestionId,
+    selectedCategoryID,
+    setSelectedCategoryID,
+    selectedSectionID,
+    setSelectedSectionID,
+    selectedQuestionSetID,
+    setSelectedQuestionSetID,
+    selectedQuestionID,
+    setSelectedQuestionID,
   }
 
   return <TemplateEditContext.Provider value={value}>{children}</TemplateEditContext.Provider>

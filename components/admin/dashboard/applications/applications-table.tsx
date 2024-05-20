@@ -1,11 +1,13 @@
 import Link from 'next/link'
 
-import { fetchApplicationByOrgNameandSearchQuery } from '@/lib/data/application'
-import { Table, THead, TR, TH, TBody, TD } from '@/components/ui/table'
-import { ApplicationType } from '@/lib/types/application'
-import { ApplicationRole, ApplicationStatus } from '@prisma/client'
 import Image from 'next/image'
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
+import {
+  ApplicationRoleTypes,
+  ApplicationStatusTypes,
+  ApplicationType,
+} from '@/lib/types/application'
+import { Table, THead, TR, TH, TBody, TD } from '@/components/ui/table'
 
 interface ApplicationsTableProps {
   orgName: string
@@ -16,24 +18,24 @@ export default async function ApplicationsTable({ orgName, query }: Applications
   // const applications = await fetchApplicationByOrgNameandSearchQuery(orgName, query)
   const applications = [
     {
-      id: '1',
-      orgId: '1',
-      clientId: '1',
+      id: 1,
+      orgID: 1,
+      clientID: 1,
       templateName: 'templateName',
       applicantFirstName: 'applicantFirstName',
       applicantLastName: 'applicantLastName',
-      role: ApplicationRole.MAIN,
-      status: ApplicationStatus.CREATED,
+      role: ApplicationRoleTypes.SPOUSE,
+      status: ApplicationStatusTypes.CREATED,
     },
     {
-      id: '2',
-      orgId: '2',
-      clientId: '2',
+      id: 2,
+      orgID: 2,
+      clientID: 2,
       templateName: 'templateName',
       applicantFirstName: 'applicantFirstName',
       applicantLastName: 'applicantLastName',
-      role: ApplicationRole.SPOUSE,
-      status: ApplicationStatus.APPROVED,
+      role: ApplicationRoleTypes.MAIN,
+      status: ApplicationStatusTypes.CREATED,
     },
   ]
   return (
@@ -82,7 +84,7 @@ function ApplicationsTableRow({ application }: ApplicationsTableRowProps) {
       <TD>
         <Link
           className="cursor-pointer font-medium hover:text-blue-600"
-          href={`/admin/clients/${application.clientId}`}
+          href={`/admin/clients/${application.clientID}`}
         >
           <div className="flex items-end gap-[6px]">
             <div>
@@ -94,7 +96,7 @@ function ApplicationsTableRow({ application }: ApplicationsTableRowProps) {
                 className="rounded-full"
               />
             </div>
-            <div>{application.clientId}</div>
+            <div>{application.clientID}</div>
           </div>
         </Link>
       </TD>

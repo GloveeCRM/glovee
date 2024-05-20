@@ -3,15 +3,15 @@ import { motion } from 'framer-motion'
 import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
 
 interface QuestionSetSettingsToolbarProps {
-  questionSetId: string
+  questionSetID: number
 }
 
 export default function QuestionSetSettingsToolbar({
-  questionSetId,
+  questionSetID,
 }: QuestionSetSettingsToolbarProps) {
   const { getQuestionSetById } = useQuestionSetActions()
 
-  const questionSet = getQuestionSetById(questionSetId)
+  const questionSet = getQuestionSetById(questionSetID)
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.05 }}>

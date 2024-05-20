@@ -5,6 +5,7 @@ import { fetchApplicationsByUserId } from '@/lib/data/application'
 import ClientProfileCard from '@/components/admin/dashboard/clients/client-profile-card'
 import ClientApplicationsTable from '@/components/admin/dashboard/clients/client-applications-table'
 import CreateNewApplicationButton from '@/components/admin/dashboard/applications/create-new-application-button'
+import { ApplicationRoleTypes, ApplicationStatusTypes } from '@/lib/types/application'
 
 interface ClientsPageProps {
   params: {
@@ -16,7 +17,19 @@ export default async function ClientPage({ params }: ClientsPageProps) {
   const orgName = params.orgName
   const userId = params.id
   const client = await fetchClientProfileById(userId, orgName)
-  const applications = await fetchApplicationsByUserId(userId)
+  // const applications = await fetchApplicationsByUserId(userId)
+  const applications = [
+    {
+      id: 1,
+      orgID: 1,
+      clientID: 1,
+      role: ApplicationRoleTypes.SPOUSE,
+      templateName: 'templateName',
+      applicantFirstName: 'applicantFirstName',
+      applicantLastName: 'applicantLastName',
+      status: ApplicationStatusTypes.CREATED,
+    },
+  ]
 
   if (!client) {
     notFound()

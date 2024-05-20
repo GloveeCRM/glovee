@@ -10,13 +10,13 @@ import TemplateEditSidebarCategory from './template-edit-sidebar-category'
 import CreateCategoryButton from './create-category-button'
 
 interface TemplateEditSidebarCategoryWrapperProps {
-  templateId: string
+  templateID: number
 }
 export default function TemplateEditSidebarCategoryWrapper({
-  templateId,
+  templateID,
 }: TemplateEditSidebarCategoryWrapperProps) {
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  const { template, selectedCategoryId } = useTemplateEditContext()
+  const { template, selectedCategoryID } = useTemplateEditContext()
 
   const templateCategories = template?.categories
 
@@ -37,13 +37,13 @@ export default function TemplateEditSidebarCategoryWrapper({
           <Fragment key={category.id}>
             <TemplateEditSidebarCategory
               category={category}
-              isExpanded={selectedCategoryId === category.id}
+              isExpanded={selectedCategoryID === category.id}
             />
             <Divider className="border-n-500" />
           </Fragment>
         ))}
       </div>
-      <CreateCategoryButton templateId={templateId} type={templateCategories ? 'add' : 'create'} />
+      <CreateCategoryButton templateID={templateID} type={templateCategories ? 'add' : 'create'} />
     </div>
   )
 }

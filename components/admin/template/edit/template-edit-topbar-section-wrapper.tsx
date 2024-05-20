@@ -9,10 +9,10 @@ import { TemplateEditTopbarSectionWrapperSkeleton } from '@/components/skeletons
 
 export default function TemplateEditTopbarSectionWrapper() {
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  const { selectedCategoryId, selectedSectionId, template } = useTemplateEditContext()
+  const { selectedCategoryID, selectedSectionID, template } = useTemplateEditContext()
 
   const selectedCategorySections = template?.categories?.find(
-    (c) => c.id === selectedCategoryId
+    (c) => c.id === selectedCategoryID
   )?.sections
 
   useEffect(() => {
@@ -32,12 +32,12 @@ export default function TemplateEditTopbarSectionWrapper() {
           <TemplateEditTopbarSection
             key={section.id}
             section={section}
-            active={section.id === selectedSectionId}
+            active={section.id === selectedSectionID}
           />
         ))}
       </div>
       <div>
-        {selectedCategoryId && <CreateSectionButton type="plus" categoryId={selectedCategoryId} />}
+        {selectedCategoryID && <CreateSectionButton type="plus" categoryID={selectedCategoryID} />}
       </div>
     </div>
   )

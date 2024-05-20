@@ -7,7 +7,7 @@ export default function useQuestionSetActions() {
   const { template, setTemplate } = useTemplateEditContext()
 
   function getQuestionSetById(
-    questionSetId: string,
+    questionSetID: number,
     questionSets: TemplateQuestionSetType[] | null = null
   ): TemplateQuestionSetType | null {
     if (!template || !template.categories) return null
@@ -23,12 +23,12 @@ export default function useQuestionSetActions() {
     }
 
     for (const questionSet of questionSets) {
-      if (questionSet.id === questionSetId) return questionSet
+      if (questionSet.id === questionSetID) return questionSet
 
       // If the question set has nested question sets, search recursively
       if (questionSet.questionSets) {
         const foundQuestionSet: TemplateQuestionSetType | null = getQuestionSetById(
-          questionSetId,
+          questionSetID,
           questionSet.questionSets
         )
         if (foundQuestionSet) return foundQuestionSet
@@ -38,29 +38,29 @@ export default function useQuestionSetActions() {
     return null
   }
 
-  function getQuestionSetsInSection(sectionId: string) {
+  function getQuestionSetsInSection(sectionID: number) {
     if (!template || !template.categories) return
 
     for (const category of template.categories) {
       if (!category.sections) continue
 
       for (const section of category.sections) {
-        if (section.id === sectionId) {
+        if (section.id === sectionID) {
           if (!section.questionSets) return []
-          return section.questionSets.filter((qs) => qs.questionSetId === null)
+          return section.questionSets.filter((qs) => qs.questionSetID === null)
         }
       }
     }
   }
 
-  function createQuestionSetInSection(sectionId: string, newQuestionSet: TemplateQuestionSetType) {
+  function createQuestionSetInSection(sectionID: number, newQuestionSet: TemplateQuestionSetType) {
     if (!template || !template.categories) return
 
     const updatedCategories = template.categories.map((category) => {
       if (!category.sections) return category
 
       const updatedSections = category.sections.map((section) => {
-        if (section.id !== sectionId) return section
+        if (section.id !== sectionID) return section
 
         const updatedQuestionSets = insertQuestionSetRecursively(
           section.questionSets || [],
@@ -81,9 +81,9 @@ export default function useQuestionSetActions() {
     newQuestionSet: TemplateQuestionSetType
   ): TemplateQuestionSetType[] {
     // If the new question set has a parent ID, the logic for nesting inside a specific parent is applied
-    if (newQuestionSet.questionSetId) {
+    if (newQuestionSet.questionSetID) {
       return existingQuestionSets.map((existingQuestionSet) => {
-        if (existingQuestionSet.id === newQuestionSet.questionSetId) {
+        if (existingQuestionSet.id === newQuestionSet.questionSetID) {
           // Here, you might adjust positions if necessary, before sorting
           let updatedChildQuestionSets = existingQuestionSet.questionSets
             ? existingQuestionSet.questionSets.map((qs) => ({
@@ -133,7 +133,7 @@ export default function useQuestionSetActions() {
       .map((questionSet, index) => ({ ...questionSet, position: index }))
   }
 
-  function removeQuestionSetFromSection(questionSetId: string) {
+  function removeQuestionSetFromSection(questionSetID: number) {
     if (!template || !template.categories) return
 
     const updatedCategories = template.categories.map((category) => {
@@ -142,7 +142,7 @@ export default function useQuestionSetActions() {
       const updatedSections = category.sections.map((section) => {
         const updatedQuestionSets = removeQuestionSetRecursively(
           section.questionSets || [],
-          questionSetId,
+          questionSetID,
           null
         )
 
@@ -157,13 +157,13 @@ export default function useQuestionSetActions() {
 
   function removeQuestionSetRecursively(
     existingQuestionSets: TemplateQuestionSetType[],
-    questionSetIdToRemove: string,
+    questionSetIDToRemove: number,
     removedQuestionSetPosition: number | null = null // Default to null when not provided
   ): TemplateQuestionSetType[] {
     let isRemoved = false
     let updatedQuestionSets = existingQuestionSets.reduce<TemplateQuestionSetType[]>(
       (acc, questionSet) => {
-        if (questionSet.id === questionSetIdToRemove) {
+        if (questionSet.id === questionSetIDToRemove) {
           // Capture the position of the question set being removed
           removedQuestionSetPosition = questionSet.position
           isRemoved = true // Mark as removed, but don't add to accumulator
@@ -190,7 +190,7 @@ export default function useQuestionSetActions() {
             ...questionSet,
             questionSets: removeQuestionSetRecursively(
               questionSet.questionSets,
-              questionSetIdToRemove,
+              questionSetIDToRemove,
               removedQuestionSetPosition
             ),
           }
@@ -205,7 +205,7 @@ export default function useQuestionSetActions() {
             ...questionSet,
             questionSets: removeQuestionSetRecursively(
               questionSet.questionSets,
-              questionSetIdToRemove,
+              questionSetIDToRemove,
               null // Explicitly pass null to indicate no removal has been done yet
             ),
           }

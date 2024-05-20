@@ -8,14 +8,14 @@ import { updateFullTemplateById } from '@/lib/actions/template'
 import { TemplateType } from '@/lib/types/template'
 
 export default function SaveTemplateButton() {
-  const { templateId, template, isTemplateChanged, setSavedTemplate } = useTemplateEditContext()
+  const { templateID, template, isTemplateChanged, setSavedTemplate } = useTemplateEditContext()
   const [isPending, startTransition] = useTransition()
   const [message, setMessage] = useState<string>('')
 
-  function saveTemplateChanges(templateId: string, template: TemplateType) {
+  function saveTemplateChanges(templateID: number, template: TemplateType) {
     setMessage('Saving changes...')
     startTransition(() => {
-      updateFullTemplateById(templateId, template)
+      updateFullTemplateById(templateID, template)
         .then((data) => {
           if (data.success) {
             setSavedTemplate(template)
@@ -41,7 +41,7 @@ export default function SaveTemplateButton() {
 
   function handleClickSave() {
     if (!template) return null
-    saveTemplateChanges(templateId, template)
+    saveTemplateChanges(templateID, template)
   }
 
   useEffect(() => {

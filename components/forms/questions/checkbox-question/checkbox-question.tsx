@@ -16,7 +16,7 @@ export default function CheckboxQuestion({ question, readOnly }: CheckboxQuestio
           <input
             type="checkbox"
             id={option.value}
-            name={question.id}
+            name={String(question.id)}
             value={option.value}
             disabled={readOnly}
             className="h-[14px] w-[14px]"

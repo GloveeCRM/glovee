@@ -17,10 +17,10 @@ interface TemplateQuestionSetProps {
 }
 
 export default function TemplateQuestionSet({ questionSet }: TemplateQuestionSetProps) {
-  const { selectedQuestionSetId, setSelectedQuestionSetId } = useTemplateEditContext()
+  const { selectedQuestionSetID, setSelectedQuestionSetID } = useTemplateEditContext()
   const { removeQuestionSetFromSection } = useQuestionSetActions()
 
-  const isQuestionSetSelected = selectedQuestionSetId === questionSet.id
+  const isQuestionSetSelected = selectedQuestionSetID === questionSet.id
 
   const templateQuestionSetRef = useRef<HTMLDivElement>(null)
 
@@ -32,12 +32,12 @@ export default function TemplateQuestionSet({ questionSet }: TemplateQuestionSet
 
   function handleClickQuestionSet(e: React.MouseEvent<HTMLDivElement>) {
     e.stopPropagation()
-    setSelectedQuestionSetId(questionSet.id)
+    setSelectedQuestionSetID(questionSet.id)
   }
 
   function handleClickDeleteQuestionSet() {
     removeQuestionSetFromSection(questionSet.id)
-    setSelectedQuestionSetId('')
+    setSelectedQuestionSetID(0)
   }
 
   useEffect(() => {
@@ -46,13 +46,13 @@ export default function TemplateQuestionSet({ questionSet }: TemplateQuestionSet
         templateQuestionSetRef.current &&
         !templateQuestionSetRef.current.contains(e.target as Node)
       ) {
-        setSelectedQuestionSetId('')
+        setSelectedQuestionSetID(0)
       }
     }
 
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [setSelectedQuestionSetId])
+  }, [setSelectedQuestionSetID])
 
   const showDropzoneBefore = questionSet.position === 0
 

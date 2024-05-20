@@ -40,9 +40,14 @@ export default async function ClientApplicationPage({
 
   return (
     <div>
-      {questions.map((question) => (
-        <TextInputQuestion key={question.id} question={question} />
-      ))}
+      {/* {questionSets.map((questionSet) => {
+        if (questionSet.type === 'loop') {
+          return <LoopQuestionSet key={questionSet.id} questionSet={questionSet} />
+        } else if (questionSet.type === 'flat') {
+          return <FlatQuestionSet key={questionSet.id} questionSet={questionSet} />
+        }
+        return null
+      })} */}
     </div>
   )
 }
