@@ -12,7 +12,7 @@ export default function ClientApplicationCategoryCard({
 }: {
   category: ApplicationCategoryType
   isExpanded: boolean
-  onClick: (categoryId: string) => void
+  onClick: (categoryId: number) => void
 }) {
   return (
     <div
@@ -26,7 +26,7 @@ export default function ClientApplicationCategoryCard({
           progressCircleColor="text-n-300"
         />
         <div className="mt-[10px] flex w-full justify-between">
-          <div>{category.title}</div>
+          <div>{category.name}</div>
           <div>
             {isExpanded ? (
               <IoChevronDown className="h-[20px] w-[20px]" />

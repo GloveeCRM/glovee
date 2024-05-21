@@ -14,11 +14,11 @@ export default function ApplicationCategoriesCardWrapper({
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const { replace } = useRouter()
-  const selectedSectionId = searchParams.get('section')
+  const selectedSectionId = searchParams.get('section') || '0'
 
   const expandedCategory =
     categories.find((category) =>
-      category.sections?.some((section) => section.id === selectedSectionId)
+      category.sections?.some((section) => section.id === parseInt(selectedSectionId))
     ) || categories[0]
 
   useEffect(() => {
@@ -26,19 +26,19 @@ export default function ApplicationCategoriesCardWrapper({
       const params = new URLSearchParams(searchParams)
       const firstSectionId = categories[0].sections?.[0]?.id
       if (firstSectionId) {
-        params.set('section', firstSectionId)
+        params.set('section', String(firstSectionId))
         replace(`${pathname}?${params.toString()}`)
       }
     }
   }, [selectedSectionId, categories, pathname, replace, searchParams])
 
-  const handleCategoryClick = (categoryId: string) => {
+  const handleCategoryClick = (categoryId: number) => {
     if (expandedCategory.id !== categoryId) {
       const params = new URLSearchParams(searchParams)
       const firstSectionId = categories.find((category) => category.id === categoryId)
         ?.sections?.[0].id
       if (firstSectionId) {
-        params.set('section', firstSectionId)
+        params.set('section', String(firstSectionId))
         replace(`${pathname}?${params.toString()}`)
       }
     }

@@ -8,14 +8,14 @@ import { ApplicationSectionType } from '@/lib/types/application'
 
 export default function ClientSidebarSectionCard({ section }: { section: ApplicationSectionType }) {
   const searchParams = useSearchParams()
-  const selectedSectionId = searchParams.get('section')
+  const selectedSectionId = searchParams.get('section') || '0'
   const pathname = usePathname()
   const { replace } = useRouter()
 
-  const handleClick = (sectionId: string) => {
+  const handleClick = (sectionId: number) => {
     const params = new URLSearchParams(searchParams)
     if (sectionId) {
-      params.set('section', sectionId)
+      params.set('section', String(sectionId))
     } else {
       params.delete('section')
     }
@@ -26,7 +26,7 @@ export default function ClientSidebarSectionCard({ section }: { section: Applica
 
   return (
     <div
-      className={`cursor-pointer rounded-sm ${selectedSectionId === section.id && 'bg-n-600'} p-[4px] pl-[26px] text-[12px] text-n-300`}
+      className={`cursor-pointer rounded-sm ${parseInt(selectedSectionId) === section.id && 'bg-n-600'} p-[4px] pl-[26px] text-[12px] text-n-300`}
       onClick={(e) => {
         e.stopPropagation()
         handleClick(section.id)
@@ -40,7 +40,7 @@ export default function ClientSidebarSectionCard({ section }: { section: Applica
             <FaRegCircle className="h-[13px] w-[13px]" />
           )}
         </div>
-        <div className="text-[12px]">{section.title}</div>
+        <div className="text-[12px]">{section.name}</div>
       </div>
     </div>
   )

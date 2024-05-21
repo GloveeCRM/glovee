@@ -1,6 +1,10 @@
 import { prisma } from '@/prisma/prisma'
 import { Application, Category } from '@prisma/client'
-import { ApplicationSummaryType, ApplicationType } from '../types/application'
+import {
+  ApplicationCategoryType,
+  ApplicationSummaryType,
+  ApplicationType,
+} from '../types/application'
 
 export async function fetchApplicationByOrgNameandSearchQuery(orgName: string, query: string) {
   try {
@@ -195,7 +199,9 @@ export async function fetchApplicantByApplicationId(id: string) {
   }
 }
 
-export async function fetchCategorieByApplicationId(id: string): Promise<Category[] | null> {
+export async function fetchCategorieByApplicationId(
+  id: string
+): Promise<ApplicationCategoryType[] | null> {
   try {
     const categories = await prisma.category.findMany({
       where: {
@@ -206,7 +212,7 @@ export async function fetchCategorieByApplicationId(id: string): Promise<Categor
       },
     })
 
-    return categories
+    return null
   } catch {
     return null
   }
