@@ -1,5 +1,5 @@
 import { prisma } from '@/prisma/prisma'
-import { Application, Category } from '@prisma/client'
+import { Category } from '@prisma/client'
 import { ApplicationSummaryType, ApplicationType } from '../types/application'
 
 export async function fetchApplicationByOrgNameandSearchQuery(orgName: string, query: string) {

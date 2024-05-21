@@ -2,10 +2,9 @@
 
 import { Question } from '@/app/[orgName]/(client)/application/[id]/page'
 import { saveTextInputAnswer } from '@/lib/actions/form'
-import { ApplicationQuestionType } from '@/lib/types/application'
 import { useDebouncedCallback } from 'use-debounce'
 
-export default function TextInputQuestion({ question }: { question: ApplicationQuestionType }) {
+export default function TextInputQuestion({ question }: { question: Question }) {
   const handleChange = useDebouncedCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     saveTextInputAnswer({ input: e.target.value, questionId: question.id })
   }, 500)
