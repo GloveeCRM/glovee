@@ -18,7 +18,7 @@ export const ApplicationSchema = z.object({
   role: z.string().min(1, { message: 'Role is required' }),
   applicantFirstName: z.string().min(1, { message: 'First name is required' }),
   applicantLastName: z.string().min(1, { message: 'Last name is required' }),
-  templateId: z
+  templateID: z
     .string({
       required_error: 'Template is required',
     })

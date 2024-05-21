@@ -91,9 +91,9 @@ export async function fetchClientProfileById(
 
 export async function searchClients(
   orgName: string,
-  query: string,
-  limit: number,
-  offset: number
+  query: string = '',
+  limit: number = 0,
+  offset: number = 0
 ): Promise<UserType[]> {
   try {
     const accessToken = await getSession()

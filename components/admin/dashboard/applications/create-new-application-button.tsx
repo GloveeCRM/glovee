@@ -1,8 +1,7 @@
 import { GoPlus } from 'react-icons/go'
 
 import { UserType } from '@/lib/types/user'
-import { fetchTemplatesByOrgId } from '@/lib/data/template'
-import { fetchOrganizationProfile } from '@/lib/data/organization'
+import { searchTemplates } from '@/lib/data/template'
 import CreateNewApplicationModal from './create-new-application-modal'
 import { ModalProvider, ModalTrigger } from '../../../ui/modal'
 
@@ -15,11 +14,7 @@ export default async function CreateNewApplicationButton({
   orgName,
   client,
 }: CreateNewApplicationButtonProp) {
-  const org = await fetchOrganizationProfile(orgName)
-  if (!org) return null
-
-  const templates = await fetchTemplatesByOrgId(org.id)
-  if (!templates) return null
+  const templates = await searchTemplates(orgName)
 
   return (
     <ModalProvider>

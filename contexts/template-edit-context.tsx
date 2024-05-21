@@ -2,7 +2,7 @@
 
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react'
 
-import { fetchFullTemplateById2 } from '@/lib/data/template'
+import { fetchFullTemplateById } from '@/lib/data/template'
 import { TemplateType } from '@/lib/types/template'
 import {
   formatTemplate,
@@ -68,7 +68,7 @@ export default function TemplateEditProvider({ templateID, children }: TemplateE
 
   useEffect(() => {
     async function fetchAndSetInitialTemplate() {
-      const fetchedTemplate = await fetchFullTemplateById2(templateID)
+      const fetchedTemplate = await fetchFullTemplateById(templateID)
       setSavedTemplate(fetchedTemplate)
 
       const localTemplate = getTemplateFromLocalStorage(templateID)

@@ -4,32 +4,34 @@ import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { IoCloseOutline } from 'react-icons/io5'
 
-import { User } from '@prisma/client'
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
-import { fetchClientsByOrgName } from '@/lib/data/user'
+import { searchClients } from '@/lib/data/user'
+import { UserType } from '@/lib/types/user'
 
 interface ClientSearchDropdownProps {
   orgName: string
-  selectedClientId: string | null
-  setSelectedClientId: (clientId: string) => void
+  selectedClientID: number | null
+  setSelectedClientID: (clientID: number) => void
 }
 
 export default function ClientSearchDropdown({
   orgName,
-  selectedClientId,
-  setSelectedClientId,
+  selectedClientID,
+  setSelectedClientID,
 }: ClientSearchDropdownProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [isSearching, setIsSearching] = useState(false)
-  const [clients, setClients] = useState<User[] | null>(null)
+  const [clients, setClients] = useState<UserType[] | null>(null)
   const [isLoadingClients, setIsLoadingClients] = useState(true)
 
   useEffect(() => {
-    fetchClientsByOrgName(orgName)
+    searchClients(orgName)
       .then((clients) => {
         setClients(clients)
       })
-      .catch(() => setClients(null))
+      .catch(() => {
+        setClients(null)
+      })
       .finally(() => setIsLoadingClients(false))
   }, [orgName, setClients, setIsLoadingClients])
 
@@ -38,13 +40,14 @@ export default function ClientSearchDropdown({
       ? clients
       : clients?.filter(
           (client) =>
-            client.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            client.firstName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            client.lastName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             client.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            client.id.includes(searchTerm)
+            String(client.id).includes(searchTerm)
         )
 
-  const handleSelectClient = (clientId: string) => {
-    setSelectedClientId(clientId)
+  const handleSelectClient = (clientId: number) => {
+    setSelectedClientID(clientId)
   }
 
   if (isLoadingClients) {
@@ -68,12 +71,12 @@ export default function ClientSearchDropdown({
           onBlur={() => {
             setTimeout(() => setIsSearching(false), 200)
           }}
-          disabled={selectedClientId !== ''}
+          disabled={selectedClientID !== 0}
         />
-        {selectedClientId !== '' && (
+        {selectedClientID !== 0 && (
           <div className="absolute top-0 flex w-full items-center justify-between rounded-sm border border-n-400 bg-white px-[8px] py-[3px] text-[14px] text-gray-700">
             <div className="flex items-center gap-[4px]">
-              {clients?.find((client) => client.id === selectedClientId)?.image === null ? (
+              {clients?.find((client) => client.id === selectedClientID)?.avatarURL === null ? (
                 <Image
                   src={DEFAULT_MALE_CLIENT_LOGO_URL}
                   alt="CLient Logo"
@@ -82,11 +85,11 @@ export default function ClientSearchDropdown({
                   className="rounded-full"
                 />
               ) : (
-                clients?.find((client) => client.id === selectedClientId)?.image
+                clients?.find((client) => client.id === selectedClientID)?.avatarURL
               )}
-              {clients?.find((client) => client.id === selectedClientId)?.name}
+              {clients?.find((client) => client.id === selectedClientID)?.avatarURL}
             </div>
-            {selectedClientId !== '' && <IoCloseOutline onClick={() => handleSelectClient('')} />}
+            {selectedClientID !== 0 && <IoCloseOutline onClick={() => handleSelectClient(0)} />}
           </div>
         )}
       </div>
@@ -106,7 +109,7 @@ export default function ClientSearchDropdown({
                   setIsSearching(false)
                 }}
               >
-                {client.image === null ? (
+                {client.avatarURL === null ? (
                   <Image
                     src={DEFAULT_MALE_CLIENT_LOGO_URL}
                     alt="CLient Logo"
@@ -115,9 +118,9 @@ export default function ClientSearchDropdown({
                     className="rounded-full"
                   />
                 ) : (
-                  client.image
+                  client.avatarURL
                 )}
-                {client.name}
+                {client.avatarURL}
               </div>
             ))
           )}

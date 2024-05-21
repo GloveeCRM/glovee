@@ -1,6 +1,6 @@
 interface Option {
   id: number | string
-  value: string
+  value: string | number
   name: string
   title?: string
 }

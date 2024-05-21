@@ -3,20 +3,20 @@
 import Image from 'next/image'
 import { MouseEvent, useState } from 'react'
 
-import { Template } from '@prisma/client'
 import { UserType } from '@/lib/types/user'
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
 import { ApplicantRoleOptions } from '@/lib/constants/applications'
-import { createApplicationInOrganization } from '@/lib/actions/application'
+import { createNewApplication } from '@/lib/actions/application'
 import { Modal, useModal } from '@/components/ui/modal'
 import { FormInput, InputLabel, TextInput } from '@/components/ui/inputs'
 import { Select } from '@/components/ui/select'
 import { Button, SubmitButton } from '@/components/ui/buttons'
 import TemplateSelect from './template-select'
 import ClientSearchDropdown from './clients-search-dropdown'
+import { TemplateType } from '@/lib/types/template'
 
 interface CreateNewApplicationModalProps {
-  templates: Template[]
+  templates: TemplateType[]
   orgName: string
   client?: UserType
 }
@@ -26,13 +26,12 @@ export default function CreateNewApplicationModal({
   orgName,
   client,
 }: CreateNewApplicationModalProps) {
-  const [selectedClientId, setSelectedClientId] = useState<string>(String(client?.id) || '')
+  const [selectedClientID, setSelectedClientID] = useState<number>(client?.id || 0)
   const [formState, setFormState] = useState<any>({})
   const { closeModal } = useModal()
 
   async function handleCreateApplication(formData: FormData) {
-    createApplicationInOrganization(orgName, selectedClientId, formData).then((res) => {
-      console.log(res)
+    createNewApplication(orgName, selectedClientID, formData).then((res) => {
       if (res.success) {
         resetForm()
         closeModal()
@@ -46,13 +45,13 @@ export default function CreateNewApplicationModal({
     setFormState({})
   }
 
-  function handleClientSelect(client: string) {
-    setSelectedClientId(client)
+  function handleClientSelect(clientID: number) {
+    setSelectedClientID(clientID)
   }
 
   function handleCloseModal(e: MouseEvent<HTMLButtonElement>) {
     e.stopPropagation()
-    setSelectedClientId('')
+    setSelectedClientID(0)
     resetForm()
     closeModal()
   }
@@ -80,8 +79,8 @@ export default function CreateNewApplicationModal({
           ) : (
             <ClientSearchDropdown
               orgName={orgName}
-              selectedClientId={selectedClientId}
-              setSelectedClientId={handleClientSelect}
+              selectedClientID={selectedClientID}
+              setSelectedClientID={handleClientSelect}
             />
           )}
         </FormInput>
