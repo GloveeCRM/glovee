@@ -25,29 +25,29 @@ export interface Answer {
 
 const applicationQuestionSets = [
   {
-    id: 'clwcpnpde0004hy7g3u064v77',
+    id: 2,
     type: 'FLAT',
     position: 0,
-    sectionId: 'clwcpnpde0003hy7g1t9qfaum',
-    questionSetId: null,
+    sectionID: 1,
+    questionSetID: null,
     questions: [
       {
-        id: 'clwcpnpde0005hy7gn753phvl',
+        id: 3,
         type: 'TEXT_INPUT',
-        prompt: 'name',
+        prompt: 'What is your name?',
         position: 0,
         helperText: 'No helper text',
         settings: {},
-        questionSetId: 'clwcpnpde0004hy7g3u064v77',
+        questionSetID: 2,
       },
     ],
   },
   {
-    id: 'clwcpnpde0006hy7gqetldv4q',
+    id: 1,
     type: 'LOOP',
     position: 1,
-    sectionId: 'clwcpnpde0003hy7g1t9qfaum',
-    questionSetId: null,
+    sectionID: 2,
+    questionSetID: null,
     questions: [],
     questionSets: [
       {
@@ -98,7 +98,7 @@ const applicationQuestionSets = [
       },
     ],
   },
-] as ApplicationQuestionSetType[]
+] as unknown as ApplicationQuestionSetType[]
 
 export default async function ClientApplicationPage({
   searchParams,
