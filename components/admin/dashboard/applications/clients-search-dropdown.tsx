@@ -24,6 +24,8 @@ export default function ClientSearchDropdown({
   const [clients, setClients] = useState<UserType[] | null>(null)
   const [isLoadingClients, setIsLoadingClients] = useState(true)
 
+  console.log(clients)
+
   useEffect(() => {
     searchClients(orgName)
       .then((clients) => {
@@ -49,6 +51,8 @@ export default function ClientSearchDropdown({
   const handleSelectClient = (clientId: number) => {
     setSelectedClientID(clientId)
   }
+
+  const selectedClient = clients?.find((client) => client.id === selectedClientID)
 
   if (isLoadingClients) {
     return <div>Loading...</div>
@@ -76,20 +80,18 @@ export default function ClientSearchDropdown({
         {selectedClientID !== 0 && (
           <div className="absolute top-0 flex w-full items-center justify-between rounded-sm border border-n-400 bg-white px-[8px] py-[3px] text-[14px] text-gray-700">
             <div className="flex items-center gap-[4px]">
-              {clients?.find((client) => client.id === selectedClientID)?.avatarURL === null ? (
+              {
                 <Image
-                  src={DEFAULT_MALE_CLIENT_LOGO_URL}
+                  src={selectedClient?.avatarURL || DEFAULT_MALE_CLIENT_LOGO_URL}
                   alt="CLient Logo"
                   width={20}
                   height={20}
                   className="rounded-full"
                 />
-              ) : (
-                clients?.find((client) => client.id === selectedClientID)?.avatarURL
-              )}
-              {clients?.find((client) => client.id === selectedClientID)?.avatarURL}
+              }
+              {selectedClient?.firstName} {selectedClient?.lastName}
             </div>
-            {selectedClientID !== 0 && <IoCloseOutline onClick={() => handleSelectClient(0)} />}
+            <IoCloseOutline className="cursor-pointer" onClick={() => handleSelectClient(0)} />
           </div>
         )}
       </div>
@@ -109,18 +111,14 @@ export default function ClientSearchDropdown({
                   setIsSearching(false)
                 }}
               >
-                {client.avatarURL === null ? (
-                  <Image
-                    src={DEFAULT_MALE_CLIENT_LOGO_URL}
-                    alt="CLient Logo"
-                    width={25}
-                    height={25}
-                    className="rounded-full"
-                  />
-                ) : (
-                  client.avatarURL
-                )}
-                {client.avatarURL}
+                <Image
+                  src={client.avatarURL || DEFAULT_MALE_CLIENT_LOGO_URL}
+                  alt="CLient Logo"
+                  width={25}
+                  height={25}
+                  className="rounded-full"
+                />
+                {client.firstName} {client.lastName}
               </div>
             ))
           )}
