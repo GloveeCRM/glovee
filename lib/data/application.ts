@@ -2,39 +2,38 @@ import { prisma } from '@/prisma/prisma'
 import {
   ApplicationCategoryType,
   ApplicationQuestionSetType,
-  ApplicationRoleTypes,
-  ApplicationStatusTypes,
   ApplicationSummaryType,
   ApplicationType,
 } from '../types/application'
 import { getSession } from '../auth/session'
 import { GLOVEE_API_URL } from '../constants/api'
 
-export async function fetchClientApplications(clientID: number): Promise<ApplicationType[]> {
-  const applications: ApplicationType[] = [
-    {
-      id: 1,
-      organizationID: 1,
-      clientID: 1,
-      role: ApplicationRoleTypes.MAIN,
-      templateName: 'Application Template 1',
-      applicantFirstName: 'John',
-      applicantLastName: 'Doe',
-      status: ApplicationStatusTypes.CREATED,
-    },
-    {
-      id: 2,
-      organizationID: 1,
-      clientID: 1,
-      role: ApplicationRoleTypes.SPOUSE,
-      templateName: 'Application Template 2',
-      applicantFirstName: 'Jane',
-      applicantLastName: 'Doe',
-      status: ApplicationStatusTypes.SUBMITTED,
-    },
-  ]
+export async function fetchClientApplications(
+  orgName: string,
+  clientID: number
+): Promise<ApplicationType[]> {
+  const accessToken = await getSession()
+  if (!accessToken) {
+    return []
+  }
 
-  return applications
+  try {
+    const response = await fetch(
+      `${GLOVEE_API_URL}/v1/${orgName}/application/admin/client-applications/${clientID}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    )
+
+    const data = await response.json()
+    return data.data.applications
+  } catch (error) {
+    return []
+  }
 }
 
 export async function searchApplications(
@@ -61,10 +60,8 @@ export async function searchApplications(
     )
 
     const data = await response.json()
-    console.log(data)
     return data.data.applications
   } catch (error) {
-    console.log(error)
     return []
   }
 }

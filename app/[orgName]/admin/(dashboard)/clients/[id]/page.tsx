@@ -28,7 +28,7 @@ export default async function ClientPage({ params }: ClientsPageProps) {
         <h1 className="text-[20px] font-bold">Applications</h1>
         <CreateNewApplicationButton orgName={orgName} client={client} />
       </div>
-      <ClientApplicationsTable clientID={clientID} />
+      <ClientApplicationsTable orgName={orgName} clientID={clientID} />
     </div>
   )
 }

@@ -49,7 +49,7 @@ interface ApplicationsTableRowProps {
 
 function ApplicationsTableRow({ application }: ApplicationsTableRowProps) {
   return (
-    <TR key={application.id} className="hover:bg-n-100">
+    <TR className="hover:bg-n-100">
       <TD>
         <Link
           className="cursor-pointer font-medium hover:text-blue-600"

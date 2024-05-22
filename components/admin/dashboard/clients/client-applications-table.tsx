@@ -1,12 +1,17 @@
+import { useOrgContext } from '@/contexts/org-context'
 import { fetchClientApplications } from '@/lib/data/application'
 import { ApplicationType } from '@/lib/types/application'
 
 interface ClientApplicationsTableProps {
+  orgName: string
   clientID: number
 }
 
-export default async function ClientApplicationsTable({ clientID }: ClientApplicationsTableProps) {
-  const applications = await fetchClientApplications(clientID)
+export default async function ClientApplicationsTable({
+  orgName,
+  clientID,
+}: ClientApplicationsTableProps) {
+  const applications = await fetchClientApplications(orgName, clientID)
 
   return (
     <div>
