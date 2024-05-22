@@ -2,12 +2,9 @@ import Link from 'next/link'
 
 import Image from 'next/image'
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
-import {
-  ApplicationRoleTypes,
-  ApplicationStatusTypes,
-  ApplicationType,
-} from '@/lib/types/application'
+import { ApplicationType } from '@/lib/types/application'
 import { Table, THead, TR, TH, TBody, TD } from '@/components/ui/table'
+import { searchApplications } from '@/lib/data/application'
 
 interface ApplicationsTableProps {
   orgName: string
@@ -15,29 +12,8 @@ interface ApplicationsTableProps {
 }
 
 export default async function ApplicationsTable({ orgName, query }: ApplicationsTableProps) {
-  // const applications = await fetchApplicationByOrgNameandSearchQuery(orgName, query)
-  const applications = [
-    {
-      id: 1,
-      orgID: 1,
-      clientID: 1,
-      templateName: 'templateName',
-      applicantFirstName: 'applicantFirstName',
-      applicantLastName: 'applicantLastName',
-      role: ApplicationRoleTypes.SPOUSE,
-      status: ApplicationStatusTypes.CREATED,
-    },
-    {
-      id: 2,
-      orgID: 2,
-      clientID: 2,
-      templateName: 'templateName',
-      applicantFirstName: 'applicantFirstName',
-      applicantLastName: 'applicantLastName',
-      role: ApplicationRoleTypes.MAIN,
-      status: ApplicationStatusTypes.CREATED,
-    },
-  ]
+  const applications = await searchApplications(orgName, query)
+
   return (
     <Table className="mt-[20px]">
       <THead>
@@ -50,17 +26,18 @@ export default async function ApplicationsTable({ orgName, query }: Applications
         </TR>
       </THead>
       <TBody>
-        {applications.length === 0 ? (
-          <TR>
-            <TD className="py-[12px] text-center text-n-500" colSpan={5}>
-              No applications found
-            </TD>
-          </TR>
-        ) : (
-          applications.map((application) => (
-            <ApplicationsTableRow application={application} key={application.id} />
-          ))
-        )}
+        {applications &&
+          (applications.length === 0 ? (
+            <TR>
+              <TD className="py-[12px] text-center text-n-500" colSpan={5}>
+                No applications found
+              </TD>
+            </TR>
+          ) : (
+            applications.map((application) => (
+              <ApplicationsTableRow application={application} key={application.id} />
+            ))
+          ))}
       </TBody>
     </Table>
   )

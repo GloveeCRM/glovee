@@ -57,7 +57,7 @@ export async function fetchClientsByOrgName(orgName: string): Promise<User[] | n
  * Fetches a user by their ID.
  */
 export async function fetchClientProfileById(
-  id: string,
+  id: number,
   orgName: string
 ): Promise<UserType | null> {
   try {

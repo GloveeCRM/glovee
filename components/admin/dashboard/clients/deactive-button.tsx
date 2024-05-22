@@ -3,9 +3,9 @@
 import { UserStatusEnum } from '@/lib/types/user'
 import { updateClientStatus } from '@/lib/actions/user'
 
-export default function DeactiveButton({ CLientId }: { CLientId: string }) {
+export default function DeactiveButton({ clientID }: { clientID: number }) {
   async function handleClickDeactivate() {
-    updateClientStatus(CLientId, UserStatusEnum.INACTIVE).then((res) => {
+    updateClientStatus(clientID, UserStatusEnum.INACTIVE).then((res) => {
       if (res.error) {
         alert(res.error)
       }

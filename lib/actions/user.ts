@@ -126,7 +126,7 @@ export async function updateClientProfile(
 }
 
 export async function updateClientStatus(
-  id: string,
+  id: number,
   status: UserStatusEnum
 ): Promise<{ success?: string; error?: string }> {
   const accessToken = await getSession()

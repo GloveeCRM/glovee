@@ -12,7 +12,7 @@ export enum ApplicationRoleTypes {
 
 export type ApplicationType = {
   id: number
-  orgID: number
+  organizationID: number
   clientID: number
   role: ApplicationRoleTypes
   templateName: string

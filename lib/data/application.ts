@@ -1,11 +1,73 @@
 import { prisma } from '@/prisma/prisma'
-import { Application, Category } from '@prisma/client'
 import {
   ApplicationCategoryType,
   ApplicationQuestionSetType,
+  ApplicationRoleTypes,
+  ApplicationStatusTypes,
   ApplicationSummaryType,
   ApplicationType,
 } from '../types/application'
+import { getSession } from '../auth/session'
+import { GLOVEE_API_URL } from '../constants/api'
+
+export async function fetchClientApplications(clientID: number): Promise<ApplicationType[]> {
+  const applications: ApplicationType[] = [
+    {
+      id: 1,
+      organizationID: 1,
+      clientID: 1,
+      role: ApplicationRoleTypes.MAIN,
+      templateName: 'Application Template 1',
+      applicantFirstName: 'John',
+      applicantLastName: 'Doe',
+      status: ApplicationStatusTypes.CREATED,
+    },
+    {
+      id: 2,
+      organizationID: 1,
+      clientID: 1,
+      role: ApplicationRoleTypes.SPOUSE,
+      templateName: 'Application Template 2',
+      applicantFirstName: 'Jane',
+      applicantLastName: 'Doe',
+      status: ApplicationStatusTypes.SUBMITTED,
+    },
+  ]
+
+  return applications
+}
+
+export async function searchApplications(
+  orgName: string,
+  query: string = '',
+  limit: number = 0,
+  offset: number = 0
+): Promise<ApplicationType[]> {
+  const accessToken = await getSession()
+  if (!accessToken) {
+    return []
+  }
+
+  try {
+    const response = await fetch(
+      `${GLOVEE_API_URL}/v1/${orgName}/application/admin/search?query=${query}&limit=${limit}&offset=${offset}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    )
+
+    const data = await response.json()
+    console.log(data)
+    return data.data.applications
+  } catch (error) {
+    console.log(error)
+    return []
+  }
+}
 
 export async function fetchApplicationByOrgNameandSearchQuery(orgName: string, query: string) {
   try {

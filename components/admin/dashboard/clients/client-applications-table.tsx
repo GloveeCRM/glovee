@@ -1,10 +1,13 @@
+import { fetchClientApplications } from '@/lib/data/application'
 import { ApplicationType } from '@/lib/types/application'
 
 interface ClientApplicationsTableProps {
-  applications: ApplicationType[] | null
+  clientID: number
 }
 
-export default function ClientApplicationsTable({ applications }: ClientApplicationsTableProps) {
+export default async function ClientApplicationsTable({ clientID }: ClientApplicationsTableProps) {
+  const applications = await fetchClientApplications(clientID)
+
   return (
     <div>
       <table className="mt-[15px] w-full text-[14px]">
@@ -24,7 +27,7 @@ export default function ClientApplicationsTable({ applications }: ClientApplicat
               </td>
             </tr>
           ) : (
-            applications.map((application) => (
+            applications.map((application: ApplicationType) => (
               <tr key={application.id}>
                 <td className="py-[10px]">{application.id}</td>
                 <td>{application.templateName}</td>

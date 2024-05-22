@@ -1,4 +1,5 @@
 'use client'
+
 import Image from 'next/image'
 import { useState } from 'react'
 
@@ -12,10 +13,9 @@ import { UserType } from '@/lib/types/user'
 
 interface ClientProfileCardProps {
   client: UserType
-  userId: string
 }
 
-export default function ClientProfileCard({ client, userId }: ClientProfileCardProps) {
+export default function ClientProfileCard({ client }: ClientProfileCardProps) {
   const [isEditing, setIsEditing] = useState(false)
 
   return (
@@ -55,8 +55,8 @@ export default function ClientProfileCard({ client, userId }: ClientProfileCardP
         )}
       </div>
       <div>
-        {(client.status === UserStatus.ACTIVE && <DeactiveButton CLientId={userId} />) ||
-          (client.status === UserStatus.INACTIVE && <ActiveButton CLientId={userId} />)}
+        {(client.status === UserStatus.ACTIVE && <DeactiveButton clientID={client.id} />) ||
+          (client.status === UserStatus.INACTIVE && <ActiveButton clientID={client.id} />)}
       </div>
     </div>
   )

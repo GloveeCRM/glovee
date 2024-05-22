@@ -1,7 +1,7 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
+import React, { useEffect, useState } from 'react'
 import { IoCloseOutline } from 'react-icons/io5'
 
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
