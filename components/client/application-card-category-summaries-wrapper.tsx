@@ -1,7 +1,8 @@
+import { ApplicationCategoryType } from '@/lib/types/application'
 import ApplicationCardCategorySummary from './application-card-category-summary'
 
 interface ApplicationCardCategorySummariesWrapperProps {
-  categorySummaries: { id: string; name: string; completionRate: number }[]
+  categorySummaries: ApplicationCategoryType[]
 }
 
 export default function ApplicationCardCategorySummariesWrapper({

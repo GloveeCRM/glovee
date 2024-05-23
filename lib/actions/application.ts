@@ -60,18 +60,9 @@ export async function createNewApplication(
  * Set application status to submitted
  */
 export async function submitApplicationById(
-  applicationId: string
+  applicationId: number
 ): Promise<{ success?: string; error?: string }> {
   try {
-    await prisma.application.update({
-      where: {
-        id: applicationId,
-      },
-      data: {
-        status: 'SUBMITTED',
-      },
-    })
-
     revalidatePath('/applications')
     return { success: 'Application submitted!' }
   } catch (error) {

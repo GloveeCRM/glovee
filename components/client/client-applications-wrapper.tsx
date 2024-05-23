@@ -1,14 +1,20 @@
-import { fetchApplicationSummariesByUserId } from '@/lib/data/application'
+import { fetchClientApplications } from '@/lib/data/application'
 import ClientApplicationSummaryCard from './client-application-summary-card'
 import { ApplicationRole } from '@prisma/client'
 import { getSessionPayload } from '@/lib/auth/session'
 
-export default async function ClientApplicationsWrapper() {
-  const payload = await getSessionPayload()
-  const clientId = String(payload?.user.id)
-  const applicationSummaries = await fetchApplicationSummariesByUserId(clientId)
+interface ClientApplicationsWrapperProps {
+  orgName: string
+}
 
-  const hasApplications = applicationSummaries !== null && applicationSummaries?.length > 0
+export default async function ClientApplicationsWrapper({
+  orgName,
+}: ClientApplicationsWrapperProps) {
+  const payload = await getSessionPayload()
+  const clientID = payload?.user.id || 0
+  const applications = await fetchClientApplications(orgName, clientID)
+
+  const hasApplications = applications !== null && applications?.length > 0
 
   return !hasApplications ? (
     <div className="flex flex-1 flex-col items-center justify-center text-[20px] text-n-400">
@@ -18,21 +24,21 @@ export default async function ClientApplicationsWrapper() {
     <div>
       <div>
         <h3 className="font-semibold">Main Applicant</h3>
-        {applicationSummaries
+        {applications
           .filter((application) => application.role === ApplicationRole.MAIN)
           .map((application) => (
             <div key={application.id} className="my-[20px]">
-              <ClientApplicationSummaryCard applicationSummary={application} />
+              <ClientApplicationSummaryCard application={application} />
             </div>
           ))}
       </div>
       <div>
         <h3 className="font-semibold">Dependents</h3>
-        {applicationSummaries
+        {applications
           .filter((application) => application.role !== ApplicationRole.MAIN)
           .map((application) => (
             <div key={application.id} className="my-[20px]">
-              <ClientApplicationSummaryCard applicationSummary={application} />
+              <ClientApplicationSummaryCard application={application} />
             </div>
           ))}
       </div>

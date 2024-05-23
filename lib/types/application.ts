@@ -19,6 +19,7 @@ export type ApplicationType = {
   applicantFirstName: string
   applicantLastName: string
   status: ApplicationStatusTypes
+  completionRate: number
   categories?: ApplicationCategoryType[]
 }
 
@@ -27,6 +28,7 @@ export type ApplicationCategoryType = {
   name: string
   position: number
   templateID: number
+  completionRate: number
   sections?: ApplicationSectionType[]
 }
 

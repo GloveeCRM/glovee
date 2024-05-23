@@ -24,8 +24,6 @@ export default function ClientSearchDropdown({
   const [clients, setClients] = useState<UserType[] | null>(null)
   const [isLoadingClients, setIsLoadingClients] = useState(true)
 
-  console.log(clients)
-
   useEffect(() => {
     searchClients(orgName)
       .then((clients) => {

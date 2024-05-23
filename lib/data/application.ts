@@ -8,7 +8,7 @@ import {
 import { getSession } from '../auth/session'
 import { GLOVEE_API_URL } from '../constants/api'
 
-export async function fetchClientApplications(
+export async function fetchAdminClientApplications(
   orgName: string,
   clientID: number
 ): Promise<ApplicationType[]> {
@@ -20,6 +20,34 @@ export async function fetchClientApplications(
   try {
     const response = await fetch(
       `${GLOVEE_API_URL}/v1/${orgName}/application/admin/client-applications/${clientID}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    )
+
+    const data = await response.json()
+    return data.data.applications
+  } catch (error) {
+    return []
+  }
+}
+
+export async function fetchClientApplications(
+  orgName: string,
+  clientID: number
+): Promise<ApplicationType[]> {
+  const accessToken = await getSession()
+  if (!accessToken) {
+    return []
+  }
+
+  try {
+    const response = await fetch(
+      `${GLOVEE_API_URL}/v1/${orgName}/application/client/applications/${clientID}`,
       {
         method: 'GET',
         headers: {
@@ -117,7 +145,6 @@ export async function fetchApplicationByOrgNameandSearchQuery(orgName: string, q
 
     return applications
   } catch (error) {
-    console.error(error)
     return []
   }
 }
@@ -207,7 +234,6 @@ export async function fetchApplicationsByUserId(id: string) {
 
     return application
   } catch (error) {
-    console.error(error)
     return null
   }
 }
