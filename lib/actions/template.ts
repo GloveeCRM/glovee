@@ -46,22 +46,35 @@ export async function createNewTemplate(orgName: string, formData: FormData) {
   }
 }
 
-/**
- * Delete template by id
- */
-export async function deleteTemplateById(templateId: string) {
-  try {
-    await prisma.template.delete({
-      where: {
-        id: templateId,
-      },
-    })
+export async function deleteTemplateByID(orgName: string, templateID: number) {
+  const accessToken = await getSession()
+  if (!accessToken) {
+    return { error: 'Failed to get access token!' }
+  }
 
-    revalidatePath('/admin/templates')
+  try {
+    const response = await fetch(
+      `${GLOVEE_API_URL}/v1/${orgName}/template/admin/delete/${templateID}`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    )
+
+    const data = await response.json()
+
+    if (data.status === 'error') {
+      return { error: data.error }
+    } else {
+      revalidatePath('/admin/templates')
+      return { success: 'Template deleted!' }
+    }
   } catch (error) {
     return { error: 'Failed to delete template!' }
   }
-  revalidatePath('/admin/templates')
 }
 
 /**

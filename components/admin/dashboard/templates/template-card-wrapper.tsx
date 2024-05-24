@@ -15,6 +15,7 @@ export default async function TemplateCardWrapper({ orgName }: TemplateCardWrapp
       <CreateNewTemplateCard orgName={orgName} />
       {templates?.map((template) => (
         <TemplateCard
+          orgName={orgName}
           key={template.id}
           id={template.id}
           title={template.name}

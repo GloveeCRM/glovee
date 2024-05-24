@@ -3,10 +3,17 @@
 import { BiTrash } from 'react-icons/bi'
 import { FiMoreHorizontal } from 'react-icons/fi'
 
-import { deleteTemplateById } from '@/lib/actions/template'
+import { deleteTemplateByID } from '@/lib/actions/template'
 import { Popover, PopoverContent, PopoverTrigger } from '../../../ui/popover'
 
-export default function TemplateCardOptionsMenuButton({ templateID }: { templateID: number }) {
+interface TemplateCardOptionsMenuButtonProps {
+  orgName: string
+  templateID: number
+}
+export default function TemplateCardOptionsMenuButton({
+  orgName,
+  templateID,
+}: TemplateCardOptionsMenuButtonProps) {
   return (
     <Popover>
       <PopoverTrigger
@@ -23,7 +30,7 @@ export default function TemplateCardOptionsMenuButton({ templateID }: { template
         <ul>
           <li
             onClick={() => {
-              deleteTemplateById(String(templateID)).then((data) => {
+              deleteTemplateByID(orgName, templateID).then((data) => {
                 if (data?.error) {
                   console.error(data.error)
                 }
