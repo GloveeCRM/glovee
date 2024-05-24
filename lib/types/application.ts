@@ -1,3 +1,9 @@
+export type Applicant = {
+  firstName: string
+  lastName: string
+  imageURL: string
+}
+
 export enum ApplicationStatusTypes {
   CREATED = 'CREATED',
   SUBMITTED = 'SUBMITTED',

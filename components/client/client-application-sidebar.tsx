@@ -1,18 +1,28 @@
 import Link from 'next/link'
 import { IoChevronBackOutline } from 'react-icons/io5'
 
-import { fetchCategorieByApplicationId } from '@/lib/data/application'
+import { fetchClientApplicationCategoriesIncludingSections } from '@/lib/data/application'
 import ApplicantInfoCard from './application/applicant-info-card'
 import ApplicationCategoriesCardWrapper from './application-categories-card-wrapper'
+import { getSessionPayload } from '@/lib/auth/session'
 
 interface ClientApplicationSidebarProps {
-  applicationId: string
+  orgName: string
+  applicationID: number
 }
 
 export default async function ClientApplicationSidebar({
-  applicationId,
+  orgName,
+  applicationID,
 }: ClientApplicationSidebarProps) {
-  const categories = (await fetchCategorieByApplicationId(applicationId)) || []
+  const payload = await getSessionPayload()
+  const userID = payload?.user.id || 0
+
+  const categories = await fetchClientApplicationCategoriesIncludingSections(
+    orgName,
+    userID,
+    applicationID
+  )
 
   return (
     <div
@@ -24,7 +34,7 @@ export default async function ClientApplicationSidebar({
           <IoChevronBackOutline className="h-[20px] w-[20px]" />
           <span className="text-[16px]">Back</span>
         </Link>
-        <ApplicantInfoCard applicationId={applicationId} />
+        <ApplicantInfoCard orgName={orgName} applicationID={applicationID} />
       </div>
       <ApplicationCategoriesCardWrapper categories={categories} />
     </div>
