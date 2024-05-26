@@ -3,7 +3,7 @@ import { getSession } from '@/lib/auth/session'
 
 import AuthProvider from '@/contexts/auth-context'
 import OrgSidebar from '@/components/org/org-sidebar'
-import '@/globals.css'
+import '@/app/globals.css'
 
 export const metadata: Metadata = {
   title: 'Immigration CRM',
