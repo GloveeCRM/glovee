@@ -1,6 +1,6 @@
 'use client'
 
-import { saveTextInputAnswer } from '@/lib/actions/form'
+import { saveAnswer } from '@/lib/actions/application'
 import { ApplicationQuestionType } from '@/lib/types/application'
 import { TemplateQuestionType } from '@/lib/types/template'
 import { useDebouncedCallback } from 'use-debounce'
@@ -11,7 +11,7 @@ export default function TextInputQuestion({
   question: ApplicationQuestionType | TemplateQuestionType
 }) {
   const handleChange = useDebouncedCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    saveTextInputAnswer({ input: e.target.value, questionId: String(question.id) })
+    saveAnswer('orgName', 0, 0, '')
   }, 500)
 
   return (

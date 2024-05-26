@@ -1,8 +1,8 @@
-import { UserRole } from '@prisma/client'
+import { UserRoleTypes } from './user'
 
 type JWTUserType = {
   id: number
-  role: UserRole
+  role: UserRoleTypes
 }
 
 type JWTOrganizationType = {

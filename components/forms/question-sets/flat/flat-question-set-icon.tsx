@@ -1,7 +1,7 @@
 'use client'
 
+import { TemplateQuestionSetTypes } from '@/lib/types/template'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
-import { TemplateQuestionSetType } from '@prisma/client'
 
 export default function FlatQuestionSetIcon() {
   const { setDraggedObject } = useDragAndDropContext()
@@ -11,7 +11,7 @@ export default function FlatQuestionSetIcon() {
     setDraggedObject({
       type: 'questionSet',
       object: {
-        type: TemplateQuestionSetType.FLAT,
+        type: TemplateQuestionSetTypes.FLAT,
       },
     })
   }

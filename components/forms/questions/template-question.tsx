@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from 'react'
 
-import { TemplateQuestionType as TemplateQuestionTypes } from '@prisma/client'
 import { TemplateQuestionType } from '@/lib/types/template'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
 import useQuestionActions from '@/hooks/template/use-question-actions'

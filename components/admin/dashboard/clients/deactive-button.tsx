@@ -1,11 +1,11 @@
 'use client'
 
-import { UserStatusEnum } from '@/lib/types/user'
+import { UserStatusTypes } from '@/lib/types/user'
 import { updateClientStatus } from '@/lib/actions/user'
 
 export default function DeactiveButton({ clientID }: { clientID: number }) {
   async function handleClickDeactivate() {
-    updateClientStatus(clientID, UserStatusEnum.INACTIVE).then((res) => {
+    updateClientStatus(clientID, UserStatusTypes.INACTIVE).then((res) => {
       if (res.error) {
         alert(res.error)
       }

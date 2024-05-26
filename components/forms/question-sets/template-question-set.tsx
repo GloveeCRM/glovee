@@ -2,8 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 
-import { TemplateQuestionSetType as TemplateQuestionSetTypes } from '@prisma/client'
-import { TemplateQuestionSetType } from '@/lib/types/template'
+import { TemplateQuestionSetType, TemplateQuestionSetTypes } from '@/lib/types/template'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
 import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
 import NonEmptySectionDropzone from '@/components/admin/template/edit/non-empty-section-dropzone'

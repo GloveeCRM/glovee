@@ -1,6 +1,6 @@
 'use client'
 
-import { TemplateQuestionType } from '@prisma/client'
+import { TemplateQuestionTypes } from '@/lib/types/template'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 import Divider from '@/components/ui/divider'
 
@@ -12,7 +12,7 @@ export default function TextInputQuestionIcon() {
     setDraggedObject({
       type: 'question',
       object: {
-        type: TemplateQuestionType.TEXT_INPUT,
+        type: TemplateQuestionTypes.TEXT_INPUT,
       },
     })
   }

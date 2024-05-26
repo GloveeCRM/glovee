@@ -1,5 +1,4 @@
-import { TemplateQuestionSetType as TemplateQuestionSetTypes } from '@prisma/client'
-import { TemplateQuestionSetType, TemplateQuestionType } from '@/lib/types/template'
+import { TemplateQuestionSetType } from '@/lib/types/template'
 import NonEmptyQuestionSetDropzone from '@/components/admin/template/edit/non-empty-question-set-dropzone'
 import TemplateQuestion from '../../questions/template-question'
 import EmptyQuestionSetDropzone from '../empty-question-set-dropzone'

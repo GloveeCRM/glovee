@@ -1,11 +1,11 @@
 'use client'
 
 import { updateClientStatus } from '@/lib/actions/user'
-import { UserStatusEnum } from '@/lib/types/user'
+import { UserStatusTypes } from '@/lib/types/user'
 
 export default function ActiveButton({ clientID }: { clientID: number }) {
   async function handleClickReactivate() {
-    updateClientStatus(clientID, UserStatusEnum.ACTIVE).then((res) => {
+    updateClientStatus(clientID, UserStatusTypes.ACTIVE).then((res) => {
       if (res.error) {
         alert(res.error)
       }

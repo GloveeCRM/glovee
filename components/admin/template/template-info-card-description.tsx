@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { MdOutlineModeEdit } from 'react-icons/md'
 import { PiCheckBold } from 'react-icons/pi'
 
-import { updateTemplateDescriptionById } from '@/lib/actions/template'
+import { updateTemplateDescriptionByID } from '@/lib/actions/template'
 
 interface TemplateInfoCardDescriptionProps {
   templateID: number
@@ -29,7 +29,7 @@ export default function TemplateInfoCardDescription({
   function handleSave() {
     const newDescription = descriptionInputRef.current?.value || ''
     setIsEditing(false)
-    updateTemplateDescriptionById(String(templateID), newDescription)
+    updateTemplateDescriptionByID(templateID, newDescription)
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {

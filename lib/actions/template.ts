@@ -2,7 +2,6 @@
 
 import { revalidatePath } from 'next/cache'
 
-import { prisma } from '@/prisma/prisma'
 import { TemplateSchema } from '../zod/schemas'
 import { TemplateType } from '../types/template'
 import { validateFormDataAgainstSchema } from '../utils/validation'
@@ -46,6 +45,14 @@ export async function createNewTemplate(orgName: string, formData: FormData) {
   }
 }
 
+export async function updateTemplateTitleByID(templateID: number, title: string) {
+  return null
+}
+
+export async function updateTemplateDescriptionByID(templateID: number, description: string) {
+  return null
+}
+
 export async function deleteTemplateByID(orgName: string, templateID: number) {
   const accessToken = await getSession()
   if (!accessToken) {
@@ -74,54 +81,6 @@ export async function deleteTemplateByID(orgName: string, templateID: number) {
     }
   } catch (error) {
     return { error: 'Failed to delete template!' }
-  }
-}
-
-/**
- * Update template title by id
- */
-export async function updateTemplateTitleById(
-  templateId: string,
-  title: string
-): Promise<{ success?: string; error?: string }> {
-  try {
-    await prisma.template.update({
-      where: {
-        id: templateId,
-      },
-      data: {
-        title: title,
-      },
-    })
-
-    revalidatePath(`/admin/template/${templateId}/edit`)
-    return { success: 'Template title updated!' }
-  } catch (error) {
-    return { error: 'Failed to update template title!' }
-  }
-}
-
-/**
- * Update template description by id
- */
-export async function updateTemplateDescriptionById(
-  templateId: string,
-  description: string
-): Promise<{ success?: string; error?: string }> {
-  try {
-    await prisma.template.update({
-      where: {
-        id: templateId,
-      },
-      data: {
-        description: description,
-      },
-    })
-
-    revalidatePath(`/admin/template/${templateId}/edit`)
-    return { success: 'Template description updated!' }
-  } catch (error) {
-    return { error: 'Failed to update template description!' }
   }
 }
 

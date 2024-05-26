@@ -1,6 +1,5 @@
 import { z } from 'zod'
-
-import { UserRole } from '@prisma/client'
+import { UserRoleTypes } from '../types/user'
 
 export const UpdateClientSchema = z.object({
   clientFirstName: z.string().min(1, { message: 'First name is required' }),
@@ -40,7 +39,7 @@ export const TemplateSchema = z.object({
 export const SettingsSchema = z
   .object({
     name: z.optional(z.string()),
-    role: z.enum([UserRole.ORG_ADMIN, UserRole.ORG_CLIENT]),
+    role: z.enum([UserRoleTypes.ORG_ADMIN, UserRoleTypes.ORG_CLIENT]),
     email: z.optional(z.string().email()),
     password: z.optional(z.string().min(6)),
     newPassword: z.optional(z.string().min(6)),

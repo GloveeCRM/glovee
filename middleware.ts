@@ -1,3 +1,5 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { UserRoleTypes } from './lib/types/user'
 import {
   DEFAULT_ORG_ADMIN_LOGIN_REDIRECT,
   AUTH_ROUTES,
@@ -5,8 +7,6 @@ import {
   DEFAULT_ORG_CLIENT_LOGIN_REDIRECT,
   ADMIN_ROUTES_PREFIX,
 } from '@/lib/constants/routes'
-import { NextRequest, NextResponse } from 'next/server'
-import { UserRole } from '@prisma/client'
 import { getCurrentOrgName } from './lib/utils/server'
 import { getSessionPayload } from './lib/auth/session'
 
@@ -22,8 +22,8 @@ export async function middleware(request: NextRequest) {
   const isAuthRoute = AUTH_ROUTES.includes(nextUrl.pathname)
   const isAdminRoute = nextUrl.pathname.startsWith(ADMIN_ROUTES_PREFIX)
 
-  const isOrgAdminOrOrgOwner = role === UserRole.ORG_ADMIN || role === UserRole.ORG_OWNER
-  const isOrgClient = role === UserRole.ORG_CLIENT
+  const isOrgAdminOrOrgOwner = role === UserRoleTypes.ORG_ADMIN || role === UserRoleTypes.ORG_OWNER
+  const isOrgClient = role === UserRoleTypes.ORG_CLIENT
 
   if (isApiAuthRoute) {
     const searchParams = request.nextUrl.searchParams.toString()

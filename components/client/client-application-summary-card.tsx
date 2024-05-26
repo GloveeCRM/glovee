@@ -3,8 +3,7 @@
 import Link from 'next/link'
 import { FaFilePen } from 'react-icons/fa6'
 
-import { ApplicationStatus } from '@prisma/client'
-import { ApplicationType } from '@/lib/types/application'
+import { ApplicationStatusTypes, ApplicationType } from '@/lib/types/application'
 import { submitApplicationById } from '@/lib/actions/application'
 import { Button, SubmitButton } from '../ui/buttons'
 import ProgressIndicatorRing from '../ui/progress-indicator-ring'
@@ -44,14 +43,14 @@ export default function ClientApplicationSummaryCard({
               >
                 <div className="flex items-center justify-center gap-[8px]">
                   <span>
-                    {`${application.status === ApplicationStatus.SUBMITTED ? 'View' : 'Open'} application`}
+                    {`${application.status === ApplicationStatusTypes.SUBMITTED ? 'View' : 'Open'} application`}
                   </span>
                   <FaFilePen className="h-[16px] w-[16px]" />
                 </div>
               </Button>
             </Link>
           </div>
-          {application.status !== ApplicationStatus.SUBMITTED && (
+          {application.status !== ApplicationStatusTypes.SUBMITTED && (
             <SubmitButton
               size="xs"
               hsize="sm"

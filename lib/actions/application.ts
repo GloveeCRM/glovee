@@ -2,7 +2,6 @@
 
 import { revalidatePath } from 'next/cache'
 
-import { prisma } from '@/prisma/prisma'
 import { ApplicationSchema } from '../zod/schemas'
 import { validateFormDataAgainstSchema } from '../utils/validation'
 import { getSession } from '../auth/session'
@@ -67,5 +66,39 @@ export async function submitApplicationById(
     return { success: 'Application submitted!' }
   } catch (error) {
     return { error: 'Failed to submit application!' }
+  }
+}
+
+export async function saveAnswer(
+  orgName: string,
+  applicationId: number,
+  questionId: number,
+  answer: string
+): Promise<{ success?: string; error?: string }> {
+  const accessToken = await getSession()
+
+  try {
+    const response = await fetch(
+      `${GLOVEE_API_URL}/v1/${orgName}/application/${applicationId}/question/${questionId}/answer`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({ answer }),
+      }
+    )
+
+    const data = await response.json()
+
+    if (data.status === 'error') {
+      return { error: data.error }
+    } else {
+      revalidatePath('/applications')
+      return { success: 'Answer saved!' }
+    }
+  } catch (error) {
+    return { error: 'Failed to save answer!' }
   }
 }

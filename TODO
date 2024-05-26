@@ -1,7 +1,0 @@
-- Setup organization table and associate users with organization.
-- Define more clear user roles based on organization
-
-- Identify Input components for the application forms for client based on Figma design systems
-- Each Input will have its own file and will recieve prompt, current user answer, and settings as props.
-- Settings will be defined as interfaces for every type of input (each input type will have a different kind of settings)
-- BASICALLY: Just implement whatever you see in Figma design systems for Inputs in different conditions (default, answered, active, error, with helper text, etc.)

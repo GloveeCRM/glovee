@@ -2,7 +2,7 @@
 
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md'
 
-import { TemplateQuestionType } from '@prisma/client'
+import { TemplateQuestionTypes } from '@/lib/types/template'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 import Divider from '@/components/ui/divider'
 
@@ -14,7 +14,7 @@ export default function SelectQuestionIcon() {
     setDraggedObject({
       type: 'question',
       object: {
-        type: TemplateQuestionType.SELECT,
+        type: TemplateQuestionTypes.SELECT,
       },
     })
   }

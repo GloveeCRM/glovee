@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import { useState } from 'react'
 
-import { UserStatus } from '@prisma/client'
+import { UserStatusTypes } from '@/lib/types/user'
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
 import DeactiveButton from './deactive-button'
 import ActiveButton from './active-button'
@@ -55,8 +55,8 @@ export default function ClientProfileCard({ client }: ClientProfileCardProps) {
         )}
       </div>
       <div>
-        {(client.status === UserStatus.ACTIVE && <DeactiveButton clientID={client.id} />) ||
-          (client.status === UserStatus.INACTIVE && <ActiveButton clientID={client.id} />)}
+        {(client.status === UserStatusTypes.ACTIVE && <DeactiveButton clientID={client.id} />) ||
+          (client.status === UserStatusTypes.INACTIVE && <ActiveButton clientID={client.id} />)}
       </div>
     </div>
   )

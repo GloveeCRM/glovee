@@ -4,10 +4,11 @@ import { useState } from 'react'
 import { v4 as uuid4 } from 'uuid'
 
 import {
-  TemplateQuestionSetType as TemplateQuestionSetTypes,
-  TemplateQuestionType as TemplateQuestionTypes,
-} from '@prisma/client'
-import { TemplateQuestionSetType, TemplateQuestionType } from '@/lib/types/template'
+  TemplateQuestionSetType,
+  TemplateQuestionSetTypes,
+  TemplateQuestionType,
+  TemplateQuestionTypes,
+} from '@/lib/types/template'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 import useQuestionActions from '@/hooks/template/use-question-actions'
 import useQuestionSetActions from '@/hooks/template/use-question-set-actions'

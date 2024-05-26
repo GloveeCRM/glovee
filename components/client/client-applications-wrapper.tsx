@@ -1,6 +1,6 @@
+import { ApplicationRoleTypes } from '@/lib/types/application'
 import { fetchClientApplications } from '@/lib/data/application'
 import ClientApplicationSummaryCard from './client-application-summary-card'
-import { ApplicationRole } from '@prisma/client'
 import { getSessionPayload } from '@/lib/auth/session'
 
 interface ClientApplicationsWrapperProps {
@@ -25,7 +25,7 @@ export default async function ClientApplicationsWrapper({
       <div>
         <h3 className="font-semibold">Main Applicant</h3>
         {applications
-          .filter((application) => application.role === ApplicationRole.MAIN)
+          .filter((application) => application.role === ApplicationRoleTypes.MAIN)
           .map((application) => (
             <div key={application.id} className="my-[20px]">
               <ClientApplicationSummaryCard application={application} />
@@ -35,7 +35,7 @@ export default async function ClientApplicationsWrapper({
       <div>
         <h3 className="font-semibold">Dependents</h3>
         {applications
-          .filter((application) => application.role !== ApplicationRole.MAIN)
+          .filter((application) => application.role !== ApplicationRoleTypes.MAIN)
           .map((application) => (
             <div key={application.id} className="my-[20px]">
               <ClientApplicationSummaryCard application={application} />
