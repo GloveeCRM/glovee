@@ -13,16 +13,13 @@ import { Select } from '@/components/ui/select'
 import { Button, SubmitButton } from '@/components/ui/buttons'
 import TemplateSelect from './template-select'
 import ClientSearchDropdown from './clients-search-dropdown'
-import { TemplateType } from '@/lib/types/template'
 
 interface CreateNewApplicationModalProps {
-  templates: TemplateType[]
   orgName: string
   client?: UserType
 }
 
 export default function CreateNewApplicationModal({
-  templates,
   orgName,
   client,
 }: CreateNewApplicationModalProps) {
@@ -122,7 +119,7 @@ export default function CreateNewApplicationModal({
             </FormInput>
           </div>
         </div>
-        <TemplateSelect templates={templates} errors={formState.errors?.templateId} />
+        <TemplateSelect errors={formState.errors?.templateId} />
         <div className="mt-[26px] flex justify-center gap-[8px]">
           <Button
             size="full"

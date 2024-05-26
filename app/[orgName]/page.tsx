@@ -4,7 +4,11 @@ interface HomePagePrarams {
   orgName: string
 }
 
-export default function HomePage({ params }: { params: HomePagePrarams }) {
+interface HomePageProps {
+  params: HomePagePrarams
+}
+
+export default function HomePage({ params }: HomePageProps) {
   return (
     <div>
       <h1>Welcome to {params.orgName}</h1>
