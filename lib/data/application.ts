@@ -19,7 +19,7 @@ export async function fetchAdminClientApplications(
 
   try {
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/application/admin/client-applications/${clientID}`,
+      `${GLOVEE_API_URL}/v1/${orgName}/application/admin/client/${clientID}/applications`,
       {
         method: 'GET',
         headers: {
@@ -147,6 +147,35 @@ export async function fetchClientApplicationCategoriesIncludingSections(
 
     const data = await response.json()
     return data.data.categories
+  } catch (error) {
+    return []
+  }
+}
+
+export async function fetchSectionQuestionSets(
+  orgName: string,
+  clientID: number,
+  sectionID: number
+): Promise<ApplicationQuestionSetType[]> {
+  const accessToken = await getSession()
+  if (!accessToken) {
+    return []
+  }
+
+  try {
+    const response = await fetch(
+      `${GLOVEE_API_URL}/v1/${orgName}/application/client/${clientID}/application/section/${sectionID}/question-sets`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    )
+
+    const data = await response.json()
+    return data.data.questionSets
   } catch (error) {
     return []
   }
