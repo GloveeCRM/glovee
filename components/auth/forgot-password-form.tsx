@@ -10,12 +10,14 @@ import { FormInput, InputLabel, TextInput } from '../ui/inputs'
 import { Callout } from '../ui/callout'
 import { SubmitButton } from '../ui/buttons'
 import Divider from '../ui/divider'
+import { useOrgContext } from '@/contexts/org-context'
 
 export default function ForgotPasswordForm() {
   const [formState, setFormState] = useState<any>({})
+  const { orgName } = useOrgContext()
 
   async function handleForgotPassword(formData: FormData) {
-    forgotPassword(formData).then((res) => {
+    forgotPassword(orgName, formData).then((res) => {
       if (res.success) {
         setFormState({ success: res.success })
       } else {

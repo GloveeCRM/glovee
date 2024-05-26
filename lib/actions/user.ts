@@ -1,14 +1,15 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { UserStatusTypes } from '../types/user'
-import { CreateClientSchema, UpdateClientSchema } from '../zod/schemas'
-import { validateFormDataAgainstSchema } from '../utils/validation'
-import { GLOVEE_API_URL } from '../constants/api'
-import { getCurrentOrgName } from '../utils/server'
-import { getSession } from '../auth/session'
+
+import { UserStatusTypes } from '@/lib/types/user'
+import { GLOVEE_API_URL } from '@/lib/constants/api'
+import { validateFormDataAgainstSchema } from '@/lib/utils/validation'
+import { CreateClientSchema, UpdateClientSchema } from '@/lib/zod/schemas'
+import { getSession } from '@/lib/auth/session'
 
 export async function updateClientProfile(
+  orgName: string,
   clientId: number,
   formData: FormData
 ): Promise<{ success?: string; error?: string; errors?: any }> {
@@ -25,8 +26,6 @@ export async function updateClientProfile(
   const { clientFirstName, clientLastName, clientEmail } = data
 
   const accessToken = await getSession()
-
-  const orgName = await getCurrentOrgName()
 
   try {
     const response = await fetch(
@@ -59,6 +58,7 @@ export async function updateClientProfile(
 }
 
 export async function updateClientStatus(
+  orgName: string,
   id: number,
   status: UserStatusTypes
 ): Promise<{ success?: string; error?: string }> {
@@ -67,7 +67,6 @@ export async function updateClientStatus(
     return { error: 'Unauthorized' }
   }
 
-  const orgName = await getCurrentOrgName()
   try {
     const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/admin/client/${id}/status`, {
       method: 'PUT',

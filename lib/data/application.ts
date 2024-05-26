@@ -2,9 +2,9 @@ import {
   ApplicationCategoryType,
   ApplicationQuestionSetType,
   ApplicationType,
-} from '../types/application'
-import { getSession } from '../auth/session'
-import { GLOVEE_API_URL } from '../constants/api'
+} from '@/lib/types/application'
+import { GLOVEE_API_URL } from '@/lib/constants/api'
+import { getSession } from '@/lib/auth/session'
 
 export async function fetchAdminClientApplications(
   orgName: string,

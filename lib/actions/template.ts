@@ -2,12 +2,11 @@
 
 import { revalidatePath } from 'next/cache'
 
-import { TemplateSchema } from '../zod/schemas'
-import { TemplateType } from '../types/template'
-import { validateFormDataAgainstSchema } from '../utils/validation'
-import { getSession } from '../auth/session'
-import { GLOVEE_API_URL } from '../constants/api'
-import { getCurrentOrgName } from '../utils/server'
+import { TemplateType } from '@/lib/types/template'
+import { GLOVEE_API_URL } from '@/lib/constants/api'
+import { validateFormDataAgainstSchema } from '@/lib/utils/validation'
+import { TemplateSchema } from '@/lib/zod/schemas'
+import { getSession } from '@/lib/auth/session'
 
 export async function createNewTemplate(orgName: string, formData: FormData) {
   const { data, errors } = await validateFormDataAgainstSchema(TemplateSchema, formData)
@@ -45,10 +44,12 @@ export async function createNewTemplate(orgName: string, formData: FormData) {
   }
 }
 
+// TODO: Implement the following function
 export async function updateTemplateTitleByID(templateID: number, title: string) {
   return null
 }
 
+// TODO: Implement the following function
 export async function updateTemplateDescriptionByID(templateID: number, description: string) {
   return null
 }
@@ -84,11 +85,9 @@ export async function deleteTemplateByID(orgName: string, templateID: number) {
   }
 }
 
-/**
- * Update full template by id
- */
-export async function updateFullTemplateById(
-  templateId: number,
+export async function updateFullTemplateByID(
+  orgName: string,
+  templateID: number,
   template: TemplateType
 ): Promise<{ success?: string; error?: string }> {
   const accessToken = await getSession()
@@ -96,11 +95,9 @@ export async function updateFullTemplateById(
     return { error: 'Failed to get access token!' }
   }
 
-  const orgName = await getCurrentOrgName()
-
   try {
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/template/admin/full-template/${templateId}`,
+      `${GLOVEE_API_URL}/v1/${orgName}/template/admin/full-template/${templateID}`,
       {
         method: 'PUT',
         headers: {
@@ -116,7 +113,7 @@ export async function updateFullTemplateById(
     if (data.status === 'error') {
       return { error: data.error }
     } else {
-      revalidatePath(`/admin/template/${templateId}/edit`)
+      revalidatePath(`/admin/template/${templateID}/edit`)
       return { success: 'Template updated!' }
     }
   } catch (error) {

@@ -10,15 +10,17 @@ import Divider from '../ui/divider'
 import { FormInput, InputLabel, PasswordInput } from '../ui/inputs'
 import { Callout } from '../ui/callout'
 import { SubmitButton } from '../ui/buttons'
+import { useOrgContext } from '@/contexts/org-context'
 
 interface NewPasswordFormProps {
   resetPasswordToken: string
 }
 export default function NewPasswordForm({ resetPasswordToken }: NewPasswordFormProps) {
   const [formState, setFormState] = useState<any>({})
+  const { orgName } = useOrgContext()
 
   async function handleSetNewPassword(formData: FormData) {
-    resetPassword(resetPasswordToken, formData).then((res) => {
+    resetPassword(orgName, resetPasswordToken, formData).then((res) => {
       if (res.success) {
         setFormState(res)
         setTimeout(() => {

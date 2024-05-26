@@ -1,9 +1,8 @@
 'use server'
 
 import { TemplateType } from '@/lib/types/template'
-import { GLOVEE_API_URL } from '../constants/api'
-import { getSession } from '../auth/session'
-import { getCurrentOrgName } from '../utils/server'
+import { GLOVEE_API_URL } from '@/lib/constants/api'
+import { getSession } from '@/lib/auth/session'
 
 export async function searchTemplates(
   orgName: string,
@@ -37,13 +36,11 @@ export async function searchTemplates(
 /**
  * Fetch template info by id
  */
-export async function fetchTemplateById(id: number): Promise<TemplateType | null> {
+export async function fetchTemplateById(orgName: string, id: number): Promise<TemplateType | null> {
   const accessToken = await getSession()
   if (!accessToken) {
     return null
   }
-
-  const orgName = await getCurrentOrgName()
 
   try {
     const response = await fetch(
@@ -69,16 +66,14 @@ export async function fetchTemplateById(id: number): Promise<TemplateType | null
   }
 }
 
-/**
- * Fetch a template by id with all of its categories, sections, question sets, and questions
- */
-export async function fetchFullTemplateById(id: number): Promise<TemplateType | null> {
+export async function fetchFullTemplateById(
+  orgName: string,
+  id: number
+): Promise<TemplateType | null> {
   const accessToken = await getSession()
   if (!accessToken) {
     return null
   }
-
-  const orgName = await getCurrentOrgName()
 
   try {
     const response = await fetch(

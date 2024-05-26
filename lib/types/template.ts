@@ -48,7 +48,7 @@ export enum TemplateQuestionTypes {
   DOCUMENT = 'DOCUMENT',
 }
 
-export type BaseSettings = Record<string, any>
+export type BaseSettingsType = Record<string, any>
 
 export type TemplateQuestionType = {
   id: number
@@ -56,6 +56,6 @@ export type TemplateQuestionType = {
   prompt: string
   position: number
   helperText?: string
-  settings?: BaseSettings
+  settings?: BaseSettingsType
   questionSetId: number
 }

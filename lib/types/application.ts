@@ -72,7 +72,7 @@ export enum ApplicationQuestionTypes {
   DOCUMENT = 'DOCUMENT',
 }
 
-export type BaseSettings = Record<string, any>
+export type BaseSettingsType = Record<string, any>
 
 export type ApplicationQuestionType = {
   id: number
@@ -80,16 +80,6 @@ export type ApplicationQuestionType = {
   prompt: string
   position: number
   helperText?: string
-  settings?: BaseSettings
+  settings?: BaseSettingsType
   questionSetId: number
-}
-
-export type ApplicationSummaryType = {
-  id: string
-  applicantFirstName: string
-  applicantLastName: string
-  role: string
-  status: string
-  completionRate: number
-  categories: { id: string; name: string; completionRate: number }[]
 }

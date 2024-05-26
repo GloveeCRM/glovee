@@ -1,23 +1,23 @@
 'use server'
 
-import { UserRoleTypes } from '../types/user'
-import {
-  LoginSchema,
-  SignUpSchema,
-  ResetPasswordSchema,
-  ForgotPasswordSchema,
-} from '@/lib/zod/schemas'
+import { UserRoleTypes } from '@/lib/types/user'
+import { GLOVEE_API_URL } from '@/lib/constants/api'
 import {
   DEFAULT_ORG_ADMIN_LOGIN_REDIRECT,
   DEFAULT_ORG_CLIENT_LOGIN_REDIRECT,
   DEFAULT_ORG_MANAGEMENT_LOGIN_REDIRECT,
 } from '@/lib/constants/routes'
 import { validateFormDataAgainstSchema } from '@/lib/utils/validation'
-import { getCurrentOrgName } from '@/lib/utils/server'
-import { getSession, getSessionPayload, removeSession, setSession } from '../auth/session'
-import { GLOVEE_API_URL } from '../constants/api'
+import {
+  LoginSchema,
+  SignUpSchema,
+  ResetPasswordSchema,
+  ForgotPasswordSchema,
+} from '@/lib/zod/schemas'
+import { getSession, getSessionPayload, removeSession, setSession } from '@/lib/auth/session'
 
 export async function login(
+  orgName: string,
   formData: FormData
 ): Promise<{ success?: string; data?: Record<string, any>; error?: string; errors?: any }> {
   const { data, errors } = await validateFormDataAgainstSchema(LoginSchema, formData)
@@ -27,12 +27,6 @@ export async function login(
   }
 
   const { email, password } = data
-
-  const orgName = getCurrentOrgName()
-
-  if (!orgName) {
-    return { error: 'Organization not found!' }
-  }
 
   try {
     const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/login`, {
@@ -66,17 +60,11 @@ export async function login(
   }
 }
 
-export async function refreshToken() {
+export async function refreshToken(orgName: string) {
   const accessToken = await getSession()
 
   if (!accessToken) {
     return { error: 'Token not found!' }
-  }
-
-  const orgName = getCurrentOrgName()
-
-  if (!orgName) {
-    return { error: 'Organization not found!' }
   }
 
   try {
@@ -100,6 +88,7 @@ export async function refreshToken() {
 }
 
 export async function signUp(
+  orgName: string,
   formData: FormData
 ): Promise<{ success?: string; data?: Record<string, any>; error?: string; errors?: any }> {
   const { data, errors } = await validateFormDataAgainstSchema(SignUpSchema, formData)
@@ -109,11 +98,6 @@ export async function signUp(
   }
 
   const { email, password, firstname, lastname } = data
-
-  const orgName = getCurrentOrgName()
-  if (!orgName) {
-    return { error: 'Organization not found!' }
-  }
 
   try {
     const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/client/register`, {
@@ -147,14 +131,11 @@ export async function signUp(
   }
 }
 
-/**
- * Logs out the user.
- */
 export async function logout() {
   return await removeSession()
 }
 
-export async function forgotPassword(formData: FormData) {
+export async function forgotPassword(orgName: string, formData: FormData) {
   const { data, errors } = await validateFormDataAgainstSchema(ForgotPasswordSchema, formData)
 
   if (errors) {
@@ -162,12 +143,6 @@ export async function forgotPassword(formData: FormData) {
   }
 
   const { email } = data
-
-  const orgName = getCurrentOrgName()
-
-  if (!orgName) {
-    return { error: 'Organization not found!' }
-  }
 
   try {
     const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/forgot-password`, {
@@ -191,6 +166,7 @@ export async function forgotPassword(formData: FormData) {
 }
 
 export async function resetPassword(
+  orgName: string,
   resetPasswordToken: string,
   formData: FormData
 ): Promise<{
@@ -206,12 +182,6 @@ export async function resetPassword(
   }
 
   const { password } = data
-
-  const orgName = getCurrentOrgName()
-
-  if (!orgName) {
-    return { error: 'Organization not found!' }
-  }
 
   try {
     const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/reset-password`, {

@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { redirect } from 'next/navigation'
 import { useState } from 'react'
 
 import { FaRegCheckCircle } from 'react-icons/fa'
@@ -9,16 +8,18 @@ import { BiMessageSquareError } from 'react-icons/bi'
 
 import { login } from '@/lib/actions/auth'
 
-import { FormInput, InputLabel, PasswordInput, TextInput } from '../ui/inputs'
+import { FormInput, InputLabel, PasswordInput, TextInput } from '@/components/ui/inputs'
 import { Callout } from '../ui/callout'
 import { SubmitButton } from '../ui/buttons'
 import Divider from '../ui/divider'
+import { useOrgContext } from '@/contexts/org-context'
 
 export default function LoginForm() {
   const [formState, setFormState] = useState<any>({})
+  const { orgName } = useOrgContext()
 
   async function handleLogin(formData: FormData) {
-    login(formData).then((res) => {
+    login(orgName, formData).then((res) => {
       if (res.success) {
         setFormState({ success: res.success })
         setTimeout(() => {

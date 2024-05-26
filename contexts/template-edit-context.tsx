@@ -4,11 +4,7 @@ import { Dispatch, SetStateAction, createContext, useContext, useEffect, useStat
 
 import { fetchFullTemplateById } from '@/lib/data/template'
 import { TemplateType } from '@/lib/types/template'
-import {
-  formatTemplate,
-  getTemplateFromLocalStorage,
-  setTemplateOnLocalStorage,
-} from '@/lib/functions/template'
+import { getTemplateFromLocalStorage, setTemplateOnLocalStorage } from '@/lib/functions/template'
 
 type TemplateEditContextType = {
   templateID: number
@@ -49,11 +45,16 @@ const templateEditContextDefaultValues: TemplateEditContextType = {
 const TemplateEditContext = createContext<TemplateEditContextType>(templateEditContextDefaultValues)
 
 interface TemplateEditProviderProps {
+  orgName: string
   templateID: number
   children: React.ReactNode
 }
 
-export default function TemplateEditProvider({ templateID, children }: TemplateEditProviderProps) {
+export default function TemplateEditProvider({
+  orgName,
+  templateID,
+  children,
+}: TemplateEditProviderProps) {
   const [template, setTemplate] = useState<TemplateType | null>(null)
   const [savedTemplate, setSavedTemplate] = useState<TemplateType | null>(null)
   const [selectedCategoryID, setSelectedCategoryID] = useState<number>(
@@ -68,7 +69,7 @@ export default function TemplateEditProvider({ templateID, children }: TemplateE
 
   useEffect(() => {
     async function fetchAndSetInitialTemplate() {
-      const fetchedTemplate = await fetchFullTemplateById(templateID)
+      const fetchedTemplate = await fetchFullTemplateById(orgName, templateID)
       setSavedTemplate(fetchedTemplate)
 
       const localTemplate = getTemplateFromLocalStorage(templateID)

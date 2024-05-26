@@ -2,11 +2,11 @@
 
 import { createContext, useContext, useEffect, useState } from 'react'
 
-import { DragObject } from '@/lib/types/drag-and-drop'
+import { DragObjectType } from '@/lib/types/drag-and-drop'
 
 type DragAndDropContextType = {
-  draggedObject: DragObject | null
-  setDraggedObject: (draggedObject: DragObject | null) => void
+  draggedObject: DragObjectType | null
+  setDraggedObject: (draggedObject: DragObjectType | null) => void
 }
 
 const dragAndDropContextDefaultValues: DragAndDropContextType = {
@@ -21,7 +21,7 @@ interface DragAndDropProviderProps {
 }
 
 export default function DragAndDropProvider({ children }: DragAndDropProviderProps) {
-  const [draggedObject, setDraggedObject] = useState<DragObject | null>(null)
+  const [draggedObject, setDraggedObject] = useState<DragObjectType | null>(null)
 
   useEffect(() => {
     function handleDragEnd() {

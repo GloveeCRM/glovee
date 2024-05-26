@@ -3,19 +3,22 @@
 import { useEffect, useState, useTransition } from 'react'
 import { ImSpinner2 } from 'react-icons/im'
 
-import { useTemplateEditContext } from '@/contexts/template-edit-context'
-import { updateFullTemplateById } from '@/lib/actions/template'
 import { TemplateType } from '@/lib/types/template'
+import { updateFullTemplateByID } from '@/lib/actions/template'
+import { useOrgContext } from '@/contexts/org-context'
+import { useTemplateEditContext } from '@/contexts/template-edit-context'
 
 export default function SaveTemplateButton() {
   const { templateID, template, isTemplateChanged, setSavedTemplate } = useTemplateEditContext()
   const [isPending, startTransition] = useTransition()
   const [message, setMessage] = useState<string>('')
 
+  const { orgName } = useOrgContext()
+
   function saveTemplateChanges(templateID: number, template: TemplateType) {
     setMessage('Saving changes...')
     startTransition(() => {
-      updateFullTemplateById(templateID, template)
+      updateFullTemplateByID(orgName, templateID, template)
         .then((data) => {
           if (data.success) {
             setSavedTemplate(template)

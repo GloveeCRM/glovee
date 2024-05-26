@@ -7,6 +7,7 @@ import { FaRegCheckCircle } from 'react-icons/fa'
 import { BiMessageSquareError } from 'react-icons/bi'
 
 import { signUp } from '@/lib/actions/auth'
+import { useOrgContext } from '@/contexts/org-context'
 
 import { SubmitButton } from '../ui/buttons'
 import { Callout } from '../ui/callout'
@@ -15,9 +16,10 @@ import Divider from '../ui/divider'
 
 export default function SignUpForm() {
   const [formState, setFormState] = useState<any>({})
+  const { orgName } = useOrgContext()
 
   async function handleSignUp(formData: FormData) {
-    signUp(formData).then((res) => {
+    signUp(orgName, formData).then((res) => {
       if (res.success) {
         setFormState({ success: res.success })
         setTimeout(() => {

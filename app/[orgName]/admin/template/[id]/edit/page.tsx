@@ -5,13 +5,15 @@ import QuestionsEditBoard from '@/components/admin/template/edit/questions-edit-
 
 interface TemplateEditPageProps {
   params: {
+    orgName: string
     id: string
   }
 }
 
 export default async function TemplateEditPage({ params }: TemplateEditPageProps) {
   const templateID = parseInt(params.id)
-  const template = await fetchTemplateById(templateID)
+  const orgName = params.orgName
+  const template = await fetchTemplateById(orgName, templateID)
 
   if (!template) {
     notFound()

@@ -3,16 +3,18 @@ import TemplateInfoCardTitle from './template-info-card-title'
 import TemplateInfoCardDescription from './template-info-card-description'
 
 interface TemplateInfoCardProps {
+  orgName: string
   templateID: number
   editable?: boolean
   className?: string
 }
 export default async function TemplateInfoCard({
+  orgName,
   templateID,
   editable = false,
   className,
 }: TemplateInfoCardProps) {
-  const template = await fetchTemplateById(templateID)
+  const template = await fetchTemplateById(orgName, templateID)
 
   return (
     <div className={`${className} rounded bg-n-600`}>

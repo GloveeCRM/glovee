@@ -1,11 +1,14 @@
 'use client'
 
-import { updateClientStatus } from '@/lib/actions/user'
 import { UserStatusTypes } from '@/lib/types/user'
+import { updateClientStatus } from '@/lib/actions/user'
+import { useOrgContext } from '@/contexts/org-context'
 
 export default function ActiveButton({ clientID }: { clientID: number }) {
+  const { orgName } = useOrgContext()
+
   async function handleClickReactivate() {
-    updateClientStatus(clientID, UserStatusTypes.ACTIVE).then((res) => {
+    updateClientStatus(orgName, clientID, UserStatusTypes.ACTIVE).then((res) => {
       if (res.error) {
         alert(res.error)
       }

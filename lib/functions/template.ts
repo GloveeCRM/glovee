@@ -1,4 +1,4 @@
-import { TemplateCategoryType, TemplateQuestionSetType, TemplateType } from '../types/template'
+import { TemplateCategoryType, TemplateQuestionSetType, TemplateType } from '@/lib/types/template'
 
 export function setTemplateOnLocalStorage(templateId: number, template: TemplateType) {
   localStorage.setItem(`template_${templateId}`, JSON.stringify(template))

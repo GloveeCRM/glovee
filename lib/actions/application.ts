@@ -2,10 +2,10 @@
 
 import { revalidatePath } from 'next/cache'
 
-import { ApplicationSchema } from '../zod/schemas'
-import { validateFormDataAgainstSchema } from '../utils/validation'
-import { getSession } from '../auth/session'
-import { GLOVEE_API_URL } from '../constants/api'
+import { GLOVEE_API_URL } from '@/lib/constants/api'
+import { validateFormDataAgainstSchema } from '@/lib/utils/validation'
+import { ApplicationSchema } from '@/lib/zod/schemas'
+import { getSession } from '@/lib/auth/session'
 
 export async function createNewApplication(
   orgName: string,
@@ -55,9 +55,6 @@ export async function createNewApplication(
   }
 }
 
-/**
- * Set application status to submitted
- */
 export async function submitApplicationById(
   applicationId: number
 ): Promise<{ success?: string; error?: string }> {

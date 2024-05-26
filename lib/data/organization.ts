@@ -1,5 +1,5 @@
-import { OrganizationType } from '../types/organization'
-import { GLOVEE_API_URL } from '../constants/api'
+import { OrganizationType } from '@/lib/types/organization'
+import { GLOVEE_API_URL } from '@/lib/constants/api'
 
 export async function fetchOrganizationProfile(orgName: string): Promise<OrganizationType | null> {
   try {

@@ -4,6 +4,7 @@ import { updateClientProfile } from '@/lib/actions/user'
 import { FormInput, InputLabel, TextInput } from '@/components/ui/inputs'
 import { Button, SubmitButton } from '@/components/ui/buttons'
 import { UserType } from '@/lib/types/user'
+import { useOrgContext } from '@/contexts/org-context'
 
 interface ClientProfileEditProps {
   setIsEditing: (isEditing: boolean) => void
@@ -12,9 +13,10 @@ interface ClientProfileEditProps {
 
 export default function ClientProfileEdit({ setIsEditing, client }: ClientProfileEditProps) {
   const [formState, setFormState] = useState<any>({})
+  const { orgName } = useOrgContext()
 
   async function handleUpdateClientById(formData: FormData) {
-    updateClientProfile(client.id, formData).then((res) => {
+    updateClientProfile(orgName, client.id, formData).then((res) => {
       if (res.success) {
         resetForm()
         setIsEditing(false)

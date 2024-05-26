@@ -21,7 +21,7 @@ export default async function RootLayout({ params, children }: RootLayoutProps) 
   const orgName = params.orgName
 
   return (
-    <AuthProvider token={session}>
+    <AuthProvider orgName={orgName} token={session}>
       <OrgProvider orgName={orgName}>
         <DragAndDropProvider>
           <html lang="en">

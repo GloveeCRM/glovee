@@ -1,14 +1,9 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
+import { UserType } from '@/lib/types/user'
+import { GLOVEE_API_URL } from '@/lib/constants/api'
+import { getSession } from '@/lib/auth/session'
 
-import { GLOVEE_API_URL } from '../constants/api'
-import { getSession } from '../auth/session'
-import { UserType } from '../types/user'
-
-/**
- * Fetches a user by their ID.
- */
 export async function fetchClientProfileById(
   id: number,
   orgName: string

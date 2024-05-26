@@ -2,10 +2,13 @@
 
 import { UserStatusTypes } from '@/lib/types/user'
 import { updateClientStatus } from '@/lib/actions/user'
+import { useOrgContext } from '@/contexts/org-context'
 
 export default function DeactiveButton({ clientID }: { clientID: number }) {
+  const { orgName } = useOrgContext()
+
   async function handleClickDeactivate() {
-    updateClientStatus(clientID, UserStatusTypes.INACTIVE).then((res) => {
+    updateClientStatus(orgName, clientID, UserStatusTypes.INACTIVE).then((res) => {
       if (res.error) {
         alert(res.error)
       }

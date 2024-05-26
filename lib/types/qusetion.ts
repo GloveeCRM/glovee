@@ -1,4 +1,4 @@
-import { BaseSettings, TemplateQuestionType, TemplateQuestionTypes } from './template'
+import { BaseSettingsType, TemplateQuestionType, TemplateQuestionTypes } from './template'
 import { ApplicationQuestionType, ApplicationQuestionTypes } from './application'
 
 export function isTextInputQuestionType(
@@ -11,7 +11,7 @@ export function isTextInputQuestionType(
 }
 
 export type TextInputQuestionType = (TemplateQuestionType | ApplicationQuestionType) & {
-  settings: BaseSettings
+  settings: BaseSettingsType
 }
 
 export function isTextareaQuestionType(
@@ -24,7 +24,7 @@ export function isTextareaQuestionType(
 }
 
 export type TextareaQuestionType = (TemplateQuestionType | ApplicationQuestionType) & {
-  settings: BaseSettings
+  settings: BaseSettingsType
 }
 
 export function isSelectQuestionType(
@@ -37,7 +37,7 @@ export function isSelectQuestionType(
 }
 
 export type SelectQuestionType = (TemplateQuestionType | ApplicationQuestionType) & {
-  settings: BaseSettings
+  settings: BaseSettingsType
 }
 
 export function isDateInputQuestionType(
@@ -50,7 +50,7 @@ export function isDateInputQuestionType(
 }
 
 export type DateInputQuestionType = (TemplateQuestionType | ApplicationQuestionType) & {
-  settings: BaseSettings
+  settings: BaseSettingsType
 }
 
 export function isRadioQuestionType(
@@ -63,7 +63,7 @@ export function isRadioQuestionType(
 }
 
 export type RadioQuestionType = (TemplateQuestionType | ApplicationQuestionType) & {
-  settings: BaseSettings & {
+  settings: BaseSettingsType & {
     display: 'inline' | 'block'
     options: {
       position: number
@@ -82,7 +82,7 @@ export function isCheckboxQuestionType(
 }
 
 export type CheckboxQuestionType = (TemplateQuestionType | ApplicationQuestionType) & {
-  settings: BaseSettings & {
+  settings: BaseSettingsType & {
     display: 'inline' | 'block'
     options: {
       position: number
@@ -101,5 +101,5 @@ export function isDocumentQuestionType(
 }
 
 export type DocumentQuestionType = (TemplateQuestionType | ApplicationQuestionType) & {
-  settings: BaseSettings
+  settings: BaseSettingsType
 }

@@ -1,4 +1,4 @@
-export type DragObject = {
+export type DragObjectType = {
   type: string
   object: any
 }

@@ -1,10 +1,10 @@
 'use client'
 
-import { refreshToken } from '@/lib/actions/auth'
-import { removeSession } from '@/lib/auth/session'
-import { DEFAULT_LOGOUT_REDIRECT } from '@/lib/constants/routes'
-import { redirect } from 'next/navigation'
 import { createContext, useContext, useEffect } from 'react'
+
+import { DEFAULT_LOGOUT_REDIRECT } from '@/lib/constants/routes'
+import { removeSession } from '@/lib/auth/session'
+import { refreshToken } from '@/lib/actions/auth'
 
 type AuthContextType = {
   token: string | null
@@ -17,18 +17,19 @@ const authContextDefaultValues: AuthContextType = {
 const AuthContext = createContext<AuthContextType>(authContextDefaultValues)
 
 interface AuthProviderProps {
+  orgName: string
   token: string | null
   children: React.ReactNode
 }
 
-export default function AuthProvider({ token, children }: AuthProviderProps) {
+export default function AuthProvider({ orgName, token, children }: AuthProviderProps) {
   const value = {
     token,
   }
 
   useEffect(() => {
     async function updateSession() {
-      refreshToken()
+      refreshToken(orgName)
         .then(async (data) => {
           if (data.error) {
             await removeSession()
