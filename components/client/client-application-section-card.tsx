@@ -1,12 +1,16 @@
 'use client'
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { FaRegCircle } from 'react-icons/fa6'
 import { FaRegCircleCheck } from 'react-icons/fa6'
+import { FaRegCircle } from 'react-icons/fa6'
 
 import { ApplicationSectionType } from '@/lib/types/application'
 
-export default function ClientSidebarSectionCard({ section }: { section: ApplicationSectionType }) {
+interface ClientSidebarSectionCardProps {
+  section: ApplicationSectionType
+}
+
+export default function ClientSidebarSectionCard({ section }: ClientSidebarSectionCardProps) {
   const searchParams = useSearchParams()
   const selectedSectionId = searchParams.get('section') || '0'
   const pathname = usePathname()
@@ -22,8 +26,6 @@ export default function ClientSidebarSectionCard({ section }: { section: Applica
     replace(`${pathname}?${params.toString()}`)
   }
 
-  const compeltationRate = 100
-
   return (
     <div
       className={`cursor-pointer rounded-sm ${parseInt(selectedSectionId) === section.id && 'bg-n-600'} p-[4px] pl-[26px] text-[12px] text-n-300`}
@@ -34,7 +36,7 @@ export default function ClientSidebarSectionCard({ section }: { section: Applica
     >
       <div className="flex gap-[4px]">
         <div className="mt-[2px]">
-          {compeltationRate == 100 ? (
+          {section.completionRate == 100 ? (
             <FaRegCircleCheck className="h-[13px] w-[13px] text-green-500" />
           ) : (
             <FaRegCircle className="h-[13px] w-[13px]" />

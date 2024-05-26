@@ -43,6 +43,7 @@ export type ApplicationSectionType = {
   name: string
   position: number
   categoryID: number
+  completionRate: number
   questionSets?: ApplicationQuestionSetType[]
 }
 
