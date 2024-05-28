@@ -66,6 +66,7 @@ export default function CreateNewApplicationButton({
   const [open, setOpen] = useState<boolean>(false)
   const [templates, setTemplates] = useState<TemplateType[]>([])
   const [clients, setClients] = useState<UserType[]>([])
+  const [isSearchingClients, setIsSearchingClients] = useState<boolean>(false)
 
   useEffect(() => {
     searchTemplates(orgName).then((res) => {
@@ -175,37 +176,45 @@ export default function CreateNewApplicationButton({
                           <CommandInput
                             className="rounded border"
                             placeholder="Search for a client"
+                            onFocus={() => setIsSearchingClients(true)}
+                            onBlur={() => {
+                              setTimeout(() => setIsSearchingClients(false), 100)
+                            }}
                           />
-                          <CommandList>
-                            <CommandEmpty className="bg-blue-200">No Clients Found</CommandEmpty>
-                            <CommandGroup>
-                              <div className="absolute left-0 w-full">
-                                <ScrollArea className="max-h-[116px] overflow-auto rounded border bg-white p-[4px]">
-                                  {clients.map((client) => (
-                                    <>
-                                      <CommandItem
-                                        key={client.id}
-                                        value={client.firstName + ' ' + client.lastName}
-                                        onSelect={() => form.setValue('clientID', client.id)}
-                                      >
-                                        <div className="flex items-center gap-[8px]">
-                                          <Image
-                                            src={client.avatarURL || DEFAULT_MALE_CLIENT_LOGO_URL}
-                                            alt=""
-                                            className="rounded-full"
-                                            width={25}
-                                            height={25}
-                                          />
-                                          {client.firstName} {client.lastName}
-                                        </div>
-                                      </CommandItem>
-                                      <Separator />
-                                    </>
-                                  ))}
-                                </ScrollArea>
-                              </div>
-                            </CommandGroup>
-                          </CommandList>
+                          {isSearchingClients && (
+                            <CommandList>
+                              <CommandEmpty className="absolute mt-[4px] w-full rounded border bg-white py-[16px] text-center text-[14px] text-n-500">
+                                No Clients Found
+                              </CommandEmpty>
+                              <CommandGroup>
+                                <div className="absolute left-0 w-full">
+                                  <ScrollArea className="max-h-[116px] overflow-auto rounded border bg-white p-[4px]">
+                                    {clients.map((client) => (
+                                      <>
+                                        <CommandItem
+                                          key={client.id}
+                                          value={client.firstName + ' ' + client.lastName}
+                                          onSelect={() => form.setValue('clientID', client.id)}
+                                        >
+                                          <div className="flex items-center gap-[8px]">
+                                            <Image
+                                              src={client.avatarURL || DEFAULT_MALE_CLIENT_LOGO_URL}
+                                              alt=""
+                                              className="rounded-full"
+                                              width={25}
+                                              height={25}
+                                            />
+                                            {client.firstName} {client.lastName}
+                                          </div>
+                                        </CommandItem>
+                                        <Separator />
+                                      </>
+                                    ))}
+                                  </ScrollArea>
+                                </div>
+                              </CommandGroup>
+                            </CommandList>
+                          )}
                         </Command>
                       )}
                       <FormMessage />
