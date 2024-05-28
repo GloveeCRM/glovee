@@ -160,10 +160,7 @@ export default function CreateNewApplicationButton({
                               {clients.find((c) => c.id === field.value)?.firstName}{' '}
                               {clients.find((c) => c.id === field.value)?.lastName}
                             </div>
-                            <div
-                              className="cursor-pointer"
-                              onClick={() => form.setValue('clientID', 0)}
-                            >
+                            <div className="cursor-pointer" onClick={() => field.onChange(0)}>
                               <IoClose className="h-[20px] w-[20px]" />
                             </div>
                           </div>
@@ -308,7 +305,7 @@ export default function CreateNewApplicationButton({
                   Cancel
                 </Button>
               </DialogClose>
-              <Button type="submit" variant="default" fullWidth={true}>
+              <Button type="submit" variant="default" fullWidth={true} autoFocus>
                 Create
               </Button>
             </div>
