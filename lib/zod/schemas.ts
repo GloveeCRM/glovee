@@ -14,14 +14,11 @@ export const CreateClientSchema = z.object({
 })
 
 export const ApplicationSchema = z.object({
+  clientID: z.number().int().positive({ message: 'Client is required' }),
   role: z.string().min(1, { message: 'Role is required' }),
   applicantFirstName: z.string().min(1, { message: 'First name is required' }),
   applicantLastName: z.string().min(1, { message: 'Last name is required' }),
-  templateID: z
-    .string({
-      required_error: 'Template is required',
-    })
-    .min(1, { message: 'Template is required' }),
+  templateID: z.number().int().positive({ message: 'Template is required' }),
 })
 
 export const TemplateSchema = z.object({

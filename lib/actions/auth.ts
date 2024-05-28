@@ -7,7 +7,7 @@ import {
   DEFAULT_ORG_CLIENT_LOGIN_REDIRECT,
   DEFAULT_ORG_MANAGEMENT_LOGIN_REDIRECT,
 } from '@/lib/constants/routes'
-import { validateFormDataAgainstSchema } from '@/lib/utils/validation'
+import { validateValuesAgainstSchema } from '@/lib/utils/validation'
 import {
   LoginSchema,
   SignUpSchema,
@@ -20,7 +20,7 @@ export async function login(
   orgName: string,
   formData: FormData
 ): Promise<{ success?: string; data?: Record<string, any>; error?: string; errors?: any }> {
-  const { data, errors } = await validateFormDataAgainstSchema(LoginSchema, formData)
+  const { data, errors } = await validateValuesAgainstSchema(LoginSchema, formData)
 
   if (errors) {
     return { errors }
@@ -91,7 +91,7 @@ export async function signUp(
   orgName: string,
   formData: FormData
 ): Promise<{ success?: string; data?: Record<string, any>; error?: string; errors?: any }> {
-  const { data, errors } = await validateFormDataAgainstSchema(SignUpSchema, formData)
+  const { data, errors } = await validateValuesAgainstSchema(SignUpSchema, formData)
 
   if (errors) {
     return { errors }
@@ -136,7 +136,7 @@ export async function logout() {
 }
 
 export async function forgotPassword(orgName: string, formData: FormData) {
-  const { data, errors } = await validateFormDataAgainstSchema(ForgotPasswordSchema, formData)
+  const { data, errors } = await validateValuesAgainstSchema(ForgotPasswordSchema, formData)
 
   if (errors) {
     return { errors }
@@ -175,7 +175,7 @@ export async function resetPassword(
   errors?: any
   data?: Record<string, any>
 }> {
-  const { data, errors } = await validateFormDataAgainstSchema(ResetPasswordSchema, formData)
+  const { data, errors } = await validateValuesAgainstSchema(ResetPasswordSchema, formData)
 
   if (errors) {
     return { errors }

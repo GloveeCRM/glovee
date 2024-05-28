@@ -1,28 +1,24 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import { z } from 'zod'
 
 import { GLOVEE_API_URL } from '@/lib/constants/api'
-import { validateFormDataAgainstSchema } from '@/lib/utils/validation'
+import { validateValuesAgainstSchema } from '@/lib/utils/validation'
 import { ApplicationSchema } from '@/lib/zod/schemas'
 import { getSession } from '@/lib/auth/session'
 
 export async function createNewApplication(
   orgName: string,
-  clientID: number,
-  formData: FormData
+  values: z.infer<typeof ApplicationSchema>
 ): Promise<{ success?: string; error?: string; errors?: any }> {
-  const { data, errors } = await validateFormDataAgainstSchema(ApplicationSchema, formData)
+  const { data, errors } = await validateValuesAgainstSchema(ApplicationSchema, values)
 
-  if (errors || clientID === 0) {
-    if (clientID === 0) {
-      const combinedErrors = { ...errors, clientId: 'Client is required' }
-      return { errors: combinedErrors }
-    }
+  if (errors) {
     return { errors }
   }
 
-  const { role, applicantFirstName, applicantLastName, templateID } = data
+  const { clientID, role, applicantFirstName, applicantLastName, templateID } = data
 
   const accessToken = await getSession()
 

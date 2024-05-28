@@ -4,12 +4,12 @@ import { revalidatePath } from 'next/cache'
 
 import { TemplateType } from '@/lib/types/template'
 import { GLOVEE_API_URL } from '@/lib/constants/api'
-import { validateFormDataAgainstSchema } from '@/lib/utils/validation'
+import { validateValuesAgainstSchema } from '@/lib/utils/validation'
 import { TemplateSchema } from '@/lib/zod/schemas'
 import { getSession } from '@/lib/auth/session'
 
 export async function createNewTemplate(orgName: string, formData: FormData) {
-  const { data, errors } = await validateFormDataAgainstSchema(TemplateSchema, formData)
+  const { data, errors } = await validateValuesAgainstSchema(TemplateSchema, formData)
   if (errors) {
     return { errors }
   }

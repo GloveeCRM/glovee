@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache'
 
 import { UserStatusTypes } from '@/lib/types/user'
 import { GLOVEE_API_URL } from '@/lib/constants/api'
-import { validateFormDataAgainstSchema } from '@/lib/utils/validation'
+import { validateValuesAgainstSchema } from '@/lib/utils/validation'
 import { CreateClientSchema, UpdateClientSchema } from '@/lib/zod/schemas'
 import { getSession } from '@/lib/auth/session'
 
@@ -13,7 +13,7 @@ export async function updateClientProfile(
   clientId: number,
   formData: FormData
 ): Promise<{ success?: string; error?: string; errors?: any }> {
-  const { data, errors } = await validateFormDataAgainstSchema(UpdateClientSchema, formData)
+  const { data, errors } = await validateValuesAgainstSchema(UpdateClientSchema, formData)
 
   if (errors) {
     return { errors }
@@ -94,7 +94,7 @@ export async function createNewClient(
   formData: FormData,
   orgName: string
 ): Promise<{ success?: string; error?: string; errors?: any }> {
-  const { data, errors } = await validateFormDataAgainstSchema(CreateClientSchema, formData)
+  const { data, errors } = await validateValuesAgainstSchema(CreateClientSchema, formData)
   if (errors) {
     return { errors }
   }

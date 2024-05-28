@@ -1,7 +1,7 @@
 'use client'
 
 import { FormInput, InputLabel } from '@/components/ui/inputs'
-import { Select } from '@/components/ui/select'
+import { Select } from '@/components/ui/select2'
 import { useOrgContext } from '@/contexts/org-context'
 import { searchTemplates } from '@/lib/data/template'
 import { TemplateType } from '@/lib/types/template'
