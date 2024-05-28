@@ -49,6 +49,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
+  CommandSeparator,
 } from '@/components/ui/command'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
@@ -147,7 +148,7 @@ export default function CreateNewApplicationButton({
                       <FormLabel>Client</FormLabel>
                       <FormControl>
                         {field.value && (
-                          <div className="mb-[6px] flex items-center justify-between rounded bg-n-200 p-[7px]">
+                          <div className="mb-[6px] flex items-center justify-between rounded bg-n-200 p-[6px]">
                             <div className="flex items-center gap-[8px]">
                               <Image
                                 src={
@@ -172,7 +173,7 @@ export default function CreateNewApplicationButton({
                         )}
                       </FormControl>
                       {field.value === 0 && (
-                        <Command id="cmdk-root" className="relative overflow-visible">
+                        <Command className="relative overflow-visible">
                           <CommandInput
                             className="rounded border"
                             placeholder="Search for a client"
@@ -183,37 +184,34 @@ export default function CreateNewApplicationButton({
                               }, 200)
                             }
                           />
+
                           {isSearchingClients && (
-                            <CommandList>
-                              <CommandEmpty className="absolute mt-[4px] w-full rounded border bg-white py-[16px] text-center text-[14px] text-n-500">
+                            <CommandList className="absolute top-[46px] z-50 max-h-[126px] w-full border">
+                              <CommandEmpty className="py-[8px] text-center text-[14px] text-n-500">
                                 No Clients Found
                               </CommandEmpty>
                               <CommandGroup>
-                                <div className="absolute left-0 w-full">
-                                  <ScrollArea className="max-h-[116px] overflow-auto rounded border bg-white p-[4px]">
-                                    {clients.map((client) => (
-                                      <>
-                                        <CommandItem
-                                          key={client.id}
-                                          value={client.firstName + ' ' + client.lastName}
-                                          onSelect={() => form.setValue('clientID', client.id)}
-                                        >
-                                          <div className="flex items-center gap-[8px]">
-                                            <Image
-                                              src={client.avatarURL || DEFAULT_MALE_CLIENT_LOGO_URL}
-                                              alt=""
-                                              className="rounded-full"
-                                              width={25}
-                                              height={25}
-                                            />
-                                            {client.firstName} {client.lastName}
-                                          </div>
-                                        </CommandItem>
-                                        <Separator />
-                                      </>
-                                    ))}
-                                  </ScrollArea>
-                                </div>
+                                {clients.map((client) => (
+                                  <>
+                                    <CommandItem
+                                      key={client.id}
+                                      value={client.firstName + ' ' + client.lastName}
+                                      onSelect={() => field.onChange(client.id)}
+                                    >
+                                      <div className="flex items-center gap-[8px]">
+                                        <Image
+                                          src={client.avatarURL || DEFAULT_MALE_CLIENT_LOGO_URL}
+                                          alt=""
+                                          className="rounded-full"
+                                          width={25}
+                                          height={25}
+                                        />
+                                        {client.firstName} {client.lastName}
+                                      </div>
+                                    </CommandItem>
+                                    <CommandSeparator />
+                                  </>
+                                ))}
                               </CommandGroup>
                             </CommandList>
                           )}
