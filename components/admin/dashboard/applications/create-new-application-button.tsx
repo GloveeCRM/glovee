@@ -42,6 +42,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command'
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
+import { Separator } from '@/components/ui/separator'
+import { IoClose } from 'react-icons/io5'
 
 interface CreateNewApplicationButtonProp {
   orgName: string
@@ -129,33 +140,74 @@ export default function CreateNewApplicationButton({
               <FormField
                 control={form.control}
                 name="clientID"
-                render={() => {
+                render={({ field }) => {
                   return (
                     <FormItem>
                       <FormLabel>Client</FormLabel>
-                      <Select onValueChange={(value) => form.setValue('clientID', Number(value))}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a client" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {clients.map((client) => (
-                            <SelectItem key={client.id} value={String(client.id)}>
-                              <div className="flex items-center gap-[8px]">
-                                <Image
-                                  src={client.avatarURL || DEFAULT_MALE_CLIENT_LOGO_URL}
-                                  alt=""
-                                  className="rounded-full"
-                                  width={25}
-                                  height={25}
-                                />
-                                {client.firstName} {client.lastName}
+                      <FormControl>
+                        {field.value && (
+                          <div className="mb-[6px] flex items-center justify-between rounded bg-n-200 p-[7px]">
+                            <div className="flex items-center gap-[8px]">
+                              <Image
+                                src={
+                                  clients.find((c) => c.id === field.value)?.avatarURL ||
+                                  DEFAULT_MALE_CLIENT_LOGO_URL
+                                }
+                                alt=""
+                                className="rounded-full"
+                                width={30}
+                                height={30}
+                              />
+                              {clients.find((c) => c.id === field.value)?.firstName}{' '}
+                              {clients.find((c) => c.id === field.value)?.lastName}
+                            </div>
+                            <div
+                              className="cursor-pointer"
+                              onClick={() => form.setValue('clientID', 0)}
+                            >
+                              <IoClose className="h-[20px] w-[20px]" />
+                            </div>
+                          </div>
+                        )}
+                      </FormControl>
+                      {field.value === 0 && (
+                        <Command className="relative overflow-visible">
+                          <CommandInput
+                            className="rounded border"
+                            placeholder="Search for a client"
+                          />
+                          <CommandList>
+                            <CommandEmpty className="bg-blue-200">No Clients Found</CommandEmpty>
+                            <CommandGroup>
+                              <div className="absolute left-0 w-full">
+                                <ScrollArea className="max-h-[116px] overflow-auto rounded border bg-white p-[4px]">
+                                  {clients.map((client) => (
+                                    <>
+                                      <CommandItem
+                                        key={client.id}
+                                        value={client.firstName + ' ' + client.lastName}
+                                        onSelect={() => form.setValue('clientID', client.id)}
+                                      >
+                                        <div className="flex items-center gap-[8px]">
+                                          <Image
+                                            src={client.avatarURL || DEFAULT_MALE_CLIENT_LOGO_URL}
+                                            alt=""
+                                            className="rounded-full"
+                                            width={25}
+                                            height={25}
+                                          />
+                                          {client.firstName} {client.lastName}
+                                        </div>
+                                      </CommandItem>
+                                      <Separator />
+                                    </>
+                                  ))}
+                                </ScrollArea>
                               </div>
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      )}
                       <FormMessage />
                     </FormItem>
                   )
@@ -188,7 +240,6 @@ export default function CreateNewApplicationButton({
                 )
               }}
             />
-
             <FormField
               control={form.control}
               name="applicantFirstName"
@@ -257,7 +308,6 @@ export default function CreateNewApplicationButton({
             </div>
           </form>
         </Form>
-        <DialogFooter></DialogFooter>
       </DialogContent>
     </Dialog>
   )
