@@ -2,10 +2,11 @@
 
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import { set, z } from 'zod'
+import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { GoPlus } from 'react-icons/go'
+import { IoClose } from 'react-icons/io5'
 
 import { TemplateType } from '@/lib/types/template'
 import { ApplicationRoleTypes } from '@/lib/types/application'
@@ -23,7 +24,6 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogHeader,
-  DialogFooter,
   DialogClose,
 } from '@/components/ui/dialog'
 import {
@@ -51,9 +51,6 @@ import {
   CommandList,
   CommandSeparator,
 } from '@/components/ui/command'
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
-import { Separator } from '@/components/ui/separator'
-import { IoClose } from 'react-icons/io5'
 
 interface CreateNewApplicationButtonProp {
   orgName: string
