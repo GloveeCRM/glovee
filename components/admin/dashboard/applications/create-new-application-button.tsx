@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import { z } from 'zod'
+import { set, z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { GoPlus } from 'react-icons/go'
@@ -172,14 +172,16 @@ export default function CreateNewApplicationButton({
                         )}
                       </FormControl>
                       {field.value === 0 && (
-                        <Command className="relative overflow-visible">
+                        <Command id="cmdk-root" className="relative overflow-visible">
                           <CommandInput
                             className="rounded border"
                             placeholder="Search for a client"
                             onFocus={() => setIsSearchingClients(true)}
-                            onBlur={() => {
-                              setTimeout(() => setIsSearchingClients(false), 100)
-                            }}
+                            onBlur={() =>
+                              setTimeout(() => {
+                                setIsSearchingClients(false)
+                              }, 200)
+                            }
                           />
                           {isSearchingClients && (
                             <CommandList>
