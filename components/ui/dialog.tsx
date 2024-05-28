@@ -44,13 +44,13 @@ const DialogContent = React.forwardRef<
       ref={ref}
       onInteractOutside={(e) => e.preventDefault()}
       className={cn(
-        'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border border-neutral-200 bg-white p-[12px] shadow-lg duration-200 sm:rounded-lg dark:border-neutral-800 dark:bg-neutral-950',
+        'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border border-neutral-200 bg-white p-[18px] shadow-lg duration-200 sm:rounded-lg dark:border-neutral-800 dark:bg-neutral-950',
         className
       )}
       {...props}
     >
       {children}
-      <DialogPrimitive.Close className="absolute right-[12px] top-[12px] rounded-sm text-n-600 ring-offset-white hover:text-n-800 focus:outline-none focus:ring-[2px] focus:ring-n-600 focus:ring-offset-[2px] disabled:pointer-events-none data-[state=open]:bg-n-100 data-[state=open]:text-n-500 dark:ring-offset-n-900 dark:focus:ring-neutral-300 dark:data-[state=open]:bg-neutral-800 dark:data-[state=open]:text-neutral-400">
+      <DialogPrimitive.Close className="absolute right-[18px] top-[18px] rounded-sm text-n-600 ring-offset-white hover:text-n-800 focus:outline-none focus:ring-[2px] focus:ring-n-600 focus:ring-offset-[2px] disabled:pointer-events-none data-[state=open]:bg-n-100 data-[state=open]:text-n-500 dark:ring-offset-n-900 dark:focus:ring-neutral-300 dark:data-[state=open]:bg-neutral-800 dark:data-[state=open]:text-neutral-400">
         <Cross2Icon className="h-[20px] w-[20px]" />
         <span className="sr-only">Close</span>
       </DialogPrimitive.Close>
@@ -78,7 +78,7 @@ const DialogTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Title
     ref={ref}
-    className={cn('mr-[20px] text-[18px] font-semibold leading-none tracking-tight', className)}
+    className={cn('mr-[22px] text-[20px] font-semibold leading-none tracking-tight', className)}
     {...props}
   />
 ))
