@@ -175,7 +175,7 @@ export default function CreateNewApplicationButton({
                       {field.value === 0 && (
                         <Command className="relative overflow-visible">
                           <CommandInput
-                            className="rounded border"
+                            className={`rounded border ${isSearchingClients && 'border-n-500'}`}
                             placeholder="Search for a client"
                             onFocus={() => setIsSearchingClients(true)}
                             onBlur={() =>
