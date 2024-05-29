@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Toaster } from 'react-hot-toast'
 
 import '@/app/globals.css'
 import { getSession } from '@/lib/auth/session'
@@ -31,6 +32,16 @@ export default async function RootLayout({ params, children }: RootLayoutProps) 
           <html lang="en">
             <body id="glovee-crm" className="h-svh overflow-hidden">
               {children}
+              <Toaster
+                toastOptions={{
+                  style: {
+                    background: '#333333',
+                    color: '#fff',
+                    borderRadius: '4px',
+                    boxShadow: 'none',
+                  },
+                }}
+              />
             </body>
           </html>
         </DragAndDropProvider>

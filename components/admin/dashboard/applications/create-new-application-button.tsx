@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import { GoPlus } from 'react-icons/go'
 import { IoClose } from 'react-icons/io5'
 
@@ -91,12 +92,27 @@ export default function CreateNewApplicationButton({
     defaultValues: defaultFormValues,
   })
 
+  function applicationCreationSuccessToast(message: string) {
+    toast.success((t) => message, {
+      duration: 3000,
+      position: 'bottom-right',
+    })
+  }
+
+  function applicationCreationErrorToast(message: string) {
+    toast.error((t) => message, {
+      duration: 3000,
+      position: 'bottom-right',
+    })
+  }
+
   async function handleCreateApplication(values: z.infer<typeof ApplicationSchema>) {
     createNewApplication(orgName, values).then((res) => {
       if (res.success) {
         setOpen(false)
+        applicationCreationSuccessToast(res.success || 'Application created!')
       } else {
-        console.error(res)
+        applicationCreationErrorToast(res.error || 'Failed to create application!')
       }
     })
   }
