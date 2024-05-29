@@ -292,11 +292,11 @@ export default function CreateNewApplicationButton({
             <FormField
               control={form.control}
               name="templateID"
-              render={() => {
+              render={({ field }) => {
                 return (
                   <FormItem>
                     <FormLabel>Template</FormLabel>
-                    <Select onValueChange={(value) => form.setValue('templateID', Number(value))}>
+                    <Select onValueChange={(value) => field.onChange(Number(value))}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select a template" />
