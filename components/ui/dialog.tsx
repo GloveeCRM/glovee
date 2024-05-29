@@ -33,6 +33,7 @@ const DialogTrigger = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Trigger ref={ref} className={cn('focus:outline-none', className)} {...props} />
 ))
+DialogTrigger.displayName = DialogPrimitive.Trigger.displayName
 
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,

@@ -77,7 +77,7 @@ export default function CreateNewApplicationButton({
         setClients(res)
       })
     }
-  }, [orgName])
+  }, [orgName, client])
 
   const defaultFormValues = {
     clientID: client?.id || 0,

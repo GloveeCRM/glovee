@@ -3,7 +3,7 @@
 import { BiTrash } from 'react-icons/bi'
 import { FiEdit, FiMoreHorizontal } from 'react-icons/fi'
 
-import { Popover, PopoverContent, PopoverTrigger, usePopover } from '@/components/ui/popover'
+import { Popover, PopoverContent, PopoverTrigger, usePopover } from '@/components/ui/popover2'
 
 interface SectionMenuButtonProps {
   onClickRename: () => void

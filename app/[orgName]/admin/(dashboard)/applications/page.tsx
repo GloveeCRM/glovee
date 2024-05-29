@@ -19,7 +19,7 @@ export default function ApplicationsPage({ params, searchParams }: ApplicationsP
   const query = searchParams.query?.trim() || ''
 
   return (
-    <div className="px-[8px] pt-[12px]">
+    <div className="mt-[8px]">
       <ApplicationPageToolbar orgName={orgName} />
       <ApplicationsTable orgName={orgName} query={query} />
     </div>

@@ -4,7 +4,7 @@ import { BiTrash } from 'react-icons/bi'
 import { FiMoreHorizontal } from 'react-icons/fi'
 
 import { deleteTemplateByID } from '@/lib/actions/template'
-import { Popover, PopoverContent, PopoverTrigger } from '../../../ui/popover'
+import { Popover, PopoverContent, PopoverTrigger } from '../../../ui/popover2'
 
 interface TemplateCardOptionsMenuButtonProps {
   orgName: string

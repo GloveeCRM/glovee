@@ -3,7 +3,7 @@
 import { FiMoreHorizontal } from 'react-icons/fi'
 import { BiTrash } from 'react-icons/bi'
 
-import { Popover, PopoverContent, PopoverTrigger, usePopover } from '@/components/ui/popover'
+import { Popover, PopoverContent, PopoverTrigger, usePopover } from '@/components/ui/popover2'
 
 interface TemplateQuestionMenuButtonProps {
   onClickDelete: () => void
