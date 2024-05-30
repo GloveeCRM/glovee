@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { UserType } from '@/lib/types/user'
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
 import { searchClients } from '@/lib/data/user'
-import { TBody, TD, TH, THead, TR, Table } from '@/components/ui/table'
+import { TBody, TD, TH, THead, TR, Table } from '@/components/ui/table2'
 
 interface ClientsTableProps {
   orgName: string
