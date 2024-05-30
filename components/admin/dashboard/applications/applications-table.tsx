@@ -11,6 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { Badge } from '@/components/ui/badge'
 
 interface ApplicationsTableProps {
   orgName: string
@@ -18,12 +19,12 @@ interface ApplicationsTableProps {
 }
 
 export default async function ApplicationsTable({ orgName, query }: ApplicationsTableProps) {
-  const applications = await searchApplications(orgName, query)
+  const applications = await searchApplications(orgName, query, 50, 0)
 
   return (
     <div className="mt-[20px] h-full overflow-auto">
       <Table>
-        <TableHeader>
+        <TableHeader className="sticky top-0 bg-white shadow-sm">
           <TableRow>
             <TableHead>Application ID</TableHead>
             <TableHead>Client</TableHead>
@@ -38,7 +39,7 @@ export default async function ApplicationsTable({ orgName, query }: Applications
               <TableCell>{application.id}</TableCell>
               <TableCell>
                 <Link href={`/admin/clients/${application.clientID}`}>
-                  <div className="flex items-end gap-[6px]">
+                  <div className="flex items-center gap-[6px]">
                     <div>
                       <Image
                         src={DEFAULT_MALE_CLIENT_LOGO_URL}
@@ -54,17 +55,15 @@ export default async function ApplicationsTable({ orgName, query }: Applications
               </TableCell>
               <TableCell>{application.templateName}</TableCell>
               <TableCell className="max-w-[100px] truncate">
-                <span className="rounded-full bg-n-300 px-[6px] py-[2px] text-[10px] text-n-700">
-                  <span className="font-semibold">
-                    {application.role} ({application.applicantFirstName}{' '}
-                    {application.applicantLastName})
+                <Badge variant="secondary" className="flex w-fit gap-[2px]">
+                  <span className="font-semibold">{application.role}</span>
+                  <span>
+                    ({application.applicantFirstName} {application.applicantLastName})
                   </span>
-                </span>
+                </Badge>
               </TableCell>
               <TableCell>
-                <span className="rounded-full bg-n-600 px-[6px] py-[2px] text-[12px] text-white">
-                  {application.status}
-                </span>
+                <Badge>{application.status}</Badge>
               </TableCell>
             </TableRow>
           ))}
