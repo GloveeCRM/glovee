@@ -12,6 +12,15 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination'
 
 interface ApplicationsTableProps {
   orgName: string
@@ -19,59 +28,86 @@ interface ApplicationsTableProps {
 }
 
 export default async function ApplicationsTable({ orgName, query }: ApplicationsTableProps) {
-  const applications = await searchApplications(orgName, query, 50, 0)
+  const applications = await searchApplications(orgName, query, 15, 0)
 
   return (
     <div className="mt-[20px] flex h-full flex-col overflow-auto">
-      <div className="overflow-auto">
-        <Table>
-          <TableHeader className="sticky top-0 bg-white shadow-sm">
-            <TableRow>
-              <TableHead>Application ID</TableHead>
-              <TableHead>Client</TableHead>
-              <TableHead>Template</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>Status</TableHead>
+      <Table>
+        <TableHeader className="sticky top-0 bg-white shadow-sm">
+          <TableRow>
+            <TableHead>Application ID</TableHead>
+            <TableHead>Client</TableHead>
+            <TableHead>Template</TableHead>
+            <TableHead>Role</TableHead>
+            <TableHead>Status</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {applications.map((application) => (
+            <TableRow key={application.id}>
+              <TableCell>{application.id}</TableCell>
+              <TableCell>
+                <Link href={`/admin/clients/${application.clientID}`}>
+                  <div className="flex items-center gap-[6px]">
+                    <Image
+                      src={DEFAULT_MALE_CLIENT_LOGO_URL}
+                      alt=""
+                      width={30}
+                      height={30}
+                      className="rounded-full"
+                    />
+                    <div>{application.clientID}</div>
+                  </div>
+                </Link>
+              </TableCell>
+              <TableCell>{application.templateName}</TableCell>
+              <TableCell className="max-w-[100px] truncate">
+                <Badge variant="secondary" className="w-fit gap-[2px]">
+                  <span className="font-semibold">{application.role}</span>
+                  <span>
+                    ({application.applicantFirstName} {application.applicantLastName})
+                  </span>
+                </Badge>
+              </TableCell>
+              <TableCell>
+                <Badge>{application.status}</Badge>
+              </TableCell>
             </TableRow>
-          </TableHeader>
-          <TableBody>
-            {applications.map((application) => (
-              <TableRow key={application.id}>
-                <TableCell>{application.id}</TableCell>
-                <TableCell>
-                  <Link href={`/admin/clients/${application.clientID}`}>
-                    <div className="flex items-center gap-[6px]">
-                      <div>
-                        <Image
-                          src={DEFAULT_MALE_CLIENT_LOGO_URL}
-                          alt=""
-                          width={30}
-                          height={30}
-                          className="rounded-full"
-                        />
-                      </div>
-                      <div>{application.clientID}</div>
-                    </div>
-                  </Link>
-                </TableCell>
-                <TableCell>{application.templateName}</TableCell>
-                <TableCell className="max-w-[100px] truncate">
-                  <Badge variant="secondary" className="flex w-fit gap-[2px]">
-                    <span className="font-semibold">{application.role}</span>
-                    <span>
-                      ({application.applicantFirstName} {application.applicantLastName})
-                    </span>
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  <Badge>{application.status}</Badge>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
-      <div className="bg-red-100">Hi</div>
+          ))}
+        </TableBody>
+      </Table>
+      <PaginationDemo />
+    </div>
+  )
+}
+
+function PaginationDemo() {
+  return (
+    <div className="p-[6px]">
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious href="#" />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#">1</PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#" isActive>
+              2
+            </PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#">3</PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationNext href="#" />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </div>
   )
 }
