@@ -42,11 +42,11 @@ export async function searchClients(
   query: string = '',
   limit: number = 0,
   offset: number = 0
-): Promise<UserType[]> {
+): Promise<{ clients: UserType[] | null; total: number }> {
   try {
     const accessToken = await getSession()
     if (!accessToken) {
-      return []
+      return { clients: null, total: 0 }
     }
 
     const response = await fetch(
@@ -63,11 +63,11 @@ export async function searchClients(
     const data = await response.json()
 
     if (data.status === 'error') {
-      return []
+      return { clients: null, total: 0 }
     } else {
-      return data.data.clients || []
+      return { clients: data.data.clients, total: data.data.total }
     }
   } catch (error) {
-    return []
+    return { clients: null, total: 0 }
   }
 }

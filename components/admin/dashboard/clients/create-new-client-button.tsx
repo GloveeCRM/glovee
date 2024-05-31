@@ -84,9 +84,9 @@ export default function CreateNewClientButton() {
   return (
     <Dialog open={isOpen} onOpenChange={handleDialogOpenChange}>
       <DialogTrigger asChild>
-        <Button variant="outline">
+        <Button variant="outline" className="mr-[6px]">
           <GoPlus className="mr-[6px] h-[20px] w-[20px]" />
-          <span>New Application</span>
+          <span>New Client</span>
         </Button>
       </DialogTrigger>
       <DialogContent>

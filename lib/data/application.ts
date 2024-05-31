@@ -88,7 +88,11 @@ export async function searchApplications(
     )
 
     const data = await response.json()
-    return { applications: data.data.applications, total: data.data.total }
+    if (data.status === 'error') {
+      return { applications: null, total: 0 }
+    } else {
+      return { applications: data.data.applications, total: data.data.total }
+    }
   } catch (error) {
     return { applications: null, total: 0 }
   }
