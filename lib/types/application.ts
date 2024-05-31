@@ -1,3 +1,5 @@
+import { UserType } from './user'
+
 export type Applicant = {
   firstName: string
   lastName: string
@@ -19,11 +21,10 @@ export enum ApplicationRoleTypes {
 export type ApplicationType = {
   id: number
   organizationID: number
-  clientID: number
+  client: UserType
   role: ApplicationRoleTypes
   templateName: string
-  applicantFirstName: string
-  applicantLastName: string
+  applicant: Applicant
   status: ApplicationStatusTypes
   completionRate: number
   categories?: ApplicationCategoryType[]

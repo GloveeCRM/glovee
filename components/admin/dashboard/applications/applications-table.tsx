@@ -52,7 +52,7 @@ export default async function ApplicationsTable({
               <TableRow key={application.id}>
                 <TableCell>{application.id}</TableCell>
                 <TableCell>
-                  <Link href={`/admin/clients/${application.clientID}`}>
+                  <Link href={`/admin/clients/${application.client.id}`}>
                     <div className="flex w-max items-center gap-[6px] hover:text-blue-500">
                       <Image
                         src={DEFAULT_MALE_CLIENT_LOGO_URL}
@@ -61,7 +61,7 @@ export default async function ApplicationsTable({
                         height={30}
                         className="rounded-full"
                       />
-                      <div>{application.clientID}</div>
+                      <div>{application.client.id}</div>
                     </div>
                   </Link>
                 </TableCell>
@@ -70,7 +70,7 @@ export default async function ApplicationsTable({
                   <Badge variant="secondary" className="gap-[2px]">
                     <span className="font-semibold">{application.role}</span>
                     <span className="truncate">
-                      ({application.applicantFirstName} {application.applicantLastName})
+                      ({application.applicant.firstName} {application.applicant.lastName})
                     </span>
                   </Badge>
                 </TableCell>
