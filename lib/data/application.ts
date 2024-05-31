@@ -67,10 +67,10 @@ export async function searchApplications(
   query: string = '',
   limit: number = 0,
   offset: number = 0
-): Promise<ApplicationType[]> {
+): Promise<{ applications: ApplicationType[] | null; total: number }> {
   const accessToken = await getSession()
   if (!accessToken) {
-    return []
+    return { applications: null, total: 0 }
   }
 
   try {
@@ -86,9 +86,9 @@ export async function searchApplications(
     )
 
     const data = await response.json()
-    return data.data.applications
+    return { applications: data.data.applications, total: data.data.total }
   } catch (error) {
-    return []
+    return { applications: null, total: 0 }
   }
 }
 
