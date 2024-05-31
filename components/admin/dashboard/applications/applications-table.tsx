@@ -55,13 +55,15 @@ export default async function ApplicationsTable({
                   <Link href={`/admin/clients/${application.client.id}`}>
                     <div className="flex w-max items-center gap-[6px] hover:text-blue-500">
                       <Image
-                        src={DEFAULT_MALE_CLIENT_LOGO_URL}
+                        src={application.client.avatarURL || DEFAULT_MALE_CLIENT_LOGO_URL}
                         alt=""
                         width={30}
                         height={30}
                         className="rounded-full"
                       />
-                      <div>{application.client.id}</div>
+                      <div>
+                        {application.client.firstName} {application.client.lastName}
+                      </div>
                     </div>
                   </Link>
                 </TableCell>
