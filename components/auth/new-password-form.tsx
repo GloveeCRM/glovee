@@ -8,7 +8,7 @@ import { FaRegCheckCircle } from 'react-icons/fa'
 import { resetPassword } from '@/lib/actions/auth'
 import Divider from '../ui/divider'
 import { FormInput, InputLabel, PasswordInput } from '../ui/inputs'
-import { Callout } from '../ui/callout'
+import Callout from '../ui/callout'
 import { SubmitButton } from '../ui/buttons'
 import { useOrgContext } from '@/contexts/org-context'
 

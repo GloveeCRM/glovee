@@ -4,7 +4,7 @@ interface CalloutProps {
   className?: string
 }
 
-export function Callout({ variant = 'info', className, children }: CalloutProps) {
+export default function Callout({ variant = 'info', className, children }: CalloutProps) {
   const colorClasses =
     variant === 'success'
       ? 'bg-emerald-100 text-emerald-700'

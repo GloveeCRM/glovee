@@ -1,5 +1,7 @@
 'use server'
 
+import { z } from 'zod'
+
 import { UserRoleTypes } from '@/lib/types/user'
 import { GLOVEE_API_URL } from '@/lib/constants/api'
 import {
@@ -14,13 +16,14 @@ import {
   ResetPasswordSchema,
   ForgotPasswordSchema,
 } from '@/lib/zod/schemas'
+
 import { getSession, getSessionPayload, removeSession, setSession } from '@/lib/auth/session'
 
 export async function login(
   orgName: string,
-  formData: FormData
+  values: z.infer<typeof LoginSchema>
 ): Promise<{ success?: string; data?: Record<string, any>; error?: string; errors?: any }> {
-  const { data, errors } = await validateValuesAgainstSchema(LoginSchema, formData)
+  const { data, errors } = await validateValuesAgainstSchema(LoginSchema, values)
 
   if (errors) {
     return { errors }

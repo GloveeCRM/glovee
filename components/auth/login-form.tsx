@@ -1,90 +1,119 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
-
+import { z } from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { FaRegCheckCircle } from 'react-icons/fa'
 import { BiMessageSquareError } from 'react-icons/bi'
 
 import { login } from '@/lib/actions/auth'
-
-import { FormInput, InputLabel, PasswordInput, TextInput } from '@/components/ui/inputs'
-import { Callout } from '../ui/callout'
-import { SubmitButton } from '../ui/buttons'
-import Divider from '../ui/divider'
+import { LoginSchema } from '@/lib/zod/schemas'
 import { useOrgContext } from '@/contexts/org-context'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components//ui/form'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components//ui/button'
+import Divider from '@/components//ui/divider'
+import Callout from '@/components//ui/callout'
 
 export default function LoginForm() {
-  const [formState, setFormState] = useState<any>({})
   const { orgName } = useOrgContext()
 
-  async function handleLogin(formData: FormData) {
-    login(orgName, formData).then((res) => {
+  const defaultFormValues = {
+    email: '',
+    password: '',
+  }
+
+  const form = useForm<z.infer<typeof LoginSchema>>({
+    resolver: zodResolver(LoginSchema),
+    defaultValues: defaultFormValues,
+  })
+
+  function handleLogin(orgName: string, values: z.infer<typeof LoginSchema>) {
+    login(orgName, values).then((res) => {
       if (res.success) {
-        setFormState({ success: res.success })
+        form.setError('root.success', {
+          message: res.success,
+        })
         setTimeout(() => {
           window.location.href = res.data?.redirectLink
         }, 500)
       } else {
-        setFormState(res)
+        form.setError('root.error', {
+          message: res.error,
+        })
       }
     })
   }
 
-  const emailError = formState?.errors?.email ? formState?.errors?.email[0] : ''
-  const passwordError = formState?.errors?.password ? formState?.errors?.password[0] : ''
-
   return (
-    <form
+    <div
       id="login-form"
-      action={handleLogin}
       className="w-full max-w-[420px] rounded-md border border-n-300 p-[20px] shadow-sm"
     >
       <h1 id="login-form-title" className="mb-[8px] text-center text-xl font-bold text-n-700">
         Login
       </h1>
-
       <Divider className="mb-[16px] border-n-300" />
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit((values) => handleLogin(orgName, values))}>
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input type="email" placeholder="example@gmail.com" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem className="mb-[20px] mt-[12px]">
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input type="password" placeholder="Password" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-      <div id="form-inputs" className="mb-[26px] flex flex-col gap-[14px]">
-        <FormInput id="email-input" errors={emailError}>
-          <InputLabel htmlFor="email" text="md" weight="semibold">
-            Email
-          </InputLabel>
-          <TextInput id="email" name="email" placeholder="example@gmail.com" />
-        </FormInput>
-        <FormInput id="password-input" errors={passwordError}>
-          <InputLabel htmlFor="password" text="md" weight="semibold">
-            Password
-          </InputLabel>
-          <PasswordInput id="password" name="password" placeholder="Password" />
-        </FormInput>
-      </div>
+          {form.formState.errors.root?.success?.message && (
+            <Callout variant="success" className="mb-[20px]">
+              <div className="flex items-center gap-[4px]">
+                <FaRegCheckCircle className="h-[16px] w-[16px]" />
+                <span>{form.formState.errors.root.success.message}</span>
+              </div>
+            </Callout>
+          )}
 
-      {formState?.success && (
-        <Callout variant="success" className="mb-[12px]">
-          <div className="flex items-center gap-[4px]">
-            <FaRegCheckCircle className="h-[16px] w-[16px]" />
-            <span>{formState.success}</span>
-          </div>
-        </Callout>
-      )}
+          {form.formState.errors.root?.error?.message && (
+            <Callout variant="error" className="mb-[20px]">
+              <div className="flex items-center gap-[4px]">
+                <BiMessageSquareError className="h-[16px] w-[16px]" />
+                <span>{form.formState.errors.root.error.message}</span>
+              </div>
+            </Callout>
+          )}
 
-      {formState?.error && (
-        <Callout variant="error" className="mb-[12px]">
-          <div className="flex items-center gap-[4px]">
-            <BiMessageSquareError className="h-[16px] w-[16px]" />
-            <span>{formState.error}</span>
-          </div>
-        </Callout>
-      )}
-
-      <div id="form-buttons">
-        <SubmitButton size="full" className="p-[8px]">
-          Login
-        </SubmitButton>
-      </div>
-
+          <Button type="submit" variant="default" fullWidth={true}>
+            Login
+          </Button>
+        </form>
+      </Form>
       <p id="forgot-password" className="mt-[8px]">
         <Link
           href="/forgot-password"
@@ -103,6 +132,6 @@ export default function LoginForm() {
           Sign Up
         </Link>
       </div>
-    </form>
+    </div>
   )
 }

@@ -25,7 +25,7 @@ export default async function ApplicationsTable({
   query,
   currentPage = 1,
 }: ApplicationsTableProps) {
-  const totalRowsPerPage = 12
+  const totalRowsPerPage = 14
   const { applications, total } = await searchApplications(
     orgName,
     query,

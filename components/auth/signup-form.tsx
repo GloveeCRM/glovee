@@ -10,7 +10,7 @@ import { signUp } from '@/lib/actions/auth'
 import { useOrgContext } from '@/contexts/org-context'
 
 import { SubmitButton } from '../ui/buttons'
-import { Callout } from '../ui/callout'
+import Callout from '../ui/callout'
 import { FormInput, InputLabel, PasswordInput, TextInput } from '../ui/inputs'
 import Divider from '../ui/divider'
 
