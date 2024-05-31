@@ -5,20 +5,14 @@ import { z } from 'zod'
 
 import { GLOVEE_API_URL } from '@/lib/constants/api'
 import { validateValuesAgainstSchema } from '@/lib/utils/validation'
-import { ApplicationSchema } from '@/lib/zod/schemas'
+import { CreateApplicationSchema } from '@/lib/zod/schemas'
 import { getSession } from '@/lib/auth/session'
 
 export async function createNewApplication(
   orgName: string,
-  values: z.infer<typeof ApplicationSchema>
-): Promise<{ success?: string; error?: string; errors?: any }> {
-  const { data, errors } = await validateValuesAgainstSchema(ApplicationSchema, values)
-
-  if (errors) {
-    return { errors }
-  }
-
-  const { clientID, role, applicantFirstName, applicantLastName, templateID } = data
+  values: z.infer<typeof CreateApplicationSchema>
+): Promise<{ success?: string; error?: string }> {
+  const { clientID, role, applicantFirstName, applicantLastName, templateID } = values
 
   const accessToken = await getSession()
 
@@ -31,7 +25,7 @@ export async function createNewApplication(
       },
       body: JSON.stringify({
         clientID,
-        templateID: parseInt(templateID),
+        templateID: templateID || null,
         role,
         applicantFirstName,
         applicantLastName,

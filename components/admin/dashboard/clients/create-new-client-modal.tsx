@@ -2,11 +2,10 @@
 
 import { MouseEvent, useState } from 'react'
 
-import { createNewClient } from '@/lib/actions/user'
 import { Modal, useModal } from '@/components/ui/modal'
 import { FormInput, InputLabel, TextInput } from '@/components/ui/inputs'
 import { Button, SubmitButton } from '@/components/ui/buttons'
-import Callout from '@/components/ui/callout'
+import { Callout } from '@/components/ui/callout'
 import { BiMessageSquareError } from 'react-icons/bi'
 import { useOrgContext } from '@/contexts/org-context'
 
@@ -16,14 +15,14 @@ export default function CreateNewClientModal() {
   const { closeModal } = useModal()
 
   async function handleCreateClient(formData: FormData) {
-    createNewClient(formData, orgName).then((res) => {
-      if (res.success) {
-        resetForm()
-        closeModal()
-      } else {
-        setFormState(res)
-      }
-    })
+    // createNewClient(formData, orgName).then((res) => {
+    //   if (res.success) {
+    //     resetForm()
+    //     closeModal()
+    //   } else {
+    //     setFormState(res)
+    //   }
+    // })
   }
 
   function resetForm() {

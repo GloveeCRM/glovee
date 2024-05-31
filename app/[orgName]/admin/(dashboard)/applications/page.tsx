@@ -22,7 +22,7 @@ export default function ApplicationsPage({ params, searchParams }: ApplicationsP
 
   return (
     <div className="flex h-[calc(100svh-16px)] flex-col gap-[8px] overflow-hidden">
-      <ApplicationPageToolbar orgName={orgName} />
+      <ApplicationPageToolbar />
       <ApplicationsTable orgName={orgName} query={query} currentPage={currentPage} />
     </div>
   )

@@ -20,8 +20,8 @@ import {
 } from '@/components//ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components//ui/button'
-import Divider from '@/components//ui/divider'
-import Callout from '@/components//ui/callout'
+import { Divider } from '@/components//ui/divider'
+import { Callout } from '@/components/ui/callout'
 
 export default function LoginForm() {
   const { orgName } = useOrgContext()

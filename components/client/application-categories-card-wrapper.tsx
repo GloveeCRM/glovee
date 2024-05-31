@@ -4,7 +4,7 @@ import ClientApplicationCategoryCard from './client-application-category-card'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Fragment, useEffect } from 'react'
 import { ApplicationCategoryType } from '@/lib/types/application'
-import Divider from '../ui/divider'
+import { Divider } from '@/components/ui/divider'
 
 export default function ApplicationCategoriesCardWrapper({
   categories,

@@ -1,10 +1,10 @@
 import SearchByParams from '@/components/search-by-params'
-import CreateNewClientButton from './create-new-client-button'
+import CreateNewClientButton from './create-new-client-button2'
 
 export default function ClinetPageToolbar() {
   return (
-    <div className="flex items-end justify-between">
-      <div className="w-[300px]">
+    <div className="mt-[8px] flex items-end justify-between">
+      <div className="ml-[6px] w-[300px]">
         <SearchByParams placeholder="Search clients" />
       </div>
       <CreateNewClientButton />

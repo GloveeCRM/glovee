@@ -6,10 +6,10 @@ import { BiMessageSquareError } from 'react-icons/bi'
 import { FaRegCheckCircle } from 'react-icons/fa'
 
 import { resetPassword } from '@/lib/actions/auth'
-import Divider from '../ui/divider'
+import { Divider } from '@/components/ui/divider'
 import { FormInput, InputLabel, PasswordInput } from '../ui/inputs'
-import Callout from '../ui/callout'
-import { SubmitButton } from '../ui/buttons'
+import { Callout } from '@/components/ui/callout'
+import { SubmitButton } from '@/components/ui/buttons'
 import { useOrgContext } from '@/contexts/org-context'
 
 interface NewPasswordFormProps {

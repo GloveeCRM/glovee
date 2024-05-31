@@ -8,12 +8,12 @@ export const UpdateClientSchema = z.object({
 })
 
 export const CreateClientSchema = z.object({
-  clientFirstName: z.string().min(1, { message: 'First name is required' }),
-  clientLastName: z.string().min(1, { message: 'Last name is required' }),
-  clientEmail: z.string().min(1, { message: 'Email is required' }).email(),
+  firstName: z.string().min(1, { message: 'First name is required' }),
+  lastName: z.string().min(1, { message: 'Last name is required' }),
+  email: z.string().min(1, { message: 'Email is required' }).email(),
 })
 
-export const ApplicationSchema = z.object({
+export const CreateApplicationSchema = z.object({
   clientID: z.number().int().positive({ message: 'Client is required' }),
   role: z.string().min(1, { message: 'Role is required' }),
   applicantFirstName: z.string().min(1, { message: 'First name is required' }),

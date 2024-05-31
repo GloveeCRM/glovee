@@ -6,11 +6,11 @@ import { FaRegCheckCircle } from 'react-icons/fa'
 import { BiMessageSquareError } from 'react-icons/bi'
 
 import { forgotPassword } from '@/lib/actions/auth'
-import { FormInput, InputLabel, TextInput } from '../ui/inputs'
-import Callout from '../ui/callout'
-import { SubmitButton } from '../ui/buttons'
-import Divider from '../ui/divider'
 import { useOrgContext } from '@/contexts/org-context'
+import { FormInput, InputLabel, TextInput } from '@/components/ui/inputs'
+import { Callout } from '@/components/ui/callout'
+import { SubmitButton } from '@/components/ui/buttons'
+import { Divider } from '@/components/ui/divider'
 
 export default function ForgotPasswordForm() {
   const [formState, setFormState] = useState<any>({})

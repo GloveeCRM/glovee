@@ -4,7 +4,7 @@ import { PiCheckBold } from 'react-icons/pi'
 
 import { TemplateQuestionTypes } from '@/lib/types/template'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
-import Divider from '@/components/ui/divider'
+import { Divider } from '@/components/ui/divider'
 
 export default function CheckboxQuestionIcon() {
   const { setDraggedObject } = useDragAndDropContext()

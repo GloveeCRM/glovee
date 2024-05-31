@@ -12,7 +12,6 @@ export default async function ClientsPage({ params, searchParams }: ClientsPageP
 
   return (
     <div>
-      <h1 className="mb-[22px] text-[24px] font-bold">Clients</h1>
       <ClinetPageToolbar />
       <ClientsTable orgName={orgName} query={query} />
     </div>

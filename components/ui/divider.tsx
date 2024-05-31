@@ -4,7 +4,7 @@ interface DividerProps {
   size?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10
 }
 
-export default function Divider({ orientation = 'horizontal', className, size = 1 }: DividerProps) {
+export function Divider({ orientation = 'horizontal', className, size = 1 }: DividerProps) {
   const horizontalClasses = `w-full ${
     size === 1
       ? 'border-t-[1px]'

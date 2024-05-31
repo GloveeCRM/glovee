@@ -16,7 +16,8 @@ import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
 import { searchClients } from '@/lib/data/user'
 import { searchTemplates } from '@/lib/data/template'
 import { createNewApplication } from '@/lib/actions/application'
-import { ApplicationSchema } from '@/lib/zod/schemas'
+import { CreateApplicationSchema } from '@/lib/zod/schemas'
+import { useOrgContext } from '@/contexts/org-context'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -54,15 +55,12 @@ import {
 } from '@/components/ui/command'
 
 interface CreateNewApplicationButtonProp {
-  orgName: string
   client?: UserType
 }
 
-export default function CreateNewApplicationButton({
-  orgName,
-  client,
-}: CreateNewApplicationButtonProp) {
-  const [open, setOpen] = useState<boolean>(false)
+export default function CreateNewApplicationButton({ client }: CreateNewApplicationButtonProp) {
+  const { orgName } = useOrgContext()
+  const [isOpen, setIsOpen] = useState<boolean>(false)
   const [templates, setTemplates] = useState<TemplateType[]>([])
   const [clients, setClients] = useState<UserType[]>([])
   const [isSearchingClients, setIsSearchingClients] = useState<boolean>(false)
@@ -87,8 +85,8 @@ export default function CreateNewApplicationButton({
     templateID: 0,
   }
 
-  const form = useForm<z.infer<typeof ApplicationSchema>>({
-    resolver: zodResolver(ApplicationSchema),
+  const form = useForm<z.infer<typeof CreateApplicationSchema>>({
+    resolver: zodResolver(CreateApplicationSchema),
     defaultValues: defaultFormValues,
   })
 
@@ -106,24 +104,27 @@ export default function CreateNewApplicationButton({
     })
   }
 
-  async function handleCreateApplication(values: z.infer<typeof ApplicationSchema>) {
-    createNewApplication(orgName, values).then((res) => {
-      if (res.success) {
-        setOpen(false)
-        applicationCreationSuccessToast(res.success || 'Application created!')
-      } else {
-        applicationCreationErrorToast(res.error || 'Failed to create application!')
-      }
-    })
+  async function handleCreateApplication(values: z.infer<typeof CreateApplicationSchema>) {
+    createNewApplication(orgName, values)
+      .then((res) => {
+        if (res.success) {
+          applicationCreationSuccessToast(res.success || 'Application created!')
+        } else {
+          applicationCreationErrorToast(res.error || 'Failed to create application!')
+        }
+      })
+      .finally(() => {
+        setIsOpen(false)
+      })
   }
 
   function handleDialogOpenChange(isOpen: boolean) {
-    setOpen(isOpen)
+    setIsOpen(isOpen)
     form.reset(defaultFormValues)
   }
 
   return (
-    <Dialog open={open} onOpenChange={handleDialogOpenChange}>
+    <Dialog open={isOpen} onOpenChange={handleDialogOpenChange}>
       <DialogTrigger asChild>
         <Button variant="outline">
           <GoPlus className="mr-[6px] h-[20px] w-[20px]" />

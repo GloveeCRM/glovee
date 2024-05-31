@@ -5,7 +5,7 @@ import { Fragment, useEffect, useState } from 'react'
 import { TemplateCategoryType } from '@/lib/types/template'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
 import { TemplateEditSidebarCategoryWrapperSkeleton } from '@/components/skeletons'
-import Divider from '@/components/ui/divider'
+import { Divider } from '@/components/ui/divider'
 import TemplateEditSidebarCategory from './template-edit-sidebar-category'
 import CreateCategoryButton from './create-category-button'
 

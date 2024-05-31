@@ -7,6 +7,7 @@ import { GLOVEE_API_URL } from '@/lib/constants/api'
 import { validateValuesAgainstSchema } from '@/lib/utils/validation'
 import { CreateClientSchema, UpdateClientSchema } from '@/lib/zod/schemas'
 import { getSession } from '@/lib/auth/session'
+import { z } from 'zod'
 
 export async function updateClientProfile(
   orgName: string,
@@ -91,15 +92,10 @@ export async function updateClientStatus(
 }
 
 export async function createNewClient(
-  formData: FormData,
-  orgName: string
-): Promise<{ success?: string; error?: string; errors?: any }> {
-  const { data, errors } = await validateValuesAgainstSchema(CreateClientSchema, formData)
-  if (errors) {
-    return { errors }
-  }
-
-  const { clientFirstName, clientLastName, clientEmail } = data
+  orgName: string,
+  values: z.infer<typeof CreateClientSchema>
+): Promise<{ success?: string; error?: string }> {
+  const { firstName, lastName, email } = values
 
   const accessToken = await getSession()
 
@@ -111,9 +107,9 @@ export async function createNewClient(
         Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify({
-        firstName: clientFirstName,
-        lastName: clientLastName,
-        email: clientEmail,
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
       }),
     })
 

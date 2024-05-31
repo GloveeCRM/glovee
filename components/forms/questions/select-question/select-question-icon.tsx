@@ -4,7 +4,7 @@ import { MdOutlineKeyboardArrowDown } from 'react-icons/md'
 
 import { TemplateQuestionTypes } from '@/lib/types/template'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
-import Divider from '@/components/ui/divider'
+import { Divider } from '@/components/ui/divider'
 
 export default function SelectQuestionIcon() {
   const { setDraggedObject } = useDragAndDropContext()
