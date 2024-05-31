@@ -22,8 +22,8 @@ export default function ClientApplicationSummaryCard({
       <div>
         <div className="flex justify-between">
           <ApplicationSummaryCardApplicantInfo
-            applicantFirstName={application.applicantFirstName}
-            applicantLastName={application.applicantLastName}
+            applicantFirstName={application.applicant.firstName}
+            applicantLastName={application.applicant.lastName}
             role={application.role}
           />
           <div>

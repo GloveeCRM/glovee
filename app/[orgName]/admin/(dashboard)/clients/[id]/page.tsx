@@ -26,7 +26,7 @@ export default async function ClientPage({ params }: ClientsPageProps) {
       <ClientProfileCard client={client} />
       <div className="mt-[20px] flex justify-between">
         <h1 className="text-[20px] font-bold">Applications</h1>
-        <CreateNewApplicationButton orgName={orgName} client={client} />
+        <CreateNewApplicationButton client={client} />
       </div>
       <ClientApplicationsTable orgName={orgName} clientID={clientID} />
     </div>

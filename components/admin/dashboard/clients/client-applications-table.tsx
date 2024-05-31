@@ -38,7 +38,7 @@ export default async function ClientApplicationsTable({
                 <td>
                   <span className="rounded-full bg-n-300 px-[6px] py-[2px] text-[10px] text-n-700">
                     <span className="font-semibold">{application.role}</span> (
-                    {application.applicantFirstName} {application.applicantLastName})
+                    {application.applicant.firstName} {application.applicant.lastName})
                   </span>
                 </td>
                 <td>
