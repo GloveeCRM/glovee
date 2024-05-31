@@ -9,10 +9,11 @@ import { TBody, TD, TH, THead, TR, Table } from '@/components/ui/table2'
 interface ClientsTableProps {
   orgName: string
   query: string
+  currentPage: number
 }
 
-export default async function ClientsTable({ orgName, query }: ClientsTableProps) {
-  const clients = await searchClients(orgName, query, 10, 0)
+export default async function ClientsTable({ orgName, query, currentPage }: ClientsTableProps) {
+  const clients = await searchClients(orgName, query, 10, currentPage)
 
   return (
     <Table className="mt-[20px]">
