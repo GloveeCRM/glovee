@@ -62,7 +62,7 @@ export default function CreateNewApplicationButton({ client }: CreateNewApplicat
   const { orgName } = useOrgContext()
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [templates, setTemplates] = useState<TemplateType[]>([])
-  const [clients, setClients] = useState<UserType[]>([])
+  const [clients, setClients] = useState<UserType[] | null>(null)
   const [isSearchingClients, setIsSearchingClients] = useState<boolean>(false)
 
   useEffect(() => {
@@ -72,7 +72,7 @@ export default function CreateNewApplicationButton({ client }: CreateNewApplicat
 
     if (!client) {
       searchClients(orgName).then((res) => {
-        setClients(res)
+        setClients(res.clients)
       })
     }
   }, [orgName, client])
@@ -138,20 +138,21 @@ export default function CreateNewApplicationButton({ client }: CreateNewApplicat
         <Form {...form}>
           <form className="w-full" onSubmit={form.handleSubmit(handleCreateApplication)}>
             {client ? (
-              <div className="flex items-center gap-[4px] text-[14px] text-gray-700">
-                {client.avatarURL === null ? (
+              <FormItem>
+                <FormLabel>Client</FormLabel>
+                <div className="flex items-center gap-[8px] p-[4px] text-[14px] text-gray-700">
                   <Image
-                    src={DEFAULT_MALE_CLIENT_LOGO_URL}
+                    src={client?.avatarURL || DEFAULT_MALE_CLIENT_LOGO_URL}
                     alt="CLient Logo"
-                    width={20}
-                    height={20}
+                    width={30}
+                    height={30}
                     className="rounded-full"
                   />
-                ) : (
-                  client.avatarURL
-                )}
-                {client.firstName} {client.lastName}
-              </div>
+                  <span className="font-medium">
+                    {client.firstName} {client.lastName}
+                  </span>
+                </div>
+              </FormItem>
             ) : (
               <FormField
                 control={form.control}
@@ -166,7 +167,7 @@ export default function CreateNewApplicationButton({ client }: CreateNewApplicat
                             <div className="flex items-center gap-[8px]">
                               <Image
                                 src={
-                                  clients.find((c) => c.id === field.value)?.avatarURL ||
+                                  clients?.find((c) => c.id === field.value)?.avatarURL ||
                                   DEFAULT_MALE_CLIENT_LOGO_URL
                                 }
                                 alt=""
@@ -174,8 +175,8 @@ export default function CreateNewApplicationButton({ client }: CreateNewApplicat
                                 width={30}
                                 height={30}
                               />
-                              {clients.find((c) => c.id === field.value)?.firstName}{' '}
-                              {clients.find((c) => c.id === field.value)?.lastName}
+                              {clients?.find((c) => c.id === field.value)?.firstName}{' '}
+                              {clients?.find((c) => c.id === field.value)?.lastName}
                             </div>
                             <div className="cursor-pointer" onClick={() => field.onChange(0)}>
                               <IoClose className="h-[20px] w-[20px]" />
@@ -202,7 +203,7 @@ export default function CreateNewApplicationButton({ client }: CreateNewApplicat
                                 No Clients Found
                               </CommandEmpty>
                               <CommandGroup>
-                                {clients.map((client) => (
+                                {clients?.map((client) => (
                                   <>
                                     <CommandItem
                                       key={client.id}
