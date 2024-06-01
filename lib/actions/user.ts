@@ -1,36 +1,29 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import { z } from 'zod'
 
 import { UserStatusTypes } from '@/lib/types/user'
 import { GLOVEE_API_URL } from '@/lib/constants/api'
-import { validateValuesAgainstSchema } from '@/lib/utils/validation'
 import { CreateClientSchema, UpdateClientSchema } from '@/lib/zod/schemas'
 import { getSession } from '@/lib/auth/session'
-import { z } from 'zod'
 
 export async function updateClientProfile(
   orgName: string,
-  clientId: number,
-  formData: FormData
+  clientID: number,
+  values: z.infer<typeof UpdateClientSchema>
 ): Promise<{ success?: string; error?: string; errors?: any }> {
-  const { data, errors } = await validateValuesAgainstSchema(UpdateClientSchema, formData)
-
-  if (errors) {
-    return { errors }
-  }
-
-  if (!clientId || clientId === 0) {
+  if (clientID === 0) {
     return { errors: { clientId: 'Client is required' } }
   }
 
-  const { clientFirstName, clientLastName, clientEmail } = data
+  const { firstName, lastName, email } = values
 
   const accessToken = await getSession()
 
   try {
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/user/admin/client/${clientId}/profile`,
+      `${GLOVEE_API_URL}/v1/${orgName}/user/admin/client/${clientID}/profile`,
       {
         method: 'PUT',
         headers: {
@@ -38,9 +31,9 @@ export async function updateClientProfile(
           Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
-          firstName: clientFirstName,
-          lastName: clientLastName,
-          email: clientEmail,
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
         }),
       }
     )
@@ -48,9 +41,9 @@ export async function updateClientProfile(
     const data = await response.json()
 
     if (data.status === 'error') {
-      return { error: data.message }
+      return { error: data.error }
     } else {
-      revalidatePath(`/admin/clients/${clientId}`)
+      revalidatePath(`/admin/clients/${clientID}`)
       return { success: 'Client updated!' }
     }
   } catch (error) {
@@ -81,10 +74,10 @@ export async function updateClientStatus(
     const data = await response.json()
 
     if (data.status === 'error') {
-      return { error: data.message }
+      return { error: data.error }
     } else {
       revalidatePath(`/admin/clients/${id}`)
-      return { success: 'Client status updated!' }
+      return { success: data.data.message }
     }
   } catch (error) {
     return { error: 'Something went wrong!' }

@@ -6,7 +6,7 @@ import { HiOutlinePencilSquare } from 'react-icons/hi2'
 
 import { UserType, UserStatusTypes } from '@/lib/types/user'
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
-import ClientProfileEdit from './client-profile-edit'
+import ClientProfileEditForm from './client-profile-edit-form'
 import SetUserStatusButton from './set-user-status-button'
 import { Badge } from '@/components/ui/badge'
 
@@ -17,8 +17,12 @@ interface ClientProfileCardProps {
 export default function ClientProfileCard({ client }: ClientProfileCardProps) {
   const [isEditing, setIsEditing] = useState(false)
 
+  function onCloseEditForm() {
+    setIsEditing(false)
+  }
+
   return (
-    <div className="flex items-center justify-between rounded-lg border border-n-400 bg-n-100/50 px-[14px] py-[18px]">
+    <div className="flex items-end justify-between rounded-md border border-n-700 bg-n-700 px-[14px] py-[18px] text-n-100">
       <div className="flex gap-[8px]">
         <div>
           <Image
@@ -30,9 +34,9 @@ export default function ClientProfileCard({ client }: ClientProfileCardProps) {
           />
         </div>
         {isEditing ? (
-          <ClientProfileEdit setIsEditing={setIsEditing} client={client} />
+          <ClientProfileEditForm onClose={onCloseEditForm} client={client} />
         ) : (
-          <div className="flex gap-[4px]">
+          <div className="flex gap-[16px]">
             <div className="flex flex-col gap-[10px]">
               <div className="flex items-center gap-[4px]">
                 <span className="text-[16px] font-semibold">
@@ -43,15 +47,15 @@ export default function ClientProfileCard({ client }: ClientProfileCardProps) {
                 )}
               </div>
               <div className="flex flex-col gap-[6px]">
-                <span className="text-[12px] text-n-600">{client.email}</span>
-                <Badge variant="default" size="md" className="border-n-400">
+                <span className="text-[12px]">{client.email}</span>
+                <Badge variant="default" size="md" className="bg-n-500 text-n-100">
                   {client.id}
                 </Badge>
               </div>
             </div>
             <div>
               <HiOutlinePencilSquare
-                className="h-[20px] w-[20px]"
+                className="h-[20px] w-[20px] cursor-pointer transition-all duration-75 hover:ml-[-1px] hover:mt-[-1px] hover:h-[22px] hover:w-[22px]"
                 onClick={() => setIsEditing(!isEditing)}
               />
             </div>
@@ -61,7 +65,6 @@ export default function ClientProfileCard({ client }: ClientProfileCardProps) {
       <div>
         <SetUserStatusButton
           userId={client.id}
-          currentStatus={client.status}
           newStatus={
             client.status === UserStatusTypes.ACTIVE
               ? UserStatusTypes.INACTIVE

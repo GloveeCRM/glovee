@@ -11,10 +11,9 @@ const buttonVariants = cva(
       variant: {
         default:
           'bg-n-700 text-n-100 hover:bg-n-900 dark:bg-n-100 dark:text-n-900 dark:hover:bg-n-200',
-        secondary:
-          'bg-n-200 text-n-900 hover:bg-n-300 dark:bg-n-800 dark:text-n-100 dark:hover:bg-n-800',
+        secondary: 'bg-n-200 text-n-900 hover:bg-n-300',
         outline:
-          'border border-n-700 bg-white text-n-700 hover:bg-n-700 hover:text-n-100 dark:border-n-800 dark:bg-n-900 dark:hover:bg-n-800 dark:hover:text-n-100',
+          'border border-n-700 text-n-700 hover:bg-n-700 hover:text-n-100 dark:border-n-800 dark:bg-n-900 dark:hover:bg-n-800 dark:hover:text-n-100',
         destructive:
           'bg-red-500 text-white hover:bg-red-600 dark:bg-red-900 dark:text-n-100 dark:hover:bg-red-900',
         ghost: 'hover:bg-n-200 hover:text-n-900 dark:hover:bg-n-800 dark:hover:text-n-100',

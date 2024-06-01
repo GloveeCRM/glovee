@@ -2,9 +2,9 @@ import { z } from 'zod'
 import { UserRoleTypes } from '../types/user'
 
 export const UpdateClientSchema = z.object({
-  clientFirstName: z.string().min(1, { message: 'First name is required' }),
-  clientLastName: z.string().min(1, { message: 'Last name is required' }),
-  clientEmail: z.string().min(1, { message: 'Email is required' }).email(),
+  firstName: z.string().min(1, { message: 'First name is required' }),
+  lastName: z.string().min(1, { message: 'Last name is required' }),
+  email: z.string().min(1, { message: 'Email is required' }).email(),
 })
 
 export const CreateClientSchema = z.object({

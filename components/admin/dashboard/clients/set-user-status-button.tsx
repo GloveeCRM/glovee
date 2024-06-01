@@ -8,15 +8,10 @@ import toast from 'react-hot-toast'
 
 interface SetUserStatusButtonProps {
   userId: number
-  currentStatus: UserStatusTypes
   newStatus: UserStatusTypes
 }
 
-export default function SetUserStatusButton({
-  userId,
-  currentStatus,
-  newStatus,
-}: SetUserStatusButtonProps) {
+export default function SetUserStatusButton({ userId, newStatus }: SetUserStatusButtonProps) {
   const { orgName } = useOrgContext()
 
   function userStatusUpdateSuccessToast(message: string) {
@@ -46,6 +41,7 @@ export default function SetUserStatusButton({
   return (
     <Button
       onClick={handleClickSetStatus}
+      size="md"
       className={
         newStatus === UserStatusTypes.ACTIVE ? 'bg-g-700 hover:bg-g-500' : 'bg-r-700 hover:bg-r-500'
       }
