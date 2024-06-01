@@ -21,7 +21,7 @@ export default async function ClientsPage({ params, searchParams }: ClientsPageP
   const currentPage = searchParams.page || 1
 
   return (
-    <div>
+    <div className="flex h-[calc(100svh-16px)] flex-col gap-[8px] overflow-hidden">
       <ClinetPageToolbar />
       <ClientsTable orgName={orgName} query={query} currentPage={currentPage} />
     </div>
