@@ -1,6 +1,5 @@
 'use client'
 
-import { MouseEvent } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -10,7 +9,6 @@ import { UserType } from '@/lib/types/user'
 import { UpdateClientSchema } from '@/lib/zod/schemas'
 import { updateClientProfile } from '@/lib/actions/user'
 import { useOrgContext } from '@/contexts/org-context'
-import { FormInput, InputLabel, TextInput } from '@/components/ui/inputs'
 import { Button } from '@/components/ui/button'
 import {
   Form,

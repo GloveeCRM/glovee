@@ -6,9 +6,9 @@ import { HiOutlinePencilSquare } from 'react-icons/hi2'
 
 import { UserType, UserStatusTypes } from '@/lib/types/user'
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
+import { Badge } from '@/components/ui/badge'
 import ClientProfileEditForm from './client-profile-edit-form'
 import SetUserStatusButton from './set-user-status-button'
-import { Badge } from '@/components/ui/badge'
 
 interface ClientProfileCardProps {
   client: UserType

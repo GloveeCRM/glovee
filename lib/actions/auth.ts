@@ -23,13 +23,7 @@ export async function login(
   orgName: string,
   values: z.infer<typeof LoginSchema>
 ): Promise<{ success?: string; data?: Record<string, any>; error?: string; errors?: any }> {
-  const { data, errors } = await validateValuesAgainstSchema(LoginSchema, values)
-
-  if (errors) {
-    return { errors }
-  }
-
-  const { email, password } = data
+  const { email, password } = values
 
   try {
     const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/login`, {

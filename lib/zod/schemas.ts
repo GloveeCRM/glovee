@@ -1,5 +1,6 @@
 import { z } from 'zod'
-import { UserRoleTypes } from '../types/user'
+
+import { UserRoleTypes } from '@/lib//types/user'
 
 export const UpdateClientSchema = z.object({
   firstName: z.string().min(1, { message: 'First name is required' }),

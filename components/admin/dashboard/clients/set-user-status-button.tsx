@@ -1,10 +1,11 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
-import { useOrgContext } from '@/contexts/org-context'
-import { updateClientStatus } from '@/lib/actions/user'
-import { UserStatusTypes } from '@/lib/types/user'
 import toast from 'react-hot-toast'
+
+import { UserStatusTypes } from '@/lib/types/user'
+import { updateClientStatus } from '@/lib/actions/user'
+import { useOrgContext } from '@/contexts/org-context'
+import { Button } from '@/components/ui/button'
 
 interface SetUserStatusButtonProps {
   userId: number
