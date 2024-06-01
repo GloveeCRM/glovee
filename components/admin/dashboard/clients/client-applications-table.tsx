@@ -21,7 +21,7 @@ export default async function ClientApplicationsTable({
   clientID,
   currentPage = 1,
 }: ClientApplicationsTableProps) {
-  const totalRowsPerPage = 10
+  const totalRowsPerPage = 12
   const { applications, total } = await searchApplications(
     orgName,
     clientID,

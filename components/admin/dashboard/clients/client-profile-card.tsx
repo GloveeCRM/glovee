@@ -2,14 +2,13 @@
 
 import Image from 'next/image'
 import { useState } from 'react'
-
-import { UserStatusTypes } from '@/lib/types/user'
-import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
-import DeactiveButton from './deactive-button'
-import ActiveButton from './active-button'
-import ClientProfileEdit from './client-profile-edit'
 import { HiOutlinePencilSquare } from 'react-icons/hi2'
-import { UserType } from '@/lib/types/user'
+
+import { UserType, UserStatusTypes } from '@/lib/types/user'
+import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
+import ClientProfileEdit from './client-profile-edit'
+import SetUserStatusButton from './set-user-status-button'
+import { Badge } from '@/components/ui/badge'
 
 interface ClientProfileCardProps {
   client: UserType
@@ -34,29 +33,41 @@ export default function ClientProfileCard({ client }: ClientProfileCardProps) {
           <ClientProfileEdit setIsEditing={setIsEditing} client={client} />
         ) : (
           <div className="flex gap-[4px]">
-            <div className="flex items-center gap-[8px]">
-              <div className="text-[16px]">
-                <p>
+            <div className="flex flex-col gap-[10px]">
+              <div className="flex items-center gap-[4px]">
+                <span className="text-[16px] font-semibold">
                   {client.firstName} {client.lastName}
-                </p>
-                <p>{client.email}</p>
-                <p>
-                  <span className="rounded-full border bg-n-200 px-[6px] py-[2px] text-[12px]">
-                    {client.id}
-                  </span>
-                </p>
+                </span>
+                {client.status === UserStatusTypes.INACTIVE && (
+                  <Badge variant="destructive">Not Active</Badge>
+                )}
+              </div>
+              <div className="flex flex-col gap-[6px]">
+                <span className="text-[12px] text-n-600">{client.email}</span>
+                <Badge variant="default" size="md" className="border-n-400">
+                  {client.id}
+                </Badge>
               </div>
             </div>
-            <HiOutlinePencilSquare
-              className="h-[20px] w-[20px]"
-              onClick={() => setIsEditing(!isEditing)}
-            />
+            <div>
+              <HiOutlinePencilSquare
+                className="h-[20px] w-[20px]"
+                onClick={() => setIsEditing(!isEditing)}
+              />
+            </div>
           </div>
         )}
       </div>
       <div>
-        {(client.status === UserStatusTypes.ACTIVE && <DeactiveButton clientID={client.id} />) ||
-          (client.status === UserStatusTypes.INACTIVE && <ActiveButton clientID={client.id} />)}
+        <SetUserStatusButton
+          userId={client.id}
+          currentStatus={client.status}
+          newStatus={
+            client.status === UserStatusTypes.ACTIVE
+              ? UserStatusTypes.INACTIVE
+              : UserStatusTypes.ACTIVE
+          }
+        />
       </div>
     </div>
   )
