@@ -59,7 +59,7 @@ export default async function ClientsTable({ orgName, query, currentPage }: Clie
                   </div>
                 </TableCell>
                 <TableCell className="text-nowrap">
-                  <Link href={`/admin/clients/${client.id}`}>
+                  <Link href={`/admin/clients/${client.id}`} className="hover:text-blue-500">
                     {client.firstName} {client.lastName}
                   </Link>
                 </TableCell>
@@ -83,6 +83,9 @@ export default async function ClientsTable({ orgName, query, currentPage }: Clie
           )}
         </TableBody>
       </Table>
+      {clients && clients.length < total && (
+        <Pagination currentPage={currentPage} totalPages={totalPages} />
+      )}
     </div>
   )
 }
