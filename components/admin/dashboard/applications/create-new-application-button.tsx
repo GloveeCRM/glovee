@@ -126,7 +126,7 @@ export default function CreateNewApplicationButton({ client }: CreateNewApplicat
   return (
     <Dialog open={isOpen} onOpenChange={handleDialogOpenChange}>
       <DialogTrigger asChild>
-        <Button variant="outline">
+        <Button variant="outline" size="md">
           <GoPlus className="mr-[6px] h-[20px] w-[20px]" />
           <span>New Application</span>
         </Button>
@@ -138,21 +138,29 @@ export default function CreateNewApplicationButton({ client }: CreateNewApplicat
         <Form {...form}>
           <form className="w-full" onSubmit={form.handleSubmit(handleCreateApplication)}>
             {client ? (
-              <FormItem>
-                <FormLabel>Client</FormLabel>
-                <div className="flex items-center gap-[8px] p-[4px] text-[14px] text-gray-700">
-                  <Image
-                    src={client?.avatarURL || DEFAULT_MALE_CLIENT_LOGO_URL}
-                    alt="CLient Logo"
-                    width={30}
-                    height={30}
-                    className="rounded-full"
-                  />
-                  <span className="font-medium">
-                    {client.firstName} {client.lastName}
-                  </span>
-                </div>
-              </FormItem>
+              <FormField
+                control={form.control}
+                name="clientID"
+                render={() => {
+                  return (
+                    <FormItem>
+                      <FormLabel>Client</FormLabel>
+                      <div className="flex items-center gap-[8px] p-[4px] text-[14px] text-gray-700">
+                        <Image
+                          src={client?.avatarURL || DEFAULT_MALE_CLIENT_LOGO_URL}
+                          alt="CLient Logo"
+                          width={30}
+                          height={30}
+                          className="rounded-full"
+                        />
+                        <span className="font-medium">
+                          {client.firstName} {client.lastName}
+                        </span>
+                      </div>
+                    </FormItem>
+                  )
+                }}
+              />
             ) : (
               <FormField
                 control={form.control}

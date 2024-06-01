@@ -5,15 +5,25 @@ import ClientProfileCard from '@/components/admin/dashboard/clients/client-profi
 import ClientApplicationsTable from '@/components/admin/dashboard/clients/client-applications-table'
 import CreateNewApplicationButton from '@/components/admin/dashboard/applications/create-new-application-button'
 
-interface ClientsPageProps {
-  params: {
-    id: string
-    orgName: string
-  }
+interface ClientPageParams {
+  orgName: string
+  id: number
 }
-export default async function ClientPage({ params }: ClientsPageProps) {
+
+interface ClientPageSearchParams {
+  page?: number
+}
+
+interface ClientsPageProps {
+  params: ClientPageParams
+  searchParams: ClientPageSearchParams
+}
+
+export default async function ClientPage({ params, searchParams }: ClientsPageProps) {
   const orgName = params.orgName
-  const clientID = parseInt(params.id)
+  const clientID = params.id
+  const currentPage = searchParams.page || 1
+
   const client = await fetchClientProfileById(clientID, orgName)
 
   if (!client) {
@@ -21,14 +31,12 @@ export default async function ClientPage({ params }: ClientsPageProps) {
   }
 
   return (
-    <div>
-      <h1 className="mb-[15px] text-[24px] font-bold">Client</h1>
+    <div className="flex h-[calc(100svh-16px)] flex-col gap-[8px] overflow-hidden">
       <ClientProfileCard client={client} />
-      <div className="mt-[20px] flex justify-between">
-        <h1 className="text-[20px] font-bold">Applications</h1>
+      <div className="mt-[20px] flex items-end justify-end">
         <CreateNewApplicationButton client={client} />
       </div>
-      <ClientApplicationsTable orgName={orgName} clientID={clientID} />
+      <ClientApplicationsTable orgName={orgName} clientID={clientID} currentPage={currentPage} />
     </div>
   )
 }

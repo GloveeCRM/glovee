@@ -1,56 +1,78 @@
-import { fetchAdminClientApplications } from '@/lib/data/application'
-import { ApplicationType } from '@/lib/types/application'
+import { searchApplications } from '@/lib/data/application'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+import { Pagination } from '@/components/ui/pagination'
+import { Badge } from '@/components/ui/badge'
 
 interface ClientApplicationsTableProps {
   orgName: string
   clientID: number
+  currentPage?: number
 }
 
 export default async function ClientApplicationsTable({
   orgName,
   clientID,
+  currentPage = 1,
 }: ClientApplicationsTableProps) {
-  const applications = await fetchAdminClientApplications(orgName, clientID)
+  const totalRowsPerPage = 10
+  const { applications, total } = await searchApplications(
+    orgName,
+    clientID,
+    '',
+    totalRowsPerPage,
+    currentPage * totalRowsPerPage - totalRowsPerPage
+  )
+  const totalPages = Math.ceil(total / totalRowsPerPage)
 
   return (
-    <div>
-      <table className="mt-[15px] w-full text-[14px]">
-        <thead className="border-b-2 border-n-700 text-left">
-          <tr>
-            <th>Application ID</th>
-            <th>Template</th>
-            <th>Role</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {!applications || applications.length === 0 ? (
-            <tr>
-              <td colSpan={4} className="py-[12px] text-center text-n-500">
-                No applications found
-              </td>
-            </tr>
-          ) : (
-            applications.map((application: ApplicationType) => (
-              <tr key={application.id}>
-                <td className="py-[10px]">{application.id}</td>
-                <td>{application.templateName}</td>
-                <td>
-                  <span className="rounded-full bg-n-300 px-[6px] py-[2px] text-[10px] text-n-700">
-                    <span className="font-semibold">{application.role}</span> (
-                    {application.applicant.firstName} {application.applicant.lastName})
-                  </span>
-                </td>
-                <td>
-                  <span className="rounded-full bg-n-600 px-[6px] py-[2px] text-[12px] text-white">
-                    {application.status}
-                  </span>
-                </td>
-              </tr>
+    <div className="flex h-full flex-col overflow-auto">
+      <Table>
+        <TableHeader className="sticky top-0 bg-white shadow-sm">
+          <TableRow>
+            <TableHead>Application ID</TableHead>
+            <TableHead>Template</TableHead>
+            <TableHead>Role</TableHead>
+            <TableHead>Status</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {applications && applications.length > 0 ? (
+            applications.map((application) => (
+              <TableRow key={application.id} className="h-[42px]">
+                <TableCell>{application.id}</TableCell>
+                <TableCell className="truncate">{application.templateName}</TableCell>
+                <TableCell>
+                  <Badge variant="secondary" className="gap-[2px]">
+                    <span className="font-semibold">{application.role}</span>
+                    <span className="truncate">
+                      ({application.applicant.firstName} {application.applicant.lastName})
+                    </span>
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  <Badge>{application.status}</Badge>
+                </TableCell>
+              </TableRow>
             ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={4} className="py-[12px] text-center text-n-500">
+                No applications found
+              </TableCell>
+            </TableRow>
           )}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
+      {applications && applications.length < total && (
+        <Pagination currentPage={currentPage} totalPages={totalPages} />
+      )}
     </div>
   )
 }

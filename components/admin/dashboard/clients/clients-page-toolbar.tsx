@@ -7,7 +7,9 @@ export default function ClinetPageToolbar() {
       <div className="ml-[6px] w-[300px]">
         <SearchByParams placeholder="Search clients" />
       </div>
-      <CreateNewClientButton />
+      <div className="mr-[6px]">
+        <CreateNewClientButton />
+      </div>
     </div>
   )
 }
