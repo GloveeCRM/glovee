@@ -126,14 +126,11 @@ export async function logout() {
   return await removeSession()
 }
 
-export async function forgotPassword(orgName: string, formData: FormData) {
-  const { data, errors } = await validateValuesAgainstSchema(ForgotPasswordSchema, formData)
-
-  if (errors) {
-    return { errors }
-  }
-
-  const { email } = data
+export async function forgotPassword(
+  orgName: string,
+  values: z.infer<typeof ForgotPasswordSchema>
+) {
+  const { email } = values
 
   try {
     const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/forgot-password`, {
@@ -149,7 +146,7 @@ export async function forgotPassword(orgName: string, formData: FormData) {
     if (data.status === 'error') {
       return { error: data.error }
     } else {
-      return { success: 'Reset password email sent!', data: { redirectLink: '/login' } }
+      return { success: data.data.message }
     }
   } catch (error) {
     return { error: 'Something went wrong!' }

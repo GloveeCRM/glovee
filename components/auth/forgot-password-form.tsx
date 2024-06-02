@@ -1,82 +1,111 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
+import { z } from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { FaRegCheckCircle } from 'react-icons/fa'
 import { BiMessageSquareError } from 'react-icons/bi'
 
 import { forgotPassword } from '@/lib/actions/auth'
+import { ForgotPasswordSchema } from '@/lib/zod/schemas'
 import { useOrgContext } from '@/contexts/org-context'
-import { FormInput, InputLabel, TextInput } from '@/components/ui/inputs'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components//ui/form'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components//ui/button'
+import { Divider } from '@/components//ui/divider'
 import { Callout } from '@/components/ui/callout'
-import { SubmitButton } from '@/components/ui/buttons'
-import { Divider } from '@/components/ui/divider'
 
 export default function ForgotPasswordForm() {
-  const [formState, setFormState] = useState<any>({})
   const { orgName } = useOrgContext()
 
-  async function handleForgotPassword(formData: FormData) {
-    forgotPassword(orgName, formData).then((res) => {
+  const defaultFormValues = {
+    email: '',
+  }
+
+  const form = useForm<z.infer<typeof ForgotPasswordSchema>>({
+    resolver: zodResolver(ForgotPasswordSchema),
+    defaultValues: defaultFormValues,
+  })
+
+  function handleForgotPassword(orgName: string, values: z.infer<typeof ForgotPasswordSchema>) {
+    forgotPassword(orgName, values).then((res) => {
       if (res.success) {
-        setFormState({ success: res.success })
+        form.setError('root.success', {
+          message: res.success,
+        })
       } else {
-        setFormState(res)
+        form.setError('root.error', {
+          message: res.error,
+        })
       }
     })
   }
 
-  const emailError = formState?.errors?.email ? formState?.errors?.email[0] : ''
-
   return (
-    <form
+    <div
       id="forgot-password-form"
-      action={handleForgotPassword}
       className="w-full max-w-[420px] rounded-md border border-n-300 p-[20px] shadow-sm"
     >
       <h1
         id="forgot-password-form-title"
         className="mb-[8px] text-center text-xl font-bold text-n-700"
       >
-        Reset Password
+        Forgot Password
       </h1>
-
       <Divider className="mb-[16px] border-n-300" />
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit((values) => handleForgotPassword(orgName, values))}>
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem className="mb-[20px]">
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input type="email" placeholder="example@gmail.com" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-      <FormInput id="emai-input" errors={emailError} className="mb-[20px]">
-        <InputLabel htmlFor="email" text="md" weight="semibold">
-          Email
-        </InputLabel>
-        <TextInput id="email" name="email" placeholder="example@gmail.com" />
-      </FormInput>
+          {form.formState.errors.root?.success?.message && (
+            <Callout variant="success" className="mb-[20px]">
+              <div className="flex items-center gap-[4px]">
+                <FaRegCheckCircle className="h-[16px] w-[16px]" />
+                <span>{form.formState.errors.root.success.message}</span>
+              </div>
+            </Callout>
+          )}
 
-      {formState?.success && (
-        <Callout variant="success" className="mb-[12px]">
-          <div className="flex items-center gap-[4px]">
-            <FaRegCheckCircle className="h-[16px] w-[16px]" />
-            <span>{formState.success}</span>
-          </div>
-        </Callout>
-      )}
+          {form.formState.errors.root?.error?.message && (
+            <Callout variant="error" className="mb-[20px]">
+              <div className="flex items-center gap-[4px]">
+                <BiMessageSquareError className="h-[16px] w-[16px]" />
+                <span>{form.formState.errors.root.error.message}</span>
+              </div>
+            </Callout>
+          )}
 
-      {formState?.error && (
-        <Callout variant="error" className="mb-[12px]">
-          <div className="flex items-center gap-[4px]">
-            <BiMessageSquareError className="h-[16px] w-[16px]" />
-            <span>{formState.error}</span>
-          </div>
-        </Callout>
-      )}
-
-      <SubmitButton size="full" className="p-[8px]">
-        Reset Password
-      </SubmitButton>
+          <Button type="submit" variant="default" fullWidth={true}>
+            Reset Password
+          </Button>
+        </form>
+      </Form>
 
       <p id="back-to-login-page" className="mt-[16px]">
         <Link href="/login" className="cursor-pointer text-[14px] text-blue-500 hover:underline">
           Back to login
         </Link>
       </p>
-    </form>
+    </div>
   )
 }
