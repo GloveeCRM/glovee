@@ -1,7 +1,5 @@
 import { z } from 'zod'
 
-import { UserRoleTypes } from '@/lib//types/user'
-
 export const UpdateClientSchema = z.object({
   firstName: z.string().min(1, { message: 'First name is required' }),
   lastName: z.string().min(1, { message: 'Last name is required' }),
@@ -34,39 +32,6 @@ export const TemplateSchema = z.object({
   description: z.string(),
 })
 
-export const SettingsSchema = z
-  .object({
-    name: z.optional(z.string()),
-    role: z.enum([UserRoleTypes.ORG_ADMIN, UserRoleTypes.ORG_CLIENT]),
-    email: z.optional(z.string().email()),
-    password: z.optional(z.string().min(6)),
-    newPassword: z.optional(z.string().min(6)),
-  })
-  .refine(
-    (data) => {
-      if (data.password && !data.newPassword) {
-        return false
-      }
-      return true
-    },
-    {
-      message: 'New password is required',
-      path: ['newPassword'],
-    }
-  )
-  .refine(
-    (data) => {
-      if (data.newPassword && !data.password) {
-        return false
-      }
-      return true
-    },
-    {
-      message: 'Password is required',
-      path: ['password'],
-    }
-  )
-
 export const ResetPasswordSchema = z.object({
   password: z
     .string()
@@ -92,14 +57,14 @@ export const LoginSchema = z.object({
   password: z.string().min(1, { message: 'Password is required' }),
 })
 
-export const SignUpSchema = z.object({
-  firstname: z
+export const SignupSchema = z.object({
+  firstName: z
     .string({
       required_error: 'First Name is required',
       invalid_type_error: 'First Name is not valid',
     })
     .min(1, { message: 'First Name is required' }),
-  lastname: z
+  lastName: z
     .string({
       required_error: 'Last Name is required',
       invalid_type_error: 'Last Name is not valid',
@@ -112,5 +77,17 @@ export const SignUpSchema = z.object({
   password: z
     .string()
     .min(1, { message: 'Password is required' })
-    .min(6, { message: 'Minimum 6 characters required' }),
+    .min(8, { message: 'Minimum 8 characters required' })
+    .refine((value) => /[a-z]/.test(value), {
+      message: 'Password must contain at least one lowercase letter',
+    })
+    .refine((value) => /[A-Z]/.test(value), {
+      message: 'Password must contain at least one uppercase letter',
+    })
+    .refine((value) => /[0-9]/.test(value), {
+      message: 'Password must contain at least one number',
+    })
+    .refine((value) => /[@$!%*?&]/.test(value), {
+      message: 'Password must contain at least one special character',
+    }),
 })

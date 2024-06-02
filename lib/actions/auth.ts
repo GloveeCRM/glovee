@@ -12,7 +12,7 @@ import {
 import { validateValuesAgainstSchema } from '@/lib/utils/validation'
 import {
   LoginSchema,
-  SignUpSchema,
+  SignupSchema,
   ResetPasswordSchema,
   ForgotPasswordSchema,
 } from '@/lib/zod/schemas'
@@ -84,17 +84,11 @@ export async function refreshToken(orgName: string) {
   }
 }
 
-export async function signUp(
+export async function signup(
   orgName: string,
-  formData: FormData
+  values: z.infer<typeof SignupSchema>
 ): Promise<{ success?: string; data?: Record<string, any>; error?: string; errors?: any }> {
-  const { data, errors } = await validateValuesAgainstSchema(SignUpSchema, formData)
-
-  if (errors) {
-    return { errors }
-  }
-
-  const { email, password, firstname, lastname } = data
+  const { email, password, firstName, lastName } = values
 
   try {
     const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/client/register`, {
@@ -102,7 +96,7 @@ export async function signUp(
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email, password, firstName: firstname, lastName: lastname }),
+      body: JSON.stringify({ email, password, firstName, lastName }),
     })
 
     const data = await response.json()
@@ -121,7 +115,7 @@ export async function signUp(
             : tokenPayload?.user.role === UserRoleTypes.ORG_CLIENT
               ? DEFAULT_ORG_CLIENT_LOGIN_REDIRECT
               : '/'
-      return { success: 'Registration Successful!', data: { redirectLink: redirectLink } }
+      return { success: 'Successfully Signed Up!', data: { redirectLink: redirectLink } }
     }
   } catch (error) {
     return { error: 'Something went wrong!' }
