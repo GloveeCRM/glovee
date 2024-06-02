@@ -1,20 +1,15 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import { z } from 'zod'
 
 import { TemplateType } from '@/lib/types/template'
 import { GLOVEE_API_URL } from '@/lib/constants/api'
-import { validateValuesAgainstSchema } from '@/lib/utils/validation'
 import { TemplateSchema } from '@/lib/zod/schemas'
 import { getSession } from '@/lib/auth/session'
 
-export async function createNewTemplate(orgName: string, formData: FormData) {
-  const { data, errors } = await validateValuesAgainstSchema(TemplateSchema, formData)
-  if (errors) {
-    return { errors }
-  }
-
-  const { name, description } = data
+export async function createNewTemplate(orgName: string, values: z.infer<typeof TemplateSchema>) {
+  const { name, description } = values
 
   const accessToken = await getSession()
   if (!accessToken) {

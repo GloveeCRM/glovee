@@ -16,7 +16,6 @@ export default function TemplateCard({ orgName, id, title, description }: Templa
     <div className="flex flex-col justify-between rounded-md border border-n-500 p-[8px]">
       <div className="mb-[8px] flex justify-between gap-[10px]">
         <p className="text-[16px] font-bold">{title}</p>
-        {/* TODO: Temporarily disabled the ability to delete a template. Reactivate or remove. */}
         <TemplateCardOptionsMenuButton orgName={orgName} templateID={id} />
       </div>
       <div>
