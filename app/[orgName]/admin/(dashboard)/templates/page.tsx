@@ -11,7 +11,7 @@ interface TemplatesPageProps {
 
 export default async function TemplatesPage({ params: { orgName } }: TemplatesPageProps) {
   return (
-    <div className="flex flex-col gap-[20px]">
+    <div className="flex h-full flex-col gap-[20px] overflow-hidden">
       <TemplatePageToolbar />
       <TemplateCardWrapper orgName={orgName} />
     </div>
