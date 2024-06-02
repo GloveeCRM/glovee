@@ -32,7 +32,7 @@ export const TemplateSchema = z.object({
   description: z.string(),
 })
 
-export const ResetPasswordSchema = z.object({
+export const NewPasswordSchema = z.object({
   password: z
     .string()
     .min(1, {
@@ -40,6 +40,18 @@ export const ResetPasswordSchema = z.object({
     })
     .min(6, {
       message: 'Minimum 6 characters required',
+    })
+    .refine((value) => /[a-z]/.test(value), {
+      message: 'Password must contain at least one lowercase letter',
+    })
+    .refine((value) => /[A-Z]/.test(value), {
+      message: 'Password must contain at least one uppercase letter',
+    })
+    .refine((value) => /[0-9]/.test(value), {
+      message: 'Password must contain at least one number',
+    })
+    .refine((value) => /[@$!%*?&]/.test(value), {
+      message: 'Password must contain at least one special character',
     }),
 })
 

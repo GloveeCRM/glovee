@@ -13,7 +13,7 @@ import { validateValuesAgainstSchema } from '@/lib/utils/validation'
 import {
   LoginSchema,
   SignupSchema,
-  ResetPasswordSchema,
+  NewPasswordSchema,
   ForgotPasswordSchema,
 } from '@/lib/zod/schemas'
 
@@ -156,20 +156,13 @@ export async function forgotPassword(
 export async function resetPassword(
   orgName: string,
   resetPasswordToken: string,
-  formData: FormData
+  values: z.infer<typeof NewPasswordSchema>
 ): Promise<{
   success?: string
   error?: string
-  errors?: any
   data?: Record<string, any>
 }> {
-  const { data, errors } = await validateValuesAgainstSchema(ResetPasswordSchema, formData)
-
-  if (errors) {
-    return { errors }
-  }
-
-  const { password } = data
+  const { password } = values
 
   try {
     const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/reset-password`, {
@@ -185,13 +178,9 @@ export async function resetPassword(
     if (data.status === 'error') {
       return { error: data.error }
     } else {
-      return { success: 'Password Reset Successful!', data: { redirectLink: '/login' } }
+      return { success: data.data.message, data: { redirectLink: '/login' } }
     }
   } catch (error) {
     return { error: 'Something went wrong!' }
   }
-}
-
-export async function verifyUserEmail(verificationToken: string) {
-  return { error: 'Not implemented!', success: null }
 }

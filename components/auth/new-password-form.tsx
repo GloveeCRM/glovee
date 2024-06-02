@@ -1,88 +1,118 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
-import { BiMessageSquareError } from 'react-icons/bi'
+import { z } from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { FaRegCheckCircle } from 'react-icons/fa'
+import { BiMessageSquareError } from 'react-icons/bi'
 
 import { resetPassword } from '@/lib/actions/auth'
-import { Divider } from '@/components/ui/divider'
-import { FormInput, InputLabel, PasswordInput } from '../ui/inputs'
-import { Callout } from '@/components/ui/callout'
-import { SubmitButton } from '@/components/ui/buttons'
+import { NewPasswordSchema } from '@/lib/zod/schemas'
 import { useOrgContext } from '@/contexts/org-context'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components//ui/form'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components//ui/button'
+import { Divider } from '@/components//ui/divider'
+import { Callout } from '@/components/ui/callout'
 
 interface NewPasswordFormProps {
   resetPasswordToken: string
 }
-export default function NewPasswordForm({ resetPasswordToken }: NewPasswordFormProps) {
-  const [formState, setFormState] = useState<any>({})
+
+export default function ForgotPasswordForm({ resetPasswordToken }: NewPasswordFormProps) {
   const { orgName } = useOrgContext()
 
-  async function handleSetNewPassword(formData: FormData) {
-    resetPassword(orgName, resetPasswordToken, formData).then((res) => {
+  const defaultFormValues = {
+    password: '',
+  }
+
+  const form = useForm<z.infer<typeof NewPasswordSchema>>({
+    resolver: zodResolver(NewPasswordSchema),
+    defaultValues: defaultFormValues,
+  })
+
+  function handleForgotPassword(orgName: string, values: z.infer<typeof NewPasswordSchema>) {
+    resetPassword(orgName, resetPasswordToken, values).then((res) => {
       if (res.success) {
-        setFormState(res)
+        form.setError('root.success', {
+          message: res.success,
+        })
         setTimeout(() => {
           window.location.href = res.data?.redirectLink
         }, 1000)
       } else {
-        setFormState(res)
+        form.setError('root.error', {
+          message: res.error,
+        })
       }
     })
   }
 
-  const passwordError = formState?.errors?.password ? formState?.errors?.password[0] : ''
-
   return (
-    <form
-      id="new-password-form"
-      action={handleSetNewPassword}
+    <div
+      id="forgot-password-form"
       className="w-full max-w-[420px] rounded-md border border-n-300 p-[20px] shadow-sm"
     >
       <h1
-        id="new-password-form-title"
+        id="forgot-password-form-title"
         className="mb-[8px] text-center text-xl font-bold text-n-700"
       >
         New Password
       </h1>
-
       <Divider className="mb-[16px] border-n-300" />
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit((values) => handleForgotPassword(orgName, values))}>
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem className="mb-[20px] mt-[12px]">
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input type="password" placeholder="Password" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-      <FormInput id="password-input" errors={passwordError} className="mb-[20px]">
-        <InputLabel htmlFor="password" text="md" weight="semibold">
-          New Password
-        </InputLabel>
-        <PasswordInput id="password" name="password" placeholder="Password" />
-      </FormInput>
+          {form.formState.errors.root?.success?.message && (
+            <Callout variant="success" className="mb-[20px]">
+              <div className="flex items-center gap-[4px]">
+                <FaRegCheckCircle className="h-[16px] w-[16px]" />
+                <span>{form.formState.errors.root.success.message}</span>
+              </div>
+            </Callout>
+          )}
 
-      {formState?.success && (
-        <Callout variant="success" className="mb-[12px]">
-          <div className="flex items-center gap-[4px]">
-            <FaRegCheckCircle className="h-[16px] w-[16px]" />
-            <span>{formState.success}</span>
-          </div>
-        </Callout>
-      )}
+          {form.formState.errors.root?.error?.message && (
+            <Callout variant="error" className="mb-[20px]">
+              <div className="flex items-center gap-[4px]">
+                <BiMessageSquareError className="h-[16px] w-[16px]" />
+                <span>{form.formState.errors.root.error.message}</span>
+              </div>
+            </Callout>
+          )}
 
-      {formState?.error && (
-        <Callout variant="error" className="mb-[12px]">
-          <div className="flex items-center gap-[4px]">
-            <BiMessageSquareError className="h-[16px] w-[16px]" />
-            <span>{formState.error}</span>
-          </div>
-        </Callout>
-      )}
-
-      <SubmitButton size="full" className="p-[8px]">
-        Set New Password
-      </SubmitButton>
+          <Button type="submit" variant="default" fullWidth={true}>
+            Set New Password
+          </Button>
+        </form>
+      </Form>
 
       <p id="back-to-login-page" className="mt-[16px]">
         <Link href="/login" className="cursor-pointer text-[14px] text-blue-500 hover:underline">
           Back to login
         </Link>
       </p>
-    </form>
+    </div>
   )
 }
