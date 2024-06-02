@@ -73,7 +73,7 @@ export async function deleteTemplateByID(orgName: string, templateID: number) {
       return { error: data.error }
     } else {
       revalidatePath('/admin/templates')
-      return { success: 'Template deleted!' }
+      return { success: data.data.message }
     }
   } catch (error) {
     return { error: 'Failed to delete template!' }

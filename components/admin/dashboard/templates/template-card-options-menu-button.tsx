@@ -1,50 +1,78 @@
 'use client'
 
+import { useState } from 'react'
 import { BiTrash } from 'react-icons/bi'
 import { FiMoreHorizontal } from 'react-icons/fi'
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { deleteTemplateByID } from '@/lib/actions/template'
-import { Popover, PopoverContent, PopoverTrigger } from '../../../ui/popover2'
+import toast from 'react-hot-toast'
 
 interface TemplateCardOptionsMenuButtonProps {
   orgName: string
   templateID: number
 }
+
 export default function TemplateCardOptionsMenuButton({
   orgName,
   templateID,
 }: TemplateCardOptionsMenuButtonProps) {
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+
+  function templateDeleteSuccessToast(message: string) {
+    toast.success((t) => message, {
+      duration: 3000,
+      position: 'bottom-right',
+    })
+  }
+
+  function templateDeleteErrorToast(message: string) {
+    toast.error((t) => message, {
+      duration: 3000,
+      position: 'bottom-right',
+    })
+  }
+
+  function handleDeleteTemplate(orgName: string, templateID: number) {
+    deleteTemplateByID(orgName, templateID).then((res) => {
+      if (res?.success) {
+        templateDeleteSuccessToast(res.success || 'Template deleted successfully!')
+      } else {
+        templateDeleteErrorToast(res.error || 'Failed to delete template!')
+      }
+    })
+  }
+
+  function handleDropdownMenuOpenChange(isOpen: boolean) {
+    setIsOpen(isOpen)
+  }
+
   return (
-    <Popover>
-      <PopoverTrigger
-        className="rounded-[3px] transition duration-100"
-        openClassName="bg-n-100 text-n-700"
-      >
-        <FiMoreHorizontal className="h-[22px] w-[22px]" />
-      </PopoverTrigger>
-      <PopoverContent
-        position="bottom-left"
-        className="mt-[2px] rounded-[3px] bg-n-100 p-[2px]
-               text-[14px] text-n-700 shadow-[0px_0px_0px_1px_rgba(15,15,15,0.05),0px_3px_6px_rgba(15,15,15,0.2),0px_9px_24px_rgba(15,15,15,0.2)] transition duration-100"
-      >
-        <ul>
-          <li
-            onClick={() => {
-              deleteTemplateByID(orgName, templateID).then((data) => {
-                if (data?.error) {
-                  console.error(data.error)
-                }
-              })
-            }}
-            className="flex cursor-pointer items-center gap-[4px] rounded-sm p-[4px] font-medium text-red-500 transition duration-100 hover:bg-red-100"
+    <DropdownMenu open={isOpen} onOpenChange={handleDropdownMenuOpenChange}>
+      <DropdownMenuTrigger asChild>
+        <div>
+          <FiMoreHorizontal
+            className={`h-[22px] w-[22px] transition duration-75 ${isOpen && 'rounded-sm bg-n-700 text-n-100'}`}
+          />
+        </div>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent side="bottom" align="start" sideOffset={-1} className="w-[160px]">
+        <DropdownMenuGroup>
+          <DropdownMenuItem
+            className="flex gap-[6px] focus:text-red-500"
+            onClick={() => handleDeleteTemplate(orgName, templateID)}
           >
-            <span>
-              <BiTrash className="h-[20px] w-[20px]" />
-            </span>
+            <BiTrash className="h-[16px] w-[16px]" />
             <span>Delete Template</span>
-          </li>
-        </ul>
-      </PopoverContent>
-    </Popover>
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }

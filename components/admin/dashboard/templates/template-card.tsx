@@ -2,6 +2,7 @@ import Link from 'next/link'
 
 import { HiOutlinePencilSquare } from 'react-icons/hi2'
 
+import { Button } from '@/components/ui/button'
 import TemplateCardOptionsMenuButton from './template-card-options-menu-button'
 
 interface TemplateCardProps {
@@ -21,19 +22,14 @@ export default function TemplateCard({ orgName, id, title, description }: Templa
       <div>
         {description && <p className="mb-[10px] line-clamp-3 text-[14px]">{description}</p>}
         <div className="flex gap-[8px]">
-          <Link
-            href={`/admin/template/${id}/preview`}
-            className="flex h-[36px] w-full items-center justify-center rounded bg-n-600 text-n-100"
-          >
-            View
-          </Link>
-          {/* TODO: Temporarily disabled the ability to edit a template. Reactivate or remove. */}
-          <Link
-            href={`/admin/template/${id}/edit`}
-            className="flex h-[36px] w-1/5 items-center justify-center rounded bg-n-600 text-n-100"
-          >
-            <HiOutlinePencilSquare className="h-[20px] w-[20px]" />
-          </Link>
+          <Button asChild size="md" fullWidth>
+            <Link href={`/admin/template/${id}/preview`}>View</Link>
+          </Button>
+          <Button asChild size="md">
+            <Link href={`/admin/template/${id}/edit`}>
+              <HiOutlinePencilSquare className="h-[20px] w-[20px]" />
+            </Link>
+          </Button>
         </div>
       </div>
     </div>
