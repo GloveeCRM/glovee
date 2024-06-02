@@ -9,10 +9,10 @@ export async function searchTemplates(
   query: string = '',
   limit: number = 0,
   offset: number = 0
-): Promise<TemplateType[]> {
+): Promise<TemplateType[] | null> {
   const accessToken = await getSession()
   if (!accessToken) {
-    return []
+    return null
   }
 
   try {
@@ -29,7 +29,7 @@ export async function searchTemplates(
     const data = await response.json()
     return data.data.templates
   } catch (error) {
-    return []
+    return null
   }
 }
 

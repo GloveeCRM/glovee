@@ -9,7 +9,7 @@ import {
   DEFAULT_ORG_CLIENT_LOGIN_REDIRECT,
   DEFAULT_ORG_MANAGEMENT_LOGIN_REDIRECT,
 } from '@/lib/constants/routes'
-import { validateValuesAgainstSchema } from '@/lib/utils/validation'
+
 import {
   LoginSchema,
   SignupSchema,
@@ -22,7 +22,11 @@ import { getSession, getSessionPayload, removeSession, setSession } from '@/lib/
 export async function login(
   orgName: string,
   values: z.infer<typeof LoginSchema>
-): Promise<{ success?: string; data?: Record<string, any>; error?: string; errors?: any }> {
+): Promise<{
+  success?: string
+  data?: Record<string, any>
+  error?: string
+}> {
   const { email, password } = values
 
   try {
@@ -57,7 +61,7 @@ export async function login(
   }
 }
 
-export async function refreshToken(orgName: string) {
+export async function refreshToken(orgName: string): Promise<{ success?: string; error?: string }> {
   const accessToken = await getSession()
 
   if (!accessToken) {
@@ -87,7 +91,11 @@ export async function refreshToken(orgName: string) {
 export async function signup(
   orgName: string,
   values: z.infer<typeof SignupSchema>
-): Promise<{ success?: string; data?: Record<string, any>; error?: string; errors?: any }> {
+): Promise<{
+  success?: string
+  data?: Record<string, any>
+  error?: string
+}> {
   const { email, password, firstName, lastName } = values
 
   try {
@@ -129,7 +137,10 @@ export async function logout() {
 export async function forgotPassword(
   orgName: string,
   values: z.infer<typeof ForgotPasswordSchema>
-) {
+): Promise<{
+  success?: string
+  error?: string
+}> {
   const { email } = values
 
   try {
