@@ -1,10 +1,11 @@
 'use client'
 
-import ClientApplicationCategoryCard from './client-application-category-card'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Fragment, useEffect } from 'react'
+
 import { ApplicationCategoryType } from '@/lib/types/application'
-import { Divider } from '@/components/ui/divider'
+import { Separator } from '@/components/ui/separator'
+import ClientApplicationCategoryCard from './client-application-category-card'
 
 export default function ApplicationCategoriesCardWrapper({
   categories,
@@ -53,7 +54,7 @@ export default function ApplicationCategoriesCardWrapper({
             isExpanded={expandedCategory.id === category.id}
             onClick={handleCategoryClick}
           />
-          <Divider className="border-n-500" />
+          <Separator className="bg-n-500" />
         </Fragment>
       ))}
     </div>

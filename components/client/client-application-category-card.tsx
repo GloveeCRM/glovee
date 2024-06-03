@@ -19,7 +19,7 @@ export default function ClientApplicationCategoryCard({
 }: ClientApplicationCategoryCardProps) {
   return (
     <div
-      className={`cursor-pointer text-wrap rounded px-[2px] pb-[4px] text-[12px] text-n-300 ${isExpanded && 'bg-n-600/60'}`}
+      className={`cursor-pointer text-wrap rounded px-[4px] pb-[4px] text-[12px] text-n-400`}
       onClick={() => onClick(category.id)}
     >
       <div className="flex gap-[4px]">
@@ -27,14 +27,16 @@ export default function ClientApplicationCategoryCard({
           completionRate={category.completionRate}
           baseCircleColor="text-n-500"
           progressCircleColor="text-n-300"
+          completeGreen
+          completeCheck
         />
-        <div className="mt-[10px] flex w-full justify-between">
-          <div>{category.name}</div>
-          <div>
+        <div className="flex w-full justify-between">
+          <div className={`mt-[12px] ${isExpanded && 'text-n-100'}`}>{category.name}</div>
+          <div className="mt-[14px]">
             {isExpanded ? (
-              <IoChevronDown className="h-[20px] w-[20px]" />
+              <IoChevronDown className="h-[16px] w-[16px]" />
             ) : (
-              <IoChevronForward className="h-[20px] w-[20px]" />
+              <IoChevronForward className="h-[16px] w-[16px]" />
             )}
           </div>
         </div>

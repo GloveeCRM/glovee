@@ -28,7 +28,7 @@ export default function ClientSidebarSectionCard({ section }: ClientSidebarSecti
 
   return (
     <div
-      className={`cursor-pointer rounded-sm ${parseInt(selectedSectionId) === section.id && 'bg-n-600'} p-[4px] pl-[26px] text-[12px] text-n-300`}
+      className={`cursor-pointer rounded ${parseInt(selectedSectionId) === section.id && 'bg-n-650 text-n-100'} p-[4px] pl-[22px] text-[12px]`}
       onClick={(e) => {
         e.stopPropagation()
         handleClick(section.id)
@@ -36,7 +36,7 @@ export default function ClientSidebarSectionCard({ section }: ClientSidebarSecti
     >
       <div className="flex gap-[4px]">
         <div className="mt-[2px]">
-          {section.completionRate == 100 ? (
+          {section.completionRate === 100 ? (
             <FaRegCircleCheck className="h-[13px] w-[13px] text-green-500" />
           ) : (
             <FaRegCircle className="h-[13px] w-[13px]" />
