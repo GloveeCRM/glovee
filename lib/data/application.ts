@@ -11,10 +11,10 @@ import { getSession } from '@/lib/auth/session'
 export async function fetchClientApplications(
   orgName: string,
   clientID: number
-): Promise<ApplicationType[]> {
+): Promise<ApplicationType[] | null> {
   const accessToken = await getSession()
   if (!accessToken) {
-    return []
+    return null
   }
 
   try {
@@ -30,9 +30,14 @@ export async function fetchClientApplications(
     )
 
     const data = await response.json()
-    return data.data.applications
+
+    if (data.status === 'error') {
+      return null
+    } else {
+      return data.data.applications
+    }
   } catch (error) {
-    return []
+    return null
   }
 }
 

@@ -1,17 +1,18 @@
 import ClientApplicationsWrapper from '@/components/client/client-applications-wrapper'
 
-interface ClientApplicationsPageProps {
-  params: {
-    orgName: string
-  }
+interface ClientApplicationsPageParams {
+  orgName: string
 }
 
-export default function ClientApplicationsPage({
-  params: { orgName },
-}: ClientApplicationsPageProps) {
+interface ClientApplicationsPageProps {
+  params: ClientApplicationsPageParams
+}
+
+export default function ClientApplicationsPage({ params }: ClientApplicationsPageProps) {
+  const { orgName } = params
+
   return (
-    <div className="flex h-full flex-col p-[8px]">
-      <h1 className="mb-[15px] text-[24px] font-bold">Applications</h1>
+    <div className="">
       <ClientApplicationsWrapper orgName={orgName} />
     </div>
   )

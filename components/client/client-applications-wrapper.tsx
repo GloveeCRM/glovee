@@ -16,32 +16,39 @@ export default async function ClientApplicationsWrapper({
 
   const hasApplications = applications !== null && applications?.length > 0
 
+  const mainApplications = applications?.filter(
+    (application) => application.role === ApplicationRoleTypes.MAIN
+  )
+  const dependentApplications = applications?.filter(
+    (application) => application.role !== ApplicationRoleTypes.MAIN
+  )
+
   return !hasApplications ? (
     <div className="flex flex-1 flex-col items-center justify-center text-[20px] text-n-400">
       No applications are assigned to you yet
     </div>
   ) : (
     <div>
-      <div>
-        <h3 className="font-semibold">Main Applicant</h3>
-        {applications
-          .filter((application) => application.role === ApplicationRoleTypes.MAIN)
-          .map((application) => (
-            <div key={application.id} className="my-[20px]">
+      {mainApplications && (
+        <div className="mb-[20px]">
+          <h3 className="mb-[12px] cursor-default font-medium">Main Applicant</h3>
+          {mainApplications.map((application) => (
+            <div className="px-[8px]">
+              <ClientApplicationSummaryCard key={application.id} application={application} />
+            </div>
+          ))}
+        </div>
+      )}
+      {dependentApplications && (
+        <div>
+          <h3 className="mb-[12px] cursor-default font-medium">Dependents</h3>
+          {dependentApplications.map((application) => (
+            <div className="mb-[16px] px-[8px]" key={application.id}>
               <ClientApplicationSummaryCard application={application} />
             </div>
           ))}
-      </div>
-      <div>
-        <h3 className="font-semibold">Dependents</h3>
-        {applications
-          .filter((application) => application.role !== ApplicationRoleTypes.MAIN)
-          .map((application) => (
-            <div key={application.id} className="my-[20px]">
-              <ClientApplicationSummaryCard application={application} />
-            </div>
-          ))}
-      </div>
+        </div>
+      )}
     </div>
   )
 }
