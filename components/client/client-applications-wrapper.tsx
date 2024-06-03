@@ -31,17 +31,17 @@ export default async function ClientApplicationsWrapper({
     <div>
       {mainApplications && (
         <div className="mb-[20px]">
-          <h3 className="mb-[12px] cursor-default font-medium">Main Applicant</h3>
+          <h3 className="mb-[12px] font-medium">Main Applicant</h3>
           {mainApplications.map((application) => (
-            <div className="px-[8px]">
-              <ClientApplicationSummaryCard key={application.id} application={application} />
+            <div className="px-[8px]" key={application.id}>
+              <ClientApplicationSummaryCard application={application} />
             </div>
           ))}
         </div>
       )}
       {dependentApplications && (
         <div>
-          <h3 className="mb-[12px] cursor-default font-medium">Dependents</h3>
+          <h3 className="mb-[12px] font-medium">Dependents</h3>
           {dependentApplications.map((application) => (
             <div className="mb-[16px] px-[8px]" key={application.id}>
               <ClientApplicationSummaryCard application={application} />

@@ -5,8 +5,8 @@ import { FaFilePen } from 'react-icons/fa6'
 
 import { ApplicationStatusTypes, ApplicationType } from '@/lib/types/application'
 import { submitApplicationById } from '@/lib/actions/application'
-import { Button, SubmitButton } from '../ui/buttons'
-import ProgressIndicatorRing from '../ui/progress-indicator-ring'
+import { Button } from '@/components/ui/button'
+import ProgressIndicatorRing from '@/components/ui/progress-indicator-ring'
 import ApplicationSummaryCardApplicantInfo from './application-summary-card-applicant-info'
 import ApplicationCardCategorySummariesWrapper from './application-card-category-summaries-wrapper'
 
@@ -36,11 +36,7 @@ export default function ClientApplicationSummaryCard({
         <div className="mt-[16px] flex justify-between gap-[8px]">
           <div className="w-[150px]">
             <Link href={`/application/${application.id}`}>
-              <Button
-                size="full"
-                hsize="sm"
-                className="bg-n-700 text-[12px] font-medium text-n-100 hover:bg-n-900"
-              >
+              <Button size="default">
                 <div className="flex items-center justify-center gap-[8px]">
                   <span>
                     {`${application.status === ApplicationStatusTypes.SUBMITTED ? 'View' : 'Open'} application`}
@@ -51,15 +47,14 @@ export default function ClientApplicationSummaryCard({
             </Link>
           </div>
           {application.status !== ApplicationStatusTypes.SUBMITTED && (
-            <SubmitButton
-              size="xs"
-              hsize="sm"
-              className="text-[12px] font-medium"
+            <Button
+              variant="secondary"
+              size="default"
               onClick={() => submitApplicationById(application.id)}
               disabled={application.completionRate !== 100}
             >
               Submit
-            </SubmitButton>
+            </Button>
           )}
         </div>
       </div>

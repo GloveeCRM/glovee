@@ -1,4 +1,5 @@
 import { Divider } from '@/components/ui/divider'
+import { Separator } from '@/components/ui/separator'
 import ProgressIndicatorRing from '../ui/progress-indicator-ring'
 
 interface ApplicationCardCategorySummaryProps {

@@ -30,7 +30,7 @@ export default async function RootLayout({ params, children }: RootLayoutProps) 
       <OrgProvider orgName={orgName}>
         <DragAndDropProvider>
           <html lang="en">
-            <body id="glovee-crm" className="h-svh overflow-hidden">
+            <body id="glovee-crm" className="h-svh cursor-default overflow-hidden">
               {children}
               <Toaster
                 toastOptions={{
