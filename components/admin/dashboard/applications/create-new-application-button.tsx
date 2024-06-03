@@ -61,7 +61,7 @@ interface CreateNewApplicationButtonProp {
 export default function CreateNewApplicationButton({ client }: CreateNewApplicationButtonProp) {
   const { orgName } = useOrgContext()
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const [templates, setTemplates] = useState<TemplateType[]>([])
+  const [templates, setTemplates] = useState<TemplateType[] | null>(null)
   const [clients, setClients] = useState<UserType[] | null>(null)
   const [isSearchingClients, setIsSearchingClients] = useState<boolean>(false)
 
@@ -313,7 +313,7 @@ export default function CreateNewApplicationButton({ client }: CreateNewApplicat
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {templates.map((template) => (
+                        {templates?.map((template) => (
                           <SelectItem key={template.id} value={String(template.id)}>
                             {template.name}
                           </SelectItem>
