@@ -20,7 +20,7 @@ import {
 } from '@/components//ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components//ui/button'
-import { Divider } from '@/components//ui/divider'
+import { Separator } from '@/components//ui/separator'
 import { Callout } from '@/components/ui/callout'
 
 interface NewPasswordFormProps {
@@ -67,7 +67,7 @@ export default function ForgotPasswordForm({ resetPasswordToken }: NewPasswordFo
       >
         New Password
       </h1>
-      <Divider className="mb-[16px] border-n-300" />
+      <Separator className="mb-[16px] bg-n-300" />
       <Form {...form}>
         <form onSubmit={form.handleSubmit((values) => handleForgotPassword(orgName, values))}>
           <FormField

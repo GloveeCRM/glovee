@@ -20,7 +20,7 @@ import {
 } from '@/components//ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components//ui/button'
-import { Divider } from '@/components//ui/divider'
+import { Separator } from '@/components/ui/separator'
 import { Callout } from '@/components/ui/callout'
 
 export default function SignUpForm() {
@@ -63,7 +63,7 @@ export default function SignUpForm() {
       <h1 id="signup-form-title" className="mb-[8px] text-center text-xl font-bold text-n-700">
         Sign Up
       </h1>
-      <Divider className="mb-[16px] border-n-300" />
+      <Separator className="mb-[16px] bg-n-300" />
       <Form {...form}>
         <form onSubmit={form.handleSubmit((values) => handleSignup(orgName, values))}>
           <FormField
