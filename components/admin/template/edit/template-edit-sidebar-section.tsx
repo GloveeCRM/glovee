@@ -119,7 +119,7 @@ export default function TemplateEditSidebarSection({
               onOpenChange={handleOptionsDropdownMenuOpenChange}
             >
               <DropdownMenuTrigger
-                className={`group-hover/section:bg-n-650 absolute right-[2px] top-0 p-[5px] opacity-0 transition duration-75 focus:outline-none group-hover/section:opacity-100 ${isOptionsMenuOpen && 'opacity-100'} ${active && 'bg-n-650'}`}
+                className={`group-hover/section:bg-n-650 absolute right-0 top-0 rounded p-[5px] opacity-0 transition duration-75 group-hover/section:opacity-100 ${isOptionsMenuOpen && 'opacity-100'} ${active && 'bg-n-650'}`}
               >
                 <FiMoreHorizontal className="h-[20px] w-[20px]" />
               </DropdownMenuTrigger>
