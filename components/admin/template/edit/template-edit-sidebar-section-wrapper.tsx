@@ -17,7 +17,7 @@ export default function TemplateEditSidebarSectionWrapper({
   const { selectedSectionID } = useTemplateEditContext()
 
   return (
-    <div>
+    <div className="mt-[2px] flex flex-col gap-[1px]">
       {sections.length > 0 ? (
         sections.map((section) => (
           <TemplateEditSidebarSection
@@ -27,7 +27,7 @@ export default function TemplateEditSidebarSectionWrapper({
           />
         ))
       ) : (
-        <div className="py-[4px] pl-[23px] text-[12px] text-n-300">No sections</div>
+        <div className="py-[4px] pl-[24px] text-[12px] text-n-400">No sections</div>
       )}
       <CreateSectionButton type={sections.length > 0 ? 'add' : 'create'} categoryID={categoryID} />
     </div>

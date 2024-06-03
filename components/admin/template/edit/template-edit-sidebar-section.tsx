@@ -1,12 +1,19 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { PiDotsSixVerticalBold } from 'react-icons/pi'
+import { FiEdit, FiMoreHorizontal } from 'react-icons/fi'
+import { BiTrash } from 'react-icons/bi'
 
 import { TemplateSectionType } from '@/lib/types/template'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
 import useSectionActions from '@/hooks/template/use-section-actions'
-import SectionMenuButton from './section-menu-button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 
 interface TemplateEditSidebarSectionProps {
   section: TemplateSectionType
@@ -18,6 +25,7 @@ export default function TemplateEditSidebarSection({
   active,
 }: TemplateEditSidebarSectionProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false)
+  const [isOptionsMenuOpen, setIsOptionsMenuOpen] = useState<boolean>(false)
 
   const { setSelectedSectionID } = useTemplateEditContext()
   const { updateSectionTitle, removeSectionFromCategory } = useSectionActions()
@@ -29,12 +37,16 @@ export default function TemplateEditSidebarSection({
     setSelectedSectionID(section.id)
   }
 
-  function handleClickRename() {
+  function handleClickRenameSection() {
     setIsEditing(true)
   }
 
-  function handleClickDelete() {
+  function handleClickDeleteSection() {
     removeSectionFromCategory(section.id)
+  }
+
+  function handleOptionsDropdownMenuOpenChange(isOpen: boolean) {
+    setIsOptionsMenuOpen(isOpen)
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
@@ -51,7 +63,7 @@ export default function TemplateEditSidebarSection({
   function adjustTextareaHeight() {
     const textarea = sectionInputRef.current
     if (textarea) {
-      textarea.style.height = '26px'
+      textarea.style.height = '22px'
       textarea.style.height = `${textarea.scrollHeight}px`
     }
   }
@@ -87,28 +99,46 @@ export default function TemplateEditSidebarSection({
 
   return (
     <div
-      className={`group/section relative flex cursor-pointer gap-[4px] text-[14px] ${active && 'bg-n-500/50'} ${isEditing ? 'py-[5px]' : 'py-[6px]'}`}
+      className={`group/section hover:bg-n-650 relative cursor-pointer rounded text-[12px] transition duration-75 ${active && 'bg-n-650 text-n-100'} ${isEditing ? 'py-[5px]' : 'py-[6px]'}`}
       onClick={handleClickSection}
     >
       {isEditing ? (
         <textarea
           ref={sectionInputRef}
-          className="ml-[28px] block w-[186px] resize-none overflow-hidden rounded border-[1px] border-n-500 bg-n-700/70 px-[4px] pb-[2px] focus:border-[1px] focus:border-n-500 focus:outline-none"
+          className="ml-[15px] block w-[206px] resize-none overflow-hidden rounded border-[1px] border-n-500 bg-n-700/70 px-[4px] pb-[2px] focus:border-[1px] focus:border-n-500 focus:outline-none"
           defaultValue={section.name}
           onChange={handleTitleChange}
           onKeyDown={handleKeyDown}
         />
       ) : (
-        <div className="flex items-start gap-[3px] pl-[8px]">
-          <span>
-            <PiDotsSixVerticalBold className="h-[22px] w-[22px] text-n-300 opacity-0 transition-opacity duration-150 group-hover/section:opacity-100" />
-          </span>
-          <div className="flex items-start">
-            <div className="pr-[6px]">{section.name}</div>
-            <SectionMenuButton
-              onClickRename={handleClickRename}
-              onClickDelete={handleClickDelete}
-            />
+        <div className="pl-[20px] pr-[6px]">
+          <div>
+            <div>{section.name}</div>
+            <DropdownMenu
+              open={isOptionsMenuOpen}
+              onOpenChange={handleOptionsDropdownMenuOpenChange}
+            >
+              <DropdownMenuTrigger
+                className={`group-hover/section:bg-n-650 absolute right-[2px] top-0 p-[5px] opacity-0 transition duration-75 focus:outline-none group-hover/section:opacity-100 ${isOptionsMenuOpen && 'opacity-100'} ${active && 'bg-n-650'}`}
+              >
+                <FiMoreHorizontal className="h-[20px] w-[20px]" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent side="right" align="start" className="w-[160px]">
+                <DropdownMenuGroup>
+                  <DropdownMenuItem onClick={handleClickRenameSection} className="flex gap-[6px]">
+                    <FiEdit className="h-[18px] w-[18px]" />
+                    <span>Rename</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={handleClickDeleteSection}
+                    className="flex gap-[6px] focus:text-red-500"
+                  >
+                    <BiTrash className="h-[18px] w-[18px]" />
+                    <span>Delete</span>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       )}

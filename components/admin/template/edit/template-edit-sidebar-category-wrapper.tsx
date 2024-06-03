@@ -5,7 +5,7 @@ import { Fragment, useEffect, useState } from 'react'
 import { TemplateCategoryType } from '@/lib/types/template'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
 import { TemplateEditSidebarCategoryWrapperSkeleton } from '@/components/skeletons'
-import { Divider } from '@/components/ui/divider'
+import { Separator } from '@/components/ui/separator'
 import TemplateEditSidebarCategory from './template-edit-sidebar-category'
 import CreateCategoryButton from './create-category-button'
 
@@ -39,7 +39,7 @@ export default function TemplateEditSidebarCategoryWrapper({
               category={category}
               isExpanded={selectedCategoryID === category.id}
             />
-            <Divider className="border-n-500" />
+            <Separator className="bg-n-600" />
           </Fragment>
         ))}
       </div>
