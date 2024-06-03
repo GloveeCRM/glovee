@@ -26,6 +26,7 @@ const DropdownMenuTrigger = React.forwardRef<
     {...props}
   />
 ))
+DropdownMenuTrigger.displayName = DropdownMenuPrimitive.Trigger.displayName
 
 const DropdownMenuSubTrigger = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.SubTrigger>,
