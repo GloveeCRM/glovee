@@ -7,7 +7,7 @@ export default function useSectionActions() {
   const { template, setTemplate, selectedCategoryID } = useTemplateEditContext()
   const templateCategories = template?.categories
 
-  function createSectionInCategory(categoryID: number) {
+  function createSectionInTemplateCategory(categoryID: number) {
     if (!templateCategories) return
 
     const updatedCategories = templateCategories.map((category) => {
@@ -30,7 +30,7 @@ export default function useSectionActions() {
     setTemplate({ ...template, categories: updatedCategories })
   }
 
-  function removeSectionFromCategory(sectionID: number) {
+  function removeSectionFromTemplateCategory(sectionID: number) {
     if (!templateCategories) return
 
     const updatedCategories = templateCategories.map((category) => {
@@ -46,7 +46,7 @@ export default function useSectionActions() {
     setTemplate({ ...template, categories: updatedCategories })
   }
 
-  function updateSectionTitle(sectionID: number, name: string) {
+  function updateSectionName(sectionID: number, name: string) {
     if (!templateCategories) return
 
     const updatedCategories = templateCategories.map((category) => {
@@ -65,8 +65,8 @@ export default function useSectionActions() {
   }
 
   return {
-    createSectionInCategory,
-    removeSectionFromCategory,
-    updateSectionTitle,
+    createSectionInTemplateCategory,
+    removeSectionFromTemplateCategory,
+    updateSectionName,
   }
 }

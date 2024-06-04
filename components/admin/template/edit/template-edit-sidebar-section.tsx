@@ -28,7 +28,7 @@ export default function TemplateEditSidebarSection({
   const [isOptionsMenuOpen, setIsOptionsMenuOpen] = useState<boolean>(false)
 
   const { setSelectedSectionID } = useTemplateEditContext()
-  const { updateSectionTitle, removeSectionFromCategory } = useSectionActions()
+  const { updateSectionName, removeSectionFromTemplateCategory } = useSectionActions()
 
   const sectionInputRef = useRef<HTMLTextAreaElement>(null)
 
@@ -42,7 +42,7 @@ export default function TemplateEditSidebarSection({
   }
 
   function handleClickDeleteSection() {
-    removeSectionFromCategory(section.id)
+    removeSectionFromTemplateCategory(section.id)
   }
 
   function handleOptionsDropdownMenuOpenChange(isOpen: boolean) {
@@ -53,7 +53,7 @@ export default function TemplateEditSidebarSection({
     if (e.key === 'Enter') {
       e.preventDefault()
       setIsEditing(false)
-      updateSectionTitle(section.id, e.currentTarget.value)
+      updateSectionName(section.id, e.currentTarget.value)
     } else if (e.key === 'Escape') {
       e.preventDefault()
       setIsEditing(false)
@@ -76,7 +76,7 @@ export default function TemplateEditSidebarSection({
     function handleClickOutside(e: MouseEvent) {
       if (sectionInputRef.current && !sectionInputRef.current.contains(e.target as Node)) {
         setIsEditing(false)
-        updateSectionTitle(section.id, sectionInputRef.current.value)
+        updateSectionName(section.id, sectionInputRef.current.value)
       }
     }
 
@@ -95,7 +95,7 @@ export default function TemplateEditSidebarSection({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [isEditing, sectionInputRef, section.id, updateSectionTitle])
+  }, [isEditing, sectionInputRef, section.id, updateSectionName])
 
   return (
     <div

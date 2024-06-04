@@ -6,7 +6,7 @@ import { useTemplateEditContext } from '@/contexts/template-edit-context'
 export default function useQuestionActions() {
   const { template, setTemplate } = useTemplateEditContext()
 
-  function getQuestionById(questionID: number) {
+  function getTemplateQuestionByID(questionID: number) {
     if (!template || !template.categories) return null
 
     function searchQuestions(questionSets: TemplateQuestionSetType[]): TemplateQuestionType | null {
@@ -197,9 +197,9 @@ export default function useQuestionActions() {
   }
 
   return {
-    getQuestionById,
+    getTemplateQuestionByID,
     getQuestionsInQuestionSet,
     createQuestionInQuestionSet,
-    removeQuestionFromSection: removeQuestionFromQuestionSet,
+    removeQuestionFromQuestionSet,
   }
 }

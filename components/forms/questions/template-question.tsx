@@ -39,7 +39,7 @@ export default function TemplateQuestion({ question }: TemplateQuestionProps) {
   const { setSelectedQuestionSetID, selectedQuestionID, setSelectedQuestionID } =
     useTemplateEditContext()
   const [isOptionsMenuOpen, setIsOptionsMenuOpen] = useState<boolean>(false)
-  const { removeQuestionFromSection } = useQuestionActions()
+  const { removeQuestionFromQuestionSet } = useQuestionActions()
 
   const questionEditRef = useRef<HTMLDivElement>(null)
 
@@ -50,7 +50,7 @@ export default function TemplateQuestion({ question }: TemplateQuestionProps) {
   }
 
   function handleClickDeleteQuestion() {
-    removeQuestionFromSection(question.id)
+    removeQuestionFromQuestionSet(question.id)
   }
 
   function handleClickQuestion(e: React.MouseEvent<HTMLDivElement>) {

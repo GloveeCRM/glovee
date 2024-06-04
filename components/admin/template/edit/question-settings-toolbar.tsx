@@ -7,9 +7,9 @@ interface QuestionSettingsToolbarProps {
 }
 
 export default function QuestionSettingsToolbar({ questionID }: QuestionSettingsToolbarProps) {
-  const { getQuestionById } = useQuestionActions()
+  const { getTemplateQuestionByID } = useQuestionActions()
 
-  const question = getQuestionById(questionID)
+  const question = getTemplateQuestionByID(questionID)
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.05 }}>

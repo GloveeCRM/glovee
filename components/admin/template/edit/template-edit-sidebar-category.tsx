@@ -32,7 +32,7 @@ export default function TemplateEditSidebarCategory({
 
   const { selectedCategoryID, setSelectedCategoryID, setSelectedSectionID } =
     useTemplateEditContext()
-  const { removeCategoryFromTemplate, updateCategoryTitle } = useCategoryActions()
+  const { removeCategoryFromTemplate, updateTemplateCategoryName } = useCategoryActions()
 
   function handleClickCategory() {
     if (selectedCategoryID !== category.id) {
@@ -58,7 +58,7 @@ export default function TemplateEditSidebarCategory({
     if (e.key === 'Enter') {
       e.preventDefault()
       setIsEditing(false)
-      updateCategoryTitle(category.id, e.currentTarget.value)
+      updateTemplateCategoryName(category.id, e.currentTarget.value)
     } else if (e.key === 'Escape') {
       e.preventDefault()
       setIsEditing(false)
@@ -84,7 +84,7 @@ export default function TemplateEditSidebarCategory({
         !categoryTitleInputRef.current.contains(e.target as Node)
       ) {
         setIsEditing(false)
-        updateCategoryTitle(category.id, categoryTitleInputRef.current.value)
+        updateTemplateCategoryName(category.id, categoryTitleInputRef.current.value)
       }
     }
 
@@ -103,7 +103,7 @@ export default function TemplateEditSidebarCategory({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [isEditing, categoryTitleInputRef, category.id, updateCategoryTitle])
+  }, [isEditing, categoryTitleInputRef, category.id, updateTemplateCategoryName])
 
   return (
     <div className="text-[14px] text-n-400">

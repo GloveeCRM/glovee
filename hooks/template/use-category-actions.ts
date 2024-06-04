@@ -1,7 +1,5 @@
 'use client'
 
-import { v4 as uuid4 } from 'uuid'
-
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
 import { generateRandomId } from '@/lib/utils/id'
 
@@ -34,7 +32,7 @@ export default function useCategoryActions() {
     setTemplate({ ...template, categories: updatedCategories })
   }
 
-  function updateCategoryTitle(categoryID: number, name: string) {
+  function updateTemplateCategoryName(categoryID: number, name: string) {
     if (!template) return
 
     const updatedCategories = templateCategories.map((category) => {
@@ -49,6 +47,6 @@ export default function useCategoryActions() {
   return {
     createCategoryInTemplate,
     removeCategoryFromTemplate,
-    updateCategoryTitle,
+    updateTemplateCategoryName,
   }
 }
