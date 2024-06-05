@@ -105,7 +105,7 @@ export default function TemplateEditSidebarSection({
       {isEditing ? (
         <textarea
           ref={sectionInputRef}
-          className="ml-[15px] block w-[206px] resize-none overflow-hidden rounded border-[1px] border-n-500 bg-n-700/70 px-[4px] pb-[2px] focus:border-[1px] focus:border-n-500 focus:outline-none"
+          className="ml-[15px] block w-[206px] resize-none overflow-hidden rounded border-[1px] border-n-500 bg-n-700/70 px-[4px] pb-[2px] text-n-100 focus:border-[1px] focus:border-n-500 focus:outline-none"
           defaultValue={section.name}
           onChange={handleTitleChange}
           onKeyDown={handleKeyDown}

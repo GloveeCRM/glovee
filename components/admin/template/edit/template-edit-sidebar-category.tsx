@@ -110,7 +110,7 @@ export default function TemplateEditSidebarCategory({
       {isEditing ? (
         <textarea
           ref={categoryTitleInputRef}
-          className="mb-[7px] ml-[1px] mt-[4px] block w-[221px] resize-none overflow-hidden rounded border-[1px] border-n-500 bg-n-700/70 px-[4px] pb-[2px] pt-[1px] focus:border-[1px] focus:border-n-500 focus:outline-none"
+          className="mb-[7px] ml-[1px] mt-[4px] block w-[221px] resize-none overflow-hidden rounded border-[1px] border-n-500 bg-n-700/70 px-[4px] pb-[2px] pt-[1px] text-n-100 focus:border-[1px] focus:border-n-500 focus:outline-none"
           defaultValue={category.name}
           onChange={handleTitleChange}
           onKeyDown={handleKeyDown}
