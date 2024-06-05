@@ -128,7 +128,7 @@ export default function TemplateQuestion({ question }: TemplateQuestionProps) {
 
   return (
     <div
-      className={`group/question rounded bg-n-100 text-[14px] ${isQuestionSelected ? 'border-[1px] border-n-700 p-[5px]' : 'p-[6px]'}`}
+      className={`group/question rounded bg-n-100 p-[8px] text-[14px] ${isQuestionSelected && 'outline outline-b-500'}`}
       ref={questionRef}
       onClick={handleClickQuestion}
     >
@@ -136,20 +136,21 @@ export default function TemplateQuestion({ question }: TemplateQuestionProps) {
         {isEditing ? (
           <textarea
             ref={questionPromptInputRef}
-            className="mb-[8px] mt-[2px] block w-full resize-none overflow-hidden rounded-sm border-[2px] border-dashed border-b-300 bg-n-100 px-[4px] pb-[2px] pt-[1px] focus:border-[1px] focus:border-b-500 focus:outline-none"
+            className="mb-[8px] ml-[-3px] mr-[8px] block w-full resize-none overflow-hidden rounded-sm border-[2px] border-dashed border-b-300 bg-n-100 px-[2px] pb-[2px] pt-[1px] focus:border-[1px] focus:border-b-500 focus:outline-none"
             defaultValue={question.prompt}
             onChange={handlePromptChange}
             onKeyDown={handleKeyDown}
           />
         ) : (
-          <>
-            <div className="mb-[10px] ml-[5px] mr-[8px] mt-[4px] flex w-full gap-[8px]">
-              <div>{question.prompt}</div>
-              <div onClick={handleClickEditQuestion} className="cursor-pointer">
-                <FiEdit2 className="mt-[1px] h-[16px] w-[16px]" />
-              </div>
+          <div className="group/prompt mb-[10px] mr-[8px] mt-[2px] flex w-full gap-[8px]">
+            <div>{question.prompt}</div>
+            <div
+              onClick={handleClickEditQuestion}
+              className="cursor-pointer opacity-0 transition duration-75 group-hover/prompt:opacity-100"
+            >
+              <FiEdit2 className="mt-[1px] h-[16px] w-[16px]" />
             </div>
-          </>
+          </div>
         )}
         <DropdownMenu open={isOptionsMenuOpen} onOpenChange={handleOptionsDropdownMenuOpenChange}>
           <DropdownMenuTrigger
