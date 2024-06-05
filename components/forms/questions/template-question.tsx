@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { BiTrash } from 'react-icons/bi'
-import { FiMoreHorizontal } from 'react-icons/fi'
+import { FiEdit, FiEdit2, FiMoreHorizontal } from 'react-icons/fi'
 
 import { TemplateQuestionType } from '@/lib/types/template'
 import {
@@ -36,13 +36,36 @@ interface TemplateQuestionProps {
 }
 
 export default function TemplateQuestion({ question }: TemplateQuestionProps) {
-  const { selectedQuestionID, setSelectedQuestionID } = useTemplateEditContext()
+  const [isEditing, setIsEditing] = useState<boolean>(false)
   const [isOptionsMenuOpen, setIsOptionsMenuOpen] = useState<boolean>(false)
-  const { removeQuestionFromQuestionSet } = useQuestionActions()
+  const { selectedQuestionID, setSelectedQuestionID } = useTemplateEditContext()
+  const { removeQuestionFromQuestionSet, updateQuestion } = useQuestionActions()
 
-  const questionEditRef = useRef<HTMLDivElement>(null)
+  const questionRef = useRef<HTMLDivElement>(null)
+  const questionPromptInputRef = useRef<HTMLTextAreaElement>(null)
 
   const isQuestionSelected = selectedQuestionID === question.id
+
+  function handleClickQuestion(e: React.MouseEvent<HTMLDivElement>) {
+    e.stopPropagation()
+    setSelectedQuestionID(question.id)
+  }
+
+  function handleClickEditQuestion() {
+    setIsEditing(true)
+  }
+
+  function adjustTextareaHeight() {
+    const textarea = questionPromptInputRef.current
+    if (textarea) {
+      textarea.style.height = '29px'
+      textarea.style.height = `${textarea.scrollHeight}px`
+    }
+  }
+
+  function handlePromptChange() {
+    adjustTextareaHeight()
+  }
 
   function handleOptionsDropdownMenuOpenChange(isOpen: boolean) {
     setIsOptionsMenuOpen(isOpen)
@@ -53,30 +76,81 @@ export default function TemplateQuestion({ question }: TemplateQuestionProps) {
     setSelectedQuestionID(0)
   }
 
-  function handleClickQuestion(e: React.MouseEvent<HTMLDivElement>) {
-    e.stopPropagation()
-    setSelectedQuestionID(question.id)
+  function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      setIsEditing(false)
+      updateQuestion({ ...question, prompt: e.currentTarget.value })
+    } else if (e.key === 'Escape') {
+      e.preventDefault()
+      setIsEditing(false)
+    }
   }
 
   useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (questionEditRef.current && !questionEditRef.current.contains(e.target as Node)) {
+    function handleClickOutsideQuestion(e: MouseEvent) {
+      if (questionRef.current && !questionRef.current.contains(e.target as Node)) {
         setSelectedQuestionID(0)
       }
     }
 
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
+    document.addEventListener('mousedown', handleClickOutsideQuestion)
+    return () => document.removeEventListener('mousedown', handleClickOutsideQuestion)
   }, [setSelectedQuestionID])
+
+  useEffect(() => {
+    function handleClickOutsideQuestionPrompt(e: MouseEvent) {
+      if (
+        questionPromptInputRef.current &&
+        !questionPromptInputRef.current.contains(e.target as Node)
+      ) {
+        setIsEditing(false)
+        updateQuestion({ ...question, prompt: questionPromptInputRef.current.value })
+      }
+    }
+
+    if (isEditing) {
+      adjustTextareaHeight()
+
+      const textarea = questionPromptInputRef.current
+      if (textarea) {
+        textarea.focus()
+
+        // move cursor to the end of the text
+        const length = textarea.value.length
+        textarea.setSelectionRange(length, length)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutsideQuestionPrompt)
+    return () => document.removeEventListener('mousedown', handleClickOutsideQuestionPrompt)
+  }, [isEditing])
 
   return (
     <div
       className={`group/question rounded bg-n-100 text-[14px] ${isQuestionSelected ? 'border-[1px] border-n-700 p-[5px]' : 'p-[6px]'}`}
-      ref={questionEditRef}
+      ref={questionRef}
       onClick={handleClickQuestion}
     >
       <div className="flex justify-between">
-        <div className="mb-[4px]">{question.prompt}</div>
+        {isEditing ? (
+          <textarea
+            ref={questionPromptInputRef}
+            className="mb-[8px] mt-[2px] block w-full resize-none overflow-hidden rounded-sm border-[2px] border-dashed border-b-300 bg-n-100 px-[4px] pb-[2px] pt-[1px] focus:border-[1px] focus:border-b-500 focus:outline-none"
+            defaultValue={question.prompt}
+            onChange={handlePromptChange}
+            onKeyDown={handleKeyDown}
+          />
+        ) : (
+          <>
+            <div className="mb-[10px] ml-[5px] mr-[8px] mt-[4px] flex w-full gap-[8px]">
+              <div>{question.prompt}</div>
+              <div onClick={handleClickEditQuestion} className="cursor-pointer">
+                <FiEdit2 className="mt-[1px] h-[16px] w-[16px]" />
+              </div>
+            </div>
+          </>
+        )}
         <DropdownMenu open={isOptionsMenuOpen} onOpenChange={handleOptionsDropdownMenuOpenChange}>
           <DropdownMenuTrigger
             className={`flex h-[10px] items-center rounded-sm bg-n-100 text-n-700 opacity-0 transition duration-75 group-hover/question:opacity-100 ${isOptionsMenuOpen && 'opacity-100'}`}

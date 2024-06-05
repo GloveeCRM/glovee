@@ -196,10 +196,55 @@ export default function useQuestionActions() {
     })
   }
 
+  function updateQuestion(updatedQuestion: TemplateQuestionType) {
+    if (!template || !template.categories) return
+
+    const updatedCategories = template.categories.map((category) => {
+      if (!category.sections) return category
+
+      const updatedSections = category.sections.map((section) => {
+        const updatedQuestionSets =
+          section.questionSets?.map((questionSet) => {
+            return updateQuestionInQuestionSet(questionSet, updatedQuestion)
+          }) || []
+
+        return { ...section, questionSets: updatedQuestionSets }
+      })
+
+      return { ...category, sections: updatedSections }
+    })
+
+    setTemplate({ ...template, categories: updatedCategories })
+  }
+
+  function updateQuestionInQuestionSet(
+    questionSet: TemplateQuestionSetType,
+    updatedQuestion: TemplateQuestionType
+  ): TemplateQuestionSetType {
+    // Update questions in the current question set
+    const updatedQuestions =
+      questionSet.questions?.map((question) => {
+        if (question.id === updatedQuestion.id) {
+          // Merge old question data with new updates
+          return { ...question, ...updatedQuestion }
+        }
+        return question
+      }) || []
+
+    // Recursively update nested question sets if any
+    const updatedNestedQuestionSets =
+      questionSet.questionSets?.map((nestedQuestionSet) => {
+        return updateQuestionInQuestionSet(nestedQuestionSet, updatedQuestion)
+      }) || []
+
+    return { ...questionSet, questions: updatedQuestions, questionSets: updatedNestedQuestionSets }
+  }
+
   return {
     getTemplateQuestionByID,
     getQuestionsInQuestionSet,
     createQuestionInQuestionSet,
     removeQuestionFromQuestionSet,
+    updateQuestion,
   }
 }

@@ -41,6 +41,10 @@ export default function TemplateEditSidebarCategory({
     }
   }
 
+  function handleOptionsDropdownMenuOpenChange(isOpen: boolean) {
+    setIsOptionsMenuOpen(isOpen)
+  }
+
   function handleClickDeleteCategory() {
     removeCategoryFromTemplate(category.id)
     setSelectedCategoryID(0)
@@ -48,10 +52,6 @@ export default function TemplateEditSidebarCategory({
 
   function handleClickRenameCategory() {
     setIsEditing(true)
-  }
-
-  function handleOptionsDropdownMenuOpenChange(isOpen: boolean) {
-    setIsOptionsMenuOpen(isOpen)
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
