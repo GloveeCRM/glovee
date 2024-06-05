@@ -32,8 +32,6 @@ export default function TemplateQuestionSet({ questionSet }: TemplateQuestionSet
 
   const templateQuestionSetRef = useRef<HTMLDivElement>(null)
 
-  const questions = questionSet.questions || []
-
   const isFlat = questionSet.type === TemplateQuestionSetTypes.FLAT
   const isLoop = questionSet.type === TemplateQuestionSetTypes.LOOP
   const isDependsOn = questionSet.type === TemplateQuestionSetTypes.DEPENDS_ON

@@ -14,10 +14,10 @@ export default function TemplateEditToolbar() {
       <div className="sticky top-0 z-10 bg-n-700 py-[6px]">
         <SaveTemplateButton />
       </div>
-      {selectedQuestionSetID ? (
-        <QuestionSetSettingsToolbar questionSetID={selectedQuestionSetID} />
-      ) : selectedQuestionID ? (
+      {selectedQuestionID ? (
         <QuestionSettingsToolbar questionID={selectedQuestionID} />
+      ) : selectedQuestionSetID ? (
+        <QuestionSetSettingsToolbar questionSetID={selectedQuestionSetID} />
       ) : (
         <TemplateEditDefaultToolbar />
       )}
