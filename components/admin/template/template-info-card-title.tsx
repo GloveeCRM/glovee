@@ -4,20 +4,19 @@ import { useEffect, useRef, useState } from 'react'
 import { PiCheckBold } from 'react-icons/pi'
 import { MdOutlineModeEdit } from 'react-icons/md'
 
-import { updateTemplateTitleByID } from '@/lib/actions/template'
+import useTemplateActions from '@/hooks/template/use-template-actions'
 
 interface TemplateInfoCardTitleProps {
-  templateID: number
   title: string
   editable?: boolean
 }
 
 export default function TemplateInfoCardTitle({
-  templateID,
   title,
   editable = false,
 }: TemplateInfoCardTitleProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false)
+  const { updateTemplateName } = useTemplateActions()
 
   const titleInputRef = useRef<HTMLTextAreaElement>(null)
 
@@ -26,9 +25,9 @@ export default function TemplateInfoCardTitle({
   }
 
   function handleSave() {
-    const newTitle = titleInputRef.current?.value || 'Untitled'
+    const newTitle = titleInputRef.current?.value || 'Untitled Template'
     setIsEditing(false)
-    updateTemplateTitleByID(templateID, newTitle)
+    updateTemplateName(newTitle)
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
@@ -70,7 +69,9 @@ export default function TemplateInfoCardTitle({
           onKeyDown={handleKeyDown}
         />
       ) : (
-        <p className="mb-[1px] ml-[7px] mt-[6px] w-[calc(100%-16px)]">{title}</p>
+        <p className="mb-[1px] ml-[7px] mt-[6px] w-[calc(100%-16px)]">
+          {title || 'Untitled Template'}
+        </p>
       )}
 
       {editable &&

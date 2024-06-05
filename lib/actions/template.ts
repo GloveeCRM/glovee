@@ -39,16 +39,6 @@ export async function createNewTemplate(orgName: string, values: z.infer<typeof 
   }
 }
 
-// TODO: Implement the following function
-export async function updateTemplateTitleByID(templateID: number, title: string) {
-  return null
-}
-
-// TODO: Implement the following function
-export async function updateTemplateDescriptionByID(templateID: number, description: string) {
-  return null
-}
-
 export async function deleteTemplateByID(orgName: string, templateID: number) {
   const accessToken = await getSession()
   if (!accessToken) {

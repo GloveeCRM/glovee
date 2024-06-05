@@ -1,32 +1,20 @@
 'use client'
 
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment } from 'react'
 
 import { TemplateCategoryType } from '@/lib/types/template'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
-import { TemplateEditSidebarCategoryWrapperSkeleton } from '@/components/skeletons'
 import { Separator } from '@/components/ui/separator'
+import { TemplateEditSidebarCategoryWrapperSkeleton } from '@/components/skeletons'
 import TemplateEditSidebarCategory from './template-edit-sidebar-category'
 import CreateCategoryButton from './create-category-button'
 
-interface TemplateEditSidebarCategoryWrapperProps {
-  templateID: number
-}
-export default function TemplateEditSidebarCategoryWrapper({
-  templateID,
-}: TemplateEditSidebarCategoryWrapperProps) {
-  const [isLoading, setIsLoading] = useState<boolean>(true)
+export default function TemplateEditSidebarCategoryWrapper() {
   const { template, selectedCategoryID } = useTemplateEditContext()
 
   const templateCategories = template?.categories
 
-  useEffect(() => {
-    if (templateCategories) {
-      setIsLoading(false)
-    }
-  }, [templateCategories])
-
-  if (isLoading) {
+  if (!templateCategories) {
     return <TemplateEditSidebarCategoryWrapperSkeleton />
   }
 
@@ -43,7 +31,10 @@ export default function TemplateEditSidebarCategoryWrapper({
           </Fragment>
         ))}
       </div>
-      <CreateCategoryButton templateID={templateID} type={templateCategories ? 'add' : 'create'} />
+      <CreateCategoryButton
+        templateID={template?.id || 0}
+        type={templateCategories ? 'add' : 'create'}
+      />
     </div>
   )
 }

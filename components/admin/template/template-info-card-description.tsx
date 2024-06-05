@@ -4,21 +4,20 @@ import { useEffect, useRef, useState } from 'react'
 import { MdOutlineModeEdit } from 'react-icons/md'
 import { PiCheckBold } from 'react-icons/pi'
 
-import { updateTemplateDescriptionByID } from '@/lib/actions/template'
+import useTemplateActions from '@/hooks/template/use-template-actions'
 
 interface TemplateInfoCardDescriptionProps {
-  templateID: number
   description: string
   editable?: boolean
 }
 
 export default function TemplateInfoCardDescription({
-  templateID,
   description,
   editable = false,
 }: TemplateInfoCardDescriptionProps) {
   const [isExpanded, setIsExpanded] = useState<boolean>(false)
   const [isEditing, setIsEditing] = useState<boolean>(false)
+  const { updateTemplateDescription } = useTemplateActions()
 
   const descriptionInputRef = useRef<HTMLTextAreaElement>(null)
 
@@ -29,7 +28,7 @@ export default function TemplateInfoCardDescription({
   function handleSave() {
     const newDescription = descriptionInputRef.current?.value || ''
     setIsEditing(false)
-    updateTemplateDescriptionByID(templateID, newDescription)
+    updateTemplateDescription(newDescription)
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
@@ -75,7 +74,7 @@ export default function TemplateInfoCardDescription({
           <p
             className={`mb-[4px] ml-[7px] w-[calc(100%-14px)] pt-[2px] text-n-300 ${description.length <= 129 && 'mb-[6px]'} ${!isExpanded ? 'line-clamp-3' : ''}`}
           >
-            {description || <span>No description</span>}
+            {description || 'No description'}
           </p>
           {description.length > 129 && (
             <button
