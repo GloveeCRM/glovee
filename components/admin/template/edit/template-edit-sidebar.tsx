@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { IoChevronBackOutline } from 'react-icons/io5'
 
-import TemplateInfoCard from '../template-info-card'
+import TemplateInfoCard from './template-info-card'
 import TemplateEditSidebarCategoryWrapper from './template-edit-sidebar-category-wrapper'
 
 export default async function TemplateEditSidebar() {

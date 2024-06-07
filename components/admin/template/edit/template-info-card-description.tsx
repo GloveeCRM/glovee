@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { MdOutlineModeEdit } from 'react-icons/md'
-import { PiCheckBold } from 'react-icons/pi'
 
 import useTemplateActions from '@/hooks/template/use-template-actions'
 
@@ -47,6 +46,12 @@ export default function TemplateInfoCardDescription({
   }
 
   useEffect(() => {
+    function handleClickOutsideDescription(e: MouseEvent) {
+      if (descriptionInputRef.current && !descriptionInputRef.current.contains(e.target as Node)) {
+        handleSave()
+      }
+    }
+
     if (isEditing) {
       adjustTextareaHeight()
       const textarea = descriptionInputRef.current
@@ -57,6 +62,11 @@ export default function TemplateInfoCardDescription({
         textarea.setSelectionRange(length, length)
       }
     }
+
+    document.addEventListener('mousedown', handleClickOutsideDescription)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutsideDescription)
+    }
   }, [isEditing, description])
 
   return (
@@ -64,7 +74,7 @@ export default function TemplateInfoCardDescription({
       {isEditing ? (
         <textarea
           ref={descriptionInputRef}
-          className="mb-[6px] ml-[2px] mt-[2px] block w-[calc(100%-25px)] resize-none overflow-hidden rounded border-[1px] border-n-500 bg-n-700/70 px-[4px] pb-[2px] focus:border-[1px] focus:border-n-500 focus:outline-none"
+          className="mb-[6px] ml-[4px] mt-[3px] block w-[calc(100%-8px)] resize-none overflow-hidden rounded border-[1px] border-n-500 bg-n-700/70 px-[3px] pb-[2px] focus:border-[1px] focus:border-n-500 focus:outline-none"
           defaultValue={description}
           onChange={adjustTextareaHeight}
           onKeyDown={handleKeyDown}
@@ -72,7 +82,7 @@ export default function TemplateInfoCardDescription({
       ) : (
         <>
           <p
-            className={`mb-[4px] ml-[7px] w-[calc(100%-14px)] pt-[2px] text-n-300 ${description.length <= 129 && 'mb-[6px]'} ${!isExpanded ? 'line-clamp-3' : ''}`}
+            className={`mb-[7px] ml-[8px] mt-[4px] w-[calc(100%-14px)] text-n-300 ${description.length <= 129 && 'mb-[6px]'} ${!isExpanded ? 'line-clamp-3' : ''}`}
           >
             {description || 'No description'}
           </p>
@@ -87,18 +97,12 @@ export default function TemplateInfoCardDescription({
         </>
       )}
 
-      {editable &&
-        (!isEditing ? (
-          <MdOutlineModeEdit
-            onClick={handleClickEdit}
-            className="absolute right-0 top-0 h-[22px] w-[22px] cursor-pointer rounded bg-n-600/90 p-[2px] text-n-300 opacity-0 transition-opacity duration-100 hover:text-n-100 group-hover:opacity-100"
-          />
-        ) : (
-          <PiCheckBold
-            onClick={handleSave}
-            className="absolute right-0 top-0 mr-[1px] h-[22px] w-[22px] cursor-pointer rounded bg-n-600/90 p-[1px] text-n-300 duration-100 hover:text-n-100"
-          />
-        ))}
+      {editable && !isEditing && (
+        <MdOutlineModeEdit
+          onClick={handleClickEdit}
+          className="absolute right-0 top-0 h-[22px] w-[22px] cursor-pointer rounded bg-n-600/90 p-[2px] text-n-300 opacity-0 transition-opacity duration-100 hover:text-n-100 group-hover:opacity-100"
+        />
+      )}
     </div>
   )
 }

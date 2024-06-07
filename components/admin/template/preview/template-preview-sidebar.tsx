@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 import { IoChevronBackOutline } from 'react-icons/io5'
 
-import TemplateInfoCard from '../template-info-card'
+import TemplateInfoCard from '../edit/template-info-card'
 
 export default async function TemplatePreviewSidebar() {
   return (

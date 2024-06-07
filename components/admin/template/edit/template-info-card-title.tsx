@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { PiCheckBold } from 'react-icons/pi'
 import { MdOutlineModeEdit } from 'react-icons/md'
 
 import useTemplateActions from '@/hooks/template/use-template-actions'
@@ -46,6 +45,12 @@ export default function TemplateInfoCardTitle({
   }
 
   useEffect(() => {
+    function handleClickOutsideTitle(e: MouseEvent) {
+      if (titleInputRef.current && !titleInputRef.current.contains(e.target as Node)) {
+        handleSave()
+      }
+    }
+
     if (isEditing) {
       adjustTextareaHeight()
       const textarea = titleInputRef.current
@@ -56,6 +61,11 @@ export default function TemplateInfoCardTitle({
         textarea.setSelectionRange(length, length)
       }
     }
+
+    document.addEventListener('mousedown', handleClickOutsideTitle)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutsideTitle)
+    }
   }, [isEditing, title])
 
   return (
@@ -63,29 +73,23 @@ export default function TemplateInfoCardTitle({
       {isEditing ? (
         <textarea
           defaultValue={title}
-          className="ml-[2px] mt-[5px] block w-[calc(100%-25px)] resize-none overflow-hidden rounded border-[1px] border-n-500 bg-n-700/70 px-[4px] pb-[2px] text-n-100 focus:border-[1px] focus:border-n-500 focus:outline-none"
+          className="ml-[4px] mt-[5px] block w-[calc(100%-8px)] resize-none overflow-hidden rounded border-[1px] border-n-500 bg-n-700/70 px-[3px] pb-[2px] text-n-100 focus:border-[1px] focus:border-n-500 focus:outline-none"
           ref={titleInputRef}
           onChange={adjustTextareaHeight}
           onKeyDown={handleKeyDown}
         />
       ) : (
-        <p className="mb-[1px] ml-[7px] mt-[6px] w-[calc(100%-16px)]">
+        <p className="mb-[1px] ml-[8px] mt-[6px] w-[calc(100%-16px)]">
           {title || 'Untitled Template'}
         </p>
       )}
 
-      {editable &&
-        (!isEditing ? (
-          <MdOutlineModeEdit
-            onClick={handleClickEdit}
-            className="absolute right-0 top-0 h-[22px] w-[22px] cursor-pointer rounded bg-n-600/90 p-[2px] text-n-300 opacity-0 transition-opacity duration-100 hover:text-n-100 group-hover:opacity-100"
-          />
-        ) : (
-          <PiCheckBold
-            onClick={handleSave}
-            className="absolute right-0 top-0 mr-[1px] h-[22px] w-[22px] cursor-pointer rounded bg-n-600/90 p-[1px] text-n-300 duration-100 hover:text-n-100"
-          />
-        ))}
+      {editable && !isEditing && (
+        <MdOutlineModeEdit
+          onClick={handleClickEdit}
+          className="absolute right-0 top-0 h-[22px] w-[22px] cursor-pointer rounded bg-n-600/90 p-[2px] text-n-300 opacity-0 transition-opacity duration-100 hover:text-n-100 group-hover:opacity-100"
+        />
+      )}
     </div>
   )
 }
