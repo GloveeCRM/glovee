@@ -1,4 +1,6 @@
 import { TemplateQuestionSetType } from '@/lib/types/template'
+import EmptyQuestionSetDropzone from '../empty-question-set-dropzone'
+import TemplateQuestionSet from '../template-question-set'
 
 interface DependsOnQuestionSetEditProps {
   questionSet: TemplateQuestionSetType
@@ -9,6 +11,8 @@ export default function DependsOnQuestionSetEdit({
   questionSet,
   selected = false,
 }: DependsOnQuestionSetEditProps) {
+  const questionSets = questionSet.questionSets
+
   return (
     <div
       className={`group/questionSet rounded bg-b-500 ${selected ? 'border-[3px] border-b-700 p-[5px] pt-[13px]' : 'p-[8px] pt-[16px]'}`}
@@ -33,7 +37,17 @@ export default function DependsOnQuestionSetEdit({
         </div>
       </div>
 
-      <div>Empty dependsOn question set</div>
+      <div className="mt-[4px]">
+        {questionSets && questionSets.length > 0 ? (
+          <div className="rounded bg-b-300 px-[4px]">
+            {questionSets.map((questionSet) => (
+              <TemplateQuestionSet key={questionSet.id} questionSet={questionSet} />
+            ))}
+          </div>
+        ) : (
+          <EmptyQuestionSetDropzone questionSet={questionSet} />
+        )}
+      </div>
     </div>
   )
 }
