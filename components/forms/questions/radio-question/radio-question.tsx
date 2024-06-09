@@ -10,7 +10,7 @@ export default function RadioQuestion({ question, readOnly }: RadioQuestionProps
   const options = question.settings.options
 
   return (
-    <div className={`flex ${inline ? 'gap-[24px]' : 'flex-col gap-[4px]'}`}>
+    <div className={`flex ${inline ? 'gap-[18px]' : 'flex-col gap-[4px]'}`}>
       {options.map((option) => (
         <div key={option.position} className="flex items-center gap-[4px]">
           <input

@@ -51,7 +51,7 @@ export default function TemplateQuestion({ question }: TemplateQuestionProps) {
     setSelectedQuestionID(question.id)
   }
 
-  function handleClickEditQuestion() {
+  function handleClickEditPrompt() {
     setIsEditing(true)
   }
 
@@ -145,7 +145,7 @@ export default function TemplateQuestion({ question }: TemplateQuestionProps) {
           <div className="group/prompt mb-[10px] mr-[8px] mt-[2px] flex w-full gap-[8px]">
             <div>{question.prompt}</div>
             <div
-              onClick={handleClickEditQuestion}
+              onClick={handleClickEditPrompt}
               className="cursor-pointer opacity-0 transition duration-75 group-hover/prompt:opacity-100"
             >
               <FiEdit2 className="mt-[1px] h-[16px] w-[16px]" />

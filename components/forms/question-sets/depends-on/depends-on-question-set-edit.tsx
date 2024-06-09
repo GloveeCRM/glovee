@@ -20,13 +20,14 @@ export default function DependsOnQuestionSetEdit({
   questionSet,
   selected = false,
 }: DependsOnQuestionSetEditProps) {
-  const [isEditing, setIsEditing] = useState<boolean>(false)
-  const { updateQuestion } = useQuestionActions()
-
   const questionSets = questionSet.questionSets
   const question = questionSet.questions?.[0] as RadioQuestionType
-  const isInline = question?.settings?.display === 'inline'
-  const options = question?.settings?.options || []
+  const isInline = question.settings.display === 'inline'
+  const options = question.settings.options || []
+
+  const [isEditing, setIsEditing] = useState<boolean>(false)
+  const [selectedOption, setSelectedOption] = useState<string>(options[0].value || '')
+  const { updateQuestion } = useQuestionActions()
 
   const questionPromptInputRef = useRef<HTMLTextAreaElement>(null)
 
@@ -46,7 +47,11 @@ export default function DependsOnQuestionSetEdit({
     questionSetID: questionSet.id,
   }
 
-  function handleClickEditQuestion() {
+  function handleSelectOption(e: React.ChangeEvent<HTMLInputElement>) {
+    setSelectedOption(e.target.value)
+  }
+
+  function handleClickEditPrompt() {
     setIsEditing(true)
   }
 
@@ -124,27 +129,46 @@ export default function DependsOnQuestionSetEdit({
           <div className="group/prompt mb-[10px] mr-[8px] mt-[2px] flex w-full gap-[8px]">
             <div>{question?.prompt}</div>
             <div
-              onClick={handleClickEditQuestion}
+              onClick={handleClickEditPrompt}
               className="cursor-pointer opacity-0 transition duration-75 group-hover/prompt:opacity-100"
             >
               <FiEdit2 className="mt-[1px] h-[16px] w-[16px]" />
             </div>
           </div>
         )}
-        <div className={`flex ${isInline ? 'gap-[12px]' : 'flex-col gap-[2px]'}`}>
-          {options.map((option: any) => (
-            <div key={option.value} className="flex items-center gap-[4px]">
-              <input type="radio" name="dependsOn" value={option.value} />
-              <label className="text-[12px]">{option.value}</label>
+        <div className={`flex ${isInline ? 'gap-[18px]' : 'flex-col gap-[4px]'}`}>
+          {options.map((option) => (
+            <div key={option.value} className="flex items-start gap-[4px]">
+              <input
+                type="radio"
+                name={String(question?.id)}
+                value={option.value}
+                checked={selectedOption === option.value}
+                className="mt-[2px] h-[14px] w-[14px]"
+                onChange={handleSelectOption}
+              />
+              <label
+                className="text-[12px] text-n-500"
+                onClick={() => setSelectedOption(option.value)}
+              >
+                {option.value}
+              </label>
             </div>
           ))}
         </div>
       </div>
       <div className="mt-[4px] flex gap-[4px]">
-        <div className="flex h-[30px] w-full items-center justify-center rounded bg-n-400">Yes</div>
-        <div className="flex h-[30px] w-full items-center justify-center rounded bg-n-600 text-n-100">
-          No
-        </div>
+        {options.map((option) => (
+          <div
+            key={option.value}
+            className={`flex h-[30px] w-full items-center justify-center rounded ${
+              selectedOption === option.value ? 'bg-n-700 text-n-100' : 'bg-b-300'
+            }`}
+            onClick={() => setSelectedOption(option.value)}
+          >
+            {option.value}
+          </div>
+        ))}
       </div>
 
       <div className="mt-[4px]">
