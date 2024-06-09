@@ -2,7 +2,7 @@
 
 import { PiCheckBold } from 'react-icons/pi'
 
-import { TemplateQuestionTypes } from '@/lib/types/template'
+import { QuestionTypes } from '@/lib/types/qusetion'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 import { Divider } from '@/components/ui/divider'
 
@@ -14,7 +14,7 @@ export default function CheckboxQuestionIcon() {
     setDraggedObject({
       type: 'question',
       object: {
-        type: TemplateQuestionTypes.CHECKBOX,
+        type: QuestionTypes.CHECKBOX,
       },
     })
   }

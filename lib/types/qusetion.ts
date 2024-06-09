@@ -1,105 +1,110 @@
-import { BaseSettingsType, TemplateQuestionType, TemplateQuestionTypes } from './template'
-import { ApplicationQuestionType, ApplicationQuestionTypes } from './application'
+export type BaseQuestionSettings = {}
+
+export enum QuestionTypes {
+  TEXT_INPUT = 'TEXT_INPUT',
+  TEXTAREA = 'TEXTAREA',
+  SELECT = 'SELECT',
+  DATE_INPUT = 'DATE_INPUT',
+  RADIO = 'RADIO',
+  CHECKBOX = 'CHECKBOX',
+  DOCUMENT = 'DOCUMENT',
+}
+
+export type BaseQuestionType = {
+  id: number
+  type: QuestionTypes
+  prompt: string
+  position: number
+  settings: BaseQuestionSettings
+  helperText?: string
+  answer?: BaseAnswerType
+  questionSetID: number
+}
+
+export type BaseAnswerType = {
+  id: number
+  questionID: number
+  answer: Record<string, any>
+}
 
 export function isTextInputQuestionType(
-  question: TemplateQuestionType | ApplicationQuestionType
+  question: BaseQuestionType
 ): question is TextInputQuestionType {
-  return (
-    question.type === TemplateQuestionTypes.TEXT_INPUT ||
-    question.type === ApplicationQuestionTypes.TEXT_INPUT
-  )
+  return question.type === QuestionTypes.TEXT_INPUT
 }
 
-export type TextInputQuestionType = (TemplateQuestionType | ApplicationQuestionType) & {
-  settings: BaseSettingsType
-}
+export type TextInputQuestionType = BaseQuestionType
 
 export function isTextareaQuestionType(
-  question: TemplateQuestionType | ApplicationQuestionType
+  question: BaseQuestionType
 ): question is TextareaQuestionType {
-  return (
-    question.type === TemplateQuestionTypes.TEXTAREA ||
-    question.type === ApplicationQuestionTypes.TEXTAREA
-  )
+  return question.type === QuestionTypes.TEXTAREA
 }
 
-export type TextareaQuestionType = (TemplateQuestionType | ApplicationQuestionType) & {
-  settings: BaseSettingsType
+export type TextareaQuestionType = BaseQuestionType
+
+export function isSelectQuestionType(question: BaseQuestionType): question is SelectQuestionType {
+  return question.type === QuestionTypes.SELECT
 }
 
-export function isSelectQuestionType(
-  question: TemplateQuestionType | ApplicationQuestionType
-): question is SelectQuestionType {
-  return (
-    question.type === TemplateQuestionTypes.SELECT ||
-    question.type === ApplicationQuestionTypes.SELECT
-  )
-}
-
-export type SelectQuestionType = (TemplateQuestionType | ApplicationQuestionType) & {
-  settings: BaseSettingsType
-}
+export type SelectQuestionType = BaseQuestionType
 
 export function isDateInputQuestionType(
-  question: TemplateQuestionType | ApplicationQuestionType
+  question: BaseQuestionType
 ): question is DateInputQuestionType {
-  return (
-    question.type === TemplateQuestionTypes.DATE_INPUT ||
-    question.type === ApplicationQuestionTypes.DATE_INPUT
-  )
+  return question.type === QuestionTypes.DATE_INPUT
 }
 
-export type DateInputQuestionType = (TemplateQuestionType | ApplicationQuestionType) & {
-  settings: BaseSettingsType
+export type DateInputQuestionType = BaseQuestionType
+
+export function isRadioQuestionType(question: BaseQuestionType): question is RadioQuestionType {
+  return question.type === QuestionTypes.RADIO
 }
 
-export function isRadioQuestionType(
-  question: TemplateQuestionType | ApplicationQuestionType
-): question is RadioQuestionType {
-  return (
-    question.type === TemplateQuestionTypes.RADIO ||
-    question.type === ApplicationQuestionTypes.RADIO
-  )
+export type RadioQuestionSettings = BaseQuestionSettings & {
+  display: 'inline' | 'block'
+  options: {
+    position: number
+    value: string
+  }[]
 }
 
-export type RadioQuestionType = (TemplateQuestionType | ApplicationQuestionType) & {
-  settings: BaseSettingsType & {
-    display: 'inline' | 'block'
-    options: {
-      position: number
-      value: string
-    }[]
-  }
+export type RadioQuestionType = BaseQuestionType & {
+  settings: RadioQuestionSettings
 }
 
 export function isCheckboxQuestionType(
-  question: TemplateQuestionType | ApplicationQuestionType
+  question: BaseQuestionType
 ): question is CheckboxQuestionType {
-  return (
-    question.type === TemplateQuestionTypes.CHECKBOX ||
-    question.type === ApplicationQuestionTypes.CHECKBOX
-  )
+  return question.type === QuestionTypes.CHECKBOX
 }
 
-export type CheckboxQuestionType = (TemplateQuestionType | ApplicationQuestionType) & {
-  settings: BaseSettingsType & {
-    display: 'inline' | 'block'
-    options: {
-      position: number
-      value: string
-    }[]
-  }
+export type CheckboxQuestionSettings = BaseQuestionSettings & {
+  display: 'inline' | 'block'
+  options: {
+    position: number
+    value: string
+  }[]
+}
+
+export type CheckboxQuestionType = BaseQuestionType & {
+  settings: CheckboxQuestionSettings
 }
 
 export function isDocumentQuestionType(
-  question: TemplateQuestionType | ApplicationQuestionType
+  question: BaseQuestionType
 ): question is DocumentQuestionType {
-  return (
-    question.type === TemplateQuestionTypes.DOCUMENT ||
-    question.type === ApplicationQuestionTypes.DOCUMENT
-  )
+  return question.type === QuestionTypes.DOCUMENT
 }
 
-export type DocumentQuestionType = (TemplateQuestionType | ApplicationQuestionType) & {
-  settings: BaseSettingsType
-}
+export type DocumentQuestionType = BaseQuestionType
+
+export type QuestionType =
+  | BaseQuestionType
+  | TextInputQuestionType
+  | TextareaQuestionType
+  | SelectQuestionType
+  | DateInputQuestionType
+  | RadioQuestionType
+  | CheckboxQuestionType
+  | DocumentQuestionType

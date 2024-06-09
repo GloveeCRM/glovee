@@ -117,7 +117,7 @@ export default function TemplateEditSidebarCategory({
         />
       ) : (
         <div
-          className="group/category hover:bg-n-650 relative cursor-pointer rounded px-[6px] py-[6px] transition duration-75"
+          className="group/category relative cursor-pointer rounded px-[6px] py-[6px] transition duration-75 hover:bg-n-650"
           onClick={handleClickCategory}
         >
           <div
@@ -127,7 +127,7 @@ export default function TemplateEditSidebarCategory({
           </div>
           <DropdownMenu open={isOptionsMenuOpen} onOpenChange={handleOptionsDropdownMenuOpenChange}>
             <DropdownMenuTrigger
-              className={`group-hover/category:bg-n-650 absolute right-0 top-0 rounded bg-n-700 p-[6px] opacity-0 transition duration-75 focus:outline-none group-hover/category:opacity-100 ${isOptionsMenuOpen && 'opacity-100'}`}
+              className={`absolute right-0 top-0 rounded bg-n-700 p-[6px] opacity-0 transition duration-75 focus:outline-none group-hover/category:bg-n-650 group-hover/category:opacity-100 ${isOptionsMenuOpen && 'opacity-100'}`}
             >
               <FiMoreHorizontal className="h-[20px] w-[20px]" />
             </DropdownMenuTrigger>

@@ -1,6 +1,7 @@
 'use client'
 
-import { TemplateQuestionSetType, TemplateQuestionType } from '@/lib/types/template'
+import { TemplateQuestionSetType } from '@/lib/types/template'
+import { QuestionType } from '@/lib/types/qusetion'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
 
 export default function useQuestionActions() {
@@ -9,7 +10,7 @@ export default function useQuestionActions() {
   function getTemplateQuestionByID(questionID: number) {
     if (!template || !template.categories) return null
 
-    function searchQuestions(questionSets: TemplateQuestionSetType[]): TemplateQuestionType | null {
+    function searchQuestions(questionSets: TemplateQuestionSetType[]): QuestionType | null {
       for (const questionSet of questionSets) {
         for (const question of questionSet.questions || []) {
           if (question.id === questionID) return question
@@ -42,9 +43,7 @@ export default function useQuestionActions() {
     if (!template || !template.categories) return
 
     // Recursive helper function to search within nested question sets
-    function searchQuestionSets(
-      questionSets: TemplateQuestionSetType[]
-    ): TemplateQuestionType[] | null {
+    function searchQuestionSets(questionSets: TemplateQuestionSetType[]): QuestionType[] | null {
       for (const questionSet of questionSets) {
         // Base case: if the current question set matches, return its questions
         if (questionSet.id === questionSetID) return questionSet.questions || null
@@ -74,7 +73,7 @@ export default function useQuestionActions() {
     return null // Return null if no matching question set is found in any section
   }
 
-  function createQuestionInQuestionSet(questionSetID: number, newQuestion: TemplateQuestionType) {
+  function createQuestionInQuestionSet(questionSetID: number, newQuestion: QuestionType) {
     if (!template || !template.categories) return
 
     const updatedCategories = template.categories.map((category) => {
@@ -99,7 +98,7 @@ export default function useQuestionActions() {
   function updateQuestionSetsWithNewQuestion(
     questionSets: TemplateQuestionSetType[],
     questionSetID: number,
-    newQuestion: TemplateQuestionType
+    newQuestion: QuestionType
   ): TemplateQuestionSetType[] {
     return questionSets.map((questionSet) => {
       // If this is the target question set
@@ -196,7 +195,7 @@ export default function useQuestionActions() {
     })
   }
 
-  function updateQuestion(updatedQuestion: TemplateQuestionType) {
+  function updateQuestion(updatedQuestion: QuestionType) {
     if (!template || !template.categories) return
 
     const updatedCategories = template.categories.map((category) => {
@@ -219,7 +218,7 @@ export default function useQuestionActions() {
 
   function updateQuestionInQuestionSet(
     questionSet: TemplateQuestionSetType,
-    updatedQuestion: TemplateQuestionType
+    updatedQuestion: QuestionType
   ): TemplateQuestionSetType {
     // Update questions in the current question set
     const updatedQuestions =

@@ -1,3 +1,9 @@
+import {
+  QuestionType,
+  BaseQuestionSettings,
+  CheckboxQuestionSettings,
+  RadioQuestionSettings,
+} from './qusetion'
 import { UserType } from './user'
 
 export type Applicant = {
@@ -62,34 +68,5 @@ export type ApplicationQuestionSetType = {
   sectionID: number
   questionSetID: number
   questionSets?: ApplicationQuestionSetType[]
-  questions?: ApplicationQuestionType[]
-}
-
-export enum ApplicationQuestionTypes {
-  TEXT_INPUT = 'TEXT_INPUT',
-  TEXTAREA = 'TEXTAREA',
-  SELECT = 'SELECT',
-  DATE_INPUT = 'DATE_INPUT',
-  RADIO = 'RADIO',
-  CHECKBOX = 'CHECKBOX',
-  DOCUMENT = 'DOCUMENT',
-}
-
-export type BaseSettingsType = Record<string, any>
-
-export type ApplicationQuestionType = {
-  id: number
-  type: ApplicationQuestionTypes
-  prompt: string
-  position: number
-  helperText?: string
-  settings?: BaseSettingsType
-  answer?: ApplicationAnswerType
-  questionSetId: number
-}
-
-export type ApplicationAnswerType = {
-  id: number
-  questionID: number
-  answer: Record<string, any>
+  questions?: QuestionType[]
 }

@@ -2,16 +2,12 @@
 
 import { useState } from 'react'
 
+import { TemplateQuestionSetType, TemplateQuestionSetTypes } from '@/lib/types/template'
+import { QuestionTypes, RadioQuestionType } from '@/lib/types/qusetion'
+import { generateRandomID } from '@/lib/utils/id'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
 import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
-import {
-  TemplateQuestionSetType,
-  TemplateQuestionSetTypes,
-  TemplateQuestionTypes,
-} from '@/lib/types/template'
-import { RadioQuestionType } from '@/lib/types/qusetion'
-import { generateRandomID } from '@/lib/utils/id'
 
 export default function EmptySectionQuestionSetDropzone() {
   const [isDraggedOver, setIsDraggedOver] = useState<boolean>(false)
@@ -53,17 +49,17 @@ export default function EmptySectionQuestionSetDropzone() {
         const questionID = generateRandomID()
         const newQuestion: RadioQuestionType = {
           id: questionID,
-          type: TemplateQuestionTypes.RADIO,
+          type: QuestionTypes.RADIO,
           prompt: 'Question Prompt',
           position: 0,
           settings: {
+            display: 'inline',
             options: [
               { position: 0, value: 'Option 1' },
               { position: 1, value: 'Option 2' },
             ],
-            display: 'inline',
           },
-          questionSetId: questionSetID,
+          questionSetID: questionSetID,
         }
         newQuestionSet.questions = [newQuestion]
       }

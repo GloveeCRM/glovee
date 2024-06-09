@@ -1,3 +1,11 @@
+import {
+  QuestionType,
+  BaseQuestionSettings,
+  CheckboxQuestionSettings,
+  RadioQuestionSettings,
+  RadioQuestionType,
+} from './qusetion'
+
 export type TemplateType = {
   id: number
   organizationID: number
@@ -32,31 +40,9 @@ export type TemplateQuestionSetType = {
   id: number
   type: TemplateQuestionSetTypes
   position: number
-  dependsOn?: Record<string, any>
+  dependsOn?: any
   sectionID: number
   questionSetID?: number | null
   questionSets?: TemplateQuestionSetType[]
-  questions?: TemplateQuestionType[]
-}
-
-export enum TemplateQuestionTypes {
-  TEXT_INPUT = 'TEXT_INPUT',
-  TEXTAREA = 'TEXTAREA',
-  SELECT = 'SELECT',
-  DATE_INPUT = 'DATE_INPUT',
-  RADIO = 'RADIO',
-  CHECKBOX = 'CHECKBOX',
-  DOCUMENT = 'DOCUMENT',
-}
-
-export type BaseSettingsType = Record<string, any>
-
-export type TemplateQuestionType = {
-  id: number
-  type: TemplateQuestionTypes
-  prompt: string
-  position: number
-  helperText?: string
-  settings?: BaseSettingsType
-  questionSetId: number
+  questions?: QuestionType[]
 }

@@ -2,16 +2,12 @@
 
 import { useState } from 'react'
 
-import {
-  TemplateQuestionSetType,
-  TemplateQuestionSetTypes,
-  TemplateQuestionType,
-  TemplateQuestionTypes,
-} from '@/lib/types/template'
+import { TemplateQuestionSetType, TemplateQuestionSetTypes } from '@/lib/types/template'
+import { QuestionType, QuestionTypes } from '@/lib/types/qusetion'
+import { generateRandomID } from '@/lib/utils/id'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
 import useQuestionActions from '@/hooks/template/use-question-actions'
-import { generateRandomID } from '@/lib/utils/id'
 
 interface EmptyQuestionSetDropzone {
   questionSet: TemplateQuestionSetType
@@ -48,10 +44,10 @@ export default function EmptyQuestionSetDropzone({ questionSet }: EmptyQuestionS
     e.preventDefault()
     if (isDropAllowed) {
       if (isQuestionOverFlat) {
-        const isRadio = draggedObject.object.type === TemplateQuestionTypes.RADIO
-        const isCheckbox = draggedObject.object.type === TemplateQuestionTypes.CHECKBOX
+        const isRadio = draggedObject.object.type === QuestionTypes.RADIO
+        const isCheckbox = draggedObject.object.type === QuestionTypes.CHECKBOX
 
-        const newQuestion: TemplateQuestionType = {
+        const newQuestion: QuestionType = {
           id: generateRandomID(),
           type: draggedObject.object.type,
           prompt: 'An Untitled Question',
@@ -71,7 +67,7 @@ export default function EmptyQuestionSetDropzone({ questionSet }: EmptyQuestionS
                   display: 'block',
                 }
               : {},
-          questionSetId: questionSet.id,
+          questionSetID: questionSet.id,
         }
         createQuestionInQuestionSet(questionSet.id, newQuestion)
       } else if (isQuestionSetOverLoop || isQuestionSetOverDependsOn) {

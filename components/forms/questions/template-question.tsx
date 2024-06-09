@@ -2,9 +2,9 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { BiTrash } from 'react-icons/bi'
-import { FiEdit, FiEdit2, FiMoreHorizontal } from 'react-icons/fi'
+import { FiEdit2, FiMoreHorizontal } from 'react-icons/fi'
 
-import { TemplateQuestionType } from '@/lib/types/template'
+import { QuestionType } from '@/lib/types/qusetion'
 import {
   isCheckboxQuestionType,
   isDateInputQuestionType,
@@ -32,7 +32,7 @@ import CheckboxQuestion from './checkbox-question/checkbox-question'
 import DocumentQuestion from './document-question/document-question'
 
 interface TemplateQuestionProps {
-  question: TemplateQuestionType
+  question: QuestionType
 }
 
 export default function TemplateQuestion({ question }: TemplateQuestionProps) {
@@ -124,7 +124,7 @@ export default function TemplateQuestion({ question }: TemplateQuestionProps) {
 
     document.addEventListener('mousedown', handleClickOutsideQuestionPrompt)
     return () => document.removeEventListener('mousedown', handleClickOutsideQuestionPrompt)
-  }, [isEditing])
+  }, [question, isEditing])
 
   return (
     <div

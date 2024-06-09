@@ -99,7 +99,7 @@ export default function TemplateEditSidebarSection({
 
   return (
     <div
-      className={`group/section hover:bg-n-650 relative cursor-pointer rounded text-[12px] transition duration-75 ${active && 'bg-n-650 text-n-100'} ${isEditing ? 'py-[5px]' : 'py-[6px]'}`}
+      className={`group/section relative cursor-pointer rounded text-[12px] transition duration-75 hover:bg-n-650 ${active && 'bg-n-650 text-n-100'} ${isEditing ? 'py-[5px]' : 'py-[6px]'}`}
       onClick={handleClickSection}
     >
       {isEditing ? (
@@ -119,7 +119,7 @@ export default function TemplateEditSidebarSection({
               onOpenChange={handleOptionsDropdownMenuOpenChange}
             >
               <DropdownMenuTrigger
-                className={`group-hover/section:bg-n-650 absolute right-0 top-0 rounded p-[5px] opacity-0 transition duration-75 group-hover/section:opacity-100 ${isOptionsMenuOpen && 'opacity-100'} ${active && 'bg-n-650'}`}
+                className={`absolute right-0 top-0 rounded p-[5px] opacity-0 transition duration-75 group-hover/section:bg-n-650 group-hover/section:opacity-100 ${isOptionsMenuOpen && 'opacity-100'} ${active && 'bg-n-650'}`}
               >
                 <FiMoreHorizontal className="h-[20px] w-[20px]" />
               </DropdownMenuTrigger>

@@ -2,7 +2,7 @@
 
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md'
 
-import { TemplateQuestionTypes } from '@/lib/types/template'
+import { QuestionTypes } from '@/lib/types/qusetion'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 import { Divider } from '@/components/ui/divider'
 
@@ -14,7 +14,7 @@ export default function DateInputQuestionIcon() {
     setDraggedObject({
       type: 'question',
       object: {
-        type: TemplateQuestionTypes.DATE_INPUT,
+        type: QuestionTypes.DATE_INPUT,
       },
     })
   }
