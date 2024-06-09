@@ -142,7 +142,15 @@ export default function DependsOnQuestionSetEdit({
         )}
         <div className={`flex ${isInline ? 'gap-[18px]' : 'flex-col gap-[4px]'}`}>
           {options.map((option) => (
-            <div key={option.value} className="flex items-start gap-[4px]">
+            <div
+              key={option.value}
+              className="flex items-start gap-[4px]"
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                setSelectedOption(option.value)
+              }}
+            >
               <input
                 type="radio"
                 name={String(question?.id)}
@@ -151,12 +159,7 @@ export default function DependsOnQuestionSetEdit({
                 className="mt-[2px] h-[14px] w-[14px]"
                 onChange={handleSelectOption}
               />
-              <label
-                className="text-[12px] text-n-500"
-                onClick={() => setSelectedOption(option.value)}
-              >
-                {option.value}
-              </label>
+              <label className="text-[12px] text-n-500">{option.value}</label>
             </div>
           ))}
         </div>
@@ -168,7 +171,11 @@ export default function DependsOnQuestionSetEdit({
             className={`flex h-[30px] w-full items-center justify-center rounded ${
               selectedOption === option.value ? 'bg-n-700 text-n-100' : 'bg-b-300'
             }`}
-            onClick={() => setSelectedOption(option.value)}
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              setSelectedOption(option.value)
+            }}
           >
             {option.value}
           </div>
