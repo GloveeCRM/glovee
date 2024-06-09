@@ -20,7 +20,6 @@ export default function DependsOnQuestionSetEdit({
   questionSet,
   selected = false,
 }: DependsOnQuestionSetEditProps) {
-  const questionSets = questionSet.questionSets
   const question = questionSet.questions?.[0] as RadioQuestionType
   const isInline = question.settings.display === 'inline'
   const options = question.settings.options || []
@@ -30,6 +29,11 @@ export default function DependsOnQuestionSetEdit({
   const { updateQuestion } = useQuestionActions()
 
   const questionPromptInputRef = useRef<HTMLTextAreaElement>(null)
+
+  const questionSets = questionSet.questionSets
+  const questionSetsToDisplay = questionSets?.filter(
+    (qs) => qs.dependsOn?.option === selectedOption
+  )
 
   const rawDependsOnQuestion: QuestionType = {
     id: generateRandomID(),
@@ -172,9 +176,9 @@ export default function DependsOnQuestionSetEdit({
       </div>
 
       <div className="mt-[4px]">
-        {questionSets && questionSets.length > 0 ? (
+        {questionSetsToDisplay && questionSetsToDisplay.length > 0 ? (
           <div className="rounded bg-b-300 px-[4px]">
-            {questionSets.map((qs) => (
+            {questionSetsToDisplay.map((qs) => (
               <div key={qs.id}>
                 {qs.position === 0 && (
                   <NonEmptyQuestionSetDropzone

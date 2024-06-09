@@ -84,8 +84,11 @@ export default function EmptyQuestionSetDropzone({
           questionSetID: questionSet.id,
         }
 
-        if (newQuestionSet.type === TemplateQuestionSetTypes.DEPENDS_ON) {
+        if (questionSet.type === TemplateQuestionSetTypes.DEPENDS_ON) {
           newQuestionSet.dependsOn = dependsOn
+        }
+
+        if (newQuestionSet.type === TemplateQuestionSetTypes.DEPENDS_ON) {
           const newQuestionID = generateRandomID()
           const newQuestion: RadioQuestionType = {
             id: newQuestionID,
