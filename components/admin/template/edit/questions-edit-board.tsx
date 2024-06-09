@@ -2,7 +2,8 @@
 
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
 import TemplateQuestionSet from '@/components/forms/question-sets/template-question-set'
-import EmptySectionQuestionSetDropzone from './empty-section-question-set-dropzone'
+import EmptySectionDropzone from './empty-section-dropzone'
+import NonEmptySectionDropzone from './non-empty-section-dropzone'
 
 export default function QuestionsEditBoard() {
   const { template, selectedCategoryID, selectedSectionID } = useTemplateEditContext()
@@ -15,10 +16,14 @@ export default function QuestionsEditBoard() {
     <div id="questions-edit-board" className="rounded-lg bg-white p-[4px]">
       {templateQuestionSets && templateQuestionSets.length > 0 ? (
         templateQuestionSets.map((questionSet) => (
-          <TemplateQuestionSet key={questionSet.id} questionSet={questionSet} />
+          <div key={questionSet.id}>
+            {questionSet.position === 0 && <NonEmptySectionDropzone position={0} />}
+            <TemplateQuestionSet questionSet={questionSet} />
+            <NonEmptySectionDropzone position={questionSet.position + 1} />
+          </div>
         ))
       ) : (
-        <EmptySectionQuestionSetDropzone />
+        <EmptySectionDropzone />
       )}
     </div>
   )

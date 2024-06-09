@@ -3,17 +3,21 @@
 import { useState } from 'react'
 
 import { TemplateQuestionSetType, TemplateQuestionSetTypes } from '@/lib/types/template'
-import { QuestionType, QuestionTypes } from '@/lib/types/qusetion'
+import { QuestionType, QuestionTypes, RadioQuestionType } from '@/lib/types/qusetion'
 import { generateRandomID } from '@/lib/utils/id'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
 import useQuestionActions from '@/hooks/template/use-question-actions'
 
-interface EmptyQuestionSetDropzone {
+interface EmptyQuestionSetDropzoneProps {
   questionSet: TemplateQuestionSetType
+  dependsOn?: any
 }
 
-export default function EmptyQuestionSetDropzone({ questionSet }: EmptyQuestionSetDropzone) {
+export default function EmptyQuestionSetDropzone({
+  questionSet,
+  dependsOn,
+}: EmptyQuestionSetDropzoneProps) {
   const [isDraggedOver, setIsDraggedOver] = useState<boolean>(false)
   const { draggedObject, setDraggedObject } = useDragAndDropContext()
   const { createQuestionSetInSection } = useQuestionSetActions()
@@ -70,13 +74,34 @@ export default function EmptyQuestionSetDropzone({ questionSet }: EmptyQuestionS
           questionSetID: questionSet.id,
         }
         createQuestionInQuestionSet(questionSet.id, newQuestion)
-      } else if (isQuestionSetOverLoop || isQuestionSetOverDependsOn) {
+      } else {
+        const newQuestionSetID = generateRandomID()
         const newQuestionSet: TemplateQuestionSetType = {
-          id: generateRandomID(),
+          id: newQuestionSetID,
           type: draggedObject.object.type,
           position: 0,
           sectionID: questionSet.sectionID,
           questionSetID: questionSet.id,
+        }
+
+        if (newQuestionSet.type === TemplateQuestionSetTypes.DEPENDS_ON) {
+          newQuestionSet.dependsOn = dependsOn
+          const newQuestionID = generateRandomID()
+          const newQuestion: RadioQuestionType = {
+            id: newQuestionID,
+            type: QuestionTypes.RADIO,
+            prompt: 'Question Prompt',
+            position: 0,
+            settings: {
+              display: 'inline',
+              options: [
+                { position: 0, value: 'Option 1' },
+                { position: 1, value: 'Option 2' },
+              ],
+            },
+            questionSetID: newQuestionSetID,
+          }
+          newQuestionSet.questions = [newQuestion]
         }
         createQuestionSetInSection(questionSet.sectionID, newQuestionSet)
       }

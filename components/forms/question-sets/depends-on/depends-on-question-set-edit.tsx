@@ -4,12 +4,12 @@ import { useEffect, useRef, useState } from 'react'
 import { FiEdit2 } from 'react-icons/fi'
 
 import { TemplateQuestionSetType } from '@/lib/types/template'
-import { QuestionType, QuestionTypes } from '@/lib/types/qusetion'
+import { QuestionType, QuestionTypes, RadioQuestionType } from '@/lib/types/qusetion'
 import { generateRandomID } from '@/lib/utils/id'
 import useQuestionActions from '@/hooks/template/use-question-actions'
+import NonEmptyQuestionSetDropzone from '../non-empty-question-set-dropzone'
 import EmptyQuestionSetDropzone from '../empty-question-set-dropzone'
 import TemplateQuestionSet from '../template-question-set'
-import { RadioQuestionType } from '@/lib/types/qusetion'
 
 interface DependsOnQuestionSetEditProps {
   questionSet: TemplateQuestionSetType
@@ -174,12 +174,29 @@ export default function DependsOnQuestionSetEdit({
       <div className="mt-[4px]">
         {questionSets && questionSets.length > 0 ? (
           <div className="rounded bg-b-300 px-[4px]">
-            {questionSets.map((questionSet) => (
-              <TemplateQuestionSet key={questionSet.id} questionSet={questionSet} />
+            {questionSets.map((qs) => (
+              <div key={qs.id}>
+                {qs.position === 0 && (
+                  <NonEmptyQuestionSetDropzone
+                    questionSet={questionSet}
+                    position={0}
+                    dependsOn={{ option: selectedOption }}
+                  />
+                )}
+                <TemplateQuestionSet questionSet={qs} />
+                <NonEmptyQuestionSetDropzone
+                  questionSet={questionSet}
+                  position={questionSet.position + 1}
+                  dependsOn={{ option: selectedOption }}
+                />
+              </div>
             ))}
           </div>
         ) : (
-          <EmptyQuestionSetDropzone questionSet={questionSet} />
+          <EmptyQuestionSetDropzone
+            questionSet={questionSet}
+            dependsOn={{ option: selectedOption }}
+          />
         )}
       </div>
     </div>

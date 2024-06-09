@@ -7,7 +7,6 @@ import { BiTrash } from 'react-icons/bi'
 import { TemplateQuestionSetType, TemplateQuestionSetTypes } from '@/lib/types/template'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
 import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
-import NonEmptySectionDropzone from '@/components/admin/template/edit/non-empty-section-dropzone'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -64,13 +63,8 @@ export default function TemplateQuestionSet({ questionSet }: TemplateQuestionSet
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [setSelectedQuestionSetID])
 
-  const showDropzoneBefore = questionSet.position === 0
-
   return (
     <div className="py-[2px]">
-      {showDropzoneBefore && (
-        <NonEmptySectionDropzone position={questionSet.position} questionSet={questionSet} />
-      )}
       <div
         className="group/questionSet relative rounded"
         onClick={handleClickQuestionSet}
@@ -102,7 +96,6 @@ export default function TemplateQuestionSet({ questionSet }: TemplateQuestionSet
           <DependsOnQuestionSetEdit questionSet={questionSet} selected={isQuestionSetSelected} />
         ) : null}
       </div>
-      <NonEmptySectionDropzone position={questionSet.position + 1} questionSet={questionSet} />
     </div>
   )
 }

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 
 import { TemplateQuestionSetType, TemplateQuestionSetTypes } from '@/lib/types/template'
-import { QuestionType, QuestionTypes } from '@/lib/types/qusetion'
+import { QuestionType, QuestionTypes, RadioQuestionType } from '@/lib/types/qusetion'
 import { generateRandomID } from '@/lib/utils/id'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 import useQuestionActions from '@/hooks/template/use-question-actions'
@@ -12,11 +12,13 @@ import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
 interface NonEmptyQuestionSetDropzoneProps {
   questionSet: TemplateQuestionSetType
   position: number
+  dependsOn?: any
 }
 
 export default function NonEmptyQuestionSetDropzone({
   questionSet,
   position,
+  dependsOn,
 }: NonEmptyQuestionSetDropzoneProps) {
   const [isDraggedOver, setIsDraggedOver] = useState<boolean>(false)
   const { draggedObject, setDraggedObject } = useDragAndDropContext()
@@ -84,18 +86,39 @@ export default function NonEmptyQuestionSetDropzone({
           questionSetID: questionSet.id,
         }
         createQuestionInQuestionSet(questionSet.id, newQuestion)
-      } else if (isQuestionSetOverLoop || isQuestionSetOverDependsOn) {
+      } else {
+        const newQuestionSetID = generateRandomID()
         const newQuestionSet: TemplateQuestionSetType = {
-          id: generateRandomID(),
+          id: newQuestionSetID,
           type: draggedObject.object.type,
           position: position,
           sectionID: questionSet.sectionID,
           questionSetID: questionSet.id,
         }
+
+        if (newQuestionSet.type === TemplateQuestionSetTypes.DEPENDS_ON) {
+          newQuestionSet.dependsOn = dependsOn
+          const newQuestionID = generateRandomID()
+          const newQuestion: RadioQuestionType = {
+            id: newQuestionID,
+            type: QuestionTypes.RADIO,
+            prompt: 'Question Prompt',
+            position: 0,
+            settings: {
+              display: 'inline',
+              options: [
+                { position: 0, value: 'Option 1' },
+                { position: 1, value: 'Option 2' },
+              ],
+            },
+            questionSetID: newQuestionSetID,
+          }
+          newQuestionSet.questions = [newQuestion]
+        }
         createQuestionSetInSection(questionSet.sectionID, newQuestionSet)
       }
+      setDraggedObject(null)
     }
-    setDraggedObject(null)
   }
 
   const isTheFirstDropzone = position === 0

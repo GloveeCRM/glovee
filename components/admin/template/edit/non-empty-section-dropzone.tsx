@@ -11,26 +11,17 @@ import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
 
 interface NonEmptySectionDropzoneProps {
   position: number
-  questionSet: TemplateQuestionSetType
 }
 
-export default function NonEmptySectionDropzone({
-  position,
-  questionSet,
-}: NonEmptySectionDropzoneProps) {
+export default function NonEmptySectionDropzone({ position }: NonEmptySectionDropzoneProps) {
   const [isDraggedOver, setIsDraggedOver] = useState<boolean>(false)
   const { selectedSectionID } = useTemplateEditContext()
   const { draggedObject, setDraggedObject } = useDragAndDropContext()
-  const { getQuestionSetById, getQuestionSetsInSection, createQuestionSetInSection } =
-    useQuestionSetActions()
+  const { getQuestionSetsInSection, createQuestionSetInSection } = useQuestionSetActions()
 
   const isDropAllowed = isDraggedOver && draggedObject?.type === 'questionSet'
 
-  const isInQuestionSet = questionSet.questionSetID !== null
-
   const questionSetsInSection = getQuestionSetsInSection(selectedSectionID)
-  const questionSetsInQuestionSet =
-    questionSet.questionSetID && getQuestionSetById(questionSet.questionSetID)?.questionSets
 
   function handleDragEnter(e: React.DragEvent<HTMLDivElement>) {
     e.preventDefault()
@@ -59,7 +50,6 @@ export default function NonEmptySectionDropzone({
         type: draggedObject.object.type,
         position: position,
         sectionID: selectedSectionID,
-        questionSetID: isInQuestionSet ? questionSet.questionSetID : null,
         questions: [],
       }
       if (newQuestionSet.type === TemplateQuestionSetTypes.DEPENDS_ON) {
@@ -86,9 +76,7 @@ export default function NonEmptySectionDropzone({
   }
 
   const isTheFirstDropzone = position === 0
-  const isTheLastDropzone = isInQuestionSet
-    ? questionSetsInQuestionSet && questionSetsInQuestionSet.length === position
-    : questionSetsInSection && questionSetsInSection.length === position
+  const isTheLastDropzone = questionSetsInSection && questionSetsInSection.length === position
 
   return (
     <div

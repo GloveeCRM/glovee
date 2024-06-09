@@ -1,6 +1,7 @@
 import { FiPlus } from 'react-icons/fi'
 
 import { TemplateQuestionSetType } from '@/lib/types/template'
+import NonEmptyQuestionSetDropzone from '../non-empty-question-set-dropzone'
 import EmptyQuestionSetDropzone from '../empty-question-set-dropzone'
 import TemplateQuestionSet from '../template-question-set'
 
@@ -18,8 +19,17 @@ export default function LoopQuestionSetEdit({ questionSet, selected }: LoopQuest
     >
       {questionSets && questionSets.length > 0 ? (
         <div className="bg-r-200 px-[4px]">
-          {questionSets.map((questionSet) => (
-            <TemplateQuestionSet key={questionSet.id} questionSet={questionSet} />
+          {questionSets.map((qs) => (
+            <div key={qs.id}>
+              {qs.position === 0 && (
+                <NonEmptyQuestionSetDropzone position={0} questionSet={questionSet} />
+              )}
+              <TemplateQuestionSet key={qs.id} questionSet={qs} />
+              <NonEmptyQuestionSetDropzone
+                position={questionSet.position + 1}
+                questionSet={questionSet}
+              />
+            </div>
           ))}
         </div>
       ) : (

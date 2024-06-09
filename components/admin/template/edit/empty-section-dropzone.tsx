@@ -9,7 +9,7 @@ import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
 import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
 
-export default function EmptySectionQuestionSetDropzone() {
+export default function EmptySectionDropzone() {
   const [isDraggedOver, setIsDraggedOver] = useState<boolean>(false)
   const { selectedSectionID } = useTemplateEditContext()
   const { draggedObject, setDraggedObject } = useDragAndDropContext()
