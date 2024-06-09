@@ -1,4 +1,4 @@
-export function generateRandomId(): number {
+export function generateRandomID(): number {
   // Get the current Unix timestamp in seconds
   const now = Math.floor(Date.now() / 1000)
 

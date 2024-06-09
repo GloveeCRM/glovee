@@ -1,7 +1,7 @@
 'use client'
 
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
-import { generateRandomId } from '@/lib/utils/id'
+import { generateRandomID } from '@/lib/utils/id'
 
 export default function useSectionActions() {
   const { template, setTemplate, selectedCategoryID } = useTemplateEditContext()
@@ -16,7 +16,7 @@ export default function useSectionActions() {
       const updatedSections = [
         ...(category.sections || []),
         {
-          id: generateRandomId(),
+          id: generateRandomID(),
           name: 'Untitled Section',
           position: (category.sections?.length || 0) + 1,
           categoryID: category.id,

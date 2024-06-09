@@ -1,13 +1,17 @@
 'use client'
 
 import { useState } from 'react'
-import { v4 as uuid4 } from 'uuid'
 
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
 import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
-import { TemplateQuestionSetType } from '@/lib/types/template'
-import { generateRandomId } from '@/lib/utils/id'
+import {
+  TemplateQuestionSetType,
+  TemplateQuestionSetTypes,
+  TemplateQuestionTypes,
+} from '@/lib/types/template'
+import { RadioQuestionType } from '@/lib/types/qusetion'
+import { generateRandomID } from '@/lib/utils/id'
 
 export default function EmptySectionQuestionSetDropzone() {
   const [isDraggedOver, setIsDraggedOver] = useState<boolean>(false)
@@ -36,15 +40,34 @@ export default function EmptySectionQuestionSetDropzone() {
     e.preventDefault()
     setIsDraggedOver(false)
     if (isDropAllowed) {
-      const questionSet: TemplateQuestionSetType = {
-        id: generateRandomId(),
+      const questionSetID = generateRandomID()
+      const newQuestionSet: TemplateQuestionSetType = {
+        id: questionSetID,
         type: draggedObject.object.type,
         position: 0,
         sectionID: selectedSectionID,
         questionSetID: null,
         questions: [],
       }
-      createQuestionSetInSection(selectedSectionID, questionSet)
+      if (newQuestionSet.type === TemplateQuestionSetTypes.DEPENDS_ON) {
+        const questionID = generateRandomID()
+        const newQuestion: RadioQuestionType = {
+          id: questionID,
+          type: TemplateQuestionTypes.RADIO,
+          prompt: 'Question Prompt',
+          position: 0,
+          settings: {
+            options: [
+              { position: 0, value: 'Option 1' },
+              { position: 1, value: 'Option 2' },
+            ],
+            display: 'inline',
+          },
+          questionSetId: questionSetID,
+        }
+        newQuestionSet.questions = [newQuestion]
+      }
+      createQuestionSetInSection(selectedSectionID, newQuestionSet)
       setDraggedObject(null)
     }
   }

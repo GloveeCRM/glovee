@@ -1,7 +1,7 @@
 'use client'
 
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
-import { generateRandomId } from '@/lib/utils/id'
+import { generateRandomID } from '@/lib/utils/id'
 
 export default function useCategoryActions() {
   const { template, setTemplate } = useTemplateEditContext()
@@ -13,7 +13,7 @@ export default function useCategoryActions() {
     const updatedCategories = [
       ...templateCategories,
       {
-        id: generateRandomId(),
+        id: generateRandomID(),
         name: 'Untitled Category',
         position: templateCategories.length + 1,
         templateID: templateID,

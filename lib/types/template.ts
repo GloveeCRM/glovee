@@ -32,6 +32,7 @@ export type TemplateQuestionSetType = {
   id: number
   type: TemplateQuestionSetTypes
   position: number
+  dependsOn?: Record<string, any>
   sectionID: number
   questionSetID?: number | null
   questionSets?: TemplateQuestionSetType[]

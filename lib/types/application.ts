@@ -58,6 +58,7 @@ export type ApplicationQuestionSetType = {
   id: number
   type: ApplicationQuestionSetTypes
   position: number
+  dependsOn?: Record<string, any>
   sectionID: number
   questionSetID: number
   questionSets?: ApplicationQuestionSetType[]
@@ -83,5 +84,12 @@ export type ApplicationQuestionType = {
   position: number
   helperText?: string
   settings?: BaseSettingsType
+  answer?: ApplicationAnswerType
   questionSetId: number
+}
+
+export type ApplicationAnswerType = {
+  id: number
+  questionID: number
+  answer: Record<string, any>
 }

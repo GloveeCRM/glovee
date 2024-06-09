@@ -11,7 +11,7 @@ import {
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
 import useQuestionActions from '@/hooks/template/use-question-actions'
-import { generateRandomId } from '@/lib/utils/id'
+import { generateRandomID } from '@/lib/utils/id'
 
 interface EmptyQuestionSetDropzone {
   questionSet: TemplateQuestionSetType
@@ -52,7 +52,7 @@ export default function EmptyQuestionSetDropzone({ questionSet }: EmptyQuestionS
         const isCheckbox = draggedObject.object.type === TemplateQuestionTypes.CHECKBOX
 
         const newQuestion: TemplateQuestionType = {
-          id: generateRandomId(),
+          id: generateRandomID(),
           type: draggedObject.object.type,
           prompt: 'An Untitled Question',
           position: 0,
@@ -76,7 +76,7 @@ export default function EmptyQuestionSetDropzone({ questionSet }: EmptyQuestionS
         createQuestionInQuestionSet(questionSet.id, newQuestion)
       } else if (isQuestionSetOverLoop || isQuestionSetOverDependsOn) {
         const newQuestionSet: TemplateQuestionSetType = {
-          id: generateRandomId(),
+          id: generateRandomID(),
           type: draggedObject.object.type,
           position: 0,
           sectionID: questionSet.sectionID,

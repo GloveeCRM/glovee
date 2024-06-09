@@ -2,11 +2,16 @@
 
 import { useState } from 'react'
 
-import { TemplateQuestionSetType } from '@/lib/types/template'
+import {
+  TemplateQuestionSetType,
+  TemplateQuestionSetTypes,
+  TemplateQuestionTypes,
+} from '@/lib/types/template'
+import { RadioQuestionType } from '@/lib/types/qusetion'
+import { generateRandomID } from '@/lib/utils/id'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
-import { generateRandomId } from '@/lib/utils/id'
 
 interface NonEmptySectionDropzoneProps {
   position: number
@@ -52,13 +57,32 @@ export default function NonEmptySectionDropzone({
     e.preventDefault()
     setIsDraggedOver(false)
     if (isDropAllowed) {
+      const questionSetID = generateRandomID()
       const newQuestionSet: TemplateQuestionSetType = {
-        id: generateRandomId(),
+        id: questionSetID,
         type: draggedObject.object.type,
         position: position,
         sectionID: selectedSectionID,
         questionSetID: isInQuestionSet ? questionSet.questionSetID : null,
         questions: [],
+      }
+      if (newQuestionSet.type === TemplateQuestionSetTypes.DEPENDS_ON) {
+        const questionID = generateRandomID()
+        const newQuestion: RadioQuestionType = {
+          id: questionID,
+          type: TemplateQuestionTypes.RADIO,
+          prompt: 'Question Prompt',
+          position: 0,
+          settings: {
+            options: [
+              { position: 0, value: 'Option 1' },
+              { position: 1, value: 'Option 2' },
+            ],
+            display: 'inline',
+          },
+          questionSetId: questionSetID,
+        }
+        newQuestionSet.questions = [newQuestion]
       }
       createQuestionSetInSection(selectedSectionID, newQuestionSet)
     }
