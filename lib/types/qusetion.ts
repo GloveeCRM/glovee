@@ -1,4 +1,6 @@
-export type BaseQuestionSettings = {}
+export type BaseQuestionSettings = {
+  isRequired: boolean
+}
 
 export enum QuestionTypes {
   TEXT_INPUT = 'TEXT_INPUT',
@@ -33,7 +35,13 @@ export function isTextInputQuestionType(
   return question.type === QuestionTypes.TEXT_INPUT
 }
 
-export type TextInputQuestionType = BaseQuestionType
+export type TextInputQuestionSettings = BaseQuestionSettings & {
+  placeholder: string
+}
+
+export type TextInputQuestionType = BaseQuestionType & {
+  settings: TextInputQuestionSettings
+}
 
 export function isTextareaQuestionType(
   question: BaseQuestionType

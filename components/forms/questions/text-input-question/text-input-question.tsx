@@ -7,5 +7,5 @@ interface TextInputQuestionProps {
 }
 
 export default function TextInputQuestion({ question, readOnly = false }: TextInputQuestionProps) {
-  return <Input type="text" placeholder={question.type} readOnly={readOnly} />
+  return <Input type="text" placeholder={question.settings.placeholder} readOnly={readOnly} />
 }
