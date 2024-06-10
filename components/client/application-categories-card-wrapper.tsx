@@ -15,11 +15,11 @@ export default function ApplicationCategoriesCardWrapper({
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const { replace } = useRouter()
-  const selectedSectionID = searchParams.get('section') || '0'
+  const selectedSectionID = searchParams.get('section')
 
   const expandedCategory =
     categories.find((category) =>
-      category.sections?.some((section) => section.id === parseInt(selectedSectionID))
+      category.sections?.some((section) => section.id === parseInt(selectedSectionID || ''))
     ) || categories[0]
 
   useEffect(() => {
