@@ -206,7 +206,7 @@ export default function CreateNewApplicationButton({ client }: CreateNewApplicat
                           />
 
                           {isSearchingClients && (
-                            <CommandList className="absolute top-[46px] z-50 max-h-[126px] w-full border">
+                            <CommandList className="absolute top-[37px] z-50 max-h-[126px] w-full border">
                               <CommandEmpty className="py-[8px] text-center text-[14px] text-n-500">
                                 No Clients Found
                               </CommandEmpty>

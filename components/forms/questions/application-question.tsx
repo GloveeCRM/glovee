@@ -26,22 +26,25 @@ export default function ApplicationQuestion({
   viewOnly = false,
 }: ApplicationQuestionProps) {
   return (
-    <div>
-      {isTextInputQuestionType(question) ? (
-        <TextInputQuestion question={question} readOnly={true} />
-      ) : isTextareaQuestionType(question) ? (
-        <TextareaQuestion question={question} readOnly={true} />
-      ) : isSelectQuestionType(question) ? (
-        <SelectQuestion question={question} readOnly={true} />
-      ) : isDateInputQuestionType(question) ? (
-        <DateInputQuestion question={question} readOnly={true} />
-      ) : isRadioQuestionType(question) ? (
-        <RadioQuestion question={question} readOnly={true} />
-      ) : isCheckboxQuestionType(question) ? (
-        <CheckboxQuestion question={question} readOnly={true} />
-      ) : isDocumentQuestionType(question) ? (
-        <DocumentQuestion question={question} readOnly={true} />
-      ) : null}
+    <div className="flex flex-col gap-[6px] p-[4px] text-[14px]">
+      <div>{question.prompt}</div>
+      <div>
+        {isTextInputQuestionType(question) ? (
+          <TextInputQuestion question={question} />
+        ) : isTextareaQuestionType(question) ? (
+          <TextareaQuestion question={question} />
+        ) : isSelectQuestionType(question) ? (
+          <SelectQuestion question={question} />
+        ) : isDateInputQuestionType(question) ? (
+          <DateInputQuestion question={question} />
+        ) : isRadioQuestionType(question) ? (
+          <RadioQuestion question={question} />
+        ) : isCheckboxQuestionType(question) ? (
+          <CheckboxQuestion question={question} />
+        ) : isDocumentQuestionType(question) ? (
+          <DocumentQuestion question={question} />
+        ) : null}
+      </div>
     </div>
   )
 }
