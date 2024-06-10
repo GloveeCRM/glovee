@@ -1,3 +1,4 @@
+import ApplicationQuestionSet from '@/components/forms/question-sets/application-question-set'
 import { getSessionPayload } from '@/lib/auth/session'
 import { fetchSectionQuestionSets } from '@/lib/data/application'
 
@@ -17,9 +18,7 @@ export default async function ClientApplicationPage({
   return (
     <div>
       {questionSets.map((questionSet) => (
-        <div key={questionSet.id}>
-          <h2>{questionSet.type}</h2>
-        </div>
+        <ApplicationQuestionSet key={questionSet.id} questionSet={questionSet} />
       ))}
     </div>
   )
