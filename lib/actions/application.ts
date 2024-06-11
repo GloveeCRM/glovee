@@ -4,9 +4,8 @@ import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 
 import { GLOVEE_API_URL } from '@/lib/constants/api'
-import { validateValuesAgainstSchema } from '@/lib/utils/validation'
 import { CreateApplicationSchema } from '@/lib/zod/schemas'
-import { getSession } from '@/lib/auth/session'
+import { getSession, getSessionPayload } from '@/lib/auth/session'
 
 export async function createNewApplication(
   orgName: string,
@@ -58,22 +57,28 @@ export async function submitApplicationById(
 
 export async function saveAnswer(
   orgName: string,
-  applicationId: number,
-  questionId: number,
-  answer: string
+  questionID: number,
+  answer: Record<string, any>
 ): Promise<{ success?: string; error?: string }> {
   const accessToken = await getSession()
+  const payload = await getSessionPayload()
+  const clientID = payload?.user?.id || 0
 
   try {
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/application/${applicationId}/question/${questionId}/answer`,
+      `${GLOVEE_API_URL}/v1/${orgName}/application/client/${clientID}/question/${questionID}/update-answer`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
         },
-        body: JSON.stringify({ answer }),
+        body: JSON.stringify({
+          answer: {
+            questionID,
+            answer,
+          },
+        }),
       }
     )
 

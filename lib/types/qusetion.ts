@@ -26,7 +26,9 @@ export type BaseQuestionType = {
 export type BaseAnswerType = {
   id: number
   questionID: number
-  answer: Record<string, any>
+  answer: {
+    text: string
+  }
 }
 
 export function isTextInputQuestionType(

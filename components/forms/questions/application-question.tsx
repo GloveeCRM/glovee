@@ -1,4 +1,5 @@
 import { LiaQuestionCircle } from 'react-icons/lia'
+import { IoCheckmarkCircle } from 'react-icons/io5'
 
 import {
   QuestionType,
@@ -30,23 +31,32 @@ export default function ApplicationQuestion({
 }: ApplicationQuestionProps) {
   return (
     <div className="flex flex-col gap-[6px] p-[4px] text-[14px]">
-      <div className="flex items-center">
-        <span>{question.prompt}</span>
-        {question.settings.isRequired && (
-          <span className="flex h-[12px] w-[12px] items-center justify-center text-[20px] text-[red]">
-            *
-          </span>
-        )}
-        {question.helperText && (
-          <Popover>
-            <PopoverTrigger asChild>
-              <LiaQuestionCircle className="text-n-450 ml-[4px] h-[21px] w-[21px] cursor-pointer data-[state=open]:text-n-800" />
-            </PopoverTrigger>
-            <PopoverContent side="right" align="start" className="max-w-[340px]">
-              <div className="p-[8px] text-[12px]">{question.helperText}</div>
-            </PopoverContent>
-          </Popover>
-        )}
+      <div className="flex justify-between">
+        <div className="relative w-[calc(100%-50px)]">
+          <span>{question.prompt}</span>
+          {question.settings.isRequired && (
+            <span className="absolute mt-[-6px] text-[24px] text-[red]">*</span>
+          )}
+          {question.helperText && (
+            <Popover>
+              <PopoverTrigger asChild>
+                <span
+                  className={`absolute ${question.settings.isRequired ? 'ml-[12px]' : 'ml-[6px]'}`}
+                >
+                  <LiaQuestionCircle className="text-n-450 h-[21px] w-[21px] cursor-pointer data-[state=open]:text-n-800" />
+                </span>
+              </PopoverTrigger>
+              <PopoverContent side="right" align="start" className="max-w-[340px]">
+                <div className="p-[8px] text-[12px]">{question.helperText}</div>
+              </PopoverContent>
+            </Popover>
+          )}
+        </div>
+        <div className="">
+          <IoCheckmarkCircle
+            className={`h-[20px] w-[20px] ${question.answer?.answer.text?.length ?? 0 > 0 ? 'text-g-700' : 'text-n-400'}`}
+          />
+        </div>
       </div>
       <div>
         {isTextInputQuestionType(question) ? (
