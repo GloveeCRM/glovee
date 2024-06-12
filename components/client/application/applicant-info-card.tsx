@@ -20,7 +20,7 @@ export default async function ApplicantInfoCard({
   return (
     <div className="flex items-center gap-[6px] rounded-md bg-n-600 p-[6px]">
       <Image
-        src={applicant.imageURL || DEFAULT_MALE_CLIENT_LOGO_URL}
+        src={applicant?.imageURL || DEFAULT_MALE_CLIENT_LOGO_URL}
         alt="Organization Logo"
         width={55}
         height={55}
