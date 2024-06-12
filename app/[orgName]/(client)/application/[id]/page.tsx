@@ -16,7 +16,7 @@ export default async function ClientApplicationPage({
   const questionSets = await fetchSectionQuestionSets(orgName, clientID, sectionId)
 
   return (
-    <div className="flex flex-col gap-[8px]">
+    <div className="flex h-screen flex-col gap-[16px] overflow-y-scroll">
       {questionSets.map((questionSet) => (
         <ApplicationQuestionSet key={questionSet.id} questionSet={questionSet} />
       ))}

@@ -87,7 +87,7 @@ export async function saveAnswer(
     if (data.status === 'error') {
       return { error: data.error }
     } else {
-      revalidatePath('/applications')
+      revalidatePath('/application')
       return { success: 'Answer saved!' }
     }
   } catch (error) {

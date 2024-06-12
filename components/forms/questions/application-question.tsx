@@ -54,7 +54,7 @@ export default function ApplicationQuestion({
         </div>
         <div className="">
           <IoCheckmarkCircle
-            className={`h-[20px] w-[20px] ${question.answer?.answer.text?.length ?? 0 > 0 ? 'text-g-700' : 'text-n-400'}`}
+            className={`h-[20px] w-[20px] ${question.answer?.isAcceptable ? 'text-g-700' : 'text-n-400'}`}
           />
         </div>
       </div>

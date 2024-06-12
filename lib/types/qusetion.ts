@@ -29,6 +29,7 @@ export type BaseAnswerType = {
   answer: {
     text: string
   }
+  isAcceptable: boolean
 }
 
 export function isTextInputQuestionType(

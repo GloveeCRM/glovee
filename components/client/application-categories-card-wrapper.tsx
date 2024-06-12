@@ -46,7 +46,7 @@ export default function ApplicationCategoriesCardWrapper({
   }
 
   return (
-    <div className="flex flex-col gap-[4px]">
+    <div className="flex h-full flex-col gap-[4px] overflow-y-auto">
       {categories.map((category: ApplicationCategoryType) => (
         <Fragment key={category.id}>
           <ClientApplicationCategoryCard
