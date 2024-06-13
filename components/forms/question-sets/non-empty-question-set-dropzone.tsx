@@ -63,7 +63,7 @@ export default function NonEmptyQuestionSetDropzone({
         const isRadio = draggedObject.object.type === QuestionTypes.RADIO
         const isCheckbox = draggedObject.object.type === QuestionTypes.CHECKBOX
 
-        const newQuestion: QuestionType = {
+        const newQuestion = {
           id: generateRandomID(),
           type: draggedObject.object.type,
           prompt: 'An Untitled Question',
@@ -76,13 +76,17 @@ export default function NonEmptyQuestionSetDropzone({
                   { position: 1, value: 'Option 2' },
                 ],
                 display: 'block',
+                isRequired: false,
               }
             : isCheckbox
               ? {
                   options: [{ position: 0, value: 'Option 1' }],
                   display: 'block',
+                  isRequired: false,
                 }
-              : {},
+              : {
+                  isRequired: false,
+                },
           questionSetID: questionSet.id,
         }
         createQuestionInQuestionSet(questionSet.id, newQuestion)
@@ -113,6 +117,7 @@ export default function NonEmptyQuestionSetDropzone({
                 { position: 0, value: 'Option 1' },
                 { position: 1, value: 'Option 2' },
               ],
+              isRequired: false,
             },
             questionSetID: newQuestionSetID,
           }

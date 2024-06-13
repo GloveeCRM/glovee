@@ -46,6 +46,7 @@ export default function DependsOnQuestionSetEdit({
         { position: 0, value: 'Yes' },
         { position: 1, value: 'No' },
       ],
+      isRequired: false,
       display: 'inline',
     },
     questionSetID: questionSet.id,

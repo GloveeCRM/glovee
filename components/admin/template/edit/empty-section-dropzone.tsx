@@ -58,6 +58,7 @@ export default function EmptySectionDropzone() {
               { position: 0, value: 'Option 1' },
               { position: 1, value: 'Option 2' },
             ],
+            isRequired: false,
           },
           questionSetID: questionSetID,
         }
