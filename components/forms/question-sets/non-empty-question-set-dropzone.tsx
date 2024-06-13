@@ -63,31 +63,48 @@ export default function NonEmptyQuestionSetDropzone({
         const isRadio = draggedObject.object.type === QuestionTypes.RADIO
         const isCheckbox = draggedObject.object.type === QuestionTypes.CHECKBOX
 
-        const newQuestion = {
-          id: generateRandomID(),
-          type: draggedObject.object.type,
-          prompt: 'An Untitled Question',
-          position: position,
-          helperText: 'No helper text',
-          settings: isRadio
-            ? {
-                options: [
-                  { position: 0, value: 'Option 1' },
-                  { position: 1, value: 'Option 2' },
-                ],
-                display: 'block',
-                isRequired: false,
-              }
-            : isCheckbox
-              ? {
-                  options: [{ position: 0, value: 'Option 1' }],
-                  display: 'block',
-                  isRequired: false,
-                }
-              : {
-                  isRequired: false,
-                },
-          questionSetID: questionSet.id,
+        let newQuestion: QuestionType
+        if (isRadio) {
+          newQuestion = {
+            id: generateRandomID(),
+            type: QuestionTypes.RADIO,
+            prompt: 'An Untitled Question',
+            position: 0,
+            settings: {
+              display: 'block',
+              options: [
+                { position: 0, value: 'Option 1' },
+                { position: 1, value: 'Option 2' },
+              ],
+              isRequired: false,
+            },
+            questionSetID: questionSet.id,
+          }
+        } else if (isCheckbox) {
+          newQuestion = {
+            id: generateRandomID(),
+            type: QuestionTypes.CHECKBOX,
+            prompt: 'An Untitled Question',
+            position: 0,
+            settings: {
+              display: 'block',
+              options: [{ position: 0, value: 'Option 1' }],
+              isRequired: false,
+            },
+            questionSetID: questionSet.id,
+          }
+        } else {
+          newQuestion = {
+            id: generateRandomID(),
+            type: QuestionTypes.TEXT_INPUT,
+            prompt: 'An Untitled Question',
+            position: 0,
+            settings: {
+              placeholder: 'Placeholder text',
+              isRequired: false,
+            },
+            questionSetID: questionSet.id,
+          }
         }
         createQuestionInQuestionSet(questionSet.id, newQuestion)
       } else {
