@@ -134,7 +134,7 @@ export default function TemplateQuestion({ question }: TemplateQuestionProps) {
 
   return (
     <div
-      className={`group/question rounded bg-n-100 p-[8px] text-[14px] ${isQuestionSelected && 'outline outline-b-500'}`}
+      className={`group/question rounded bg-n-100 p-[8px] text-[14px] ${isQuestionSelected && 'outline outline-offset-1 outline-blue-500'}`}
       ref={questionRef}
       onClick={handleClickQuestion}
     >

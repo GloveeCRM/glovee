@@ -72,7 +72,7 @@ export default function TemplateQuestionSet({ questionSet }: TemplateQuestionSet
   return (
     <div className="py-[2px]">
       <div
-        className="group/questionSet relative rounded"
+        className={`group/questionSet relative rounded ${isQuestionSetSelected && 'outline outline-2 outline-offset-1 outline-blue-500'}`}
         onClick={handleClickQuestionSet}
         ref={templateQuestionSetRef}
       >
@@ -95,11 +95,11 @@ export default function TemplateQuestionSet({ questionSet }: TemplateQuestionSet
           </DropdownMenuContent>
         </DropdownMenu>
         {isFlat ? (
-          <FlatQuestionSetEdit questionSet={questionSet} selected={isQuestionSetSelected} />
+          <FlatQuestionSetEdit questionSet={questionSet} />
         ) : isLoop ? (
-          <LoopQuestionSetEdit questionSet={questionSet} selected={isQuestionSetSelected} />
+          <LoopQuestionSetEdit questionSet={questionSet} />
         ) : isDependsOn ? (
-          <DependsOnQuestionSetEdit questionSet={questionSet} selected={isQuestionSetSelected} />
+          <DependsOnQuestionSetEdit questionSet={questionSet} />
         ) : null}
       </div>
     </div>

@@ -5,18 +5,12 @@ import EmptyQuestionSetDropzone from '../empty-question-set-dropzone'
 
 interface FlatQuestionSetEditProps {
   questionSet: TemplateQuestionSetType
-  selected: boolean
 }
 
-export default function FlatQuestionSetEdit({
-  questionSet,
-  selected = false,
-}: FlatQuestionSetEditProps) {
+export default function FlatQuestionSetEdit({ questionSet }: FlatQuestionSetEditProps) {
   const questions = questionSet.questions || []
   return (
-    <div
-      className={`rounded bg-g-500 ${selected ? 'border-[3px] border-g-700 p-[5px] pt-[13px]' : 'p-[8px] pt-[16px]'}`}
-    >
+    <div className="rounded bg-g-500 p-[8px] pt-[16px]">
       {questions && questions.length > 0 ? (
         <div className="rounded bg-g-200/80 px-[6px] py-[2px]">
           {questions.map((question) => (

@@ -13,13 +13,9 @@ import TemplateQuestionSet from '../template-question-set'
 
 interface DependsOnQuestionSetEditProps {
   questionSet: TemplateQuestionSetType
-  selected: boolean
 }
 
-export default function DependsOnQuestionSetEdit({
-  questionSet,
-  selected = false,
-}: DependsOnQuestionSetEditProps) {
+export default function DependsOnQuestionSetEdit({ questionSet }: DependsOnQuestionSetEditProps) {
   const question = questionSet.questions?.[0] as RadioQuestionType
   const isInline = question.settings.display === 'inline'
   const options = question.settings.options || []
@@ -118,9 +114,7 @@ export default function DependsOnQuestionSetEdit({
   }, [question, isEditing])
 
   return (
-    <div
-      className={`group/questionSet rounded bg-b-500 text-[14px] ${selected ? 'border-[3px] border-b-700 p-[5px] pt-[13px]' : 'p-[8px] pt-[16px]'}`}
-    >
+    <div className="group/questionSet rounded bg-b-500 p-[8px] pt-[16px] text-[14px]">
       <div className="rounded bg-n-200 p-[8px]">
         {isEditing ? (
           <textarea

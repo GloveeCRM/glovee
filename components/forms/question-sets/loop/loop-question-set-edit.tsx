@@ -7,16 +7,13 @@ import TemplateQuestionSet from '../template-question-set'
 
 interface LoopQuestionSetEditProps {
   questionSet: TemplateQuestionSetType
-  selected: boolean
 }
 
-export default function LoopQuestionSetEdit({ questionSet, selected }: LoopQuestionSetEditProps) {
+export default function LoopQuestionSetEdit({ questionSet }: LoopQuestionSetEditProps) {
   const questionSets = questionSet.questionSets
 
   return (
-    <div
-      className={`rounded bg-r-500 ${selected ? 'border-[3px] border-r-700 p-[5px] pt-[13px]' : 'p-[8px] pt-[16px]'}`}
-    >
+    <div className="rounded bg-r-500 p-[8px] pt-[16px]">
       {questionSets && questionSets.length > 0 ? (
         <div className="bg-r-200 px-[4px]">
           {questionSets.map((qs) => (
