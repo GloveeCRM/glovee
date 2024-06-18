@@ -43,7 +43,7 @@ export default function ApplicationQuestion({
                 <span
                   className={`absolute ${question.settings.isRequired ? 'ml-[12px]' : 'ml-[6px]'}`}
                 >
-                  <LiaQuestionCircle className="text-n-450 h-[21px] w-[21px] cursor-pointer data-[state=open]:text-n-800" />
+                  <LiaQuestionCircle className="h-[21px] w-[21px] cursor-pointer text-n-450 data-[state=open]:text-n-800" />
                 </span>
               </PopoverTrigger>
               <PopoverContent side="right" align="start" className="max-w-[340px]">

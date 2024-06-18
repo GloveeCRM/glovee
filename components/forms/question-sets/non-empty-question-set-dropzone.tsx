@@ -96,7 +96,7 @@ export default function NonEmptyQuestionSetDropzone({
         } else {
           newQuestion = {
             id: generateRandomID(),
-            type: QuestionTypes.TEXT_INPUT,
+            type: draggedObject.object.type,
             prompt: 'An Untitled Question',
             position: 0,
             settings: {
