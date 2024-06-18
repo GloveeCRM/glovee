@@ -89,6 +89,12 @@ export default function TemplateQuestion({ question }: TemplateQuestionProps) {
 
   useEffect(() => {
     function handleClickOutsideQuestion(e: MouseEvent) {
+      const targetElement = e.target as HTMLElement
+
+      if (targetElement.closest('#templateEditToolbar')) {
+        return
+      }
+
       if (questionRef.current && !questionRef.current.contains(e.target as Node)) {
         setSelectedQuestionID(0)
       }
