@@ -51,6 +51,12 @@ export default function TemplateQuestionSet({ questionSet }: TemplateQuestionSet
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
+      const targetElement = e.target as HTMLElement
+
+      if (targetElement.closest('#templateEditToolbar')) {
+        return
+      }
+
       if (
         templateQuestionSetRef.current &&
         !templateQuestionSetRef.current.contains(e.target as Node)
