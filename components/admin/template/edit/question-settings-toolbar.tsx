@@ -18,9 +18,9 @@ export default function QuestionSettingsToolbar({ questionID }: QuestionSettings
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.05 }}
-      className="text-[14px]"
+      className="py-[6px] text-[14px]"
     >
-      <div>Question Settings</div>
+      <div className="mb-[12px]">Question Settings</div>
       {question && isTextInputQuestionType(question) && (
         <TextInputQuestionSettings question={question} />
       )}
