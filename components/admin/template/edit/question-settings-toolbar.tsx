@@ -14,7 +14,12 @@ export default function QuestionSettingsToolbar({ questionID }: QuestionSettings
   const question = getTemplateQuestionByID(questionID)
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.05 }}>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.05 }}
+      className="text-[14px]"
+    >
       <div>Question Settings</div>
       {question && isTextInputQuestionType(question) && (
         <TextInputQuestionSettings question={question} />
