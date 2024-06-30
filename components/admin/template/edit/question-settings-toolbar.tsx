@@ -1,9 +1,14 @@
 import { motion } from 'framer-motion'
 
 import useQuestionActions from '@/hooks/template/use-question-actions'
-import { isTextInputQuestionType, isTextareaQuestionType } from '@/lib/types/qusetion'
+import {
+  isSelectQuestionType,
+  isTextInputQuestionType,
+  isTextareaQuestionType,
+} from '@/lib/types/qusetion'
 import TextInputQuestionSettings from '@/components/forms/questions/text-input-question/text-input-question-settings'
 import TextareaQuestionSettings from '@/components/forms/questions/textarea-question/textarea-question-settings'
+import SelectQuestionSettings from '@/components/forms/questions/select-question/select-question-settings'
 
 interface QuestionSettingsToolbarProps {
   questionID: number
@@ -28,6 +33,8 @@ export default function QuestionSettingsToolbar({ questionID }: QuestionSettings
             <TextInputQuestionSettings question={question} />
           ) : isTextareaQuestionType(question) ? (
             <TextareaQuestionSettings question={question} />
+          ) : isSelectQuestionType(question) ? (
+            <SelectQuestionSettings question={question} />
           ) : (
             <div>Settings for this question type are not available</div>
           )}
