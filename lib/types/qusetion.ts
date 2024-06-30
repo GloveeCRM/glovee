@@ -52,7 +52,13 @@ export function isTextareaQuestionType(
   return question.type === QuestionTypes.TEXTAREA
 }
 
-export type TextareaQuestionType = BaseQuestionType
+export type TextareaQuestionSettings = BaseQuestionSettings & {
+  placeholder: string
+}
+
+export type TextareaQuestionType = BaseQuestionType & {
+  settings: TextareaQuestionSettings
+}
 
 export function isSelectQuestionType(question: BaseQuestionType): question is SelectQuestionType {
   return question.type === QuestionTypes.SELECT
