@@ -14,7 +14,7 @@ export default async function ClientApplicationPage({
   const clientID = payload?.user?.id || 0
   const sectionId = parseInt(searchParams.section || '0')
   const questionSets = await fetchSectionQuestionSets(orgName, clientID, sectionId)
-  console.log(questionSets)
+
   return (
     <div className="flex h-screen flex-col gap-[16px] overflow-y-scroll">
       {questionSets.map((questionSet) => (
