@@ -62,6 +62,7 @@ export default function NonEmptyQuestionSetDropzone({
       if (isQuestionOverFlat) {
         const isRadio = draggedObject.object.type === QuestionTypes.RADIO
         const isCheckbox = draggedObject.object.type === QuestionTypes.CHECKBOX
+        const isSelect = draggedObject.object.type === QuestionTypes.SELECT
 
         let newQuestion: QuestionType
         if (isRadio) {
@@ -89,6 +90,22 @@ export default function NonEmptyQuestionSetDropzone({
             settings: {
               display: 'block',
               options: [{ position: 0, value: 'Option 1' }],
+              isRequired: false,
+            },
+            questionSetID: questionSet.id,
+          }
+        } else if (isSelect) {
+          newQuestion = {
+            id: generateRandomID(),
+            type: QuestionTypes.SELECT,
+            prompt: 'An Untitled Question',
+            position: 0,
+            settings: {
+              options: [
+                { id: generateRandomID(), position: 0, value: 'Option 1' },
+                { id: generateRandomID(), position: 1, value: 'Option 2' },
+              ],
+              defaultOptionID: 0,
               isRequired: false,
             },
             questionSetID: questionSet.id,

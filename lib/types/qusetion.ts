@@ -64,11 +64,15 @@ export function isSelectQuestionType(question: BaseQuestionType): question is Se
   return question.type === QuestionTypes.SELECT
 }
 
+export type SelectQuestionOptionType = {
+  id: number
+  position: number
+  value: string
+}
+
 export type SelectQuestionSettings = BaseQuestionSettings & {
-  options: {
-    position: number
-    value: string
-  }[]
+  options: SelectQuestionOptionType[]
+  defaultOptionID: number
 }
 
 export type SelectQuestionType = BaseQuestionType & {
