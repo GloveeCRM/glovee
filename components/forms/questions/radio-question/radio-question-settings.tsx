@@ -5,18 +5,18 @@ import { useDebouncedCallback } from 'use-debounce'
 import { BiTrash } from 'react-icons/bi'
 import { FiEdit2, FiPlus } from 'react-icons/fi'
 
-import { SelectQuestionOptionType, SelectQuestionType } from '@/lib/types/qusetion'
+import { RadioQuestionType, RadioQuestionOptionType } from '@/lib/types/qusetion'
 import { generateRandomID } from '@/lib/utils/id'
 import useQuestionActions from '@/hooks/template/use-question-actions'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 import { Separator } from '@/components/ui/separator'
 
-interface SelectQuestionSettingsProps {
-  question: SelectQuestionType
+interface RadioQuestionSettingsProps {
+  question: RadioQuestionType
 }
 
-export default function SelectQuestionSettings({ question }: SelectQuestionSettingsProps) {
+export default function RadioQuestionSettings({ question }: RadioQuestionSettingsProps) {
   const { updateQuestion } = useQuestionActions()
 
   function handleChangeIsRequired(isChecked: boolean) {
@@ -57,11 +57,11 @@ export default function SelectQuestionSettings({ question }: SelectQuestionSetti
           {question.settings.options?.length !== 0 && (
             <div className="flex flex-col gap-[4px]">
               {question.settings.options.map((option) => (
-                <SelectOption key={option.id} question={question} option={option} />
+                <RadioOption key={option.id} question={question} option={option} />
               ))}
             </div>
           )}
-          <AddASelectOptionButton question={question} />
+          <AddARadioOptionButton question={question} />
         </div>
         <Separator className="mt-[6px] bg-n-600" />
       </div>
@@ -94,11 +94,11 @@ export default function SelectQuestionSettings({ question }: SelectQuestionSetti
   )
 }
 
-interface AddASelectOptionButtonProps {
-  question: SelectQuestionType
+interface AddARadioOptionButtonProps {
+  question: RadioQuestionType
 }
 
-function AddASelectOptionButton({ question }: AddASelectOptionButtonProps) {
+function AddARadioOptionButton({ question }: AddARadioOptionButtonProps) {
   const { updateQuestion } = useQuestionActions()
 
   function handleAddOption() {
@@ -115,23 +115,24 @@ function AddASelectOptionButton({ question }: AddASelectOptionButtonProps) {
       },
     })
   }
+
   return (
     <div
       className="my-[6px] flex w-fit cursor-pointer items-center gap-[4px] text-[12px]"
       onClick={handleAddOption}
     >
-      <FiPlus className="h-[18px] w-[18px]" />
-      <span>Add an option</span>
+      <FiPlus />
+      <div>Add an option</div>
     </div>
   )
 }
 
-interface SelectOptionProps {
-  question: SelectQuestionType
-  option: SelectQuestionOptionType
+interface RadioOptionProps {
+  question: RadioQuestionType
+  option: RadioQuestionOptionType
 }
 
-function SelectOption({ question, option }: SelectOptionProps) {
+function RadioOption({ question, option }: RadioOptionProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false)
   const { updateQuestion } = useQuestionActions()
 

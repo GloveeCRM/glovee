@@ -91,12 +91,16 @@ export function isRadioQuestionType(question: BaseQuestionType): question is Rad
   return question.type === QuestionTypes.RADIO
 }
 
+export type RadioQuestionOptionType = {
+  id: number
+  position: number
+  value: string
+}
+
 export type RadioQuestionSettings = BaseQuestionSettings & {
   display: 'inline' | 'block'
-  options: {
-    position: number
-    value: string
-  }[]
+  options: RadioQuestionOptionType[]
+  defaultOptionID: number
 }
 
 export type RadioQuestionType = BaseQuestionType & {

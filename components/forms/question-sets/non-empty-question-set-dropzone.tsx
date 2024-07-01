@@ -74,9 +74,10 @@ export default function NonEmptyQuestionSetDropzone({
             settings: {
               display: 'block',
               options: [
-                { position: 0, value: 'Option 1' },
-                { position: 1, value: 'Option 2' },
+                { id: generateRandomID(), position: 0, value: 'Option 1' },
+                { id: generateRandomID(), position: 1, value: 'Option 2' },
               ],
+              defaultOptionID: 0,
               isRequired: false,
             },
             questionSetID: questionSet.id,
@@ -148,9 +149,10 @@ export default function NonEmptyQuestionSetDropzone({
             settings: {
               display: 'inline',
               options: [
-                { position: 0, value: 'Option 1' },
-                { position: 1, value: 'Option 2' },
+                { id: generateRandomID(), position: 0, value: 'Option 1' },
+                { id: generateRandomID(), position: 1, value: 'Option 2' },
               ],
+              defaultOptionID: 0,
               isRequired: false,
             },
             questionSetID: newQuestionSetID,
