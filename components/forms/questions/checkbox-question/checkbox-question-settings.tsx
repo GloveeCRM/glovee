@@ -69,7 +69,7 @@ export default function CheckboxQuestionSettings({ question }: CheckboxQuestionS
         <div>Guide</div>
         <Textarea
           defaultValue={question.helperText}
-          className="rounded-sm border-0 bg-n-600/80 px-[8px] text-[12px] focus-visible:ring-1 focus-visible:ring-n-500"
+          className="rounded-sm border-0 bg-n-600/80 text-[12px] focus-visible:ring-1 focus-visible:ring-n-500"
           onChange={handleChangeGuide}
         />
       </div>

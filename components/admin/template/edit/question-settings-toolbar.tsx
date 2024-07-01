@@ -4,6 +4,7 @@ import useQuestionActions from '@/hooks/template/use-question-actions'
 import {
   isCheckboxQuestionType,
   isDateInputQuestionType,
+  isDocumentQuestionType,
   isRadioQuestionType,
   isSelectQuestionType,
   isTextInputQuestionType,
@@ -14,6 +15,7 @@ import TextareaQuestionSettings from '@/components/forms/questions/textarea-ques
 import SelectQuestionSettings from '@/components/forms/questions/select-question/select-question-settings'
 import RadioQuestionSettings from '@/components/forms/questions/radio-question/radio-question-settings'
 import CheckboxQuestionSettings from '@/components/forms/questions/checkbox-question/checkbox-question-settings'
+import DocumentQuestionSettings from '@/components/forms/questions/document-question/document-question-settings'
 
 interface QuestionSettingsToolbarProps {
   questionID: number
@@ -21,7 +23,6 @@ interface QuestionSettingsToolbarProps {
 
 export default function QuestionSettingsToolbar({ questionID }: QuestionSettingsToolbarProps) {
   const { getTemplateQuestionByID } = useQuestionActions()
-
   const question = getTemplateQuestionByID(questionID)
 
   return (
@@ -33,7 +34,7 @@ export default function QuestionSettingsToolbar({ questionID }: QuestionSettings
     >
       <div className="mb-[12px]">Question Settings</div>
       {question && (
-        <>
+        <div>
           {isTextInputQuestionType(question) ? (
             <TextInputQuestionSettings question={question} />
           ) : isTextareaQuestionType(question) ? (
@@ -46,10 +47,12 @@ export default function QuestionSettingsToolbar({ questionID }: QuestionSettings
             <RadioQuestionSettings question={question} />
           ) : isCheckboxQuestionType(question) ? (
             <CheckboxQuestionSettings question={question} />
+          ) : isDocumentQuestionType(question) ? (
+            <DocumentQuestionSettings question={question} />
           ) : (
             <div>Settings for this question type are not available</div>
           )}
-        </>
+        </div>
       )}
     </motion.div>
   )
