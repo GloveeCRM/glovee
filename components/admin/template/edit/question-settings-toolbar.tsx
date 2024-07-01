@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 
 import useQuestionActions from '@/hooks/template/use-question-actions'
 import {
+  isCheckboxQuestionType,
   isDateInputQuestionType,
   isRadioQuestionType,
   isSelectQuestionType,
@@ -12,6 +13,7 @@ import TextInputQuestionSettings from '@/components/forms/questions/text-input-q
 import TextareaQuestionSettings from '@/components/forms/questions/textarea-question/textarea-question-settings'
 import SelectQuestionSettings from '@/components/forms/questions/select-question/select-question-settings'
 import RadioQuestionSettings from '@/components/forms/questions/radio-question/radio-question-settings'
+import CheckboxQuestionSettings from '@/components/forms/questions/checkbox-question/checkbox-question-settings'
 
 interface QuestionSettingsToolbarProps {
   questionID: number
@@ -42,6 +44,8 @@ export default function QuestionSettingsToolbar({ questionID }: QuestionSettings
             <div>Date Input Settings</div>
           ) : isRadioQuestionType(question) ? (
             <RadioQuestionSettings question={question} />
+          ) : isCheckboxQuestionType(question) ? (
+            <CheckboxQuestionSettings question={question} />
           ) : (
             <div>Settings for this question type are not available</div>
           )}

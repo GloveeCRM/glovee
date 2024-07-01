@@ -78,7 +78,7 @@ export default function EmptyQuestionSetDropzone({
             position: 0,
             settings: {
               display: 'block',
-              options: [{ position: 0, value: 'Option 1' }],
+              options: [{ id: generateRandomID(), position: 0, value: 'Option 1' }],
               isRequired: false,
             },
             questionSetID: questionSet.id,

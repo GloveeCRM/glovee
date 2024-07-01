@@ -113,12 +113,16 @@ export function isCheckboxQuestionType(
   return question.type === QuestionTypes.CHECKBOX
 }
 
+export type CheckboxQuestionOptionType = {
+  id: number
+  position: number
+  value: string
+}
+
 export type CheckboxQuestionSettings = BaseQuestionSettings & {
   display: 'inline' | 'block'
-  options: {
-    position: number
-    value: string
-  }[]
+  options: CheckboxQuestionOptionType[]
+  defaultOptionID: number
 }
 
 export type CheckboxQuestionType = BaseQuestionType & {
