@@ -39,8 +39,8 @@ export default function DependsOnQuestionSetEdit({ questionSet }: DependsOnQuest
     helperText: 'No helper text',
     settings: {
       options: [
-        { position: 0, value: 'Yes' },
-        { position: 1, value: 'No' },
+        { id: generateRandomID(), position: 0, value: 'Yes' },
+        { id: generateRandomID(), position: 1, value: 'No' },
       ],
       isRequired: false,
       display: 'inline',

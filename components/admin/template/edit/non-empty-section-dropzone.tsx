@@ -62,9 +62,10 @@ export default function NonEmptySectionDropzone({ position }: NonEmptySectionDro
           settings: {
             display: 'inline',
             options: [
-              { position: 0, value: 'Option 1' },
-              { position: 1, value: 'Option 2' },
+              { id: generateRandomID(), position: 0, value: 'Option 1' },
+              { id: generateRandomID(), position: 1, value: 'Option 2' },
             ],
+            defaultOptionID: 0,
             isRequired: false,
           },
           questionSetID: questionSetID,
