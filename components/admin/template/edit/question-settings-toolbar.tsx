@@ -16,6 +16,7 @@ import SelectQuestionSettings from '@/components/forms/questions/select-question
 import RadioQuestionSettings from '@/components/forms/questions/radio-question/radio-question-settings'
 import CheckboxQuestionSettings from '@/components/forms/questions/checkbox-question/checkbox-question-settings'
 import DocumentQuestionSettings from '@/components/forms/questions/document-question/document-question-settings'
+import DateInputQuestionSettings from '@/components/forms/questions/date-input-question/date-input-question-settings'
 
 interface QuestionSettingsToolbarProps {
   questionID: number
@@ -42,7 +43,7 @@ export default function QuestionSettingsToolbar({ questionID }: QuestionSettings
           ) : isSelectQuestionType(question) ? (
             <SelectQuestionSettings question={question} />
           ) : isDateInputQuestionType(question) ? (
-            <div>Date Input Settings</div>
+            <DateInputQuestionSettings question={question} />
           ) : isRadioQuestionType(question) ? (
             <RadioQuestionSettings question={question} />
           ) : isCheckboxQuestionType(question) ? (

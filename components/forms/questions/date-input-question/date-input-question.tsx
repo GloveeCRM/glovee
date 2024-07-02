@@ -18,7 +18,7 @@ export default function DateInputQuestion({ question, readOnly }: DateInputQuest
           placeholder={question.type}
           disabled={readOnly}
         >
-          <option value="">SELECT</option>
+          <option value="">DD</option>
         </select>
       </div>
       <div className="flex w-full flex-col">
@@ -31,7 +31,7 @@ export default function DateInputQuestion({ question, readOnly }: DateInputQuest
           placeholder={question.type}
           disabled={readOnly}
         >
-          <option value="">SELECT</option>
+          <option value="">MM</option>
         </select>
       </div>
       <div className="flex w-full flex-col">
@@ -44,7 +44,7 @@ export default function DateInputQuestion({ question, readOnly }: DateInputQuest
           placeholder={question.type}
           disabled={readOnly}
         >
-          <option value="">SELECT</option>
+          <option value="">YYYY</option>
         </select>
       </div>
     </div>

@@ -85,7 +85,14 @@ export function isDateInputQuestionType(
   return question.type === QuestionTypes.DATE_INPUT
 }
 
-export type DateInputQuestionType = BaseQuestionType
+export type DateInputQuestionSettings = BaseQuestionSettings & {
+  minimumDate: string | null
+  maximumDate: string | null
+}
+
+export type DateInputQuestionType = BaseQuestionType & {
+  settings: DateInputQuestionSettings
+}
 
 export function isRadioQuestionType(question: BaseQuestionType): question is RadioQuestionType {
   return question.type === QuestionTypes.RADIO
