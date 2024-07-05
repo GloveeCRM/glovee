@@ -48,6 +48,8 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL(DEFAULT_ORG_ADMIN_LOGIN_REDIRECT, nextUrl))
   } else if (!isLoggedIn && !isPublicRoute && !isAuthRoute) {
     return NextResponse.redirect(new URL('/login', nextUrl))
+  } else if (nextUrl.pathname === '/admin') {
+    return NextResponse.redirect(new URL(DEFAULT_ORG_ADMIN_LOGIN_REDIRECT, nextUrl))
   }
 
   if (orgName) {

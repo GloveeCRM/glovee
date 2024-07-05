@@ -46,14 +46,12 @@ export async function login(
       await setSession(data.data.accessToken)
       const tokenPayload = await getSessionPayload()
       const redirectLink =
-        tokenPayload?.organization?.orgName === 'org'
-          ? DEFAULT_ORG_MANAGEMENT_LOGIN_REDIRECT
-          : tokenPayload?.user.role === UserRoleTypes.ORG_ADMIN ||
-              tokenPayload?.user.role === UserRoleTypes.ORG_OWNER
-            ? DEFAULT_ORG_ADMIN_LOGIN_REDIRECT
-            : tokenPayload?.user.role === UserRoleTypes.ORG_CLIENT
-              ? DEFAULT_ORG_CLIENT_LOGIN_REDIRECT
-              : '/'
+        tokenPayload?.user.role === UserRoleTypes.ORG_ADMIN ||
+        tokenPayload?.user.role === UserRoleTypes.ORG_OWNER
+          ? DEFAULT_ORG_ADMIN_LOGIN_REDIRECT
+          : tokenPayload?.user.role === UserRoleTypes.ORG_CLIENT
+            ? DEFAULT_ORG_CLIENT_LOGIN_REDIRECT
+            : '/'
       return { success: 'Login Successful!', data: { redirectLink: redirectLink } }
     }
   } catch (error) {

@@ -12,7 +12,7 @@ export const AUTH_ROUTES = ['/login', '/signup', '/error', '/forgot-password', '
 /**
  * The default redirect path after logging in as an admin.
  */
-export const DEFAULT_ORG_ADMIN_LOGIN_REDIRECT = '/admin'
+export const DEFAULT_ORG_ADMIN_LOGIN_REDIRECT = '/admin/applications'
 
 /**
  * The default redirect path after logging in as a user

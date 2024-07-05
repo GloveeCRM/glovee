@@ -33,7 +33,7 @@ export default function TemplateEditSidebarCategoryWrapper() {
       </div>
       <CreateCategoryButton
         templateID={template?.id || 0}
-        type={templateCategories ? 'add' : 'create'}
+        type={templateCategories.length === 0 ? 'create' : 'add'}
       />
     </div>
   )
