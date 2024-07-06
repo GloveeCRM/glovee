@@ -13,7 +13,7 @@ interface TemplateEditLayoutProps {
   children: React.ReactNode
 }
 
-export default function templateEditLayout({ params, children }: TemplateEditLayoutProps) {
+export default function TemplateEditLayout({ params, children }: TemplateEditLayoutProps) {
   const templateID = params.id
   const orgName = params.orgName
 
