@@ -51,6 +51,41 @@ export async function updateClientProfile(
   }
 }
 
+export async function updateClientProfilePicture(
+  orgName: string,
+  clientID: number,
+  avatarURL: string
+): Promise<{ success?: string; error?: string }> {
+  const accessToken = await getSession()
+
+  try {
+    const response = await fetch(
+      `${GLOVEE_API_URL}/v1/${orgName}/user/admin/client/${clientID}/profile-picture`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          url: avatarURL,
+        }),
+      }
+    )
+
+    const data = await response.json()
+
+    if (data.status === 'error') {
+      return { error: data.error }
+    } else {
+      revalidatePath(`/admin/clients/${clientID}`)
+      return { success: 'Profile picture updated!' }
+    }
+  } catch (error) {
+    return { error: 'Something went wrong!' }
+  }
+}
+
 export async function updateClientStatus(
   orgName: string,
   id: number,

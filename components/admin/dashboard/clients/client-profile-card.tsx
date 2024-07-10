@@ -9,6 +9,7 @@ import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
 import { Badge } from '@/components/ui/badge'
 import ClientProfileEditForm from './client-profile-edit-form'
 import SetUserStatusButton from './set-user-status-button'
+import ClientProfilePicture from './client-profile-picture'
 
 interface ClientProfileCardProps {
   client: UserType
@@ -24,15 +25,11 @@ export default function ClientProfileCard({ client }: ClientProfileCardProps) {
   return (
     <div className="flex items-end justify-between rounded-md border border-n-700 bg-n-700 px-[14px] py-[18px] text-n-100">
       <div className="flex gap-[8px]">
-        <div>
-          <Image
-            src={client.avatarURL || DEFAULT_MALE_CLIENT_LOGO_URL}
-            alt="CLient Logo"
-            width={75}
-            height={75}
-            className="block rounded-full"
-          />
-        </div>
+        <ClientProfilePicture
+          url={client.avatarURL || DEFAULT_MALE_CLIENT_LOGO_URL}
+          client={client}
+          editable={isEditing}
+        />
         {isEditing ? (
           <ClientProfileEditForm onClose={onCloseEditForm} client={client} />
         ) : (

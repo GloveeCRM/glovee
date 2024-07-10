@@ -71,3 +71,37 @@ export async function searchClients(
     return { clients: null, total: 0 }
   }
 }
+
+export async function fetchProfilePictureUploadURL(
+  orgName: string,
+  clientID: number,
+  mimeType: string
+): Promise<string | null> {
+  try {
+    const accessToken = await getSession()
+    if (!accessToken) {
+      return null
+    }
+
+    const response = await fetch(
+      `${GLOVEE_API_URL}/v1/${orgName}/user/admin/client/${clientID}/profile-picture-upload-url?mimeType=${mimeType}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    )
+
+    const data = await response.json()
+
+    if (data.status === 'error') {
+      return null
+    } else {
+      return data.data.uploadURL
+    }
+  } catch (error) {
+    return null
+  }
+}

@@ -1,5 +1,6 @@
-import { DocumentQuestionType } from '@/lib/types/qusetion'
 import { FiUpload } from 'react-icons/fi'
+
+import { DocumentQuestionType } from '@/lib/types/qusetion'
 
 interface DocumentQuestionProps {
   question: DocumentQuestionType
@@ -11,7 +12,7 @@ export default function DocumentQuestion({ question, readOnly }: DocumentQuestio
     <div className="flex flex-col items-center gap-[2px] rounded-sm border-[1px] border-n-300 p-[4px] text-n-500/90">
       <FiUpload className="h-[18px] w-[18px]" />
       <div>Upload a File</div>
-      <input type="file" placeholder={question.type} readOnly={readOnly} hidden />
+      <input type="file" placeholder={question.type} readOnly={readOnly} />
     </div>
   )
 }
