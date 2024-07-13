@@ -54,6 +54,8 @@ export function isTextareaQuestionType(
 
 export type TextareaQuestionSettings = BaseQuestionSettings & {
   placeholder: string
+  minimumLength: number | null
+  maximumLength: number | null
 }
 
 export type TextareaQuestionType = BaseQuestionType & {
