@@ -26,10 +26,15 @@ export type BaseQuestionType = {
 export type BaseAnswerType = {
   id: number
   questionID: number
-  answer: {
-    text: string
-  }
+  answer: AnswerValueType
   isAcceptable: boolean
+}
+
+export type AnswerValueType = {
+  text?: string
+  optionIDs?: number[]
+  date?: string
+  files?: string[]
 }
 
 export function isTextInputQuestionType(
