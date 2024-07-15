@@ -58,9 +58,12 @@ export default function TextareaQuestion({ question, readOnly = false }: Textare
       </div>
       <div className="text-right text-[12px] text-n-500">
         {question.answer?.answer.text.length || 0}
-        {(question.settings.minimumLength || question.settings.maximumLength) && ' / '}
+        {(question.settings.minimumLength !== null || question.settings.maximumLength !== null) &&
+          ' / '}
         {question.settings.minimumLength && question.settings.minimumLength}
-        {question.settings.minimumLength && question.settings.maximumLength && '-'}
+        {question.settings.minimumLength !== null &&
+          question.settings.maximumLength !== null &&
+          '-'}
         {question.settings.maximumLength && question.settings.maximumLength}
       </div>
     </div>

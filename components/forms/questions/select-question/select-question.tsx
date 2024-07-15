@@ -1,4 +1,4 @@
-import { QuestionType, SelectQuestionType } from '@/lib/types/qusetion'
+import { SelectQuestionType } from '@/lib/types/qusetion'
 
 interface SelectQuestionProps {
   question: SelectQuestionType
@@ -6,19 +6,25 @@ interface SelectQuestionProps {
 }
 
 export default function SelectQuestion({ question, readOnly }: SelectQuestionProps) {
+  const showPlaceholder =
+    !question.settings.defaultOptionID || question.settings.defaultOptionID === 0
+
   return (
     <select
-      className="w-full rounded-sm border-[1px] border-n-400 bg-n-100 p-[4px] px-[6px] text-[12px] focus:outline-none"
+      className="h-[34px] w-full rounded-sm border-[1px] border-n-400 bg-transparent p-[4px] px-[6px] text-[12px] focus:outline-none"
       defaultValue={question.settings.defaultOptionID}
       disabled={readOnly}
     >
-      <option value={question.settings.defaultOptionID}>
-        {question.settings.defaultOptionID === 0
-          ? '--Select an option--'
-          : question.settings.options.find(
-              (option) => option.id === question.settings.defaultOptionID
-            )?.value}
-      </option>
+      {showPlaceholder && (
+        <option value={0} disabled>
+          --Select an option--
+        </option>
+      )}
+      {question.settings.options.map((option) => (
+        <option key={option.id} value={option.id}>
+          {option.value}
+        </option>
+      ))}
     </select>
   )
 }

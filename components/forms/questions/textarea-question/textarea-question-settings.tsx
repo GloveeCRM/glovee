@@ -52,7 +52,7 @@ export default function TextareaQuestionSettings({ question }: TextareaQuestionS
   }
 
   function handleChangeMinimumLength(e: React.ChangeEvent<HTMLInputElement>) {
-    const value = parseInt(e.target.value)
+    const value = Number(e.target.value) || 0
     updateQuestion({
       ...question,
       settings: { ...question.settings, minimumLength: value },
@@ -60,7 +60,7 @@ export default function TextareaQuestionSettings({ question }: TextareaQuestionS
   }
 
   function handleChangeMaximumLength(e: React.ChangeEvent<HTMLInputElement>) {
-    const value = parseInt(e.target.value)
+    const value = Number(e.target.value) || 0
     updateQuestion({
       ...question,
       settings: { ...question.settings, maximumLength: value },
@@ -103,6 +103,7 @@ export default function TextareaQuestionSettings({ question }: TextareaQuestionS
           </div>
           {question.settings.minimumLength !== null && (
             <Input
+              type="number"
               defaultValue={question.settings.minimumLength?.toString() || '0'}
               className="h-[30px] rounded-sm border-0 bg-n-600/80 px-[8px] text-[12px] focus-visible:ring-1 focus-visible:ring-n-500"
               onChange={handleChangeMinimumLength}
@@ -119,6 +120,7 @@ export default function TextareaQuestionSettings({ question }: TextareaQuestionS
           </div>
           {question.settings.maximumLength !== null && (
             <Input
+              type="number"
               defaultValue={question.settings.maximumLength?.toString() || '0'}
               className="h-[30px] rounded-sm border-0 bg-n-600/80 px-[8px] text-[12px] focus-visible:ring-1 focus-visible:ring-n-500"
               onChange={handleChangeMaximumLength}
