@@ -17,9 +17,13 @@ export default async function ClientApplicationPage({
 
   return (
     <div className="flex h-full flex-col gap-[16px] overflow-y-scroll">
-      {questionSets.map((questionSet) => (
-        <ApplicationQuestionSet key={questionSet.id} questionSet={questionSet} />
-      ))}
+      {questionSets ? (
+        questionSets.map((questionSet) => (
+          <ApplicationQuestionSet key={questionSet.id} questionSet={questionSet} />
+        ))
+      ) : (
+        <div className="flex h-full items-center justify-center text-n-500">No questions found</div>
+      )}
     </div>
   )
 }
