@@ -40,7 +40,7 @@ export default function ClientProfilePicture({ url, client, editable }: ClientPr
       return
     }
 
-    const updateRes = await updateClientProfilePicture(orgName, client.id, uploadRes.url!)
+    const updateRes = await updateClientProfilePicture(orgName, client.id, uploadRes.url || '')
     if (updateRes.error) {
       console.error('Failed to update profile picture')
       return

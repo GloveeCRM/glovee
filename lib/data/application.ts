@@ -162,3 +162,39 @@ export async function fetchSectionQuestionSets(
     return []
   }
 }
+
+export async function fetchApplicationDocumentUploadURL(
+  orgName: string,
+  clientID: number,
+  applicationID: number,
+  questionID: number,
+  mimeType: string
+): Promise<string | null> {
+  try {
+    const accessToken = await getSession()
+    if (!accessToken) {
+      return null
+    }
+
+    const response = await fetch(
+      `${GLOVEE_API_URL}/v1/${orgName}/application/client/${clientID}/application/${applicationID}/question/${questionID}/document-upload-url?mimeType=${mimeType}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    )
+
+    const data = await response.json()
+
+    if (data.status === 'error') {
+      return null
+    } else {
+      return data.data.uploadURL
+    }
+  } catch (error) {
+    return null
+  }
+}
