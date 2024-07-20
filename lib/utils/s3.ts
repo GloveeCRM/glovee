@@ -34,3 +34,12 @@ export async function uploadFileToS3(
     }
   }
 }
+
+/**
+ * Extract the object key from the S3 URL
+ */
+export function extractS3ObjectKey(url: string): string {
+  const pattern = /amazonaws\.com\/(.*)/
+  const match = url.match(pattern)
+  return match ? match[1] : ''
+}

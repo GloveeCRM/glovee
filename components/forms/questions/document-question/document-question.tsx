@@ -8,7 +8,7 @@ import { FiUpload } from 'react-icons/fi'
 import { DocumentQuestionType } from '@/lib/types/qusetion'
 import { saveAnswer } from '@/lib/actions/application'
 import { useOrgContext } from '@/contexts/org-context'
-import { uploadFileToS3 } from '@/lib/utils/s3'
+import { extractS3ObjectKey, uploadFileToS3 } from '@/lib/utils/s3'
 import { useApplicationContext } from '@/contexts/application-context'
 import { fetchApplicationDocumentUploadURL } from '@/lib/data/application'
 import { getSessionPayload } from '@/lib/auth/session'
@@ -72,7 +72,9 @@ export default function DocumentQuestion({ question, readOnly }: DocumentQuestio
       return
     }
 
-    saveAnswer(orgName, question.id, { files: [uploadRes.url || ''] }).then((data) => {
+    const objectkey = extractS3ObjectKey(uploadRes.url || '')
+
+    saveAnswer(orgName, question.id, { files: [objectkey] }).then((data) => {
       setMessage(data.success ? 'Saved!' : 'Failed to save changes!')
       setTimeout(() => {
         setMessage('')
