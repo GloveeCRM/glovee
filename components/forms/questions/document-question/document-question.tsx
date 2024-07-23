@@ -5,13 +5,13 @@ import { ImSpinner2 } from 'react-icons/im'
 import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
 import { FiUpload } from 'react-icons/fi'
 
-import { DocumentQuestionType } from '@/lib/types/qusetion'
-import { saveAnswer } from '@/lib/actions/application'
-import { useOrgContext } from '@/contexts/org-context'
+import { AnswerTypes, AnswerFile, DocumentQuestionType } from '@/lib/types/qusetion'
 import { extractS3ObjectKey, uploadFileToS3 } from '@/lib/utils/s3'
-import { useApplicationContext } from '@/contexts/application-context'
+import { saveAnswer } from '@/lib/actions/application'
 import { fetchApplicationDocumentUploadURL } from '@/lib/data/application'
 import { getSessionPayload } from '@/lib/auth/session'
+import { useOrgContext } from '@/contexts/org-context'
+import { useApplicationContext } from '@/contexts/application-context'
 
 interface DocumentQuestionProps {
   question: DocumentQuestionType
@@ -74,7 +74,22 @@ export default function DocumentQuestion({ question, readOnly }: DocumentQuestio
 
     const objectkey = extractS3ObjectKey(uploadRes.url || '')
 
-    saveAnswer(orgName, question.id, { files: [objectkey] }).then((data) => {
+    console.log('mime type', file.type)
+    saveAnswer(
+      orgName,
+      question.id,
+      {
+        files: [
+          {
+            file: {
+              objectKey: objectkey,
+              mimeType: file.type,
+            },
+          } as AnswerFile,
+        ],
+      },
+      AnswerTypes.FILE
+    ).then((data) => {
       setMessage(data.success ? 'Saved!' : 'Failed to save changes!')
       setTimeout(() => {
         setMessage('')
@@ -86,19 +101,34 @@ export default function DocumentQuestion({ question, readOnly }: DocumentQuestio
     }
   }
 
+  const fileExists =
+    question.answer?.answer.files?.length && question.answer.answer.files.length !== 0
+
   return (
     <div className="relative">
-      <div className="flex flex-col items-center gap-[2px] rounded-sm border-[1px] border-n-300 p-[4px] text-n-500/90">
-        <FiUpload className="h-[18px] w-[18px]" />
-        <div>Upload a File</div>
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={handleFileChange}
-          placeholder={question.type}
-          readOnly={readOnly}
-        />
-      </div>
+      {fileExists ? (
+        <a
+          href={question.answer?.answer.files?.[0].file.path}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-[2px] text-blue-500 hover:text-blue-700"
+        >
+          <IoMdCheckmarkCircle className="h-[18px] w-[18px]" />
+          Open Document
+        </a>
+      ) : (
+        <div className="flex flex-col items-center gap-[2px] rounded-sm border-[1px] border-n-300 p-[4px] text-n-500/90">
+          <FiUpload className="h-[18px] w-[18px]" />
+          <div>Upload a File</div>
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            placeholder={question.type}
+            readOnly={readOnly}
+          />
+        </div>
+      )}
       {message.length !== 0 && (
         <div
           className={`absolute right-[1px] top-[1px] flex h-[32px] items-center gap-[2px] rounded bg-white px-[4px]

@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { ImSpinner2 } from 'react-icons/im'
 import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
 
-import { SelectQuestionType } from '@/lib/types/qusetion'
+import { AnswerTypes, SelectQuestionType } from '@/lib/types/qusetion'
 import { saveAnswer } from '@/lib/actions/application'
 import { useOrgContext } from '@/contexts/org-context'
 
@@ -20,12 +20,14 @@ export default function SelectQuestion({ question, readOnly }: SelectQuestionPro
   function handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
     const selectedOptionID = Number(e.target.value) || 0
     setMessage('Saving')
-    saveAnswer(orgName, question.id, { optionIDs: [selectedOptionID] }).then((data) => {
-      setMessage(data.success ? 'Saved!' : 'Failed to save changes!')
-      setTimeout(() => {
-        setMessage('')
-      }, 1000)
-    })
+    saveAnswer(orgName, question.id, { optionIDs: [selectedOptionID] }, AnswerTypes.OPTION).then(
+      (data) => {
+        setMessage(data.success ? 'Saved!' : 'Failed to save changes!')
+        setTimeout(() => {
+          setMessage('')
+        }, 1000)
+      }
+    )
   }
 
   const showPlaceholder =

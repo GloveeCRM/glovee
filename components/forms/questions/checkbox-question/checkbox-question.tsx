@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { ImSpinner2 } from 'react-icons/im'
 import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
 
-import { CheckboxQuestionType } from '@/lib/types/qusetion'
+import { AnswerTypes, CheckboxQuestionType } from '@/lib/types/qusetion'
 import { saveAnswer } from '@/lib/actions/application'
 import { useOrgContext } from '@/contexts/org-context'
 
@@ -24,12 +24,14 @@ export default function CheckboxQuestion({ question, readOnly }: CheckboxQuestio
       : currentlySelected.filter((id) => id !== selectedOptionID)
 
     setMessage('Saving')
-    saveAnswer(orgName, question.id, { optionIDs: newSelection }).then((data) => {
-      setMessage(data.success ? 'Saved!' : 'Failed to save changes!')
-      setTimeout(() => {
-        setMessage('')
-      }, 1000)
-    })
+    saveAnswer(orgName, question.id, { optionIDs: newSelection }, AnswerTypes.OPTION).then(
+      (data) => {
+        setMessage(data.success ? 'Saved!' : 'Failed to save changes!')
+        setTimeout(() => {
+          setMessage('')
+        }, 1000)
+      }
+    )
   }
   const inline = question.settings.display === 'inline'
   const options = question.settings.options

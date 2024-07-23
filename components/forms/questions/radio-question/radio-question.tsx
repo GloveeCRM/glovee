@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { ImSpinner2 } from 'react-icons/im'
 import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
 
-import { RadioQuestionType } from '@/lib/types/qusetion'
+import { AnswerTypes, RadioQuestionType } from '@/lib/types/qusetion'
 import { saveAnswer } from '@/lib/actions/application'
 import { useOrgContext } from '@/contexts/org-context'
 
@@ -20,12 +20,14 @@ export default function RadioQuestion({ question, readOnly }: RadioQuestionProps
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const selectedOptionID = Number(e.target.value) || 0
     setMessage('Saving')
-    saveAnswer(orgName, question.id, { optionIDs: [selectedOptionID] }).then((data) => {
-      setMessage(data.success ? 'Saved!' : 'Failed to save changes!')
-      setTimeout(() => {
-        setMessage('')
-      }, 1000)
-    })
+    saveAnswer(orgName, question.id, { optionIDs: [selectedOptionID] }, AnswerTypes.OPTION).then(
+      (data) => {
+        setMessage(data.success ? 'Saved!' : 'Failed to save changes!')
+        setTimeout(() => {
+          setMessage('')
+        }, 1000)
+      }
+    )
   }
 
   const inline = question.settings.display === 'inline'

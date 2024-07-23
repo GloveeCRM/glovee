@@ -58,7 +58,8 @@ export async function submitApplicationById(
 export async function saveAnswer(
   orgName: string,
   questionID: number,
-  answer: Record<string, any>
+  answer: Record<string, any>,
+  answerType: string
 ): Promise<{ success?: string; error?: string }> {
   const accessToken = await getSession()
   const payload = await getSessionPayload()
@@ -76,6 +77,7 @@ export async function saveAnswer(
         body: JSON.stringify({
           answer: {
             questionID,
+            answerType,
             answer,
           },
         }),

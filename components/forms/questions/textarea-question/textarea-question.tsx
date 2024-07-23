@@ -5,7 +5,7 @@ import { useDebouncedCallback } from 'use-debounce'
 import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
 import { ImSpinner2 } from 'react-icons/im'
 
-import { TextareaQuestionType } from '@/lib/types/qusetion'
+import { AnswerTypes, TextareaQuestionType } from '@/lib/types/qusetion'
 import { saveAnswer } from '@/lib/actions/application'
 import { useOrgContext } from '@/contexts/org-context'
 import { Textarea } from '@/components/ui/textarea'
@@ -21,7 +21,7 @@ export default function TextareaQuestion({ question, readOnly = false }: Textare
 
   const handleChange = useDebouncedCallback(async (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage('Saving')
-    saveAnswer(orgName, question.id, { text: e.target.value }).then((data) => {
+    saveAnswer(orgName, question.id, { text: e.target.value }, AnswerTypes.TEXT).then((data) => {
       setMessage(data.success ? 'Saved!' : 'Failed to save changes!')
       setTimeout(() => {
         setMessage('')

@@ -1,3 +1,5 @@
+import { FileType } from './file'
+
 export type BaseQuestionSettings = {
   isRequired: boolean
 }
@@ -26,15 +28,30 @@ export type BaseQuestionType = {
 export type BaseAnswerType = {
   id: number
   questionID: number
+  type: AnswerTypes
   answer: AnswerValueType
   isAcceptable: boolean
+}
+
+export enum AnswerTypes {
+  TEXT = 'TEXT',
+  OPTION = 'OPTION',
+  DATE = 'DATE',
+  FILE = 'FILE',
 }
 
 export type AnswerValueType = {
   text?: string
   optionIDs?: number[]
   date?: string
-  files?: string[]
+  files?: AnswerFile[]
+}
+
+export type AnswerFile = {
+  id: number
+  answerID: number
+  fileID: number
+  file: FileType
 }
 
 export function isTextInputQuestionType(

@@ -5,7 +5,7 @@ import { useDebouncedCallback } from 'use-debounce'
 import { ImSpinner2 } from 'react-icons/im'
 import { IoMdCheckmarkCircle, IoIosCloseCircle } from 'react-icons/io'
 
-import { TextInputQuestionType } from '@/lib/types/qusetion'
+import { AnswerTypes, TextInputQuestionType } from '@/lib/types/qusetion'
 import { saveAnswer } from '@/lib/actions/application'
 import { useOrgContext } from '@/contexts/org-context'
 import { Input } from '@/components/ui/input'
@@ -21,7 +21,7 @@ export default function TextInputQuestion({ question, readOnly = false }: TextIn
 
   const handleChange = useDebouncedCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage('Saving')
-    saveAnswer(orgName, question.id, { text: e.target.value }).then((data) => {
+    saveAnswer(orgName, question.id, { text: e.target.value }, AnswerTypes.TEXT).then((data) => {
       setMessage(data.success ? 'Saved!' : 'Failed to save changes!')
       setTimeout(() => {
         setMessage('')
