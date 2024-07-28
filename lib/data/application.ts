@@ -7,6 +7,7 @@ import {
 } from '@/lib/types/application'
 import { GLOVEE_API_URL } from '@/lib/constants/api'
 import { getSession } from '@/lib/auth/session'
+import { File } from '../types/file'
 
 export async function fetchClientApplications(
   orgName: string,
@@ -163,12 +164,12 @@ export async function fetchSectionQuestionSets(
   }
 }
 
-export async function fetchApplicationDocumentUploadURL(
+export async function fetchApplicationAnswerFileUploadIntent(
   orgName: string,
   clientID: number,
   applicationID: number,
   questionID: number,
-  mimeType: string
+  file: File
 ): Promise<string | null> {
   try {
     const accessToken = await getSession()
@@ -177,13 +178,16 @@ export async function fetchApplicationDocumentUploadURL(
     }
 
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/application/client/${clientID}/application/${applicationID}/question/${questionID}/document-upload-url?mimeType=${mimeType}`,
+      `${GLOVEE_API_URL}/v1/${orgName}/application/client/${clientID}/application/${applicationID}/question/${questionID}/create-application-answer-file-upload-intent`,
       {
-        method: 'GET',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
         },
+        body: JSON.stringify({
+          file: file,
+        }),
       }
     )
 

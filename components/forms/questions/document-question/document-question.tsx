@@ -10,8 +10,9 @@ import { saveAnswer } from '@/lib/actions/application'
 import { useOrgContext } from '@/contexts/org-context'
 import { extractS3ObjectKey, uploadFileToS3 } from '@/lib/utils/s3'
 import { useApplicationContext } from '@/contexts/application-context'
-import { fetchApplicationDocumentUploadURL } from '@/lib/data/application'
+import { fetchApplicationAnswerFileUploadIntent } from '@/lib/data/application'
 import { getSessionPayload } from '@/lib/auth/session'
+import { File } from '@/lib/types/file'
 
 interface DocumentQuestionProps {
   question: DocumentQuestionType
@@ -48,12 +49,16 @@ export default function DocumentQuestion({ question, readOnly }: DocumentQuestio
       return
     }
 
-    const uploadURL = await fetchApplicationDocumentUploadURL(
+    const fu = {
+      mimeType: file.type,
+    } as File
+
+    const uploadURL = await fetchApplicationAnswerFileUploadIntent(
       orgName,
       userID,
       applicationID,
       question.id,
-      file.type
+      fu
     )
     if (!uploadURL) {
       setMessage('Failed to upload file!')
@@ -74,7 +79,23 @@ export default function DocumentQuestion({ question, readOnly }: DocumentQuestio
 
     const objectkey = extractS3ObjectKey(uploadRes.url || '')
 
-    saveAnswer(orgName, question.id, { files: [objectkey] }).then((data) => {
+    const f = {
+      id: 0,
+      name: file.name,
+      mimeType: file.type,
+      path: uploadRes.url || '',
+      size: file.size,
+      bucket: '',
+      objectKey: objectkey,
+      metadata: {
+        id: 0,
+        fileID: 0,
+        key: 'tags',
+        value: 'document',
+      },
+    } as File
+
+    saveAnswer(orgName, question.id, { files: [f] }).then((data) => {
       setMessage(data.success ? 'Saved!' : 'Failed to save changes!')
       setTimeout(() => {
         setMessage('')
