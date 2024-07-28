@@ -170,7 +170,10 @@ export async function fetchApplicationAnswerFileUploadIntent(
   applicationID: number,
   questionID: number,
   file: File
-): Promise<string | null> {
+): Promise<{
+  uploadURL: string
+  file: File
+} | null> {
   try {
     const accessToken = await getSession()
     if (!accessToken) {
@@ -196,7 +199,7 @@ export async function fetchApplicationAnswerFileUploadIntent(
     if (data.status === 'error') {
       return null
     } else {
-      return data.data.uploadURL
+      return data.data
     }
   } catch (error) {
     return null

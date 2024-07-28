@@ -53,14 +53,14 @@ export default function DocumentQuestion({ question, readOnly }: DocumentQuestio
       mimeType: file.type,
     } as File
 
-    const uploadURL = await fetchApplicationAnswerFileUploadIntent(
+    const uploadIntent = await fetchApplicationAnswerFileUploadIntent(
       orgName,
       userID,
       applicationID,
       question.id,
       fu
     )
-    if (!uploadURL) {
+    if (!uploadIntent) {
       setMessage('Failed to upload file!')
       setTimeout(() => {
         setMessage('')
@@ -68,7 +68,7 @@ export default function DocumentQuestion({ question, readOnly }: DocumentQuestio
       return
     }
 
-    const uploadRes = await uploadFileToS3(uploadURL, file)
+    const uploadRes = await uploadFileToS3(uploadIntent.uploadURL, file)
     if (!uploadRes.success) {
       setMessage('Failed to upload file!')
       setTimeout(() => {
