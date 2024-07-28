@@ -8,7 +8,7 @@ import { FiUpload } from 'react-icons/fi'
 import { DocumentQuestionType } from '@/lib/types/qusetion'
 import { saveAnswer } from '@/lib/actions/application'
 import { useOrgContext } from '@/contexts/org-context'
-import { extractS3ObjectKey, uploadFileToS3 } from '@/lib/utils/s3'
+import { uploadFileToS3 } from '@/lib/utils/s3'
 import { useApplicationContext } from '@/contexts/application-context'
 import { fetchApplicationAnswerFileUploadIntent } from '@/lib/data/application'
 import { getSessionPayload } from '@/lib/auth/session'
@@ -28,11 +28,7 @@ export default function DocumentQuestion({ question, readOnly }: DocumentQuestio
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
-    if (!file) {
-      return
-    }
-
-    if (!applicationID) {
+    if (!file || !applicationID) {
       return
     }
 
@@ -49,8 +45,10 @@ export default function DocumentQuestion({ question, readOnly }: DocumentQuestio
       return
     }
 
-    const fu = {
+    const fileToUpload = {
+      name: file.name,
       mimeType: file.type,
+      size: file.size,
     } as File
 
     const uploadIntent = await fetchApplicationAnswerFileUploadIntent(
@@ -58,7 +56,7 @@ export default function DocumentQuestion({ question, readOnly }: DocumentQuestio
       userID,
       applicationID,
       question.id,
-      fu
+      fileToUpload
     )
     if (!uploadIntent) {
       setMessage('Failed to upload file!')
@@ -77,25 +75,7 @@ export default function DocumentQuestion({ question, readOnly }: DocumentQuestio
       return
     }
 
-    const objectkey = extractS3ObjectKey(uploadRes.url || '')
-
-    const f = {
-      id: 0,
-      name: file.name,
-      mimeType: file.type,
-      path: uploadRes.url || '',
-      size: file.size,
-      bucket: '',
-      objectKey: objectkey,
-      metadata: {
-        id: 0,
-        fileID: 0,
-        key: 'tags',
-        value: 'document',
-      },
-    } as File
-
-    saveAnswer(orgName, question.id, { files: [f] }).then((data) => {
+    saveAnswer(orgName, question.id, { files: [uploadIntent.file] }).then((data) => {
       setMessage(data.success ? 'Saved!' : 'Failed to save changes!')
       setTimeout(() => {
         setMessage('')
