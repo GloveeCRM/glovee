@@ -91,7 +91,7 @@ export default function DocumentQuestion({ question, readOnly }: DocumentQuestio
   return (
     <div className="relative">
       <div className="flex flex-col items-center gap-[2px] rounded-sm border-[1px] border-n-300 p-[4px] text-n-500/90">
-        {question.answer?.answer.files ? (
+        {question.answer?.answer.files && question.answer.answer.files.length > 0 ? (
           question.answer.answer.files.map((file) => (
             <div key={file.id} className="flex items-center gap-[2px]">
               <span>{file.name}</span>
