@@ -13,6 +13,7 @@ import { useApplicationContext } from '@/contexts/application-context'
 import { fetchApplicationAnswerFileUploadIntent } from '@/lib/data/application'
 import { getSessionPayload } from '@/lib/auth/session'
 import { File } from '@/lib/types/file'
+import Link from 'next/link'
 
 interface DocumentQuestionProps {
   question: DocumentQuestionType
@@ -90,15 +91,28 @@ export default function DocumentQuestion({ question, readOnly }: DocumentQuestio
   return (
     <div className="relative">
       <div className="flex flex-col items-center gap-[2px] rounded-sm border-[1px] border-n-300 p-[4px] text-n-500/90">
-        <FiUpload className="h-[18px] w-[18px]" />
-        <div>Upload a File</div>
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={handleFileChange}
-          placeholder={question.type}
-          readOnly={readOnly}
-        />
+        {question.answer?.answer.files ? (
+          question.answer.answer.files.map((file) => (
+            <div key={file.id} className="flex items-center gap-[2px]">
+              <span>{file.name}</span>
+              <Link href={file.presignedDownloadURL} target="_blank">
+                Download
+              </Link>
+            </div>
+          ))
+        ) : (
+          <div>
+            <FiUpload className="h-[18px] w-[18px]" />
+            <div>Upload a File</div>
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              placeholder={question.type}
+              readOnly={readOnly}
+            />
+          </div>
+        )}
       </div>
       {message.length !== 0 && (
         <div

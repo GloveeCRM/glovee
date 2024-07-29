@@ -7,6 +7,7 @@ export type File = {
   bucket: string
   objectKey: string
   metadata: FileMetadata
+  presignedDownloadURL: string
 }
 
 export type FileMetadata = {

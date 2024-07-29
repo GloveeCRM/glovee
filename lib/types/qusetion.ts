@@ -1,3 +1,5 @@
+import { File } from './file'
+
 export type BaseQuestionSettings = {
   isRequired: boolean
 }
@@ -34,7 +36,7 @@ export type AnswerValueType = {
   text?: string
   optionIDs?: number[]
   date?: string
-  files?: string[]
+  files?: File[]
 }
 
 export function isTextInputQuestionType(
