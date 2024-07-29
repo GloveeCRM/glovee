@@ -2,18 +2,20 @@
 
 import { useRef, useState } from 'react'
 import { ImSpinner2 } from 'react-icons/im'
+import Link from 'next/link'
+import { BiTrash } from 'react-icons/bi'
 import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
-import { FiUpload } from 'react-icons/fi'
+import { FiUpload, FiFileText } from 'react-icons/fi'
 
 import { DocumentQuestionType } from '@/lib/types/qusetion'
-import { saveAnswer } from '@/lib/actions/application'
-import { useOrgContext } from '@/contexts/org-context'
-import { uploadFileToS3 } from '@/lib/utils/s3'
-import { useApplicationContext } from '@/contexts/application-context'
-import { fetchApplicationAnswerFileUploadIntent } from '@/lib/data/application'
-import { getSessionPayload } from '@/lib/auth/session'
 import { File } from '@/lib/types/file'
-import Link from 'next/link'
+import { uploadFileToS3 } from '@/lib/utils/s3'
+import { fetchApplicationAnswerFileUploadIntent } from '@/lib/data/application'
+import { saveAnswer } from '@/lib/actions/application'
+import { getSessionPayload } from '@/lib/auth/session'
+import { useOrgContext } from '@/contexts/org-context'
+import { useApplicationContext } from '@/contexts/application-context'
+import { LuFileText } from 'react-icons/lu'
 
 interface DocumentQuestionProps {
   question: DocumentQuestionType
@@ -90,14 +92,21 @@ export default function DocumentQuestion({ question, readOnly }: DocumentQuestio
 
   return (
     <div className="relative">
-      <div className="flex flex-col items-center gap-[2px] rounded-sm border-[1px] border-n-300 p-[4px] text-n-500/90">
+      <div className="flex flex-col items-center gap-[2px] rounded border-[1px] border-n-300 p-[6px] text-n-500/90">
         {question.answer?.answer.files && question.answer.answer.files.length > 0 ? (
           question.answer.answer.files.map((file) => (
-            <div key={file.id} className="flex items-center gap-[2px]">
-              <span>{file.name}</span>
-              <Link href={file.presignedDownloadURL} target="_blank">
-                Download
-              </Link>
+            <div key={file.id} className="flex w-full items-center justify-between gap-[2px]">
+              <div className="flex items-center gap-[6px] text-n-600">
+                <div className="w-fit rounded-full bg-n-300/70 p-[8px]">
+                  <LuFileText className="h-[26px] w-[26px]" />
+                </div>
+                <Link href={file.presignedDownloadURL} target="_blank">
+                  <span>{file.name}</span>
+                </Link>
+              </div>
+              <div className="cursor-pointer rounded-full p-[6px] transition duration-75 hover:bg-red-100">
+                <BiTrash className="h-[22px] w-[22px] text-red-500" />
+              </div>
             </div>
           ))
         ) : (
