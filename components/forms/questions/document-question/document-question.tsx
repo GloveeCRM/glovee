@@ -139,7 +139,7 @@ export default function DocumentQuestion({ question, readOnly }: DocumentQuestio
                   <LuFileText className="h-[26px] w-[26px]" />
                 </div>
                 <Link href={file.presignedDownloadURL} target="_blank">
-                  <span>{file.name}</span>
+                  <span className="line-clamp-1">{file.name}</span>
                 </Link>
               </div>
               <div
