@@ -90,12 +90,50 @@ export default function DocumentQuestion({ question, readOnly }: DocumentQuestio
     }
   }
 
+  async function handleFileDelete(file: File) {
+    if (!applicationID) {
+      return
+    }
+
+    setMessage('Deleting')
+
+    const payload = await getSessionPayload()
+    const userID = payload?.user.id || 0
+
+    if (!userID) {
+      setMessage('Failed to delete file!')
+      setTimeout(() => {
+        setMessage('')
+      }, 1000)
+      return
+    }
+
+    const currentFiles = question.answer?.answer.files || []
+    const newFiles = currentFiles.filter((f) => f.id !== file.id)
+
+    saveAnswer(orgName, question.id, { files: newFiles }).then((data) => {
+      setMessage(data.success ? 'Saved!' : 'Failed to save changes!')
+      setTimeout(() => {
+        setMessage('')
+      }, 1000)
+    })
+  }
+
+  function handleClickUploadFile() {
+    if (fileInputRef.current) {
+      fileInputRef.current.click()
+    }
+  }
+
   return (
     <div className="relative">
-      <div className="flex flex-col items-center gap-[2px] rounded border-[1px] border-n-300 p-[6px] text-n-500/90">
+      <div className="flex flex-col items-center gap-[2px] rounded border-[1px] border-n-300 text-n-500/90">
         {question.answer?.answer.files && question.answer.answer.files.length > 0 ? (
           question.answer.answer.files.map((file) => (
-            <div key={file.id} className="flex w-full items-center justify-between gap-[2px]">
+            <div
+              key={file.id}
+              className="flex w-full items-center justify-between gap-[2px] px-[8px] py-[10px]"
+            >
               <div className="flex items-center gap-[6px] text-n-600">
                 <div className="w-fit rounded-full bg-n-300/70 p-[8px]">
                   <LuFileText className="h-[26px] w-[26px]" />
@@ -104,13 +142,19 @@ export default function DocumentQuestion({ question, readOnly }: DocumentQuestio
                   <span>{file.name}</span>
                 </Link>
               </div>
-              <div className="cursor-pointer rounded-full p-[6px] transition duration-75 hover:bg-red-100">
+              <div
+                className="cursor-pointer rounded-full p-[6px] transition duration-75 hover:bg-red-100"
+                onClick={() => handleFileDelete(file)}
+              >
                 <BiTrash className="h-[22px] w-[22px] text-red-500" />
               </div>
             </div>
           ))
         ) : (
-          <div>
+          <div
+            className="flex w-full cursor-pointer flex-col items-center p-[12px]"
+            onClick={handleClickUploadFile}
+          >
             <FiUpload className="h-[18px] w-[18px]" />
             <div>Upload a File</div>
             <input
@@ -119,6 +163,7 @@ export default function DocumentQuestion({ question, readOnly }: DocumentQuestio
               onChange={handleFileChange}
               placeholder={question.type}
               readOnly={readOnly}
+              className="hidden"
             />
           </div>
         )}
