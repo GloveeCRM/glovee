@@ -152,7 +152,7 @@ export default function DocumentQuestion({ question, readOnly }: DocumentQuestio
           ))
         ) : (
           <div
-            className="flex w-full cursor-pointer flex-col items-center p-[12px]"
+            className="flex w-full cursor-pointer flex-col items-center p-[12px] transition duration-75 hover:bg-n-100/50 hover:text-n-600"
             onClick={handleClickUploadFile}
           >
             <FiUpload className="h-[18px] w-[18px]" />
