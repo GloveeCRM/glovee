@@ -14,7 +14,7 @@ export default function DateInputQuestion({ question, readOnly }: DateInputQuest
         </label>
         <select
           id="day"
-          className="rounded-sm border-[1px] border-n-400 bg-n-100 p-[4px] px-[6px] text-[12px] focus:outline-none"
+          className="h-[32px] w-full rounded-sm border-[1px] border-n-400 bg-transparent p-[4px] px-[6px] text-[12px] focus:outline-none"
           placeholder={question.type}
           disabled={readOnly}
         >
@@ -27,8 +27,7 @@ export default function DateInputQuestion({ question, readOnly }: DateInputQuest
         </label>
         <select
           id="month"
-          className="rounded-sm border-[1px] border-n-400 bg-n-100 p-[4px] px-[6px] text-[12px] focus:outline-none"
-          placeholder={question.type}
+          className="h-[32px] w-full rounded-sm border-[1px] border-n-400 bg-transparent p-[4px] px-[6px] text-[12px] focus:outline-none"
           disabled={readOnly}
         >
           <option value="">MM</option>
@@ -40,7 +39,7 @@ export default function DateInputQuestion({ question, readOnly }: DateInputQuest
         </label>
         <select
           id="year"
-          className="rounded-sm border-[1px] border-n-400 bg-n-100 p-[4px] px-[6px] text-[12px] focus:outline-none"
+          className="h-[32px] w-full rounded-sm border-[1px] border-n-400 bg-transparent p-[4px] px-[6px] text-[12px] focus:outline-none"
           placeholder={question.type}
           disabled={readOnly}
         >
