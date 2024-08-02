@@ -26,14 +26,6 @@ export default function CheckboxQuestionSettings({ question }: CheckboxQuestionS
     })
   }
 
-  function handleChangeDefaultOption(e: React.ChangeEvent<HTMLSelectElement>) {
-    const optionID = parseInt(e.target.value)
-    updateQuestion({
-      ...question,
-      settings: { ...question.settings, defaultOptionID: Number(optionID) },
-    })
-  }
-
   const handleChangeGuide = useDebouncedCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value
     updateQuestion({

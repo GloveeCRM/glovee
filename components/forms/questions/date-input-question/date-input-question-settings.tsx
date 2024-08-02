@@ -84,7 +84,7 @@ export default function DateInputQuestionSettings({ question }: DateInputQuestio
         <div className="flex flex-col gap-[6px]">
           <div className="flex items-center gap-[6px]">
             <Switch
-              checked={question.settings.minimumDate !== null}
+              checked={selectedMinDate !== null}
               onCheckedChange={handleChangeIsMinDateRequired}
             />
             <div>Minimum Date</div>
@@ -100,7 +100,7 @@ export default function DateInputQuestionSettings({ question }: DateInputQuestio
         <div className="flex flex-col gap-[6px]">
           <div className="flex items-center gap-[6px]">
             <Switch
-              checked={question.settings.maximumDate !== null}
+              checked={selectedMaxDate !== null}
               onCheckedChange={handleChangeIsMaxDateRequired}
             />
             <div>Maximum Date</div>
