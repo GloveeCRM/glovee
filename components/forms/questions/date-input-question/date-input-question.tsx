@@ -89,7 +89,7 @@ export default function DateInputQuestion({ question, readOnly }: DateInputQuest
   )
 
   return (
-    <div className="flex gap-[2%]">
+    <div className="relative flex gap-[2%]">
       <div className="flex w-full flex-col">
         <label htmlFor="day" className="text-[12px] text-n-500">
           Day
