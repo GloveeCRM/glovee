@@ -69,6 +69,7 @@ export default function NonEmptySectionDropzone({ position }: NonEmptySectionDro
             isRequired: false,
           },
           questionSetID: questionSetID,
+          options: [],
         }
         newQuestionSet.questions = [newQuestion]
       }

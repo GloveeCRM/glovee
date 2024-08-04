@@ -62,6 +62,7 @@ export default function EmptySectionDropzone() {
             isRequired: false,
           },
           questionSetID: questionSetID,
+          options: [],
         }
         newQuestionSet.questions = [newQuestion]
       }

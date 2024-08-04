@@ -144,6 +144,7 @@ export default function EmptyQuestionSetDropzone({
               isRequired: false,
             },
             questionSetID: newQuestionSetID,
+            options: [],
           }
           newQuestionSet.questions = [newQuestion]
         }
