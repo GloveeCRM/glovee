@@ -30,6 +30,7 @@ export default function SelectQuestion({ question, readOnly }: SelectQuestionPro
 
   const showPlaceholder =
     !question.settings.defaultOptionID || question.settings.defaultOptionID === 0
+  const options = question.options || question.settings.options
 
   return (
     <div className="relative">
@@ -44,7 +45,7 @@ export default function SelectQuestion({ question, readOnly }: SelectQuestionPro
             --Select an option--
           </option>
         )}
-        {question.options.map((option) => (
+        {options.map((option) => (
           <option key={option.id} value={option.id}>
             {option.value}
           </option>

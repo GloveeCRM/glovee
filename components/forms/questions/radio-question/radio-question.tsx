@@ -29,7 +29,7 @@ export default function RadioQuestion({ question, readOnly }: RadioQuestionProps
   }
 
   const inline = question.settings.display === 'inline'
-  const options = question.options
+  const options = question.options || question.settings.options
 
   return (
     <div className="relative">

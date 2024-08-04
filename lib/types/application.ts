@@ -1,4 +1,5 @@
 import { QuestionType } from './qusetion'
+import { TemplateQuestionSetType, TemplateQuestionSetTypes } from './template'
 import { UserType } from './user'
 
 export type Applicant = {
@@ -64,4 +65,31 @@ export type ApplicationQuestionSetType = {
   questionSetID: number
   questionSets?: ApplicationQuestionSetType[]
   questions?: QuestionType[]
+}
+
+export function isFlatQuestionSetType(
+  questionSet: ApplicationQuestionSetType | TemplateQuestionSetType
+) {
+  return (
+    questionSet.type === ApplicationQuestionSetTypes.FLAT ||
+    questionSet.type === TemplateQuestionSetTypes.FLAT
+  )
+}
+
+export function isLoopQuestionSetType(
+  questionSet: ApplicationQuestionSetType | TemplateQuestionSetType
+) {
+  return (
+    questionSet.type === ApplicationQuestionSetTypes.LOOP ||
+    questionSet.type === TemplateQuestionSetTypes.LOOP
+  )
+}
+
+export function isDependsOnQuestionSetType(
+  questionSet: ApplicationQuestionSetType | TemplateQuestionSetType
+) {
+  return (
+    questionSet.type === ApplicationQuestionSetTypes.DEPENDS_ON ||
+    questionSet.type === TemplateQuestionSetTypes.DEPENDS_ON
+  )
 }
