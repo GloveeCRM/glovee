@@ -21,7 +21,7 @@ export default function TextInputQuestion({ question, readOnly = false }: TextIn
 
   const handleChange = useDebouncedCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage('Saving')
-    saveAnswer(orgName, question.id, { text: e.target.value }).then((data) => {
+    saveAnswer({ orgName, questionID: question.id, text: e.target.value }).then((data) => {
       setMessage(data.success ? 'Saved!' : 'Failed to save changes!')
       setTimeout(() => {
         setMessage('')
@@ -35,7 +35,7 @@ export default function TextInputQuestion({ question, readOnly = false }: TextIn
         type="text"
         placeholder={question.settings.placeholder}
         readOnly={readOnly}
-        defaultValue={question.answer?.answer.text || ''}
+        defaultValue={question.answer?.text || ''}
         onChange={handleChange}
       />
       {message.length !== 0 && (

@@ -20,7 +20,7 @@ export default function RadioQuestion({ question, readOnly }: RadioQuestionProps
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const selectedOptionID = Number(e.target.value) || 0
     setMessage('Saving')
-    saveAnswer(orgName, question.id, { optionIDs: [selectedOptionID] }).then((data) => {
+    saveAnswer({ orgName, questionID: question.id, optionIDs: [selectedOptionID] }).then((data) => {
       setMessage(data.success ? 'Saved!' : 'Failed to save changes!')
       setTimeout(() => {
         setMessage('')
@@ -29,7 +29,7 @@ export default function RadioQuestion({ question, readOnly }: RadioQuestionProps
   }
 
   const inline = question.settings.display === 'inline'
-  const options = question.settings.options
+  const options = question.options
 
   return (
     <div className="relative">
@@ -42,7 +42,7 @@ export default function RadioQuestion({ question, readOnly }: RadioQuestionProps
               name={String(question.id)}
               value={option.id}
               onChange={handleChange}
-              checked={question.answer?.answer.optionIDs?.[0] === option.id}
+              checked={question.answer?.optionIDs?.[0] === option.id}
               disabled={readOnly}
               className="h-[14px] w-[14px]"
             />

@@ -21,7 +21,7 @@ export default function TextareaQuestion({ question, readOnly = false }: Textare
 
   const handleChange = useDebouncedCallback(async (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage('Saving')
-    saveAnswer(orgName, question.id, { text: e.target.value }).then((data) => {
+    saveAnswer({ orgName, questionID: question.id, text: e.target.value }).then((data) => {
       setMessage(data.success ? 'Saved!' : 'Failed to save changes!')
       setTimeout(() => {
         setMessage('')
@@ -36,7 +36,7 @@ export default function TextareaQuestion({ question, readOnly = false }: Textare
           placeholder={question.settings.placeholder}
           readOnly={readOnly}
           rows={3}
-          defaultValue={question.answer?.answer.text || ''}
+          defaultValue={question.answer?.text || ''}
           onChange={handleChange}
         />
         {message.length !== 0 && (
@@ -57,7 +57,7 @@ export default function TextareaQuestion({ question, readOnly = false }: Textare
         )}
       </div>
       <div className="text-right text-[12px] text-n-500">
-        {question.answer?.answer.text?.length || 0}
+        {question.answer?.text?.length || 0}
         {(question.settings.minimumLength !== null || question.settings.maximumLength !== null) &&
           ' / '}
         {question.settings.minimumLength && question.settings.minimumLength}

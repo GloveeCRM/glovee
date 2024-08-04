@@ -20,7 +20,7 @@ export default function SelectQuestion({ question, readOnly }: SelectQuestionPro
   function handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
     const selectedOptionID = Number(e.target.value) || 0
     setMessage('Saving')
-    saveAnswer(orgName, question.id, { optionIDs: [selectedOptionID] }).then((data) => {
+    saveAnswer({ orgName, questionID: question.id, optionIDs: [selectedOptionID] }).then((data) => {
       setMessage(data.success ? 'Saved!' : 'Failed to save changes!')
       setTimeout(() => {
         setMessage('')
@@ -35,7 +35,7 @@ export default function SelectQuestion({ question, readOnly }: SelectQuestionPro
     <div className="relative">
       <select
         className="h-[34px] w-full rounded-sm border-[1px] border-n-400 bg-transparent p-[4px] px-[6px] text-[12px] focus:outline-none"
-        defaultValue={question.answer?.answer.optionIDs?.[0] || question.settings.defaultOptionID}
+        defaultValue={question.answer?.optionIDs?.[0] || question.settings.defaultOptionID}
         disabled={readOnly}
         onChange={handleChange}
       >
@@ -44,7 +44,7 @@ export default function SelectQuestion({ question, readOnly }: SelectQuestionPro
             --Select an option--
           </option>
         )}
-        {question.settings.options.map((option) => (
+        {question.options.map((option) => (
           <option key={option.id} value={option.id}>
             {option.value}
           </option>

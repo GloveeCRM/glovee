@@ -16,15 +16,15 @@ interface DateInputQuestionProps {
 }
 
 export default function DateInputQuestion({ question, readOnly }: DateInputQuestionProps) {
-  const initialDate = question.answer?.answer.date ? new Date(question.answer.answer.date) : null
+  const initialDate = question.answer?.date ? new Date(question.answer.date) : null
   const minimumDate = new Date(question.settings.minimumDate || '1900-01-01')
   const maximumDate = new Date(question.settings.maximumDate || '2100-12-31')
 
   const { orgName } = useOrgContext()
   const [selectedDate, setSelectedDate] = useState({
-    year: initialDate ? initialDate.getFullYear() : 0,
-    month: initialDate ? initialDate.getMonth() + 1 : 0,
-    day: initialDate ? initialDate.getDate() : 0,
+    year: initialDate ? initialDate.getUTCFullYear() : 0,
+    month: initialDate ? initialDate.getUTCMonth() + 1 : 0,
+    day: initialDate ? initialDate.getUTCDate() : 0,
   })
   const [message, setMessage] = useState<string>('')
 
@@ -62,20 +62,20 @@ export default function DateInputQuestion({ question, readOnly }: DateInputQuest
   }
 
   function isDateValid(date: { year: number; month: number; day: number } = selectedDate) {
+    const checkDate = new Date(Date.UTC(date.year, date.month - 1, date.day))
     return (
       date.year !== 0 &&
       date.month !== 0 &&
       date.day !== 0 &&
-      new Date(Number(date.year), Number(date.month) - 1, Number(date.day)) >= minimumDate &&
-      new Date(Number(date.year), Number(date.month) - 1, Number(date.day)) <= maximumDate
+      checkDate >= minimumDate &&
+      checkDate <= maximumDate
     )
   }
 
   function saveDate(date: { year: number; month: number; day: number }) {
     setMessage('Saving')
-    saveAnswer(orgName, question.id, {
-      date: new Date(Number(date.year), Number(date.month) - 1, Number(date.day)),
-    }).then((data) => {
+    const newDate = new Date(Date.UTC(date.year, date.month - 1, date.day)).toISOString()
+    saveAnswer({ orgName, questionID: question.id, date: newDate }).then((data) => {
       setMessage(data.success ? 'Saved!' : 'Failed to save changes!')
       setTimeout(() => {
         setMessage('')

@@ -1,9 +1,4 @@
-import {
-  QuestionType,
-  BaseQuestionSettings,
-  CheckboxQuestionSettings,
-  RadioQuestionSettings,
-} from './qusetion'
+import { QuestionType } from './qusetion'
 import { UserType } from './user'
 
 export type Applicant = {

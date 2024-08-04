@@ -25,17 +25,20 @@ export type BaseQuestionType = {
   questionSetID: number
 }
 
+type QuestionOptionType = {
+  id: number
+  questionID: number
+  value: string
+  position: number
+}
+
 export type BaseAnswerType = {
   id: number
   questionID: number
-  answer: AnswerValueType
   isAcceptable: boolean
-}
-
-export type AnswerValueType = {
   text?: string
-  optionIDs?: number[]
   date?: string
+  optionIDs?: number[]
   files?: File[]
 }
 
@@ -86,6 +89,7 @@ export type SelectQuestionSettings = BaseQuestionSettings & {
 
 export type SelectQuestionType = BaseQuestionType & {
   settings: SelectQuestionSettings
+  options: QuestionOptionType[]
 }
 
 export function isDateInputQuestionType(
@@ -121,6 +125,7 @@ export type RadioQuestionSettings = BaseQuestionSettings & {
 
 export type RadioQuestionType = BaseQuestionType & {
   settings: RadioQuestionSettings
+  options: QuestionOptionType[]
 }
 
 export function isCheckboxQuestionType(
@@ -143,6 +148,7 @@ export type CheckboxQuestionSettings = BaseQuestionSettings & {
 
 export type CheckboxQuestionType = BaseQuestionType & {
   settings: CheckboxQuestionSettings
+  options: QuestionOptionType[]
 }
 
 export function isDocumentQuestionType(

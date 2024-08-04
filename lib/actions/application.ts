@@ -1,11 +1,12 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { z } from 'zod'
+import { date, z } from 'zod'
 
 import { GLOVEE_API_URL } from '@/lib/constants/api'
 import { CreateApplicationSchema } from '@/lib/zod/schemas'
 import { getSession, getSessionPayload } from '@/lib/auth/session'
+import { File } from '../types/file'
 
 export async function createNewApplication(
   orgName: string,
@@ -55,14 +56,37 @@ export async function submitApplicationById(
   }
 }
 
-export async function saveAnswer(
-  orgName: string,
-  questionID: number,
-  answer: Record<string, any>
-): Promise<{ success?: string; error?: string }> {
+interface SaveAnswerProps {
+  orgName: string
+  questionID: number
+  text?: string
+  optionIDs?: number[]
+  date?: string
+  files?: File[]
+}
+
+export async function saveAnswer({
+  orgName,
+  questionID,
+  text,
+  optionIDs,
+  date,
+  files,
+}: SaveAnswerProps): Promise<{ success?: string; error?: string }> {
   const accessToken = await getSession()
   const payload = await getSessionPayload()
   const clientID = payload?.user?.id || 0
+
+  const body = JSON.stringify({
+    questionID,
+    answer: {
+      questionID,
+      text,
+      files,
+      optionIDs,
+      date,
+    },
+  })
 
   try {
     const response = await fetch(
@@ -73,12 +97,7 @@ export async function saveAnswer(
           'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
         },
-        body: JSON.stringify({
-          answer: {
-            questionID,
-            answer,
-          },
-        }),
+        body: body,
       }
     )
 

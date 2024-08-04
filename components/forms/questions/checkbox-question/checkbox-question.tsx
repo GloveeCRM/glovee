@@ -18,13 +18,17 @@ export default function CheckboxQuestion({ question, readOnly }: CheckboxQuestio
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const selectedOptionID = Number(e.target.value)
-    const currentlySelected = question.answer?.answer.optionIDs ?? []
+    const currentlySelected = question.answer?.optionIDs ?? []
     const newSelection = e.target.checked
       ? [...currentlySelected, selectedOptionID]
       : currentlySelected.filter((id) => id !== selectedOptionID)
 
     setMessage('Saving')
-    saveAnswer(orgName, question.id, { optionIDs: newSelection }).then((data) => {
+    saveAnswer({
+      orgName,
+      questionID: question.id,
+      optionIDs: newSelection,
+    }).then((data) => {
       setMessage(data.success ? 'Saved!' : 'Failed to save changes!')
       setTimeout(() => {
         setMessage('')
@@ -32,7 +36,7 @@ export default function CheckboxQuestion({ question, readOnly }: CheckboxQuestio
     })
   }
   const inline = question.settings.display === 'inline'
-  const options = question.settings.options
+  const options = question.options
 
   return (
     <div className="relative">
@@ -45,7 +49,7 @@ export default function CheckboxQuestion({ question, readOnly }: CheckboxQuestio
               name={String(question.id)}
               value={option.id}
               onChange={handleChange}
-              checked={question.answer?.answer.optionIDs?.includes(option.id) ?? false}
+              checked={question.answer?.optionIDs?.includes(option.id) ?? false}
               disabled={readOnly}
               className="h-[14px] w-[14px]"
             />

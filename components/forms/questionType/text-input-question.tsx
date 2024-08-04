@@ -7,7 +7,7 @@ import { saveAnswer } from '@/lib/actions/application'
 
 export default function TextInputQuestion({ question }: { question: QuestionType }) {
   const handleChange = useDebouncedCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    saveAnswer('orgName', 0, { text: e.target.value })
+    saveAnswer({ orgName: 'orgName', questionID: 0, text: e.target.value })
   }, 500)
 
   return (

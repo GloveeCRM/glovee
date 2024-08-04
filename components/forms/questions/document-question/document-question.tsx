@@ -78,7 +78,7 @@ export default function DocumentQuestion({ question, readOnly }: DocumentQuestio
       return
     }
 
-    saveAnswer(orgName, question.id, { files: [uploadIntent.file] }).then((data) => {
+    saveAnswer({ orgName, questionID: question.id, files: [uploadIntent.file] }).then((data) => {
       setMessage(data.success ? 'Saved!' : 'Failed to save changes!')
       setTimeout(() => {
         setMessage('')
@@ -108,10 +108,10 @@ export default function DocumentQuestion({ question, readOnly }: DocumentQuestio
       return
     }
 
-    const currentFiles = question.answer?.answer.files || []
+    const currentFiles = question.answer?.files || []
     const newFiles = currentFiles.filter((f) => f.id !== file.id)
 
-    saveAnswer(orgName, question.id, { files: newFiles }).then((data) => {
+    saveAnswer({ orgName, questionID: question.id, files: newFiles }).then((data) => {
       setMessage(data.success ? 'Saved!' : 'Failed to save changes!')
       setTimeout(() => {
         setMessage('')
@@ -128,8 +128,8 @@ export default function DocumentQuestion({ question, readOnly }: DocumentQuestio
   return (
     <div className="relative">
       <div className="flex flex-col items-center gap-[2px] rounded border-[1px] border-n-300 text-n-500/90">
-        {question.answer?.answer.files && question.answer.answer.files.length > 0 ? (
-          question.answer.answer.files.map((file) => (
+        {question.answer?.files && question.answer.files.length > 0 ? (
+          question.answer.files.map((file) => (
             <div
               key={file.id}
               className="flex w-full items-center justify-between gap-[2px] px-[8px] py-[10px]"
