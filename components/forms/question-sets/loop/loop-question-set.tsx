@@ -7,6 +7,7 @@ import ApplicationQuestionSet from '../application-question-set'
 import { createQuestionSetAndQuestions, deleteQuestionSet } from '@/lib/actions/application'
 import { useOrgContext } from '@/contexts/org-context'
 import { Separator } from '@/components/ui/separator'
+import { BiTrash } from 'react-icons/bi'
 
 interface LoopQuestionSetViewProps {
   questionSet: ApplicationQuestionSetType
@@ -28,21 +29,21 @@ export default function LoopQuestionSetView({
   return (
     <div>
       {questionSets && questionSets.length > 0 ? (
-        <div className="flex flex-col gap-[12px]">
+        <div className="">
           {questionSets.map((qs) => (
             <div>
-              <div key={qs.id} className="flex">
+              <div key={qs.id} className="flex gap-[6px]">
+                <ApplicationQuestionSet key={qs.id} questionSet={qs} />
                 {qs.position !== 0 && (
                   <div
-                    className="cursor-pointer text-r-700"
+                    className="flex cursor-pointer items-center rounded bg-red-500/30 p-[4px] text-red-700 transition duration-150 hover:bg-red-500/50 hover:text-red-900"
                     onClick={() => handleDeleteQuestionSet(qs.id)}
                   >
-                    Delete
+                    <BiTrash className="h-[22px] w-[22px]" />
                   </div>
                 )}
-                <ApplicationQuestionSet key={qs.id} questionSet={qs} />
               </div>
-              <Separator className="mt-[12px] bg-n-300" />
+              <Separator className="my-[18px] bg-n-300" />
             </div>
           ))}
           <RepeatQuestionSet questionSet={questionSet} />
@@ -67,7 +68,7 @@ function RepeatQuestionSet({ questionSet }: { questionSet: ApplicationQuestionSe
 
   return (
     <div
-      className="flex cursor-pointer items-center justify-center text-[14px]"
+      className="mx-auto flex w-fit cursor-pointer items-center justify-center rounded-full px-[8px] py-[2px] text-[14px] transition duration-75 hover:bg-n-100"
       onClick={handleClick}
     >
       <FiPlus className="h-[18px] w-[18px]" />
