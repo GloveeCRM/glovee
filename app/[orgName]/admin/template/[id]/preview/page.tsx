@@ -13,11 +13,11 @@ export default async function TemplatePreviewPage({
   return (
     <>
       {templateQuestionSets.map((questionSet) => {
-        if (questionSet.type === TemplateQuestionSetTypes.LOOP) {
-          return <LoopQuestionSet key={questionSet.id} questionSet={questionSet} />
-        } else if (questionSet.type === TemplateQuestionSetTypes.FLAT) {
-          return <FlatQuestionSet key={questionSet.id} questionSet={questionSet} />
-        }
+        // if (questionSet.type === TemplateQuestionSetTypes.LOOP) {
+        //   return <LoopQuestionSet key={questionSet.id} questionSet={questionSet} />
+        // } else if (questionSet.type === TemplateQuestionSetTypes.FLAT) {
+        //   return <FlatQuestionSet key={questionSet.id} questionSet={questionSet} />
+        // }
         return null
       })}
     </>
