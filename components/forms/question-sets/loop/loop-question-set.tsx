@@ -31,8 +31,8 @@ export default function LoopQuestionSetView({
       {questionSets && questionSets.length > 0 ? (
         <div className="">
           {questionSets.map((qs) => (
-            <div>
-              <div key={qs.id} className="flex gap-[6px]">
+            <div key={qs.id}>
+              <div className="flex gap-[6px]">
                 <ApplicationQuestionSet key={qs.id} questionSet={qs} />
                 {qs.position !== 0 && (
                   <div

@@ -19,7 +19,10 @@ export default async function ClientApplicationPage({
     <div className="flex h-full flex-col gap-[16px] overflow-y-scroll p-[12px]">
       {questionSets ? (
         questionSets.map((questionSet) => (
-          <div className="flex w-full flex-col gap-[8px] rounded-lg bg-white px-[8px] py-[12px]">
+          <div
+            key={questionSet.id}
+            className="flex w-full flex-col gap-[8px] rounded-lg bg-white px-[8px] py-[12px]"
+          >
             <ApplicationQuestionSet key={questionSet.id} questionSet={questionSet} />
           </div>
         ))
