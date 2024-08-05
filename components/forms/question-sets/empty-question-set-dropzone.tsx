@@ -11,7 +11,7 @@ import useQuestionActions from '@/hooks/template/use-question-actions'
 
 interface EmptyQuestionSetDropzoneProps {
   questionSet: TemplateQuestionSetType
-  dependsOn?: any
+  dependsOn?: number
 }
 
 export default function EmptyQuestionSetDropzone({

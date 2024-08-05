@@ -12,7 +12,7 @@ import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
 interface NonEmptyQuestionSetDropzoneProps {
   questionSet: TemplateQuestionSetType
   position: number
-  dependsOn?: any
+  dependsOn?: number
 }
 
 export default function NonEmptyQuestionSetDropzone({

@@ -21,15 +21,13 @@ export default function DependsOnQuestionSetEdit({ questionSet }: DependsOnQuest
   const options = question.settings.options || []
 
   const [isEditing, setIsEditing] = useState<boolean>(false)
-  const [selectedOption, setSelectedOption] = useState<string>(options[0].value || '')
+  const [selectedOption, setSelectedOption] = useState<number>(options[0].id || 0)
   const { updateQuestion } = useQuestionActions()
 
   const questionPromptInputRef = useRef<HTMLTextAreaElement>(null)
 
   const questionSets = questionSet.questionSets
-  const questionSetsToDisplay = questionSets?.filter(
-    (qs) => qs.dependsOn?.option === selectedOption
-  )
+  const questionSetsToDisplay = questionSets?.filter((qs) => qs.dependsOn === selectedOption)
 
   const rawDependsOnQuestion: QuestionType = {
     id: generateRandomID(),
@@ -49,7 +47,7 @@ export default function DependsOnQuestionSetEdit({ questionSet }: DependsOnQuest
   }
 
   function handleSelectOption(e: React.ChangeEvent<HTMLInputElement>) {
-    setSelectedOption(e.target.value)
+    setSelectedOption(Number(e.target.value))
   }
 
   function handleClickEditPrompt() {
@@ -143,14 +141,14 @@ export default function DependsOnQuestionSetEdit({ questionSet }: DependsOnQuest
               onClick={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
-                setSelectedOption(option.value)
+                setSelectedOption(option.id)
               }}
             >
               <input
                 type="radio"
                 name={String(question?.id)}
                 value={option.value}
-                checked={selectedOption === option.value}
+                checked={selectedOption === option.id}
                 className="mt-[2px] h-[14px] w-[14px]"
                 onChange={handleSelectOption}
               />
@@ -164,12 +162,12 @@ export default function DependsOnQuestionSetEdit({ questionSet }: DependsOnQuest
           <div
             key={option.value}
             className={`flex h-[30px] w-full items-center justify-center rounded ${
-              selectedOption === option.value ? 'bg-n-700 text-n-100' : 'bg-b-300'
+              selectedOption === option.id ? 'bg-n-700 text-n-100' : 'bg-b-300'
             }`}
             onClick={(e) => {
               e.preventDefault()
               e.stopPropagation()
-              setSelectedOption(option.value)
+              setSelectedOption(option.id)
             }}
           >
             {option.value}
@@ -186,23 +184,20 @@ export default function DependsOnQuestionSetEdit({ questionSet }: DependsOnQuest
                   <NonEmptyQuestionSetDropzone
                     questionSet={questionSet}
                     position={0}
-                    dependsOn={{ option: selectedOption }}
+                    dependsOn={selectedOption}
                   />
                 )}
                 <TemplateQuestionSet questionSet={qs} />
                 <NonEmptyQuestionSetDropzone
                   questionSet={questionSet}
                   position={questionSet.position + 1}
-                  dependsOn={{ option: selectedOption }}
+                  dependsOn={selectedOption}
                 />
               </div>
             ))}
           </div>
         ) : (
-          <EmptyQuestionSetDropzone
-            questionSet={questionSet}
-            dependsOn={{ option: selectedOption }}
-          />
+          <EmptyQuestionSetDropzone questionSet={questionSet} dependsOn={selectedOption} />
         )}
       </div>
     </div>

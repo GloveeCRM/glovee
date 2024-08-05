@@ -1,23 +1,20 @@
 'use client'
 
 import { FiPlus } from 'react-icons/fi'
+import { BiTrash } from 'react-icons/bi'
 
 import { ApplicationQuestionSetType } from '@/lib/types/application'
-import ApplicationQuestionSet from '../application-question-set'
 import { createQuestionSetAndQuestions, deleteQuestionSet } from '@/lib/actions/application'
 import { useOrgContext } from '@/contexts/org-context'
 import { Separator } from '@/components/ui/separator'
-import { BiTrash } from 'react-icons/bi'
+import ApplicationQuestionSet from '../application-question-set'
 
-interface LoopQuestionSetViewProps {
+interface LoopQuestionSetProps {
   questionSet: ApplicationQuestionSetType
   viewOnly?: boolean
 }
 
-export default function LoopQuestionSetView({
-  questionSet,
-  viewOnly = false,
-}: LoopQuestionSetViewProps) {
+export default function LoopQuestionSet({ questionSet, viewOnly = false }: LoopQuestionSetProps) {
   const { orgName } = useOrgContext()
 
   const questionSets = questionSet.questionSets
@@ -29,7 +26,7 @@ export default function LoopQuestionSetView({
   return (
     <div>
       {questionSets && questionSets.length > 0 ? (
-        <div className="">
+        <div>
           {questionSets.map((qs) => (
             <div key={qs.id}>
               <div className="flex gap-[6px]">

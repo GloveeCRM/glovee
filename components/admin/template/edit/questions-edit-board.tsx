@@ -11,6 +11,7 @@ export default function QuestionsEditBoard() {
   const templateQuestionSets = template?.categories
     ?.find((category) => category.id === selectedCategoryID)
     ?.sections?.find((section) => section.id === selectedSectionID)?.questionSets
+  console.log(templateQuestionSets)
 
   return (
     <div id="questions-edit-board" className="rounded-lg bg-white p-[4px]">
