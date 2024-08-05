@@ -6,6 +6,7 @@ import { ApplicationQuestionSetType } from '@/lib/types/application'
 import ApplicationQuestionSet from '../application-question-set'
 import { createQuestionSetAndQuestions, deleteQuestionSet } from '@/lib/actions/application'
 import { useOrgContext } from '@/contexts/org-context'
+import { Separator } from '@/components/ui/separator'
 
 interface LoopQuestionSetViewProps {
   questionSet: ApplicationQuestionSetType
@@ -25,20 +26,23 @@ export default function LoopQuestionSetView({
   }
 
   return (
-    <div className="rounded bg-r-500 p-[8px] pt-[16px]">
+    <div>
       {questionSets && questionSets.length > 0 ? (
-        <div className="bg-r-200 px-[4px]">
+        <div className="flex flex-col gap-[12px]">
           {questionSets.map((qs) => (
-            <div key={qs.id} className="flex">
-              {qs.position !== 0 && (
-                <div
-                  className="cursor-pointer text-r-700"
-                  onClick={() => handleDeleteQuestionSet(qs.id)}
-                >
-                  Delete
-                </div>
-              )}
-              <ApplicationQuestionSet key={qs.id} questionSet={qs} />
+            <div>
+              <div key={qs.id} className="flex">
+                {qs.position !== 0 && (
+                  <div
+                    className="cursor-pointer text-r-700"
+                    onClick={() => handleDeleteQuestionSet(qs.id)}
+                  >
+                    Delete
+                  </div>
+                )}
+                <ApplicationQuestionSet key={qs.id} questionSet={qs} />
+              </div>
+              <Separator className="mt-[12px] bg-n-300" />
             </div>
           ))}
           <RepeatQuestionSet questionSet={questionSet} />

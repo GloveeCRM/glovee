@@ -16,10 +16,12 @@ export default async function ClientApplicationPage({
   const questionSets = await fetchSectionQuestionSets(orgName, clientID, sectionId)
 
   return (
-    <div className="flex h-full flex-col gap-[16px] overflow-y-scroll">
+    <div className="flex h-full flex-col gap-[16px] overflow-y-scroll p-[12px]">
       {questionSets ? (
         questionSets.map((questionSet) => (
-          <ApplicationQuestionSet key={questionSet.id} questionSet={questionSet} />
+          <div className="flex w-full flex-col gap-[8px] rounded-lg bg-white px-[8px] py-[12px]">
+            <ApplicationQuestionSet key={questionSet.id} questionSet={questionSet} />
+          </div>
         ))
       ) : (
         <div className="flex h-full items-center justify-center text-n-500">No questions found</div>

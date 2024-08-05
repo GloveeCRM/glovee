@@ -11,7 +11,7 @@ export default function FlatQuestionSetView({
   viewOnly = false,
 }: FlatQuestionSetViewProps) {
   return (
-    <div className="flex flex-col gap-[8px] rounded-lg border border-n-400 px-[8px] py-[12px]">
+    <div>
       {questionSet.questions &&
         questionSet.questions.length > 0 &&
         questionSet.questions.map((q) => (

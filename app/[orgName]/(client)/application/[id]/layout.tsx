@@ -17,7 +17,7 @@ export default function ApplicationLayout({ children, params }: Readonly<Applica
     <ApplicationContextProvider applicationID={applicationID}>
       <div id="client-application-layout" className="flex overflow-hidden">
         <ClientApplicationSidebar orgName={orgName} applicationID={applicationID} />
-        <div className="h-screen flex-1 p-[8px]">{children}</div>
+        <div className="h-screen flex-1 bg-n-450">{children}</div>
       </div>
     </ApplicationContextProvider>
   )
