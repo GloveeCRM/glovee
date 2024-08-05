@@ -7,6 +7,7 @@ import { GLOVEE_API_URL } from '@/lib/constants/api'
 import { CreateApplicationSchema } from '@/lib/zod/schemas'
 import { getSession, getSessionPayload } from '@/lib/auth/session'
 import { File } from '../types/file'
+import { ApplicationQuestionSetType } from '../types/application'
 
 export async function createNewApplication(
   orgName: string,
@@ -111,5 +112,76 @@ export async function saveAnswer({
     }
   } catch (error) {
     return { error: 'Failed to save answer!' }
+  }
+}
+
+export async function createQuestionSetAndQuestions(
+  orgName: string,
+  questionSet: ApplicationQuestionSetType
+): Promise<{ success?: string; error?: string }> {
+  const accessToken = await getSession()
+  const payload = await getSessionPayload()
+  const clientID = payload?.user?.id || 0
+
+  const body = JSON.stringify({
+    questionSet,
+  })
+
+  try {
+    const response = await fetch(
+      `${GLOVEE_API_URL}/v1/${orgName}/application/client/${clientID}/application/create-question-set`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: body,
+      }
+    )
+
+    const data = await response.json()
+
+    if (data.status === 'error') {
+      return { error: data.error }
+    } else {
+      revalidatePath('/application')
+      return { success: 'Question set created!' }
+    }
+  } catch (error) {
+    return { error: 'Failed to create question set!' }
+  }
+}
+
+export async function deleteQuestionSet(
+  orgName: string,
+  questionSetID: number
+): Promise<{ success?: string; error?: string }> {
+  const accessToken = await getSession()
+  const payload = await getSessionPayload()
+  const clientID = payload?.user?.id || 0
+
+  try {
+    const response = await fetch(
+      `${GLOVEE_API_URL}/v1/${orgName}/application/client/${clientID}/application/question-set/${questionSetID}`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    )
+
+    const data = await response.json()
+
+    if (data.status === 'error') {
+      return { error: data.error }
+    } else {
+      revalidatePath('/application')
+      return { success: 'Question set deleted!' }
+    }
+  } catch (error) {
+    return { error: 'Failed to delete question set!' }
   }
 }

@@ -1,6 +1,6 @@
 import { ApplicationQuestionSetType, ApplicationQuestionSetTypes } from '@/lib/types/application'
-import FlatQuestionSetView from './flat/flat-question-set-view'
-import LoopQuestionSetView from './loop/loop-question-set-view'
+import FlatQuestionSet from './flat/flat-question-set'
+import LoopQuestionSet from './loop/loop-question-set'
 import DependsOnQuestionSetView from './depends-on/depends-on-question-set-view'
 
 interface ApplicationQuestionSetProps {
@@ -13,11 +13,11 @@ export default function ApplicationQuestionSet({ questionSet }: ApplicationQuest
   const isDependsOn = questionSet.type === ApplicationQuestionSetTypes.DEPENDS_ON
 
   return (
-    <div>
+    <div className="w-full">
       {isFlat ? (
-        <FlatQuestionSetView questionSet={questionSet} />
+        <FlatQuestionSet questionSet={questionSet} />
       ) : isLoop ? (
-        <LoopQuestionSetView questionSet={questionSet} />
+        <LoopQuestionSet questionSet={questionSet} />
       ) : isDependsOn ? (
         <DependsOnQuestionSetView questionSet={questionSet} />
       ) : null}

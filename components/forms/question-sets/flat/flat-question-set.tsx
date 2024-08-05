@@ -1,12 +1,22 @@
-import TextInputQuestion from '../../questionType/text-input-question'
-import { TemplateQuestionSetType } from '@/lib/types/template'
+import { ApplicationQuestionSetType } from '@/lib/types/application'
+import ApplicationQuestion from '../../questions/application-question'
 
-export default function FlatQuestionSet({ questionSet }: { questionSet: TemplateQuestionSetType }) {
+interface FlatQuestionSetViewProps {
+  questionSet: ApplicationQuestionSetType
+  viewOnly?: boolean
+}
+
+export default function FlatQuestionSetView({
+  questionSet,
+  viewOnly = false,
+}: FlatQuestionSetViewProps) {
   return (
-    <div className="bg-green-500 p-[8px]">
-      {questionSet?.questions?.map((question) => (
-        <TextInputQuestion key={question.id} question={question} />
-      ))}
+    <div className="flex flex-col gap-[8px] rounded-lg border border-n-400 px-[8px] py-[12px]">
+      {questionSet.questions &&
+        questionSet.questions.length > 0 &&
+        questionSet.questions.map((q) => (
+          <ApplicationQuestion key={q.id} question={q} viewOnly={viewOnly} />
+        ))}
     </div>
   )
 }
