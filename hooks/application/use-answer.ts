@@ -2,12 +2,12 @@
 
 import { useState } from 'react'
 
+import { File } from '@/lib/types/file'
+import { uploadFileToS3 } from '@/lib/utils/s3'
+import { fetchApplicationAnswerFileUploadIntent } from '@/lib/data/application'
 import { saveAnswer } from '@/lib/actions/application'
 import { useOrgContext } from '@/contexts/org-context'
-import { File } from '@/lib/types/file'
 import { useApplicationContext } from '@/contexts/application-context'
-import { fetchApplicationAnswerFileUploadIntent } from '@/lib/data/application'
-import { uploadFileToS3 } from '@/lib/utils/s3'
 
 interface Answer {
   text?: string
@@ -27,11 +27,10 @@ export default function useAnswer(questionID: number, initialAnswer: Answer) {
     setAnswer(newAnswer)
 
     saveAnswer({ orgName, questionID, ...newAnswer }).then((data) => {
-      if (data.success) {
-        setMessage('Saved!')
-        setAnswer(data.data ? data.data.answer : newAnswer)
-      } else {
-        setMessage('Failed to save changes!')
+      setMessage(data.success ? 'Saved!' : 'Failed to save changes!')
+
+      if (data.data.answer.files.length > 0) {
+        setAnswer({ ...newAnswer, files: data.data.answer.files })
       }
 
       setTimeout(() => {
