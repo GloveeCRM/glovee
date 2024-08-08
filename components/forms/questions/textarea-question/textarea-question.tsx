@@ -1,13 +1,11 @@
 'use client'
 
-import { useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
 import { ImSpinner2 } from 'react-icons/im'
 
 import { TextareaQuestionType } from '@/lib/types/qusetion'
-import { saveAnswer } from '@/lib/actions/application'
-import { useOrgContext } from '@/contexts/org-context'
+import useAnswer from '@/hooks/application/use-answer'
 import { Textarea } from '@/components/ui/textarea'
 
 interface TextareaQuestionProps {
@@ -16,17 +14,10 @@ interface TextareaQuestionProps {
 }
 
 export default function TextareaQuestion({ question, readOnly = false }: TextareaQuestionProps) {
-  const { orgName } = useOrgContext()
-  const [message, setMessage] = useState<string>('')
+  const { answer, message, updateAnswer } = useAnswer(question.id, question.answer || { text: '' })
 
   const handleChange = useDebouncedCallback(async (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setMessage('Saving')
-    saveAnswer({ orgName, questionID: question.id, text: e.target.value }).then((data) => {
-      setMessage(data.success ? 'Saved!' : 'Failed to save changes!')
-      setTimeout(() => {
-        setMessage('')
-      }, 1000)
-    })
+    updateAnswer({ ...answer, text: e.target.value })
   }, 500)
 
   return (
@@ -36,7 +27,7 @@ export default function TextareaQuestion({ question, readOnly = false }: Textare
           placeholder={question.settings.placeholder}
           readOnly={readOnly}
           rows={3}
-          defaultValue={question.answer?.text || ''}
+          defaultValue={answer.text || ''}
           onChange={handleChange}
         />
         {message.length !== 0 && (
@@ -57,7 +48,7 @@ export default function TextareaQuestion({ question, readOnly = false }: Textare
         )}
       </div>
       <div className="text-right text-[12px] text-n-500">
-        {question.answer?.text?.length || 0}
+        {answer.text?.length || 0}
         {(question.settings.minimumLength !== null || question.settings.maximumLength !== null) &&
           ' / '}
         {question.settings.minimumLength && question.settings.minimumLength}

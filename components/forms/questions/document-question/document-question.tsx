@@ -1,21 +1,15 @@
 'use client'
 
-import { useRef, useState } from 'react'
-import { ImSpinner2 } from 'react-icons/im'
 import Link from 'next/link'
+import { useRef } from 'react'
+import { ImSpinner2 } from 'react-icons/im'
 import { BiTrash } from 'react-icons/bi'
 import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
-import { FiUpload, FiFileText } from 'react-icons/fi'
+import { FiUpload } from 'react-icons/fi'
+import { LuFileText } from 'react-icons/lu'
 
 import { DocumentQuestionType } from '@/lib/types/qusetion'
-import { File } from '@/lib/types/file'
-import { uploadFileToS3 } from '@/lib/utils/s3'
-import { fetchApplicationAnswerFileUploadIntent } from '@/lib/data/application'
-import { saveAnswer } from '@/lib/actions/application'
-import { getSessionPayload } from '@/lib/auth/session'
-import { useOrgContext } from '@/contexts/org-context'
-import { useApplicationContext } from '@/contexts/application-context'
-import { LuFileText } from 'react-icons/lu'
+import useAnswer from '@/hooks/application/use-answer'
 
 interface DocumentQuestionProps {
   question: DocumentQuestionType
@@ -23,100 +17,37 @@ interface DocumentQuestionProps {
 }
 
 export default function DocumentQuestion({ question, readOnly }: DocumentQuestionProps) {
-  const { orgName } = useOrgContext()
-  const { applicationID } = useApplicationContext()
-  const [message, setMessage] = useState<string>('')
+  const { answer, message, updateAnswer, uploadAnswerFile } = useAnswer(
+    question.id,
+    question.answer || { optionIDs: [] }
+  )
 
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
-    if (!file || !applicationID) {
+    if (!file) {
       return
     }
 
-    setMessage('Uploading')
-
-    const payload = await getSessionPayload()
-    const userID = payload?.user.id || 0
-
-    if (!userID) {
-      setMessage('Failed to upload file!')
-      setTimeout(() => {
-        setMessage('')
-      }, 1000)
+    const newFile = await uploadAnswerFile(file)
+    if (!newFile) {
       return
     }
 
-    const fileToUpload = {
-      name: file.name,
-      mimeType: file.type,
-      size: file.size,
-    } as File
-
-    const uploadIntent = await fetchApplicationAnswerFileUploadIntent(
-      orgName,
-      userID,
-      applicationID,
-      question.id,
-      fileToUpload
-    )
-    if (!uploadIntent) {
-      setMessage('Failed to upload file!')
-      setTimeout(() => {
-        setMessage('')
-      }, 1000)
-      return
-    }
-
-    const uploadRes = await uploadFileToS3(uploadIntent.uploadURL, file)
-    if (!uploadRes.success) {
-      setMessage('Failed to upload file!')
-      setTimeout(() => {
-        setMessage('')
-      }, 1000)
-      return
-    }
-
-    saveAnswer({ orgName, questionID: question.id, files: [uploadIntent.file] }).then((data) => {
-      setMessage(data.success ? 'Saved!' : 'Failed to save changes!')
-      setTimeout(() => {
-        setMessage('')
-      }, 1000)
-    })
+    const newFiles = [...(answer.files || []), newFile]
+    updateAnswer({ ...answer, files: newFiles })
 
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
     }
   }
 
-  async function handleFileDelete(file: File) {
-    if (!applicationID) {
-      return
-    }
+  async function handleFileDelete(fileID: number) {
+    const currentFiles = answer.files || []
+    const newFiles = currentFiles.filter((f) => f.id !== fileID)
 
-    setMessage('Deleting')
-
-    const payload = await getSessionPayload()
-    const userID = payload?.user.id || 0
-
-    if (!userID) {
-      setMessage('Failed to delete file!')
-      setTimeout(() => {
-        setMessage('')
-      }, 1000)
-      return
-    }
-
-    const currentFiles = question.answer?.files || []
-    const newFiles = currentFiles.filter((f) => f.id !== file.id)
-
-    saveAnswer({ orgName, questionID: question.id, files: newFiles }).then((data) => {
-      setMessage(data.success ? 'Saved!' : 'Failed to save changes!')
-      setTimeout(() => {
-        setMessage('')
-      }, 1000)
-    })
+    updateAnswer({ ...answer, files: newFiles })
   }
 
   function handleClickUploadFile() {
@@ -128,8 +59,8 @@ export default function DocumentQuestion({ question, readOnly }: DocumentQuestio
   return (
     <div className="relative">
       <div className="flex flex-col items-center gap-[2px] rounded border-[1px] border-n-300 text-n-500/90">
-        {question.answer?.files && question.answer.files.length > 0 ? (
-          question.answer.files.map((file) => (
+        {answer.files && answer.files.length > 0 ? (
+          answer.files.map((file) => (
             <div
               key={file.id}
               className="flex w-full items-center justify-between gap-[2px] px-[8px] py-[10px]"
@@ -144,7 +75,7 @@ export default function DocumentQuestion({ question, readOnly }: DocumentQuestio
               </div>
               <div
                 className="cursor-pointer rounded-full p-[6px] transition duration-75 hover:bg-red-100"
-                onClick={() => handleFileDelete(file)}
+                onClick={() => handleFileDelete(file.id)}
               >
                 <BiTrash className="h-[22px] w-[22px] text-red-500" />
               </div>

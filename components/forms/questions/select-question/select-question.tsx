@@ -1,12 +1,12 @@
 'use client'
 
-import { useState } from 'react'
 import { ImSpinner2 } from 'react-icons/im'
 import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
 
 import { SelectQuestionType } from '@/lib/types/qusetion'
 import { saveAnswer } from '@/lib/actions/application'
 import { useOrgContext } from '@/contexts/org-context'
+import useAnswer from '@/hooks/application/use-answer'
 
 interface SelectQuestionProps {
   question: SelectQuestionType
@@ -14,18 +14,14 @@ interface SelectQuestionProps {
 }
 
 export default function SelectQuestion({ question, readOnly }: SelectQuestionProps) {
-  const { orgName } = useOrgContext()
-  const [message, setMessage] = useState<string>('')
+  const { answer, message, updateAnswer } = useAnswer(
+    question.id,
+    question.answer || { optionIDs: [] }
+  )
 
   function handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
     const selectedOptionID = Number(e.target.value) || 0
-    setMessage('Saving')
-    saveAnswer({ orgName, questionID: question.id, optionIDs: [selectedOptionID] }).then((data) => {
-      setMessage(data.success ? 'Saved!' : 'Failed to save changes!')
-      setTimeout(() => {
-        setMessage('')
-      }, 1000)
-    })
+    updateAnswer({ ...answer, optionIDs: [selectedOptionID] })
   }
 
   const showPlaceholder =
@@ -36,7 +32,7 @@ export default function SelectQuestion({ question, readOnly }: SelectQuestionPro
     <div className="relative">
       <select
         className="h-[34px] w-full rounded-sm border-[1px] border-n-400 bg-transparent p-[4px] px-[6px] text-[12px] focus:outline-none"
-        defaultValue={question.answer?.optionIDs?.[0] || question.settings.defaultOptionID}
+        defaultValue={answer.optionIDs?.[0] || question.settings.defaultOptionID}
         disabled={readOnly}
         onChange={handleChange}
       >

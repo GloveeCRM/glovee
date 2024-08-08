@@ -1,11 +1,10 @@
 'use client'
-import { useState } from 'react'
+
 import { ImSpinner2 } from 'react-icons/im'
 import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
 
 import { CheckboxQuestionType } from '@/lib/types/qusetion'
-import { saveAnswer } from '@/lib/actions/application'
-import { useOrgContext } from '@/contexts/org-context'
+import useAnswer from '@/hooks/application/use-answer'
 
 interface CheckboxQuestionProps {
   question: CheckboxQuestionType
@@ -13,28 +12,21 @@ interface CheckboxQuestionProps {
 }
 
 export default function CheckboxQuestion({ question, readOnly }: CheckboxQuestionProps) {
-  const { orgName } = useOrgContext()
-  const [message, setMessage] = useState<string>('')
+  const { answer, message, updateAnswer } = useAnswer(
+    question.id,
+    question.answer || { optionIDs: [] }
+  )
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const selectedOptionID = Number(e.target.value)
-    const currentlySelected = question.answer?.optionIDs ?? []
+    const currentlySelected = answer.optionIDs ?? []
     const newSelection = e.target.checked
       ? [...currentlySelected, selectedOptionID]
       : currentlySelected.filter((id) => id !== selectedOptionID)
 
-    setMessage('Saving')
-    saveAnswer({
-      orgName,
-      questionID: question.id,
-      optionIDs: newSelection,
-    }).then((data) => {
-      setMessage(data.success ? 'Saved!' : 'Failed to save changes!')
-      setTimeout(() => {
-        setMessage('')
-      }, 1000)
-    })
+    updateAnswer({ ...answer, optionIDs: newSelection })
   }
+
   const inline = question.settings.display === 'inline'
   const options = question.options || question.settings.options
 
@@ -49,7 +41,7 @@ export default function CheckboxQuestion({ question, readOnly }: CheckboxQuestio
               name={String(question.id)}
               value={option.id}
               onChange={handleChange}
-              checked={question.answer?.optionIDs?.includes(option.id) ?? false}
+              checked={answer.optionIDs?.includes(option.id) ?? false}
               disabled={readOnly}
               className="h-[14px] w-[14px]"
             />

@@ -3,17 +3,17 @@
 import { createContext, useContext } from 'react'
 
 type ApplicationContextType = {
-  applicationID: number | null
+  applicationID: number
 }
 
 const applicationContextDefaultValues: ApplicationContextType = {
-  applicationID: null,
+  applicationID: 0,
 }
 
 const ApplicationContext = createContext<ApplicationContextType>(applicationContextDefaultValues)
 
 interface ApplicationContextProviderProps {
-  applicationID: number | null
+  applicationID: number
   children: React.ReactNode
 }
 

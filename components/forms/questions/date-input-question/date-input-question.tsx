@@ -7,8 +7,7 @@ import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
 import { DateInputQuestionType } from '@/lib/types/qusetion'
 import { MONTHS } from '@/lib/constants/date'
 import { compareDates, daysInMonth } from '@/lib/functions/date'
-import { saveAnswer } from '@/lib/actions/application'
-import { useOrgContext } from '@/contexts/org-context'
+import useAnswer from '@/hooks/application/use-answer'
 
 interface DateInputQuestionProps {
   question: DateInputQuestionType
@@ -16,17 +15,17 @@ interface DateInputQuestionProps {
 }
 
 export default function DateInputQuestion({ question, readOnly }: DateInputQuestionProps) {
-  const initialDate = question.answer?.date ? new Date(question.answer.date) : null
+  const { answer, message, updateAnswer } = useAnswer(question.id, question.answer || { date: '' })
+
+  const initialDate = answer.date ? new Date(answer.date) : null
   const minimumDate = new Date(question.settings.minimumDate || '1900-01-01')
   const maximumDate = new Date(question.settings.maximumDate || '2100-12-31')
 
-  const { orgName } = useOrgContext()
   const [selectedDate, setSelectedDate] = useState({
     year: initialDate ? initialDate.getUTCFullYear() : 0,
     month: initialDate ? initialDate.getUTCMonth() + 1 : 0,
     day: initialDate ? initialDate.getUTCDate() : 0,
   })
-  const [message, setMessage] = useState<string>('')
 
   function handleYearChange(e: React.ChangeEvent<HTMLSelectElement>) {
     const newDate = { ...selectedDate, year: Number(e.target.value) }
@@ -73,14 +72,8 @@ export default function DateInputQuestion({ question, readOnly }: DateInputQuest
   }
 
   function saveDate(date: { year: number; month: number; day: number }) {
-    setMessage('Saving')
     const newDate = new Date(Date.UTC(date.year, date.month - 1, date.day)).toISOString()
-    saveAnswer({ orgName, questionID: question.id, date: newDate }).then((data) => {
-      setMessage(data.success ? 'Saved!' : 'Failed to save changes!')
-      setTimeout(() => {
-        setMessage('')
-      }, 1000)
-    })
+    updateAnswer({ ...answer, date: newDate })
   }
 
   const numDaysInMonth = daysInMonth(

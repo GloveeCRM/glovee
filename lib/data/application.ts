@@ -6,7 +6,7 @@ import {
   ApplicationType,
 } from '@/lib/types/application'
 import { GLOVEE_API_URL } from '@/lib/constants/api'
-import { getSession } from '@/lib/auth/session'
+import { getSession, getSessionPayload } from '@/lib/auth/session'
 import { File } from '../types/file'
 
 export async function fetchClientApplications(
@@ -166,7 +166,6 @@ export async function fetchSectionQuestionSets(
 
 export async function fetchApplicationAnswerFileUploadIntent(
   orgName: string,
-  clientID: number,
   applicationID: number,
   questionID: number,
   file: File
@@ -175,13 +174,16 @@ export async function fetchApplicationAnswerFileUploadIntent(
   file: File
 } | null> {
   try {
+    const payload = await getSessionPayload()
+    const userID = payload?.user.id || 0
+
     const accessToken = await getSession()
     if (!accessToken) {
       return null
     }
 
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/application/client/${clientID}/application/${applicationID}/question/${questionID}/create-application-answer-file-upload-intent`,
+      `${GLOVEE_API_URL}/v1/${orgName}/application/client/${userID}/application/${applicationID}/question/${questionID}/create-application-answer-file-upload-intent`,
       {
         method: 'POST',
         headers: {

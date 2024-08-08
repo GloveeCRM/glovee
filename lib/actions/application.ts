@@ -73,7 +73,7 @@ export async function saveAnswer({
   optionIDs,
   date,
   files,
-}: SaveAnswerProps): Promise<{ success?: string; error?: string }> {
+}: SaveAnswerProps): Promise<{ success?: string; error?: string; data?: any }> {
   const accessToken = await getSession()
   const payload = await getSessionPayload()
   const clientID = payload?.user?.id || 0
@@ -108,7 +108,7 @@ export async function saveAnswer({
       return { error: data.error }
     } else {
       revalidatePath('/application')
-      return { success: 'Answer saved!' }
+      return { success: 'Answer saved!', data: data.data }
     }
   } catch (error) {
     return { error: 'Failed to save answer!' }

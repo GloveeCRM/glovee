@@ -1,13 +1,11 @@
 'use client'
 
-import { useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import { ImSpinner2 } from 'react-icons/im'
 import { IoMdCheckmarkCircle, IoIosCloseCircle } from 'react-icons/io'
 
 import { TextInputQuestionType } from '@/lib/types/qusetion'
-import { saveAnswer } from '@/lib/actions/application'
-import { useOrgContext } from '@/contexts/org-context'
+import useAnswer from '@/hooks/application/use-answer'
 import { Input } from '@/components/ui/input'
 
 interface TextInputQuestionProps {
@@ -16,17 +14,10 @@ interface TextInputQuestionProps {
 }
 
 export default function TextInputQuestion({ question, readOnly = false }: TextInputQuestionProps) {
-  const { orgName } = useOrgContext()
-  const [message, setMessage] = useState<string>('')
+  const { answer, message, updateAnswer } = useAnswer(question.id, question.answer || { text: '' })
 
   const handleChange = useDebouncedCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMessage('Saving')
-    saveAnswer({ orgName, questionID: question.id, text: e.target.value }).then((data) => {
-      setMessage(data.success ? 'Saved!' : 'Failed to save changes!')
-      setTimeout(() => {
-        setMessage('')
-      }, 1000)
-    })
+    updateAnswer({ ...answer, text: e.target.value })
   }, 500)
 
   return (
@@ -35,7 +26,7 @@ export default function TextInputQuestion({ question, readOnly = false }: TextIn
         type="text"
         placeholder={question.settings.placeholder}
         readOnly={readOnly}
-        defaultValue={question.answer?.text || ''}
+        defaultValue={answer.text || ''}
         onChange={handleChange}
       />
       {message.length !== 0 && (

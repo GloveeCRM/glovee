@@ -1,12 +1,10 @@
 'use client'
 
-import { useState } from 'react'
 import { ImSpinner2 } from 'react-icons/im'
 import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
 
 import { RadioQuestionType } from '@/lib/types/qusetion'
-import { saveAnswer } from '@/lib/actions/application'
-import { useOrgContext } from '@/contexts/org-context'
+import useAnswer from '@/hooks/application/use-answer'
 
 interface RadioQuestionProps {
   question: RadioQuestionType
@@ -14,18 +12,13 @@ interface RadioQuestionProps {
 }
 
 export default function RadioQuestion({ question, readOnly }: RadioQuestionProps) {
-  const { orgName } = useOrgContext()
-  const [message, setMessage] = useState<string>('')
-
+  const { answer, message, updateAnswer } = useAnswer(
+    question.id,
+    question.answer || { optionIDs: [] }
+  )
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const selectedOptionID = Number(e.target.value) || 0
-    setMessage('Saving')
-    saveAnswer({ orgName, questionID: question.id, optionIDs: [selectedOptionID] }).then((data) => {
-      setMessage(data.success ? 'Saved!' : 'Failed to save changes!')
-      setTimeout(() => {
-        setMessage('')
-      }, 1000)
-    })
+    updateAnswer({ ...answer, optionIDs: [selectedOptionID] })
   }
 
   const inline = question.settings.display === 'inline'
@@ -42,7 +35,7 @@ export default function RadioQuestion({ question, readOnly }: RadioQuestionProps
               name={String(question.id)}
               value={option.id}
               onChange={handleChange}
-              checked={question.answer?.optionIDs?.[0] === option.id}
+              checked={answer.optionIDs?.[0] === option.id}
               disabled={readOnly}
               className="h-[14px] w-[14px]"
             />
