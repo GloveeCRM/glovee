@@ -21,7 +21,7 @@ export default async function ClientApplicationPage({
         questionSets.map((questionSet) => (
           <div
             key={questionSet.id}
-            className="flex w-full flex-col gap-[8px] rounded-lg bg-white px-[8px] py-[12px]"
+            className="flex w-full flex-col gap-[8px] rounded-lg border border-n-400 p-[8px]"
           >
             <ApplicationQuestionSet key={questionSet.id} questionSet={questionSet} />
           </div>

@@ -26,23 +26,25 @@ export default function LoopQuestionSet({ questionSet, viewOnly = false }: LoopQ
   return (
     <div>
       {questionSets && questionSets.length > 0 ? (
-        <div>
-          {questionSets.map((qs) => (
-            <div key={qs.id}>
-              <div className="flex gap-[6px]">
-                <ApplicationQuestionSet key={qs.id} questionSet={qs} />
-                {qs.position !== 0 && (
-                  <div
-                    className="flex cursor-pointer items-center rounded bg-red-500/30 p-[4px] text-red-700 transition duration-150 hover:bg-red-500/50 hover:text-red-900"
-                    onClick={() => handleDeleteQuestionSet(qs.id)}
-                  >
-                    <BiTrash className="h-[22px] w-[22px]" />
-                  </div>
-                )}
+        <div className="flex flex-col gap-[12px]">
+          <div className="flex flex-col gap-[12px]">
+            {questionSets.map((qs) => (
+              <div key={qs.id}>
+                <div className="flex gap-[6px]">
+                  <ApplicationQuestionSet key={qs.id} questionSet={qs} />
+                  {qs.position !== 0 && (
+                    <div
+                      className="flex cursor-pointer items-center rounded bg-red-500/30 p-[4px] text-red-700 transition duration-150 hover:bg-red-500/50 hover:text-red-900"
+                      onClick={() => handleDeleteQuestionSet(qs.id)}
+                    >
+                      <BiTrash className="h-[22px] w-[22px]" />
+                    </div>
+                  )}
+                </div>
               </div>
-              <Separator className="my-[18px] bg-n-300" />
-            </div>
-          ))}
+            ))}
+          </div>
+          <Separator className="bg-n-400" />
           <RepeatQuestionSet questionSet={questionSet} />
         </div>
       ) : (
