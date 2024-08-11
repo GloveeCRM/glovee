@@ -34,15 +34,13 @@ export default function ApplicationQuestion({
       <div className="flex justify-between">
         <div className="relative w-[calc(100%-50px)]">
           <span>{question.prompt}</span>
-          {question.settings.isRequired && (
+          {question.isRequired && (
             <span className="absolute mt-[-6px] text-[24px] text-[red]">*</span>
           )}
           {question.helperText && (
             <Popover>
               <PopoverTrigger asChild>
-                <span
-                  className={`absolute ${question.settings.isRequired ? 'ml-[12px]' : 'ml-[6px]'}`}
-                >
+                <span className={`absolute ${question.isRequired ? 'ml-[12px]' : 'ml-[6px]'}`}>
                   <LiaQuestionCircle className="h-[21px] w-[21px] cursor-pointer text-n-450 data-[state=open]:text-n-800" />
                 </span>
               </PopoverTrigger>

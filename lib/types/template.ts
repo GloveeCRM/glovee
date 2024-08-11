@@ -1,10 +1,4 @@
-import {
-  QuestionType,
-  BaseQuestionSettings,
-  CheckboxQuestionSettings,
-  RadioQuestionSettings,
-  RadioQuestionType,
-} from './qusetion'
+import { QuestionType } from './qusetion'
 
 export type TemplateType = {
   id: number

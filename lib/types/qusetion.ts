@@ -1,8 +1,6 @@
 import { File } from './file'
 
-export type BaseQuestionSettings = {
-  isRequired: boolean
-}
+export type BaseQuestionSettings = {}
 
 export enum QuestionTypes {
   TEXT_INPUT = 'TEXT_INPUT',
@@ -23,6 +21,7 @@ export type BaseQuestionType = {
   helperText?: string
   answer?: BaseAnswerType
   questionSetID: number
+  isRequired: boolean
 }
 
 type QuestionOptionType = {

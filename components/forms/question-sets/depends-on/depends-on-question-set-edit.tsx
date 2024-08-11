@@ -40,10 +40,10 @@ export default function DependsOnQuestionSetEdit({ questionSet }: DependsOnQuest
         { id: generateRandomID(), position: 0, value: 'Yes' },
         { id: generateRandomID(), position: 1, value: 'No' },
       ],
-      isRequired: false,
       display: 'inline',
     },
     questionSetID: questionSet.id,
+    isRequired: false,
   }
 
   function handleSelectOption(e: React.ChangeEvent<HTMLInputElement>) {

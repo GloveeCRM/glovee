@@ -78,9 +78,9 @@ export default function NonEmptyQuestionSetDropzone({
                 { id: generateRandomID(), position: 1, value: 'Option 2' },
               ],
               defaultOptionID: 0,
-              isRequired: false,
             },
             questionSetID: questionSet.id,
+            isRequired: false,
           }
         } else if (isCheckbox) {
           newQuestion = {
@@ -91,9 +91,9 @@ export default function NonEmptyQuestionSetDropzone({
             settings: {
               display: 'block',
               options: [{ id: generateRandomID(), position: 0, value: 'Option 1' }],
-              isRequired: false,
             },
             questionSetID: questionSet.id,
+            isRequired: false,
           }
         } else if (isSelect) {
           newQuestion = {
@@ -107,9 +107,9 @@ export default function NonEmptyQuestionSetDropzone({
                 { id: generateRandomID(), position: 1, value: 'Option 2' },
               ],
               defaultOptionID: 0,
-              isRequired: false,
             },
             questionSetID: questionSet.id,
+            isRequired: false,
           }
         } else {
           newQuestion = {
@@ -119,9 +119,9 @@ export default function NonEmptyQuestionSetDropzone({
             position: 0,
             settings: {
               placeholder: 'Placeholder text',
-              isRequired: false,
             },
             questionSetID: questionSet.id,
+            isRequired: false,
           }
         }
         createQuestionInQuestionSet(questionSet.id, newQuestion)
@@ -153,9 +153,9 @@ export default function NonEmptyQuestionSetDropzone({
                 { id: generateRandomID(), position: 1, value: 'Option 2' },
               ],
               defaultOptionID: 0,
-              isRequired: false,
             },
             questionSetID: newQuestionSetID,
+            isRequired: false,
             options: [],
           }
           newQuestionSet.questions = [newQuestion]

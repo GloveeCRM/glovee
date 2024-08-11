@@ -22,7 +22,7 @@ export default function RadioQuestionSettings({ question }: RadioQuestionSetting
   function handleChangeIsRequired(isChecked: boolean) {
     updateQuestion({
       ...question,
-      settings: { ...question.settings, isRequired: isChecked },
+      isRequired: isChecked,
     })
   }
 
@@ -46,7 +46,7 @@ export default function RadioQuestionSettings({ question }: RadioQuestionSetting
     <div className="flex flex-col gap-[12px]">
       <div>
         <div className="flex items-center gap-[6px]">
-          <Switch checked={question.settings.isRequired} onCheckedChange={handleChangeIsRequired} />
+          <Switch checked={question.isRequired} onCheckedChange={handleChangeIsRequired} />
           <div>isRequired</div>
         </div>
         <Separator className="mt-[12px] bg-n-600" />

@@ -19,7 +19,7 @@ export default function TextInputQuestionSettings({ question }: TextInputQuestio
   function handleChangeIsRequired(isChecked: boolean) {
     updateQuestion({
       ...question,
-      settings: { ...question.settings, isRequired: isChecked },
+      isRequired: isChecked,
     })
   }
 
@@ -43,7 +43,7 @@ export default function TextInputQuestionSettings({ question }: TextInputQuestio
     <div className="flex flex-col gap-[12px]">
       <div>
         <div className="flex items-center gap-[6px]">
-          <Switch checked={question.settings.isRequired} onCheckedChange={handleChangeIsRequired} />
+          <Switch checked={question.isRequired} onCheckedChange={handleChangeIsRequired} />
           <div>isRequired</div>
         </div>
       </div>

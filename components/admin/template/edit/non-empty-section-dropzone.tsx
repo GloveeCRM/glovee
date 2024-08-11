@@ -66,9 +66,9 @@ export default function NonEmptySectionDropzone({ position }: NonEmptySectionDro
               { id: generateRandomID(), position: 1, value: 'Option 2' },
             ],
             defaultOptionID: 0,
-            isRequired: false,
           },
           questionSetID: questionSetID,
+          isRequired: false,
           options: [],
         }
         newQuestionSet.questions = [newQuestion]
