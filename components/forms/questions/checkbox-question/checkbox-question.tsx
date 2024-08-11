@@ -32,9 +32,9 @@ export default function CheckboxQuestion({ question, readOnly }: CheckboxQuestio
 
   return (
     <div className="relative">
-      <div className={`flex ${inline ? 'gap-[18px]' : 'flex-col gap-[4px]'}`}>
+      <div className={`flex ${inline ? 'gap-[18px]' : 'flex-col gap-[6px]'}`}>
         {options.map((option) => (
-          <div key={option.id} className="flex items-center gap-[4px]">
+          <div key={option.id} className="flex items-center gap-[6px]">
             <input
               type="checkbox"
               id={String(option.id)}
@@ -43,9 +43,9 @@ export default function CheckboxQuestion({ question, readOnly }: CheckboxQuestio
               onChange={handleChange}
               checked={answer.optionIDs?.includes(option.id) ?? false}
               disabled={readOnly}
-              className="h-[14px] w-[14px]"
+              className="h-[16px] w-[16px] accent-n-700"
             />
-            <label htmlFor={String(option.id)} className="text-[12px] text-n-500">
+            <label htmlFor={String(option.id)} className="text-[14px] text-n-500">
               {option.value}
             </label>
           </div>

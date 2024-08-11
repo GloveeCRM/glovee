@@ -30,7 +30,7 @@ export default function ApplicationQuestion({
   viewOnly = false,
 }: ApplicationQuestionProps) {
   return (
-    <div className="flex flex-col gap-[6px] p-[4px] text-[14px]">
+    <div className="flex flex-col gap-[10px] p-[4px] text-[14px]">
       <div className="flex justify-between">
         <div className="relative w-[calc(100%-50px)]">
           <span>{question.prompt}</span>

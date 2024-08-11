@@ -37,9 +37,9 @@ export default function RadioQuestion({ question, readOnly }: RadioQuestionProps
               onChange={handleChange}
               checked={answer.optionIDs?.[0] === option.id}
               disabled={readOnly}
-              className="h-[14px] w-[14px]"
+              className="h-[16px] w-[16px] accent-n-700"
             />
-            <label htmlFor={String(option.id)} className="text-[12px] text-n-500">
+            <label htmlFor={String(option.id)} className="text-[14px]">
               {option.value}
             </label>
           </div>
