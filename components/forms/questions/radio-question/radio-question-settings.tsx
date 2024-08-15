@@ -192,7 +192,7 @@ function RadioOption({ question, option }: RadioOptionProps) {
           settings: {
             ...question.settings,
             options: question.settings.options?.map((o) =>
-              o.id === option.id ? { ...o, value: option.value } : o
+              o.id === option.id ? { ...o, value: optionValueInputRef.current?.value } : o
             ),
           },
         })
