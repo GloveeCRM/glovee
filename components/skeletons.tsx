@@ -241,20 +241,6 @@ function TemplateEditSidebarCategorySkeleton() {
   )
 }
 
-interface TemplateEditTopbarSectionSkeletonProps {
-  selected?: boolean
-}
-
-function TemplateEditTopbarSectionSkeleton({ selected }: TemplateEditTopbarSectionSkeletonProps) {
-  return (
-    <div
-      className={`flex items-center border-l-[1px] border-n-500/50 bg-n-600/50 px-[6px] ${selected && 'bg-n-500/75'}`}
-    >
-      <TitleSkeleton size="sm" className={`bg-n-500/50 ${selected && 'bg-n-400/50'}`} />
-    </div>
-  )
-}
-
 interface TemplateEditSidebarSectionSkeletonProps {
   selected?: boolean
 }
@@ -285,19 +271,6 @@ export function TemplateEditSidebarCategoryWrapperSkeleton() {
       <TemplateEditSidebarCategorySkeleton />
       <TemplateEditSidebarCategorySkeleton />
       <TemplateEditSidebarCategorySkeleton />
-    </div>
-  )
-}
-
-export function TemplateEditTopbarSectionWrapperSkeleton() {
-  return (
-    <div className="flex h-full animate-pulse">
-      <TemplateEditTopbarSectionSkeleton selected />
-      <TemplateEditTopbarSectionSkeleton />
-      <TemplateEditTopbarSectionSkeleton />
-      <div className="flex items-center border-l-[1px] border-r-[1px] border-n-500/50 bg-n-600/50 px-[2px]">
-        <IconSkeleton className="bg-n-500/50" size="sm" />
-      </div>
     </div>
   )
 }
