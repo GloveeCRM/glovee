@@ -34,7 +34,7 @@ export type TemplateQuestionSetType = {
   id: number
   type: TemplateQuestionSetTypes
   position: number
-  dependsOn?: any
+  dependsOn?: number
   sectionID: number
   questionSetID?: number | null
   questionSets?: TemplateQuestionSetType[]

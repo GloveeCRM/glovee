@@ -60,7 +60,7 @@ export type ApplicationQuestionSetType = {
   id: number
   type: ApplicationQuestionSetTypes
   position: number
-  dependsOn?: Record<string, any>
+  dependsOn?: number
   sectionID: number
   questionSetID: number
   questionSets?: ApplicationQuestionSetType[]

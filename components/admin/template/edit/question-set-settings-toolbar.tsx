@@ -6,6 +6,7 @@ import {
   isFlatQuestionSetType,
   isLoopQuestionSetType,
 } from '@/lib/types/application'
+import DependsOnQuestionSetSettings from '@/components/forms/question-sets/depends-on/depends-on-question-set-settings'
 
 interface QuestionSetSettingsToolbarProps {
   questionSetID: number
@@ -28,13 +29,12 @@ export default function QuestionSetSettingsToolbar({
       <div className="mb-[12px]">Question Set Settings</div>
       {questionSet && (
         <div className="flex flex-col gap-[10px]">
-          <div>Type: {questionSet.type}</div>
           {isFlatQuestionSetType(questionSet) ? (
             <div>Questions: {questionSet.questions?.length}</div>
           ) : isLoopQuestionSetType(questionSet) ? (
             <div>loop</div>
           ) : isDependsOnQuestionSetType(questionSet) ? (
-            <div>dependsOn</div>
+            <DependsOnQuestionSetSettings questionSet={questionSet} />
           ) : (
             <div>Settings for this question set type are not available</div>
           )}
