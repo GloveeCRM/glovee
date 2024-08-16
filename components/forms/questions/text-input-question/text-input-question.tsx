@@ -6,7 +6,6 @@ import { IoMdCheckmarkCircle, IoIosCloseCircle } from 'react-icons/io'
 
 import { TextInputQuestionType } from '@/lib/types/qusetion'
 import useAnswer from '@/hooks/application/use-answer'
-import { Input } from '@/components/ui/input'
 
 interface TextInputQuestionProps {
   question: TextInputQuestionType
@@ -22,16 +21,17 @@ export default function TextInputQuestion({ question, readOnly = false }: TextIn
 
   return (
     <div className="relative">
-      <Input
+      <input
         type="text"
         placeholder={question.settings.placeholder}
-        readOnly={readOnly}
+        disabled={readOnly}
         defaultValue={answer.text || ''}
         onChange={handleChange}
+        className={`w-full rounded-[3px] border border-n-400 px-[8px] py-[7px] text-[14px] placeholder:font-light placeholder:text-n-450 focus-visible:border-n-600 focus-visible:outline-none disabled:bg-transparent`}
       />
       {message.length !== 0 && (
         <div
-          className={`absolute right-[1px] top-[1px] flex h-[calc(100%-2px)] items-center gap-[2px] rounded bg-white px-[4px] ${message === 'Failed to save changes!' ? 'text-red-600' : 'text-g-700'}`}
+          className={`absolute right-[1px] top-[1px] flex h-[calc(100%-2px)] items-center gap-[2px] rounded-[3px] bg-white px-[4px] ${message === 'Failed to save changes!' ? 'text-red-600' : 'text-g-700'}`}
         >
           {message === 'Saving' ? (
             <ImSpinner2 className="h-[14px] w-[14px] animate-spin" />
