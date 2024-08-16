@@ -70,7 +70,7 @@ export default function NonEmptyQuestionSetDropzone({
             id: generateRandomID(),
             type: QuestionTypes.RADIO,
             prompt: 'An Untitled Question',
-            position: 0,
+            position: position,
             settings: {
               display: 'block',
               options: [
@@ -87,7 +87,7 @@ export default function NonEmptyQuestionSetDropzone({
             id: generateRandomID(),
             type: QuestionTypes.CHECKBOX,
             prompt: 'An Untitled Question',
-            position: 0,
+            position: position,
             settings: {
               display: 'block',
               options: [{ id: generateRandomID(), position: 0, value: 'Option 1' }],
@@ -100,7 +100,7 @@ export default function NonEmptyQuestionSetDropzone({
             id: generateRandomID(),
             type: QuestionTypes.SELECT,
             prompt: 'An Untitled Question',
-            position: 0,
+            position: position,
             settings: {
               options: [
                 { id: generateRandomID(), position: 0, value: 'Option 1' },
@@ -116,7 +116,7 @@ export default function NonEmptyQuestionSetDropzone({
             id: generateRandomID(),
             type: draggedObject.object.type,
             prompt: 'An Untitled Question',
-            position: 0,
+            position: position,
             settings: {
               placeholder: 'Placeholder text',
             },
