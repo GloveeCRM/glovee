@@ -6,7 +6,6 @@ import { ImSpinner2 } from 'react-icons/im'
 
 import { TextareaQuestionType } from '@/lib/types/qusetion'
 import useAnswer from '@/hooks/application/use-answer'
-import { Textarea } from '@/components/ui/textarea'
 
 interface TextareaQuestionProps {
   question: TextareaQuestionType
@@ -23,12 +22,13 @@ export default function TextareaQuestion({ question, readOnly = false }: Textare
   return (
     <div>
       <div className="relative">
-        <Textarea
+        <textarea
           placeholder={question.settings.placeholder}
-          readOnly={readOnly}
+          disabled={readOnly}
           rows={3}
           defaultValue={answer.text || ''}
           onChange={handleChange}
+          className="w-full rounded-[3px] border border-n-400 px-[8px] py-[4px] text-[14px] placeholder:font-light placeholder:text-n-450 focus-visible:border-n-600 focus-visible:outline-none disabled:bg-transparent"
         />
         {message.length !== 0 && (
           <div

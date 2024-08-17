@@ -4,8 +4,6 @@ import { ImSpinner2 } from 'react-icons/im'
 import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
 
 import { SelectQuestionType } from '@/lib/types/qusetion'
-import { saveAnswer } from '@/lib/actions/application'
-import { useOrgContext } from '@/contexts/org-context'
 import useAnswer from '@/hooks/application/use-answer'
 
 interface SelectQuestionProps {
