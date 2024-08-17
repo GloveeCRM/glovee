@@ -31,7 +31,7 @@ export default function SelectQuestion({ question, readOnly }: SelectQuestionPro
   return (
     <div className="relative">
       <select
-        className="h-[34px] w-full rounded-sm border-[1px] border-n-400 bg-transparent p-[4px] px-[6px] text-[12px] focus:outline-none"
+        className="w-full rounded-[3px] border border-n-400 bg-transparent px-[6px] py-[8px] text-[14px] focus-visible:outline-none"
         defaultValue={answer.optionIDs?.[0] || question.settings.defaultOptionID}
         disabled={readOnly}
         onChange={handleChange}
