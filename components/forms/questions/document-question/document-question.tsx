@@ -90,7 +90,7 @@ export default function DocumentQuestion({ question, readOnly }: DocumentQuestio
         ))
       ) : (
         <div
-          className="flex w-full cursor-pointer flex-col items-center gap-[1px] rounded-[3px] border border-n-400 p-[11px] text-n-450 transition duration-150 hover:border-n-500 hover:text-n-500"
+          className={`flex w-full cursor-pointer flex-col items-center gap-[1px] rounded-[3px] border border-n-400 p-[11px] text-n-450 ${!readOnly && 'hover:text-n-500` transition duration-150 hover:border-n-500'}`}
           onClick={handleClickUploadFile}
         >
           <FiUpload className="h-[18px] w-[18px]" />
@@ -100,7 +100,7 @@ export default function DocumentQuestion({ question, readOnly }: DocumentQuestio
             ref={fileInputRef}
             onChange={handleFileChange}
             placeholder={question.type}
-            readOnly={readOnly}
+            disabled={readOnly}
             className="hidden"
           />
         </div>
