@@ -89,7 +89,7 @@ export default function DateInputQuestion({ question, readOnly }: DateInputQuest
         </label>
         <select
           id="day"
-          className="h-[32px] w-full rounded-sm border-[1px] border-n-400 bg-transparent p-[4px] px-[6px] text-[12px] focus:outline-none"
+          className="w-full rounded-[3px] border border-n-400 bg-transparent px-[6px] py-[8px] text-[14px] focus-visible:outline-none"
           placeholder={question.type}
           disabled={readOnly}
           value={selectedDate.day}
@@ -126,7 +126,7 @@ export default function DateInputQuestion({ question, readOnly }: DateInputQuest
         </label>
         <select
           id="month"
-          className="h-[32px] w-full rounded-sm border-[1px] border-n-400 bg-transparent p-[4px] px-[6px] text-[12px] focus:outline-none"
+          className="w-full rounded-[3px] border border-n-400 bg-transparent px-[6px] py-[8px] text-[14px] focus-visible:outline-none"
           disabled={readOnly}
           value={selectedDate.month}
           onChange={handleMonthChange}
@@ -155,7 +155,7 @@ export default function DateInputQuestion({ question, readOnly }: DateInputQuest
         </label>
         <select
           id="year"
-          className="h-[32px] w-full rounded-sm border-[1px] border-n-400 bg-transparent p-[4px] px-[6px] text-[12px] focus:outline-none"
+          className="w-full rounded-[3px] border border-n-400 bg-transparent px-[6px] py-[8px] text-[14px] focus-visible:outline-none"
           placeholder={question.type}
           disabled={readOnly}
           value={selectedDate.year}
