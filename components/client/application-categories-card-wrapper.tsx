@@ -1,7 +1,7 @@
 'use client'
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Fragment, useEffect } from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 import { ApplicationCategoryType } from '@/lib/types/application'
 import { Separator } from '@/components/ui/separator'

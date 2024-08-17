@@ -4,11 +4,11 @@ import Link from 'next/link'
 import { FaFilePen } from 'react-icons/fa6'
 
 import { ApplicationStatusTypes, ApplicationType } from '@/lib/types/application'
-import { submitApplicationById } from '@/lib/actions/application'
 import { Button } from '@/components/ui/button'
 import ProgressIndicatorRing from '@/components/ui/progress-indicator-ring'
 import ApplicationSummaryCardApplicantInfo from './application-summary-card-applicant-info'
 import ApplicationCardCategorySummariesWrapper from './application-card-category-summaries-wrapper'
+import SubmitApplicationDialog from './submit-application-dialog'
 
 interface ClientApplicationSummaryCardProps {
   application: ApplicationType
@@ -39,7 +39,7 @@ export default function ClientApplicationSummaryCard({
               <Button size="default">
                 <div className="flex items-center justify-center gap-[8px]">
                   <span>
-                    {`${application.status === ApplicationStatusTypes.SUBMITTED ? 'View' : 'Open'} application`}
+                    {`${application.status === ApplicationStatusTypes.SUBMITTED ? 'View' : 'Open'} Application`}
                   </span>
                   <FaFilePen className="h-[16px] w-[16px]" />
                 </div>
@@ -47,14 +47,7 @@ export default function ClientApplicationSummaryCard({
             </Link>
           </div>
           {application.status !== ApplicationStatusTypes.SUBMITTED && (
-            <Button
-              variant="secondary"
-              size="default"
-              onClick={() => submitApplicationById(application.id)}
-              disabled={application.completionRate !== 100}
-            >
-              Submit
-            </Button>
+            <SubmitApplicationDialog application={application} />
           )}
         </div>
       </div>

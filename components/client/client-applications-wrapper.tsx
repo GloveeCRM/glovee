@@ -1,7 +1,7 @@
 import { ApplicationRoleTypes } from '@/lib/types/application'
 import { fetchClientApplications } from '@/lib/data/application'
-import ClientApplicationSummaryCard from './client-application-summary-card'
 import { getSessionPayload } from '@/lib/auth/session'
+import ClientApplicationSummaryCard from './client-application-summary-card'
 
 interface ClientApplicationsWrapperProps {
   orgName: string

@@ -1,9 +1,9 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-
-import { IoFolderOutline, IoSettingsOutline } from 'react-icons/io5'
 import { GoCommentDiscussion } from 'react-icons/go'
+import { IoFolderOutline, IoSettingsOutline } from 'react-icons/io5'
+
 import { NavLinkItem } from '../admin/dashboard/nav/nav-link-item'
 
 const links = [
