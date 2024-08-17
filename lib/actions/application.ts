@@ -52,8 +52,11 @@ export async function submitApplicationById(
 ): Promise<{ success?: string; error?: string }> {
   try {
     const accessToken = await getSession()
+    const payload = await getSessionPayload()
+    const clientID = payload?.user?.id || 0
+
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/application/${applicationID}/set-status`,
+      `${GLOVEE_API_URL}/v1/${orgName}/application/client/${clientID}/application/${applicationID}/set-status`,
       {
         method: 'POST',
         headers: {
