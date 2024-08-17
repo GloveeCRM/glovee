@@ -6,7 +6,7 @@ import { ImSpinner2 } from 'react-icons/im'
 import { BiTrash } from 'react-icons/bi'
 import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
 import { FiUpload } from 'react-icons/fi'
-import { LuFileText } from 'react-icons/lu'
+import { LuDownload, LuFileText } from 'react-icons/lu'
 
 import { DocumentQuestionType } from '@/lib/types/qusetion'
 import useAnswer from '@/hooks/application/use-answer'
@@ -68,15 +68,23 @@ export default function DocumentQuestion({ question, readOnly }: DocumentQuestio
               <div className="w-fit rounded-full bg-n-300/70 p-[8px]">
                 <LuFileText className="h-[26px] w-[26px]" />
               </div>
-              <Link href={file.presignedDownloadURL} target="_blank">
-                <span className="line-clamp-1">{file.name}</span>
-              </Link>
+              <span className="line-clamp-1">{file.name}</span>
             </div>
-            <div
-              className="cursor-pointer rounded-full p-[6px] transition duration-75 hover:bg-red-100"
-              onClick={() => handleFileDelete(file.id)}
-            >
-              <BiTrash className="h-[22px] w-[22px] text-red-500" />
+            <div className="flex items-center gap-[6px]">
+              <div>
+                <Link href={file.presignedDownloadURL} target="_blank">
+                  <span className="flex items-center gap-[4px] rounded-full bg-n-200 px-[8px] py-[2px] text-n-600 transition duration-75 hover:bg-n-300 hover:text-n-800">
+                    <LuDownload className="h-[16px] w-[16px]" />
+                    <span>Download</span>
+                  </span>
+                </Link>
+              </div>
+              <div
+                className="cursor-pointer rounded-full p-[6px] transition duration-75 hover:bg-red-100"
+                onClick={() => handleFileDelete(file.id)}
+              >
+                <BiTrash className="h-[22px] w-[22px] text-red-500" />
+              </div>
             </div>
           </div>
         ))
