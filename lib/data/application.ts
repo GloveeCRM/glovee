@@ -1,10 +1,6 @@
 'use server'
 
-import {
-  ApplicationCategoryType,
-  ApplicationQuestionSetType,
-  ApplicationType,
-} from '@/lib/types/application'
+import { ApplicationQuestionSetType, ApplicationType } from '@/lib/types/application'
 import { GLOVEE_API_URL } from '@/lib/constants/api'
 import { getSession, getSessionPayload } from '@/lib/auth/session'
 import { File } from '../types/file'
@@ -106,19 +102,50 @@ export async function fetchApplicantInformation(
   }
 }
 
-export async function fetchClientApplicationCategoriesIncludingSections(
-  orgName: string,
-  clientID: number,
-  applicationID: number
-): Promise<ApplicationCategoryType[]> {
+export async function fetchFullApplication(
+  applicationID: number,
+  orgName: string
+): Promise<ApplicationType | null> {
   const accessToken = await getSession()
   if (!accessToken) {
-    return []
+    return null
   }
+  const payload = await getSessionPayload()
+  const clientID = payload?.user.id || 0
 
   try {
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/application/client/${clientID}/application/${applicationID}/categories`,
+      `${GLOVEE_API_URL}/v1/${orgName}/application/client/${clientID}/full-application/${applicationID}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    )
+
+    const data = await response.json()
+    return data.data.application
+  } catch (error) {
+    return null
+  }
+}
+
+export async function fetchClientApplicationIncludingCategoriesAndSections(
+  orgName: string,
+  applicationID: number
+): Promise<ApplicationType | null> {
+  const accessToken = await getSession()
+  if (!accessToken) {
+    return null
+  }
+  const payload = await getSessionPayload()
+  const clientID = payload?.user.id || 0
+
+  try {
+    const response = await fetch(
+      `${GLOVEE_API_URL}/v1/${orgName}/application/client/${clientID}/application/${applicationID}/including-categories-and-sections`,
       {
         method: 'GET',
         headers: {
@@ -131,7 +158,7 @@ export async function fetchClientApplicationCategoriesIncludingSections(
     const data = await response.json()
     return data.data.categories
   } catch (error) {
-    return []
+    return null
   }
 }
 

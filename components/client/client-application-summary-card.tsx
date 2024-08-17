@@ -35,23 +35,25 @@ export default function ClientApplicationSummaryCard({
         )}
         <div className="mt-[16px] flex justify-between gap-[8px]">
           <div className="w-[150px]">
-            <Link href={`/application/${application.id}`}>
-              {application.status === ApplicationStatusTypes.SUBMITTED ? (
+            {application.status === ApplicationStatusTypes.SUBMITTED ? (
+              <Link href={`/submission/${application.id}`}>
                 <Button size="default">
                   <div className="flex items-center justify-center gap-[8px]">
                     <span>View Submission</span>
                     <FaFileLines className="h-[16px] w-[16px]" />
                   </div>
                 </Button>
-              ) : (
+              </Link>
+            ) : (
+              <Link href={`/application/${application.id}`}>
                 <Button size="default">
                   <div className="flex items-center justify-center gap-[8px]">
                     <span>Open Application</span>
                     <FaFilePen className="h-[16px] w-[16px]" />
                   </div>
                 </Button>
-              )}
-            </Link>
+              </Link>
+            )}
           </div>
           {application.status !== ApplicationStatusTypes.SUBMITTED && (
             <SubmitApplicationDialog application={application} />

@@ -5,7 +5,7 @@ import { fetchClientApplicationIncludingCategoriesAndSections } from '@/lib/data
 import ApplicationContextProvider from '@/contexts/application-context'
 import ClientApplicationSidebar from '@/components/client/client-application-sidebar'
 
-interface ApplicationLayoutProps {
+interface SubmissionLayoutProps {
   children: React.ReactNode
   params: {
     orgName: string
@@ -13,10 +13,10 @@ interface ApplicationLayoutProps {
   }
 }
 
-export default async function ApplicationLayout({
+export default async function SubmissionLayout({
   children,
   params,
-}: Readonly<ApplicationLayoutProps>) {
+}: Readonly<SubmissionLayoutProps>) {
   const orgName = params.orgName
   const applicationID = parseInt(params.id)
 
@@ -26,10 +26,10 @@ export default async function ApplicationLayout({
   )
   const categories = application?.categories || []
 
-  if (application?.status === ApplicationStatusTypes.SUBMITTED) {
-    redirect(`/submission/${applicationID}`)
-  } else if (application?.status !== ApplicationStatusTypes.CREATED) {
-    redirect(`/applications}`)
+  if (application?.status === ApplicationStatusTypes.CREATED) {
+    redirect(`/application/${applicationID}`)
+  } else if (application?.status !== ApplicationStatusTypes.SUBMITTED) {
+    redirect(`/applications`)
   }
 
   return (

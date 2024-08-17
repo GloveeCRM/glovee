@@ -1,29 +1,21 @@
 import Link from 'next/link'
 import { IoChevronBackOutline } from 'react-icons/io5'
 
-import { fetchClientApplicationCategoriesIncludingSections } from '@/lib/data/application'
+import { ApplicationCategoryType } from '@/lib/types/application'
 import ApplicantInfoCard from './application/applicant-info-card'
 import ApplicationCategoriesCardWrapper from './application-categories-card-wrapper'
-import { getSessionPayload } from '@/lib/auth/session'
 
 interface ClientApplicationSidebarProps {
   orgName: string
   applicationID: number
+  categories: ApplicationCategoryType[]
 }
 
 export default async function ClientApplicationSidebar({
   orgName,
   applicationID,
+  categories,
 }: ClientApplicationSidebarProps) {
-  const payload = await getSessionPayload()
-  const userID = payload?.user.id || 0
-
-  const categories = await fetchClientApplicationCategoriesIncludingSections(
-    orgName,
-    userID,
-    applicationID
-  )
-
   return (
     <div
       id="client-application-sidebar"
