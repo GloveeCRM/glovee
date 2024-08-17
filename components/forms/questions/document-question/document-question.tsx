@@ -58,47 +58,46 @@ export default function DocumentQuestion({ question, readOnly }: DocumentQuestio
 
   return (
     <div className="relative">
-      <div className="flex flex-col items-center gap-[2px] rounded border-[1px] border-n-300 text-n-500/90">
-        {answer.files && answer.files.length > 0 ? (
-          answer.files.map((file) => (
-            <div
-              key={file.id}
-              className="flex w-full items-center justify-between gap-[2px] px-[8px] py-[10px]"
-            >
-              <div className="flex items-center gap-[6px] text-n-600">
-                <div className="w-fit rounded-full bg-n-300/70 p-[8px]">
-                  <LuFileText className="h-[26px] w-[26px]" />
-                </div>
-                <Link href={file.presignedDownloadURL} target="_blank">
-                  <span className="line-clamp-1">{file.name}</span>
-                </Link>
-              </div>
-              <div
-                className="cursor-pointer rounded-full p-[6px] transition duration-75 hover:bg-red-100"
-                onClick={() => handleFileDelete(file.id)}
-              >
-                <BiTrash className="h-[22px] w-[22px] text-red-500" />
-              </div>
-            </div>
-          ))
-        ) : (
+      {answer.files && answer.files.length > 0 ? (
+        answer.files.map((file) => (
           <div
-            className="flex w-full cursor-pointer flex-col items-center p-[12px] transition duration-75 hover:bg-n-100/50 hover:text-n-600"
-            onClick={handleClickUploadFile}
+            key={file.id}
+            className="flex w-full items-center justify-between gap-[2px] rounded-[3px] border border-n-400 px-[8px] py-[10px]"
           >
-            <FiUpload className="h-[18px] w-[18px]" />
-            <div>Upload a File</div>
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleFileChange}
-              placeholder={question.type}
-              readOnly={readOnly}
-              className="hidden"
-            />
+            <div className="flex items-center gap-[6px] text-n-600">
+              <div className="w-fit rounded-full bg-n-300/70 p-[8px]">
+                <LuFileText className="h-[26px] w-[26px]" />
+              </div>
+              <Link href={file.presignedDownloadURL} target="_blank">
+                <span className="line-clamp-1">{file.name}</span>
+              </Link>
+            </div>
+            <div
+              className="cursor-pointer rounded-full p-[6px] transition duration-75 hover:bg-red-100"
+              onClick={() => handleFileDelete(file.id)}
+            >
+              <BiTrash className="h-[22px] w-[22px] text-red-500" />
+            </div>
           </div>
-        )}
-      </div>
+        ))
+      ) : (
+        <div
+          className="flex w-full cursor-pointer flex-col items-center gap-[1px] rounded-[3px] border border-n-400 p-[11px] text-n-450 transition duration-150 hover:border-n-500 hover:text-n-500"
+          onClick={handleClickUploadFile}
+        >
+          <FiUpload className="h-[18px] w-[18px]" />
+          <div>Upload a File</div>
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            placeholder={question.type}
+            readOnly={readOnly}
+            className="hidden"
+          />
+        </div>
+      )}
+
       {message.length !== 0 && (
         <div
           className={`absolute right-[1px] top-[1px] flex h-[32px] items-center gap-[2px] rounded bg-white px-[4px]
