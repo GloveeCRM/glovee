@@ -39,6 +39,7 @@ export default async function ApplicationLayout({
           orgName={orgName}
           applicationID={applicationID}
           categories={categories}
+          type="inProgress"
         />
         <div className="h-screen flex-1">{children}</div>
       </div>

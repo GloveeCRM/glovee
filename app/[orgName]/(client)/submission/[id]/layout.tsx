@@ -34,11 +34,12 @@ export default async function SubmissionLayout({
 
   return (
     <ApplicationContextProvider applicationID={applicationID}>
-      <div id="client-application-layout" className="flex overflow-hidden">
+      <div id="client-submission-layout" className="flex overflow-hidden">
         <ClientApplicationSidebar
           orgName={orgName}
           applicationID={applicationID}
           categories={categories}
+          type="submitted"
         />
         <div className="h-screen flex-1">{children}</div>
       </div>

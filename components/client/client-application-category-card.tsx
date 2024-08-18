@@ -8,12 +8,14 @@ import ClientSidebarSectionCard from './client-application-section-card'
 
 interface ClientApplicationCategoryCardProps {
   category: ApplicationCategoryType
+  type: 'inProgress' | 'submitted'
   isExpanded: boolean
   onClick: (categoryId: number) => void
 }
 
 export default function ClientApplicationCategoryCard({
   category,
+  type,
   isExpanded,
   onClick,
 }: ClientApplicationCategoryCardProps) {
@@ -23,16 +25,18 @@ export default function ClientApplicationCategoryCard({
       onClick={() => onClick(category.id)}
     >
       <div className="flex gap-[4px]">
-        <ProgressIndicatorRing
-          completionRate={category.completionRate}
-          baseCircleColor="text-n-500"
-          progressCircleColor="text-n-300"
-          completeGreen
-          completeCheck
-        />
-        <div className="flex w-full justify-between">
-          <div className={`mt-[12px] ${isExpanded && 'text-n-100'}`}>{category.name}</div>
-          <div className="mt-[14px]">
+        {type === 'inProgress' && (
+          <ProgressIndicatorRing
+            completionRate={category.completionRate}
+            baseCircleColor="text-n-500"
+            progressCircleColor="text-n-300"
+            completeGreen
+            completeCheck
+          />
+        )}
+        <div className="flex w-full items-center justify-between py-[6px] text-[14px]">
+          <div className={`${isExpanded && 'text-n-100'} w-full`}>{category.name}</div>
+          <div className="">
             {isExpanded ? (
               <IoChevronDown className="h-[16px] w-[16px]" />
             ) : (
@@ -43,7 +47,7 @@ export default function ClientApplicationCategoryCard({
       </div>
       {isExpanded &&
         category.sections?.map((section: ApplicationSectionType) => (
-          <ClientSidebarSectionCard key={section.id} section={section} />
+          <ClientSidebarSectionCard key={section.id} section={section} type={type} />
         ))}
     </div>
   )

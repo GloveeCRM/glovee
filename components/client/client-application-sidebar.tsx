@@ -9,12 +9,14 @@ interface ClientApplicationSidebarProps {
   orgName: string
   applicationID: number
   categories: ApplicationCategoryType[]
+  type: 'inProgress' | 'submitted'
 }
 
 export default async function ClientApplicationSidebar({
   orgName,
   applicationID,
   categories,
+  type,
 }: ClientApplicationSidebarProps) {
   return (
     <div
@@ -28,7 +30,7 @@ export default async function ClientApplicationSidebar({
         </Link>
         <ApplicantInfoCard orgName={orgName} applicationID={applicationID} />
       </div>
-      <ApplicationCategoriesCardWrapper categories={categories} />
+      <ApplicationCategoriesCardWrapper categories={categories} type={type} />
     </div>
   )
 }

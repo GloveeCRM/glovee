@@ -7,11 +7,15 @@ import { ApplicationCategoryType } from '@/lib/types/application'
 import { Separator } from '@/components/ui/separator'
 import ClientApplicationCategoryCard from './client-application-category-card'
 
+interface ApplicationCategoriesCardWrapperProps {
+  categories: ApplicationCategoryType[]
+  type: 'inProgress' | 'submitted'
+}
+
 export default function ApplicationCategoriesCardWrapper({
   categories,
-}: {
-  categories: ApplicationCategoryType[]
-}) {
+  type,
+}: ApplicationCategoriesCardWrapperProps) {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const { replace } = useRouter()
@@ -53,6 +57,7 @@ export default function ApplicationCategoriesCardWrapper({
             category={category}
             isExpanded={expandedCategory.id === category.id}
             onClick={handleCategoryClick}
+            type={type}
           />
           <Separator className="bg-n-500" />
         </Fragment>

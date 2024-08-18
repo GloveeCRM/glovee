@@ -8,9 +8,10 @@ import { ApplicationSectionType } from '@/lib/types/application'
 
 interface ClientSidebarSectionCardProps {
   section: ApplicationSectionType
+  type: 'inProgress' | 'submitted'
 }
 
-export default function ClientSidebarSectionCard({ section }: ClientSidebarSectionCardProps) {
+export default function ClientSidebarSectionCard({ section, type }: ClientSidebarSectionCardProps) {
   const searchParams = useSearchParams()
   const selectedSectionId = searchParams.get('section') || '0'
   const pathname = usePathname()
@@ -35,14 +36,16 @@ export default function ClientSidebarSectionCard({ section }: ClientSidebarSecti
       }}
     >
       <div className="flex gap-[4px]">
-        <div className="mt-[2px]">
-          {section.completionRate === 100 ? (
-            <FaRegCircleCheck className="h-[13px] w-[13px] text-green-500" />
-          ) : (
-            <FaRegCircle className="h-[13px] w-[13px]" />
-          )}
-        </div>
-        <div className="text-[12px]">{section.name}</div>
+        {type === 'inProgress' && (
+          <div className="mt-[2px]">
+            {section.completionRate === 100 ? (
+              <FaRegCircleCheck className="h-[13px] w-[13px] text-green-500" />
+            ) : (
+              <FaRegCircle className="h-[13px] w-[13px]" />
+            )}
+          </div>
+        )}
+        <div>{section.name}</div>
       </div>
     </div>
   )
