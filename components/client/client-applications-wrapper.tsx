@@ -33,7 +33,7 @@ export default async function ClientApplicationsWrapper({
         <div className="mb-[20px]">
           <h3 className="mb-[12px] font-medium">Main Applicant</h3>
           {mainApplications.map((application) => (
-            <div className="px-[8px]" key={application.id}>
+            <div className="mb-[16px] px-[8px]" key={application.id}>
               <ClientApplicationSummaryCard application={application} />
             </div>
           ))}
