@@ -45,7 +45,11 @@ export default async function ClientSubmissionPage({
               <div key={question.id} className="grid grid-cols-3 gap-[24px] py-[16px]">
                 <div className="font-light text-black">{question.prompt}</div>
                 <div className="col-span-2 font-light text-n-500">
-                  <Answer question={question} />
+                  {question.answer?.isAcceptable ? (
+                    <Answer question={question} />
+                  ) : (
+                    <div className="text-n-500/70">No answer provided</div>
+                  )}
                 </div>
               </div>
               {i < questions.length - 1 && <Separator className="bg-n-300" />}
