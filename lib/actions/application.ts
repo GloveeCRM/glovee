@@ -18,7 +18,7 @@ export async function createNewApplication(
   const accessToken = await getSession()
 
   try {
-    const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/application/admin/create`, {
+    const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/form/admin/create`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ export async function submitApplicationById(
     const clientID = payload?.user?.id || 0
 
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/application/client/${clientID}/application/${applicationID}/set-status`,
+      `${GLOVEE_API_URL}/v1/${orgName}/form/client/${clientID}/form/${applicationID}/set-status`,
       {
         method: 'POST',
         headers: {
@@ -114,7 +114,7 @@ export async function saveAnswer({
 
   try {
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/application/client/${clientID}/question/${questionID}/update-answer`,
+      `${GLOVEE_API_URL}/v1/${orgName}/form/client/${clientID}/question/${questionID}/update-answer`,
       {
         method: 'POST',
         headers: {
@@ -152,7 +152,7 @@ export async function createQuestionSetAndQuestions(
 
   try {
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/application/client/${clientID}/application/create-question-set`,
+      `${GLOVEE_API_URL}/v1/${orgName}/form/client/${clientID}/form/create-question-set`,
       {
         method: 'POST',
         headers: {
@@ -186,7 +186,7 @@ export async function deleteQuestionSet(
 
   try {
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/application/client/${clientID}/application/question-set/${questionSetID}`,
+      `${GLOVEE_API_URL}/v1/${orgName}/form/client/${clientID}/form/question-set/${questionSetID}`,
       {
         method: 'DELETE',
         headers: {

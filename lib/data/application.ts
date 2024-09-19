@@ -15,23 +15,20 @@ export async function fetchClientApplications(
   }
 
   try {
-    const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/application/client/${clientID}/applications`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    )
+    const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/form/client/${clientID}/forms`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
 
     const data = await response.json()
 
     if (data.status === 'error') {
       return null
     } else {
-      return data.data.applications
+      return data.data.forms
     }
   } catch (error) {
     return null
@@ -52,7 +49,7 @@ export async function searchApplications(
 
   try {
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/application/admin/search?userID=${userID}&query=${query}&limit=${limit}&offset=${offset}`,
+      `${GLOVEE_API_URL}/v1/${orgName}/form/admin/search?userID=${userID}&query=${query}&limit=${limit}&offset=${offset}`,
       {
         method: 'GET',
         headers: {
@@ -66,7 +63,7 @@ export async function searchApplications(
     if (data.status === 'error') {
       return { applications: null, total: 0 }
     } else {
-      return { applications: data.data.applications, total: data.data.total }
+      return { applications: data.data.forms, total: data.data.total }
     }
   } catch (error) {
     return { applications: null, total: 0 }
@@ -85,7 +82,7 @@ export async function fetchApplicantInformation(
 
   try {
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/application/client/${clientID}/application/${applicationID}/applicant`,
+      `${GLOVEE_API_URL}/v1/${orgName}/form/client/${clientID}/form/${applicationID}/applicant`,
       {
         method: 'GET',
         headers: {
@@ -115,7 +112,7 @@ export async function fetchFullApplication(
 
   try {
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/application/client/${clientID}/full-application/${applicationID}`,
+      `${GLOVEE_API_URL}/v1/${orgName}/form/client/${clientID}/full-form/${applicationID}`,
       {
         method: 'GET',
         headers: {
@@ -126,7 +123,7 @@ export async function fetchFullApplication(
     )
 
     const data = await response.json()
-    return data.data.application
+    return data.data.form
   } catch (error) {
     return null
   }
@@ -145,7 +142,7 @@ export async function fetchClientApplicationIncludingCategoriesAndSections(
 
   try {
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/application/client/${clientID}/application/${applicationID}/including-categories-and-sections`,
+      `${GLOVEE_API_URL}/v1/${orgName}/form/client/${clientID}/form/${applicationID}/including-categories-and-sections`,
       {
         method: 'GET',
         headers: {
@@ -156,7 +153,7 @@ export async function fetchClientApplicationIncludingCategoriesAndSections(
     )
 
     const data = await response.json()
-    return data.data.categories
+    return data.data.form
   } catch (error) {
     return null
   }
@@ -174,7 +171,7 @@ export async function fetchSectionQuestionSets(
 
   try {
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/application/client/${clientID}/application/section/${sectionID}/question-sets`,
+      `${GLOVEE_API_URL}/v1/${orgName}/form/client/${clientID}/form/section/${sectionID}/question-sets`,
       {
         method: 'GET',
         headers: {
@@ -210,7 +207,7 @@ export async function fetchApplicationAnswerFileUploadIntent(
     }
 
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/application/client/${userID}/application/${applicationID}/question/${questionID}/create-application-answer-file-upload-intent`,
+      `${GLOVEE_API_URL}/v1/${orgName}/form/client/${userID}/form/${applicationID}/question/${questionID}/create-form-answer-file-upload-intent`,
       {
         method: 'POST',
         headers: {
