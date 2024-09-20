@@ -1,4 +1,4 @@
-import { searchApplications } from '@/lib/data/application'
+import { searchForms } from '@/lib/data/form'
 import {
   Table,
   TableBody,
@@ -22,7 +22,7 @@ export default async function ClientApplicationsTable({
   currentPage = 1,
 }: ClientApplicationsTableProps) {
   const totalRowsPerPage = 12
-  const { applications, total } = await searchApplications(
+  const { forms, total } = await searchForms(
     orgName,
     clientID,
     '',
@@ -43,34 +43,34 @@ export default async function ClientApplicationsTable({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {applications && applications.length > 0 ? (
-            applications.map((application) => (
-              <TableRow key={application.id} className="h-[42px]">
-                <TableCell>{application.id}</TableCell>
-                <TableCell className="truncate">{application.templateName}</TableCell>
+          {forms && forms.length > 0 ? (
+            forms.map((form) => (
+              <TableRow key={form.id} className="h-[42px]">
+                <TableCell>{form.id}</TableCell>
+                <TableCell className="truncate">{form.templateName}</TableCell>
                 <TableCell>
                   <Badge variant="secondary" className="gap-[2px]">
-                    <span className="font-semibold">{application.role}</span>
+                    <span className="font-semibold">{form.role}</span>
                     <span className="truncate">
-                      ({application.applicant.firstName} {application.applicant.lastName})
+                      ({form.applicant.firstName} {form.applicant.lastName})
                     </span>
                   </Badge>
                 </TableCell>
                 <TableCell>
-                  <Badge>{application.status}</Badge>
+                  <Badge>{form.status}</Badge>
                 </TableCell>
               </TableRow>
             ))
           ) : (
             <TableRow>
               <TableCell colSpan={4} className="py-[12px] text-center text-n-500">
-                No applications found
+                No forms found
               </TableCell>
             </TableRow>
           )}
         </TableBody>
       </Table>
-      {applications && applications.length < total && (
+      {forms && forms.length < total && (
         <Pagination currentPage={currentPage} totalPages={totalPages} />
       )}
     </div>

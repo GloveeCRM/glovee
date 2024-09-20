@@ -5,7 +5,7 @@ import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
 import { ImSpinner2 } from 'react-icons/im'
 
 import { TextareaQuestionType } from '@/lib/types/qusetion'
-import useAnswer from '@/hooks/application/use-answer'
+import useAnswer from '@/hooks/form/use-answer'
 
 interface TextareaQuestionProps {
   question: TextareaQuestionType

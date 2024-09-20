@@ -1,9 +1,9 @@
 import { redirect } from 'next/navigation'
 
-import { ApplicationStatusTypes } from '@/lib/types/application'
-import { fetchClientApplicationIncludingCategoriesAndSections } from '@/lib/data/application'
-import ApplicationContextProvider from '@/contexts/application-context'
-import ClientApplicationSidebar from '@/components/client/client-application-sidebar'
+import { FormStatusTypes } from '@/lib/types/form'
+import { fetchClientFormIncludingCategoriesAndSections } from '@/lib/data/form'
+import FormContextProvider from '@/contexts/form-context'
+import ClientFormSidebar from '@/components/client/client-form-sidebar'
 
 interface SubmissionLayoutProps {
   children: React.ReactNode
@@ -20,29 +20,26 @@ export default async function SubmissionLayout({
   const orgName = params.orgName
   const applicationID = parseInt(params.id)
 
-  const application = await fetchClientApplicationIncludingCategoriesAndSections(
-    orgName,
-    applicationID
-  )
+  const application = await fetchClientFormIncludingCategoriesAndSections(orgName, applicationID)
   const categories = application?.categories || []
 
-  if (application?.status === ApplicationStatusTypes.CREATED) {
+  if (application?.status === FormStatusTypes.CREATED) {
     redirect(`/application/${applicationID}`)
-  } else if (application?.status !== ApplicationStatusTypes.SUBMITTED) {
+  } else if (application?.status !== FormStatusTypes.SUBMITTED) {
     redirect(`/applications`)
   }
 
   return (
-    <ApplicationContextProvider applicationID={applicationID}>
+    <FormContextProvider formID={applicationID}>
       <div id="client-submission-layout" className="flex overflow-hidden">
-        <ClientApplicationSidebar
+        <ClientFormSidebar
           orgName={orgName}
-          applicationID={applicationID}
+          formID={applicationID}
           categories={categories}
           type="submitted"
         />
         <div className="h-screen flex-1">{children}</div>
       </div>
-    </ApplicationContextProvider>
+    </FormContextProvider>
   )
 }

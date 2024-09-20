@@ -3,7 +3,7 @@
 import { useDebouncedCallback } from 'use-debounce'
 
 import { QuestionType } from '@/lib/types/qusetion'
-import { saveAnswer } from '@/lib/actions/application'
+import { saveAnswer } from '@/lib/actions/form'
 
 export default function TextInputQuestion({ question }: { question: QuestionType }) {
   const handleChange = useDebouncedCallback((e: React.ChangeEvent<HTMLInputElement>) => {

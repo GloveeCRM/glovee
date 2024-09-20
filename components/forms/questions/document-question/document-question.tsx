@@ -9,7 +9,7 @@ import { FiUpload } from 'react-icons/fi'
 import { LuDownload, LuFileText } from 'react-icons/lu'
 
 import { DocumentQuestionType } from '@/lib/types/qusetion'
-import useAnswer from '@/hooks/application/use-answer'
+import useAnswer from '@/hooks/form/use-answer'
 
 interface DocumentQuestionProps {
   question: DocumentQuestionType

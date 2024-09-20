@@ -8,88 +8,84 @@ export type Applicant = {
   imageURL: string
 }
 
-export enum ApplicationStatusTypes {
+export enum FormStatusTypes {
   CREATED = 'CREATED',
   SUBMITTED = 'SUBMITTED',
 }
 
-export enum ApplicationRoleTypes {
+export enum FormRoleTypes {
   MAIN = 'MAIN',
   SPOUSE = 'SPOUSE',
   CHILD = 'CHILD',
   OTHER = 'OTHER',
 }
 
-export type ApplicationType = {
+export type FormType = {
   id: number
   organizationID: number
   client: UserType
-  role: ApplicationRoleTypes
+  role: FormRoleTypes
   templateName: string
   applicant: Applicant
-  status: ApplicationStatusTypes
+  status: FormStatusTypes
   completionRate: number
-  categories?: ApplicationCategoryType[]
+  categories?: FormCategoryType[]
 }
 
-export type ApplicationCategoryType = {
+export type FormCategoryType = {
   id: number
   name: string
   position: number
-  templateID: number
+  formID: number
   completionRate: number
-  sections?: ApplicationSectionType[]
+  sections?: FormSectionType[]
 }
 
-export type ApplicationSectionType = {
+export type FormSectionType = {
   id: number
   name: string
   position: number
   categoryID: number
   completionRate: number
-  questionSets?: ApplicationQuestionSetType[]
+  questionSets?: FormQuestionSetType[]
 }
 
-export enum ApplicationQuestionSetTypes {
+export enum FormQuestionSetTypes {
   FLAT = 'FLAT',
   LOOP = 'LOOP',
   DEPENDS_ON = 'DEPENDS_ON',
 }
 
-export type ApplicationQuestionSetType = {
+export type FormQuestionSetType = {
   id: number
-  type: ApplicationQuestionSetTypes
+  type: FormQuestionSetTypes
   position: number
   dependsOn?: number
   sectionID: number
   questionSetID: number
-  questionSets?: ApplicationQuestionSetType[]
+  questionSets?: FormQuestionSetType[]
   questions?: QuestionType[]
 }
 
-export function isFlatQuestionSetType(
-  questionSet: ApplicationQuestionSetType | TemplateQuestionSetType
-) {
+export function isFlatQuestionSetType(questionSet: FormQuestionSetType | TemplateQuestionSetType) {
   return (
-    questionSet.type === ApplicationQuestionSetTypes.FLAT ||
+    questionSet.type === FormQuestionSetTypes.FLAT ||
     questionSet.type === TemplateQuestionSetTypes.FLAT
   )
 }
 
-export function isLoopQuestionSetType(
-  questionSet: ApplicationQuestionSetType | TemplateQuestionSetType
-) {
+export function isLoopQuestionSetType(questionSet: FormQuestionSetType | TemplateQuestionSetType) {
   return (
-    questionSet.type === ApplicationQuestionSetTypes.LOOP ||
+    questionSet.type === FormQuestionSetTypes.LOOP ||
     questionSet.type === TemplateQuestionSetTypes.LOOP
   )
 }
 
 export function isDependsOnQuestionSetType(
-  questionSet: ApplicationQuestionSetType | TemplateQuestionSetType
+  questionSet: FormQuestionSetType | TemplateQuestionSetType
 ) {
   return (
-    questionSet.type === ApplicationQuestionSetTypes.DEPENDS_ON ||
+    questionSet.type === FormQuestionSetTypes.DEPENDS_ON ||
     questionSet.type === TemplateQuestionSetTypes.DEPENDS_ON
   )
 }

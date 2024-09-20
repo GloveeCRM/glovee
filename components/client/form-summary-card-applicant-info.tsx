@@ -2,19 +2,19 @@ import Image from 'next/image'
 
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
 
-interface ApplicationSummaryCardApplicantInfoProps {
+interface FormSummaryCardApplicantInfoProps {
   applicantFirstName: string
   applicantLastName: string
   role: string
   imageUrl?: string
 }
 
-export default function ApplicationSummaryCardApplicantInfo({
+export default function FormSummaryCardApplicantInfo({
   applicantFirstName,
   applicantLastName,
   role,
   imageUrl,
-}: ApplicationSummaryCardApplicantInfoProps) {
+}: FormSummaryCardApplicantInfoProps) {
   const formattedRole = role.charAt(0).toUpperCase() + role.slice(1).toLowerCase()
   return (
     <div className="flex items-center gap-[6px]">

@@ -5,7 +5,7 @@ import {
   isDependsOnQuestionSetType,
   isFlatQuestionSetType,
   isLoopQuestionSetType,
-} from '@/lib/types/application'
+} from '@/lib/types/form'
 import DependsOnQuestionSetSettings from '@/components/forms/question-sets/depends-on/depends-on-question-set-settings'
 
 interface QuestionSetSettingsToolbarProps {

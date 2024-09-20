@@ -1,8 +1,8 @@
-import { ApplicationQuestionSetType } from '@/lib/types/application'
-import ApplicationQuestion from '../../questions/application-question'
+import { FormQuestionSetType } from '@/lib/types/form'
+import FormQuestion from '../../questions/form-question'
 
 interface FlatQuestionSetViewProps {
-  questionSet: ApplicationQuestionSetType
+  questionSet: FormQuestionSetType
   viewOnly?: boolean
 }
 
@@ -15,7 +15,7 @@ export default function FlatQuestionSetView({
       {questionSet.questions &&
         questionSet.questions.length > 0 &&
         questionSet.questions.map((q) => (
-          <ApplicationQuestion key={q.id} question={q} viewOnly={viewOnly} />
+          <FormQuestion key={q.id} question={q} viewOnly={viewOnly} />
         ))}
     </div>
   )

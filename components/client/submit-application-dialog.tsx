@@ -4,8 +4,8 @@ import { useState } from 'react'
 import toast from 'react-hot-toast'
 import { ImSpinner2 } from 'react-icons/im'
 
-import { ApplicationType } from '@/lib/types/application'
-import { submitApplicationById } from '@/lib/actions/application'
+import { FormType } from '@/lib/types/form'
+import { submitFormById } from '@/lib/actions/form'
 import { useOrgContext } from '@/contexts/org-context'
 import { Button } from '@/components/ui/button'
 import {
@@ -16,27 +16,25 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import ApplicationSummaryCardApplicantInfo from './application-summary-card-applicant-info'
+import FormSummaryCardApplicantInfo from './form-summary-card-applicant-info'
 
-interface SubmitApplicationDialogProps {
-  application: ApplicationType
+interface SubmitFormDialogProps {
+  form: FormType
 }
 
-export default function SubmitApplicationDialog({ application }: SubmitApplicationDialogProps) {
+export default function SubmitFormDialog({ form }: SubmitFormDialogProps) {
   const { orgName } = useOrgContext()
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
-  function handleSubmitApplication() {
+  function handleSubmitForm() {
     setIsSubmitting(true)
-    submitApplicationById(application.id, orgName)
+    submitFormById(form.id, orgName)
       .then((response) => {
         if (response.success) {
-          submitApplicationSuccessToast(response.success)
+          submitFormSuccessToast(response.success)
         } else {
-          submitApplicationErrorToast(
-            response.error || 'An error occurred while submitting the application'
-          )
+          submitFormErrorToast(response.error || 'An error occurred while submitting the form')
         }
       })
       .finally(() => {
@@ -45,14 +43,14 @@ export default function SubmitApplicationDialog({ application }: SubmitApplicati
       })
   }
 
-  function submitApplicationSuccessToast(message: string) {
+  function submitFormSuccessToast(message: string) {
     toast.success((t) => message, {
       duration: 3000,
       position: 'bottom-right',
     })
   }
 
-  function submitApplicationErrorToast(message: string) {
+  function submitFormErrorToast(message: string) {
     toast.error((t) => message, {
       duration: 3000,
       position: 'bottom-right',
@@ -62,19 +60,19 @@ export default function SubmitApplicationDialog({ application }: SubmitApplicati
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="default" size="default" disabled={application.completionRate !== 100}>
+        <Button variant="default" size="default" disabled={form.completionRate !== 100}>
           Submit
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Are you sure you want to submit this application?</DialogTitle>
+          <DialogTitle>Are you sure you want to submit this form?</DialogTitle>
         </DialogHeader>
         <div className="mt-[8px]">
-          <ApplicationSummaryCardApplicantInfo
-            applicantFirstName={application.applicant.firstName}
-            applicantLastName={application.applicant.lastName}
-            role={application.role}
+          <FormSummaryCardApplicantInfo
+            applicantFirstName={form.applicant.firstName}
+            applicantLastName={form.applicant.lastName}
+            role={form.role}
           />
         </div>
         <div className="mt-[16px] flex gap-[8px]">
@@ -88,7 +86,7 @@ export default function SubmitApplicationDialog({ application }: SubmitApplicati
             variant="default"
             fullWidth={true}
             autoFocus
-            onClick={handleSubmitApplication}
+            onClick={handleSubmitForm}
           >
             {isSubmitting ? (
               <ImSpinner2 className="h-[24px] w-[24px] animate-spin text-n-200" />

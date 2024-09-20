@@ -10,13 +10,13 @@ import { GoPlus } from 'react-icons/go'
 import { IoClose } from 'react-icons/io5'
 
 import { TemplateType } from '@/lib/types/template'
-import { ApplicationRoleTypes } from '@/lib/types/application'
+import { FormRoleTypes } from '@/lib/types/form'
 import { UserType } from '@/lib/types/user'
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
 import { searchClients } from '@/lib/data/user'
 import { searchTemplates } from '@/lib/data/template'
-import { createNewApplication } from '@/lib/actions/application'
-import { CreateApplicationSchema } from '@/lib/zod/schemas'
+import { createNewForm } from '@/lib/actions/form'
+import { CreateFormSchema } from '@/lib/zod/schemas'
 import { useOrgContext } from '@/contexts/org-context'
 
 import { Button } from '@/components/ui/button'
@@ -85,8 +85,8 @@ export default function CreateNewApplicationButton({ client }: CreateNewApplicat
     templateID: 0,
   }
 
-  const form = useForm<z.infer<typeof CreateApplicationSchema>>({
-    resolver: zodResolver(CreateApplicationSchema),
+  const form = useForm<z.infer<typeof CreateFormSchema>>({
+    resolver: zodResolver(CreateFormSchema),
     defaultValues: defaultFormValues,
   })
 
@@ -104,8 +104,8 @@ export default function CreateNewApplicationButton({ client }: CreateNewApplicat
     })
   }
 
-  async function handleCreateApplication(values: z.infer<typeof CreateApplicationSchema>) {
-    createNewApplication(orgName, values)
+  async function handleCreateApplication(values: z.infer<typeof CreateFormSchema>) {
+    createNewForm(orgName, values)
       .then((res) => {
         if (res.success) {
           applicationCreationSuccessToast(res.success || 'Application created!')
@@ -257,7 +257,7 @@ export default function CreateNewApplicationButton({ client }: CreateNewApplicat
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {Object.values(ApplicationRoleTypes).map((role) => (
+                        {Object.values(FormRoleTypes).map((role) => (
                           <SelectItem key={role} value={role}>
                             {role.charAt(0).toUpperCase() + role.slice(1).toLowerCase()}
                           </SelectItem>

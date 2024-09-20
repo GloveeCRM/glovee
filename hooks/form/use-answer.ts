@@ -4,10 +4,10 @@ import { useState } from 'react'
 
 import { File } from '@/lib/types/file'
 import { uploadFileToS3 } from '@/lib/utils/s3'
-import { fetchApplicationAnswerFileUploadIntent } from '@/lib/data/application'
-import { saveAnswer } from '@/lib/actions/application'
+import { fetchFormAnswerFileUploadIntent } from '@/lib/data/form'
+import { saveAnswer } from '@/lib/actions/form'
 import { useOrgContext } from '@/contexts/org-context'
-import { useApplicationContext } from '@/contexts/application-context'
+import { useFormContext } from '@/contexts/form-context'
 
 interface Answer {
   text?: string
@@ -18,7 +18,7 @@ interface Answer {
 
 export default function useAnswer(questionID: number, initialAnswer: Answer) {
   const { orgName } = useOrgContext()
-  const { applicationID } = useApplicationContext()
+  const { formID } = useFormContext()
   const [answer, setAnswer] = useState<Answer>(initialAnswer)
   const [message, setMessage] = useState<string>('')
 
@@ -48,9 +48,9 @@ export default function useAnswer(questionID: number, initialAnswer: Answer) {
       size: file.size,
     } as File
 
-    const uploadIntent = await fetchApplicationAnswerFileUploadIntent(
+    const uploadIntent = await fetchFormAnswerFileUploadIntent(
       orgName,
-      applicationID,
+      formID,
       questionID,
       fileToUpload
     )

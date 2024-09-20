@@ -7,7 +7,7 @@ import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
 import { DateInputQuestionType } from '@/lib/types/qusetion'
 import { MONTHS } from '@/lib/constants/date'
 import { compareDates, daysInMonth } from '@/lib/functions/date'
-import useAnswer from '@/hooks/application/use-answer'
+import useAnswer from '@/hooks/form/use-answer'
 
 interface DateInputQuestionProps {
   question: DateInputQuestionType

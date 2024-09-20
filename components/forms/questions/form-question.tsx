@@ -20,15 +20,12 @@ import DateInputQuestion from './date-input-question/date-input-question'
 import SelectQuestion from './select-question/select-question'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 
-interface ApplicationQuestionProps {
+interface FormQuestionProps {
   question: QuestionType
   viewOnly?: boolean
 }
 
-export default function ApplicationQuestion({
-  question,
-  viewOnly = false,
-}: ApplicationQuestionProps) {
+export default function FormQuestion({ question, viewOnly = false }: FormQuestionProps) {
   return (
     <div className="flex flex-col gap-[10px] p-[4px] text-[14px]">
       <div className="flex justify-between">

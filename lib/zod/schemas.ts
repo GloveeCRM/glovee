@@ -12,7 +12,7 @@ export const CreateClientSchema = z.object({
   email: z.string().min(1, { message: 'Email is required' }).email(),
 })
 
-export const CreateApplicationSchema = z.object({
+export const CreateFormSchema = z.object({
   clientID: z.number().int().positive({ message: 'Client is required' }),
   role: z.string().min(1, { message: 'Role is required' }),
   applicantFirstName: z.string().min(1, { message: 'First name is required' }),

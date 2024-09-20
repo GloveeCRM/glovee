@@ -4,7 +4,7 @@ import { ImSpinner2 } from 'react-icons/im'
 import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
 
 import { RadioQuestionType } from '@/lib/types/qusetion'
-import useAnswer from '@/hooks/application/use-answer'
+import useAnswer from '@/hooks/form/use-answer'
 
 interface RadioQuestionProps {
   question: RadioQuestionType

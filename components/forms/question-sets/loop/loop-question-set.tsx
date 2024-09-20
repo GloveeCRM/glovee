@@ -3,14 +3,14 @@
 import { FiPlus } from 'react-icons/fi'
 import { BiTrash } from 'react-icons/bi'
 
-import { ApplicationQuestionSetType } from '@/lib/types/application'
-import { createQuestionSetAndQuestions, deleteQuestionSet } from '@/lib/actions/application'
+import { FormQuestionSetType } from '@/lib/types/form'
+import { createQuestionSetAndQuestions, deleteQuestionSet } from '@/lib/actions/form'
 import { useOrgContext } from '@/contexts/org-context'
 import { Separator } from '@/components/ui/separator'
-import ApplicationQuestionSet from '../application-question-set'
+import FormQuestionSet from '../form-question-set'
 
 interface LoopQuestionSetProps {
-  questionSet: ApplicationQuestionSetType
+  questionSet: FormQuestionSetType
   viewOnly?: boolean
 }
 
@@ -31,7 +31,7 @@ export default function LoopQuestionSet({ questionSet, viewOnly = false }: LoopQ
             {questionSets.map((qs) => (
               <div key={qs.id}>
                 <div className="flex gap-[6px]">
-                  <ApplicationQuestionSet key={qs.id} questionSet={qs} />
+                  <FormQuestionSet key={qs.id} questionSet={qs} />
                   {qs.position !== 0 && (
                     <div
                       className="flex cursor-pointer items-center rounded bg-red-500/30 p-[4px] text-red-700 transition duration-150 hover:bg-red-500/50 hover:text-red-900"
@@ -54,11 +54,11 @@ export default function LoopQuestionSet({ questionSet, viewOnly = false }: LoopQ
   )
 }
 
-function RepeatQuestionSet({ questionSet }: { questionSet: ApplicationQuestionSetType }) {
+function RepeatQuestionSet({ questionSet }: { questionSet: FormQuestionSetType }) {
   const { orgName } = useOrgContext()
 
   function handleClick() {
-    let questionSetToClone = questionSet.questionSets?.[0] as ApplicationQuestionSetType
+    let questionSetToClone = questionSet.questionSets?.[0] as FormQuestionSetType
     questionSetToClone = { ...questionSetToClone, position: questionSet.questionSets?.length || 0 }
     if (questionSetToClone) {
       createQuestionSetAndQuestions(orgName, questionSetToClone)

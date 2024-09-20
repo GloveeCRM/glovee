@@ -1,4 +1,4 @@
-import ClientApplicationsWrapper from '@/components/client/client-applications-wrapper'
+import ClientFormsWrapper from '@/components/client/client-forms-wrapper'
 
 interface ClientApplicationsPageParams {
   orgName: string
@@ -13,7 +13,7 @@ export default function ClientApplicationsPage({ params }: ClientApplicationsPag
 
   return (
     <div className="">
-      <ClientApplicationsWrapper orgName={orgName} />
+      <ClientFormsWrapper orgName={orgName} />
     </div>
   )
 }

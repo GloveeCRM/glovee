@@ -4,14 +4,14 @@ import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 
 import { GLOVEE_API_URL } from '@/lib/constants/api'
-import { CreateApplicationSchema } from '@/lib/zod/schemas'
+import { CreateFormSchema } from '@/lib/zod/schemas'
 import { getSession, getSessionPayload } from '@/lib/auth/session'
 import { File } from '../types/file'
-import { ApplicationQuestionSetType, ApplicationStatusTypes } from '../types/application'
+import { FormQuestionSetType, FormStatusTypes } from '../types/form'
 
-export async function createNewApplication(
+export async function createNewForm(
   orgName: string,
-  values: z.infer<typeof CreateApplicationSchema>
+  values: z.infer<typeof CreateFormSchema>
 ): Promise<{ success?: string; error?: string }> {
   const { clientID, role, applicantFirstName, applicantLastName, templateID } = values
 
@@ -46,8 +46,8 @@ export async function createNewApplication(
   }
 }
 
-export async function submitApplicationById(
-  applicationID: number,
+export async function submitFormById(
+  formID: number,
   orgName: string
 ): Promise<{ success?: string; error?: string }> {
   try {
@@ -56,14 +56,14 @@ export async function submitApplicationById(
     const clientID = payload?.user?.id || 0
 
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/form/client/${clientID}/form/${applicationID}/set-status`,
+      `${GLOVEE_API_URL}/v1/${orgName}/form/client/${clientID}/form/${formID}/set-status`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
         },
-        body: JSON.stringify({ status: ApplicationStatusTypes.SUBMITTED }),
+        body: JSON.stringify({ status: FormStatusTypes.SUBMITTED }),
       }
     )
 
@@ -76,7 +76,7 @@ export async function submitApplicationById(
       return { success: 'Application submitted!' }
     }
   } catch (error) {
-    return { error: 'Failed to submit application!' }
+    return { error: 'Failed to submit form!' }
   }
 }
 
@@ -140,7 +140,7 @@ export async function saveAnswer({
 
 export async function createQuestionSetAndQuestions(
   orgName: string,
-  questionSet: ApplicationQuestionSetType
+  questionSet: FormQuestionSetType
 ): Promise<{ success?: string; error?: string }> {
   const accessToken = await getSession()
   const payload = await getSessionPayload()

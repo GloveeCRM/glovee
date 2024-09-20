@@ -2,7 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
-import { searchApplications } from '@/lib/data/application'
+import { searchForms } from '@/lib/data/form'
 import {
   Table,
   TableBody,
@@ -26,7 +26,7 @@ export default async function ApplicationsTable({
   currentPage = 1,
 }: ApplicationsTableProps) {
   const totalRowsPerPage = 14
-  const { applications, total } = await searchApplications(
+  const { forms, total } = await searchForms(
     orgName,
     0,
     query,
@@ -48,37 +48,37 @@ export default async function ApplicationsTable({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {applications && applications.length > 0 ? (
-            applications.map((application) => (
-              <TableRow key={application.id}>
-                <TableCell>{application.id}</TableCell>
+          {forms && forms.length > 0 ? (
+            forms.map((form) => (
+              <TableRow key={form.id}>
+                <TableCell>{form.id}</TableCell>
                 <TableCell>
-                  <Link href={`/admin/clients/${application.client.id}`}>
+                  <Link href={`/admin/clients/${form.client.id}`}>
                     <div className="flex w-max items-center gap-[6px] hover:text-blue-500">
                       <Image
-                        src={application.client.avatarURL || DEFAULT_MALE_CLIENT_LOGO_URL}
+                        src={form.client.avatarURL || DEFAULT_MALE_CLIENT_LOGO_URL}
                         alt=""
                         width={30}
                         height={30}
                         className="rounded-full"
                       />
                       <div>
-                        {application.client.firstName} {application.client.lastName}
+                        {form.client.firstName} {form.client.lastName}
                       </div>
                     </div>
                   </Link>
                 </TableCell>
-                <TableCell className="text-nowrap">{application.templateName}</TableCell>
+                <TableCell className="text-nowrap">{form.templateName}</TableCell>
                 <TableCell>
                   <Badge variant="secondary" className="gap-[2px]">
-                    <span className="font-semibold">{application.role}</span>
+                    <span className="font-semibold">{form.role}</span>
                     <span className="truncate">
-                      ({application.applicant.firstName} {application.applicant.lastName})
+                      ({form.applicant.firstName} {form.applicant.lastName})
                     </span>
                   </Badge>
                 </TableCell>
                 <TableCell>
-                  <Badge>{application.status}</Badge>
+                  <Badge>{form.status}</Badge>
                 </TableCell>
               </TableRow>
             ))
@@ -91,7 +91,7 @@ export default async function ApplicationsTable({
           )}
         </TableBody>
       </Table>
-      {applications && applications.length < total && (
+      {forms && forms.length < total && (
         <Pagination currentPage={currentPage} totalPages={totalPages} />
       )}
     </div>

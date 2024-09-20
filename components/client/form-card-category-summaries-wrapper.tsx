@@ -1,17 +1,17 @@
-import { ApplicationCategoryType } from '@/lib/types/application'
-import ApplicationCardCategorySummary from './application-card-category-summary'
+import { FormCategoryType } from '@/lib/types/form'
+import FormCardCategorySummary from './form-card-category-summary'
 
-interface ApplicationCardCategorySummariesWrapperProps {
-  categorySummaries: ApplicationCategoryType[]
+interface FormCardCategorySummariesWrapperProps {
+  categorySummaries: FormCategoryType[]
 }
 
-export default function ApplicationCardCategorySummariesWrapper({
+export default function FormCardCategorySummariesWrapper({
   categorySummaries,
-}: ApplicationCardCategorySummariesWrapperProps) {
+}: FormCardCategorySummariesWrapperProps) {
   return (
     <div className="flex justify-center">
       {categorySummaries.map((categorySummary, index) => (
-        <ApplicationCardCategorySummary
+        <FormCardCategorySummary
           key={categorySummary.id}
           name={categorySummary.name}
           completionRate={categorySummary.completionRate}

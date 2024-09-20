@@ -2,20 +2,17 @@ import Image from 'next/image'
 
 import { getSessionPayload } from '@/lib/auth/session'
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
-import { fetchApplicantInformation } from '@/lib/data/application'
+import { fetchApplicantInformation } from '@/lib/data/form'
 
 interface ApplicantInfoCardProps {
   orgName: string
-  applicationID: number
+  formID: number
 }
 
-export default async function ApplicantInfoCard({
-  orgName,
-  applicationID,
-}: ApplicantInfoCardProps) {
+export default async function ApplicantInfoCard({ orgName, formID }: ApplicantInfoCardProps) {
   const payload = await getSessionPayload()
   const userID = payload?.user.id || 0
-  const applicant = await fetchApplicantInformation(orgName, userID, applicationID)
+  const applicant = await fetchApplicantInformation(orgName, userID, formID)
 
   return (
     <div className="flex items-center gap-[6px] rounded-md bg-n-600 p-[6px]">

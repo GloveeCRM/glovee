@@ -1,14 +1,14 @@
 'use server'
 
-import { ApplicationQuestionSetType, ApplicationType } from '@/lib/types/application'
+import { FormQuestionSetType, FormType } from '@/lib/types/form'
 import { GLOVEE_API_URL } from '@/lib/constants/api'
 import { getSession, getSessionPayload } from '@/lib/auth/session'
 import { File } from '../types/file'
 
-export async function fetchClientApplications(
+export async function fetchClientForms(
   orgName: string,
   clientID: number
-): Promise<ApplicationType[] | null> {
+): Promise<FormType[] | null> {
   const accessToken = await getSession()
   if (!accessToken) {
     return null
@@ -35,16 +35,16 @@ export async function fetchClientApplications(
   }
 }
 
-export async function searchApplications(
+export async function searchForms(
   orgName: string,
   userID: number = 0,
   query: string = '',
   limit: number = 0,
   offset: number = 0
-): Promise<{ applications: ApplicationType[] | null; total: number }> {
+): Promise<{ forms: FormType[] | null; total: number }> {
   const accessToken = await getSession()
   if (!accessToken) {
-    return { applications: null, total: 0 }
+    return { forms: null, total: 0 }
   }
 
   try {
@@ -61,20 +61,16 @@ export async function searchApplications(
 
     const data = await response.json()
     if (data.status === 'error') {
-      return { applications: null, total: 0 }
+      return { forms: null, total: 0 }
     } else {
-      return { applications: data.data.forms, total: data.data.total }
+      return { forms: data.data.forms, total: data.data.total }
     }
   } catch (error) {
-    return { applications: null, total: 0 }
+    return { forms: null, total: 0 }
   }
 }
 
-export async function fetchApplicantInformation(
-  orgName: string,
-  clientID: number,
-  applicationID: number
-) {
+export async function fetchApplicantInformation(orgName: string, clientID: number, formID: number) {
   const accessToken = await getSession()
   if (!accessToken) {
     return null
@@ -82,7 +78,7 @@ export async function fetchApplicantInformation(
 
   try {
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/form/client/${clientID}/form/${applicationID}/applicant`,
+      `${GLOVEE_API_URL}/v1/${orgName}/form/client/${clientID}/form/${formID}/applicant`,
       {
         method: 'GET',
         headers: {
@@ -99,10 +95,7 @@ export async function fetchApplicantInformation(
   }
 }
 
-export async function fetchFullApplication(
-  applicationID: number,
-  orgName: string
-): Promise<ApplicationType | null> {
+export async function fetchFullForm(formID: number, orgName: string): Promise<FormType | null> {
   const accessToken = await getSession()
   if (!accessToken) {
     return null
@@ -112,7 +105,7 @@ export async function fetchFullApplication(
 
   try {
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/form/client/${clientID}/full-form/${applicationID}`,
+      `${GLOVEE_API_URL}/v1/${orgName}/form/client/${clientID}/full-form/${formID}`,
       {
         method: 'GET',
         headers: {
@@ -129,10 +122,10 @@ export async function fetchFullApplication(
   }
 }
 
-export async function fetchClientApplicationIncludingCategoriesAndSections(
+export async function fetchClientFormIncludingCategoriesAndSections(
   orgName: string,
-  applicationID: number
-): Promise<ApplicationType | null> {
+  formID: number
+): Promise<FormType | null> {
   const accessToken = await getSession()
   if (!accessToken) {
     return null
@@ -142,7 +135,7 @@ export async function fetchClientApplicationIncludingCategoriesAndSections(
 
   try {
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/form/client/${clientID}/form/${applicationID}/including-categories-and-sections`,
+      `${GLOVEE_API_URL}/v1/${orgName}/form/client/${clientID}/form/${formID}/including-categories-and-sections`,
       {
         method: 'GET',
         headers: {
@@ -163,7 +156,7 @@ export async function fetchSectionQuestionSets(
   orgName: string,
   clientID: number,
   sectionID: number
-): Promise<ApplicationQuestionSetType[]> {
+): Promise<FormQuestionSetType[]> {
   const accessToken = await getSession()
   if (!accessToken) {
     return []
@@ -188,9 +181,9 @@ export async function fetchSectionQuestionSets(
   }
 }
 
-export async function fetchApplicationAnswerFileUploadIntent(
+export async function fetchFormAnswerFileUploadIntent(
   orgName: string,
-  applicationID: number,
+  formID: number,
   questionID: number,
   file: File
 ): Promise<{
@@ -207,7 +200,7 @@ export async function fetchApplicationAnswerFileUploadIntent(
     }
 
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/form/client/${userID}/form/${applicationID}/question/${questionID}/create-form-answer-file-upload-intent`,
+      `${GLOVEE_API_URL}/v1/${orgName}/form/client/${userID}/form/${formID}/question/${questionID}/create-form-answer-file-upload-intent`,
       {
         method: 'POST',
         headers: {

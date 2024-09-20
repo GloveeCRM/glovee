@@ -3,19 +3,19 @@
 import { Fragment, useEffect } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
-import { ApplicationCategoryType } from '@/lib/types/application'
+import { FormCategoryType } from '@/lib/types/form'
 import { Separator } from '@/components/ui/separator'
-import ClientApplicationCategoryCard from './client-application-category-card'
+import ClientFormCategoryCard from './client-form-category-card'
 
-interface ApplicationCategoriesCardWrapperProps {
-  categories: ApplicationCategoryType[]
+interface FormCategoriesCardWrapperProps {
+  categories: FormCategoryType[]
   type: 'inProgress' | 'submitted'
 }
 
-export default function ApplicationCategoriesCardWrapper({
+export default function FormCategoriesCardWrapper({
   categories,
   type,
-}: ApplicationCategoriesCardWrapperProps) {
+}: FormCategoriesCardWrapperProps) {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const { replace } = useRouter()
@@ -51,9 +51,9 @@ export default function ApplicationCategoriesCardWrapper({
 
   return (
     <div className="flex h-full flex-col gap-[4px] overflow-y-auto">
-      {categories.map((category: ApplicationCategoryType) => (
+      {categories.map((category: FormCategoryType) => (
         <Fragment key={category.id}>
-          <ClientApplicationCategoryCard
+          <ClientFormCategoryCard
             category={category}
             isExpanded={expandedCategory.id === category.id}
             onClick={handleCategoryClick}

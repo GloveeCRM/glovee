@@ -4,14 +4,17 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FaRegCircleCheck } from 'react-icons/fa6'
 import { FaRegCircle } from 'react-icons/fa6'
 
-import { ApplicationSectionType } from '@/lib/types/application'
+import { FormSectionType } from '@/lib/types/form'
 
-interface ClientSidebarSectionCardProps {
-  section: ApplicationSectionType
+interface ClientFormSidebarSectionCardProps {
+  section: FormSectionType
   type: 'inProgress' | 'submitted'
 }
 
-export default function ClientSidebarSectionCard({ section, type }: ClientSidebarSectionCardProps) {
+export default function ClientFormSidebarSectionCard({
+  section,
+  type,
+}: ClientFormSidebarSectionCardProps) {
   const searchParams = useSearchParams()
   const selectedSectionId = searchParams.get('section') || '0'
   const pathname = usePathname()

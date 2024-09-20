@@ -1,7 +1,7 @@
-import { ApplicationQuestionSetType } from '@/lib/types/application'
-import { fetchSectionQuestionSets } from '@/lib/data/application'
+import { FormQuestionSetType } from '@/lib/types/form'
+import { fetchSectionQuestionSets } from '@/lib/data/form'
 import { getSessionPayload } from '@/lib/auth/session'
-import ApplicationQuestionSet from '@/components/forms/question-sets/application-question-set'
+import FormQuestionSet from '@/components/forms/question-sets/form-question-set'
 
 export default async function ClientApplicationPage({
   params,
@@ -20,7 +20,7 @@ export default async function ClientApplicationPage({
 }
 
 interface QuestionSetWrapperProps {
-  questionSets: ApplicationQuestionSetType[]
+  questionSets: FormQuestionSetType[]
 }
 
 function QuestionSetWrapper({ questionSets }: QuestionSetWrapperProps) {
@@ -32,7 +32,7 @@ function QuestionSetWrapper({ questionSets }: QuestionSetWrapperProps) {
             key={questionSet.id}
             className="flex w-full flex-col gap-[8px] rounded-lg border border-n-400 p-[8px]"
           >
-            <ApplicationQuestionSet key={questionSet.id} questionSet={questionSet} />
+            <FormQuestionSet key={questionSet.id} questionSet={questionSet} />
           </div>
         ))
       ) : (

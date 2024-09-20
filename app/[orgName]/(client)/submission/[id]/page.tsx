@@ -3,7 +3,7 @@ import { BsDot } from 'react-icons/bs'
 import { LuDownload, LuFileText } from 'react-icons/lu'
 
 import { File } from '@/lib/types/file'
-import { ApplicationQuestionSetType } from '@/lib/types/application'
+import { FormQuestionSetType } from '@/lib/types/form'
 import {
   CheckboxQuestionOptionType,
   isCheckboxQuestionType,
@@ -17,7 +17,7 @@ import {
   RadioQuestionOptionType,
   SelectQuestionOptionType,
 } from '@/lib/types/qusetion'
-import { fetchSectionQuestionSets } from '@/lib/data/application'
+import { fetchSectionQuestionSets } from '@/lib/data/form'
 import { getSessionPayload } from '@/lib/auth/session'
 import { Separator } from '@/components/ui/separator'
 
@@ -143,7 +143,7 @@ function OptionAnswers({
   )
 }
 
-function extractQuestionsFromQuestionSets(questionSets: ApplicationQuestionSetType[]) {
+function extractQuestionsFromQuestionSets(questionSets: FormQuestionSetType[]) {
   const questions: QuestionType[] = []
   questionSets.forEach((qset) => {
     qset.questions?.forEach((q) => {
