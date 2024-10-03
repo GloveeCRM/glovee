@@ -34,7 +34,7 @@ export default function ClientFormSummaryCard({ form }: ClientFormSummaryCardPro
         <div className="mt-[16px] flex justify-between gap-[8px]">
           <div className="w-[150px]">
             {form.status === FormStatusTypes.SUBMITTED ? (
-              <Link href={`/submission/${form.id}`}>
+              <Link href={`/application/${form.applicationID}/submission/${form.id}`}>
                 <Button size="default">
                   <div className="flex items-center justify-center gap-[8px]">
                     <span>View Submission</span>
@@ -43,7 +43,7 @@ export default function ClientFormSummaryCard({ form }: ClientFormSummaryCardPro
                 </Button>
               </Link>
             ) : (
-              <Link href={`/application/${form.id}`}>
+              <Link href={`/application/${form.applicationID}/form/${form.id}`}>
                 <Button size="default">
                   <div className="flex items-center justify-center gap-[8px]">
                     <span>Open Application</span>

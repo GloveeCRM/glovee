@@ -5,7 +5,6 @@ import ClientApplicationSummaryCard from './client-application-summary-card'
 export default async function ClientApplicationsWrapper() {
   const userID = await getSessionUserID()
   const applications = await fetchApplicationsByUserID(userID)
-  console.log(applications)
 
   const hasApplications = applications && applications?.length > 0
 
