@@ -22,6 +22,7 @@ export enum FormRoleTypes {
 
 export type FormType = {
   id: number
+  applicationID: number
   organizationID: number
   client: UserType
   role: FormRoleTypes

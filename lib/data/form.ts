@@ -2,8 +2,9 @@
 
 import { FormQuestionSetType, FormType } from '@/lib/types/form'
 import { GLOVEE_API_URL } from '@/lib/constants/api'
-import { getSession, getSessionPayload } from '@/lib/auth/session'
+import { getSession, getSessionPayload, getSessionUserID } from '@/lib/auth/session'
 import { File } from '../types/file'
+import { getCurrentOrgName } from '../utils/server'
 
 export async function fetchClientForms(
   orgName: string,
@@ -219,6 +220,38 @@ export async function fetchFormAnswerFileUploadIntent(
       return null
     } else {
       return data.data
+    }
+  } catch (error) {
+    return null
+  }
+}
+
+export async function fetchFormsByApplicationID(applicationID: number): Promise<FormType[] | null> {
+  const accessToken = await getSession()
+  if (!accessToken) {
+    return null
+  }
+
+  const userID = await getSessionUserID()
+  const orgName = await getCurrentOrgName()
+
+  try {
+    const response = await fetch(
+      `${GLOVEE_API_URL}/v1/${orgName}/form/client/${userID}/application/${applicationID}/forms`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    )
+
+    const data = await response.json()
+    if (data.status === 'error') {
+      return null
+    } else {
+      return data.data.forms
     }
   } catch (error) {
     return null

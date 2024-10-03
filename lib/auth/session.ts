@@ -34,3 +34,8 @@ export async function getSessionPayload() {
 export async function removeSession() {
   cookies().set('session', '', { expires: new Date(0) })
 }
+
+export async function getSessionUserID(): Promise<number> {
+  const payload = await getSessionPayload()
+  return payload?.user?.id || 0
+}
