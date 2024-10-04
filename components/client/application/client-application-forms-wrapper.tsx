@@ -1,6 +1,6 @@
 import { FormRoleTypes } from '@/lib/types/form'
 import { fetchFormsByApplicationID } from '@/lib/data/form'
-import ClientFormSummaryCard from './client-form-summary-card'
+import ClientFormSummaryCard from '../client-form-summary-card'
 
 interface ClientApplicationFormsWrapperProps {
   applicationID: number
@@ -17,12 +17,12 @@ export default async function ClientApplicationFormsWrapper({
   const dependentForms = forms?.filter((form) => form.role !== FormRoleTypes.MAIN)
 
   return !hasForms ? (
-    <div className="flex flex-1 flex-col items-center justify-center text-[20px] text-n-400">
+    <div className="flex h-full flex-1 flex-col items-center justify-center text-[20px] text-n-500">
       No forms are assigned to you yet
     </div>
   ) : (
     <div>
-      {mainForms && (
+      {mainForms && mainForms.length > 0 && (
         <div className="mb-[20px]">
           <h3 className="mb-[12px] font-medium">Main Applicant</h3>
           {mainForms.map((form) => (
@@ -32,7 +32,7 @@ export default async function ClientApplicationFormsWrapper({
           ))}
         </div>
       )}
-      {dependentForms && (
+      {dependentForms && dependentForms.length > 0 && (
         <div>
           <h3 className="mb-[12px] font-medium">Dependents</h3>
           {dependentForms.map((form) => (

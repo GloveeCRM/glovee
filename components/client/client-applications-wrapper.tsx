@@ -1,6 +1,6 @@
 import { getSessionUserID } from '@/lib/auth/session'
 import { fetchApplicationsByUserID } from '@/lib/data/application'
-import ClientApplicationSummaryCard from './client-application-summary-card'
+import ClientApplicationSummaryCard from './application/client-application-summary-card'
 
 export default async function ClientApplicationsWrapper() {
   const userID = await getSessionUserID()
@@ -14,14 +14,11 @@ export default async function ClientApplicationsWrapper() {
     </div>
   ) : (
     <div>
-      <div className="mb-[20px]">
-        <h3 className="mb-[12px] font-medium">Main Applicant</h3>
-        {applications.map((application) => (
-          <div className="mb-[16px] px-[8px]" key={application.applicationID}>
-            <ClientApplicationSummaryCard application={application} />
-          </div>
-        ))}
-      </div>
+      {applications.map((application) => (
+        <div className="mb-[16px]" key={application.applicationID}>
+          <ClientApplicationSummaryCard application={application} />
+        </div>
+      ))}
     </div>
   )
 }

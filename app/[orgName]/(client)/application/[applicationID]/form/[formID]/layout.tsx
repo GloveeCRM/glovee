@@ -33,7 +33,7 @@ export default async function ApplicationLayout({
 
   return (
     <FormContextProvider formID={formID}>
-      <div id="client-application-layout" className="flex overflow-hidden">
+      <div id="client-form-layout" className="flex overflow-hidden">
         <ClientFormSidebar
           orgName={orgName}
           applicationID={applicationID}
