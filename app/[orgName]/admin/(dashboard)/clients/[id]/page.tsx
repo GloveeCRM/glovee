@@ -36,7 +36,7 @@ export default async function ClientPage({ params, searchParams }: ClientsPagePr
       <div className="mt-[20px] flex items-end justify-end">
         <CreateNewApplicationButton client={client} />
       </div>
-      <ClientApplicationsTable orgName={orgName} clientID={clientID} currentPage={currentPage} />
+      <ClientApplicationsTable clientID={clientID} currentPage={currentPage} />
     </div>
   )
 }

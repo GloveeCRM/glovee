@@ -26,7 +26,7 @@ export type FormType = {
   organizationID: number
   client: UserType
   role: FormRoleTypes
-  templateName: string
+  formName: string
   applicant: Applicant
   status: FormStatusTypes
   completionRate: number

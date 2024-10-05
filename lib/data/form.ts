@@ -5,52 +5,39 @@ import { GLOVEE_API_URL } from '@/lib/constants/api'
 import { getSession, getSessionPayload, getSessionUserID } from '@/lib/auth/session'
 import { File } from '../types/file'
 import { getCurrentOrgName } from '../utils/server'
+import { keysToCamelCase } from '../utils/json'
 
-export async function fetchClientForms(
-  orgName: string,
-  clientID: number
-): Promise<FormType[] | null> {
-  const accessToken = await getSession()
-  if (!accessToken) {
-    return null
-  }
-
-  try {
-    const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/form/client/${clientID}/forms`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`,
-      },
-    })
-
-    const data = await response.json()
-
-    if (data.status === 'error') {
-      return null
-    } else {
-      return data.data.forms
-    }
-  } catch (error) {
-    return null
-  }
+interface SearchFormsInput {
+  filters?: { formID?: number; userID?: number; applicationID?: number }
+  query?: string
+  limit?: number
+  offset?: number
 }
 
-export async function searchForms(
-  orgName: string,
-  userID: number = 0,
-  query: string = '',
-  limit: number = 0,
-  offset: number = 0
-): Promise<{ forms: FormType[] | null; total: number }> {
+export async function searchForms({
+  filters = { formID: 0, userID: 0, applicationID: 0 },
+  query = '',
+  limit = 0,
+  offset = 0,
+}: SearchFormsInput): Promise<{ forms: FormType[] | null; totalCount: number }> {
   const accessToken = await getSession()
   if (!accessToken) {
-    return { forms: null, total: 0 }
+    return { forms: null, totalCount: 0 }
   }
+
+  const orgName = await getCurrentOrgName()
+
+  const queryParams = new URLSearchParams()
+  queryParams.append('user_id', filters.userID?.toString() || '')
+  queryParams.append('application_id', filters.applicationID?.toString() || '')
+  queryParams.append('form_id', filters.formID?.toString() || '')
+  queryParams.append('search_query', query)
+  queryParams.append('limit', limit.toString())
+  queryParams.append('offset', offset.toString())
 
   try {
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/form/admin/search?userID=${userID}&query=${query}&limit=${limit}&offset=${offset}`,
+      `${GLOVEE_API_URL}/v1/${orgName}/form/search?${queryParams.toString()}`,
       {
         method: 'GET',
         headers: {
@@ -61,13 +48,14 @@ export async function searchForms(
     )
 
     const data = await response.json()
-    if (data.status === 'error') {
-      return { forms: null, total: 0 }
+    const camelData = keysToCamelCase(data)
+    if (camelData.status === 'error') {
+      return { forms: null, totalCount: 0 }
     } else {
-      return { forms: data.data.forms, total: data.data.total }
+      return { forms: camelData.data.forms, totalCount: camelData.data.total }
     }
   } catch (error) {
-    return { forms: null, total: 0 }
+    return { forms: null, totalCount: 0 }
   }
 }
 
@@ -134,9 +122,12 @@ export async function fetchClientFormIncludingCategoriesAndSections(
   const payload = await getSessionPayload()
   const clientID = payload?.user.id || 0
 
+  const queryParams = new URLSearchParams()
+  queryParams.append('user_id', clientID.toString())
+
   try {
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/form/client/${clientID}/form/${formID}/including-categories-and-sections`,
+      `${GLOVEE_API_URL}/v1/${orgName}/form/${formID}/including-categories-and-sections?${queryParams.toString()}`,
       {
         method: 'GET',
         headers: {
@@ -220,38 +211,6 @@ export async function fetchFormAnswerFileUploadIntent(
       return null
     } else {
       return data.data
-    }
-  } catch (error) {
-    return null
-  }
-}
-
-export async function fetchFormsByApplicationID(applicationID: number): Promise<FormType[] | null> {
-  const accessToken = await getSession()
-  if (!accessToken) {
-    return null
-  }
-
-  const userID = await getSessionUserID()
-  const orgName = await getCurrentOrgName()
-
-  try {
-    const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/form/client/${userID}/application/${applicationID}/forms`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    )
-
-    const data = await response.json()
-    if (data.status === 'error') {
-      return null
-    } else {
-      return data.data.forms
     }
   } catch (error) {
     return null

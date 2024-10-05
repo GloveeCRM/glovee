@@ -6,25 +6,25 @@ import { FaFileLines, FaFilePen } from 'react-icons/fa6'
 import { FormStatusTypes, FormType } from '@/lib/types/form'
 import { Button } from '@/components/ui/button'
 import ProgressIndicatorRing from '@/components/ui/progress-indicator-ring'
-import FormSummaryCardApplicantInfo from './form-summary-card-applicant-info'
 import FormCardCategorySummariesWrapper from './form-card-category-summaries-wrapper'
 import SubmitFormDialog from './submit-application-dialog'
+import { Badge } from '../ui/badge'
 
 interface ClientFormSummaryCardProps {
   form: FormType
 }
 
 export default function ClientFormSummaryCard({ form }: ClientFormSummaryCardProps) {
+  console.log(JSON.stringify(form, null, 2))
   return (
     <div className="items-center justify-between rounded-lg border border-n-500 p-[10px]">
       <div>
         <div className="flex justify-between">
-          <FormSummaryCardApplicantInfo
-            applicantFirstName={form.applicant.firstName}
-            applicantLastName={form.applicant.lastName}
-            role={form.role}
-          />
           <div>
+            <span className="font-semi-bold text-[16px]">{form.formName}</span>
+          </div>
+          <div className="flex items-center gap-[8px]">
+            <Badge size="lg">{form.status}</Badge>
             <ProgressIndicatorRing completionRate={form.completionRate} />
           </div>
         </div>

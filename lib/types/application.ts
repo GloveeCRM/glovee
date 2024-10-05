@@ -6,4 +6,5 @@ export type ApplicationType = {
   createdAt: string
   updatedAt: string
   createdBy: UserType
+  owner: UserType
 }

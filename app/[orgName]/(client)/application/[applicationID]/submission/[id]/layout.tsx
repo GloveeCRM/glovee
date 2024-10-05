@@ -34,6 +34,7 @@ export default async function SubmissionLayout({
       <div id="client-submission-layout" className="flex overflow-hidden">
         <ClientFormSidebar
           orgName={orgName}
+          applicationID={applicationID}
           formID={applicationID}
           categories={categories}
           type="submitted"

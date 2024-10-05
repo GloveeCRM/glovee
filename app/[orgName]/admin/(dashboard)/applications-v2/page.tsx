@@ -1,5 +1,5 @@
-import ApplicationPageToolbar from '@/components/admin/dashboard/applications/applications-page-toolbar'
-import ApplicationsTable from '@/components/admin/dashboard/applications/applications-table'
+import ApplicationsTable from '@/components/admin/dashboard/applications-v2/applications-table'
+import ApplicationPageToolbar from '@/components/admin/dashboard/applications-v2/applications-page-toolbar'
 
 interface ApplicationsPageSearchParams {
   query?: string

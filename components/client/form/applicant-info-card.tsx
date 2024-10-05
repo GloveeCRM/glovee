@@ -24,8 +24,8 @@ export default async function ApplicantInfoCard({ orgName, formID }: ApplicantIn
         className="rounded-full"
       />
       <div>
-        <div className="text-[12px] font-semibold text-n-100">{`${applicant.firstName} ${applicant.lastName}`}</div>
-        <div className="text-[9px] text-n-300">{applicant.email}</div>
+        <div className="text-[12px] font-semibold text-n-100">{`${applicant?.firstName} ${applicant?.lastName}`}</div>
+        <div className="text-[9px] text-n-300">{applicant?.email}</div>
       </div>
     </div>
   )

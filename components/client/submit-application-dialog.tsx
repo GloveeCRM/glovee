@@ -16,7 +16,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import FormSummaryCardApplicantInfo from './form-summary-card-applicant-info'
 
 interface SubmitFormDialogProps {
   form: FormType
@@ -68,13 +67,6 @@ export default function SubmitFormDialog({ form }: SubmitFormDialogProps) {
         <DialogHeader>
           <DialogTitle>Are you sure you want to submit this form?</DialogTitle>
         </DialogHeader>
-        <div className="mt-[8px]">
-          <FormSummaryCardApplicantInfo
-            applicantFirstName={form.applicant.firstName}
-            applicantLastName={form.applicant.lastName}
-            role={form.role}
-          />
-        </div>
         <div className="mt-[16px] flex gap-[8px]">
           <DialogClose asChild>
             <Button variant="secondary" fullWidth={true}>

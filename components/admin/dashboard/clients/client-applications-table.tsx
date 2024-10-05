@@ -11,25 +11,22 @@ import { Pagination } from '@/components/ui/pagination'
 import { Badge } from '@/components/ui/badge'
 
 interface ClientApplicationsTableProps {
-  orgName: string
   clientID: number
   currentPage?: number
 }
 
 export default async function ClientApplicationsTable({
-  orgName,
   clientID,
   currentPage = 1,
 }: ClientApplicationsTableProps) {
   const totalRowsPerPage = 12
-  const { forms, total } = await searchForms(
-    orgName,
-    clientID,
-    '',
-    totalRowsPerPage,
-    currentPage * totalRowsPerPage - totalRowsPerPage
-  )
-  const totalPages = Math.ceil(total / totalRowsPerPage)
+  const offset = currentPage * totalRowsPerPage - totalRowsPerPage
+  const { forms, totalCount } = await searchForms({
+    filters: { userID: clientID },
+    limit: totalRowsPerPage,
+    offset: offset,
+  })
+  const totalPages = Math.ceil(totalCount / totalRowsPerPage)
 
   return (
     <div className="flex h-full flex-col overflow-auto">
@@ -47,12 +44,12 @@ export default async function ClientApplicationsTable({
             forms.map((form) => (
               <TableRow key={form.id} className="h-[42px]">
                 <TableCell>{form.id}</TableCell>
-                <TableCell className="truncate">{form.templateName}</TableCell>
+                <TableCell className="truncate">{form.formName}</TableCell>
                 <TableCell>
                   <Badge variant="secondary" className="gap-[2px]">
                     <span className="font-semibold">{form.role}</span>
                     <span className="truncate">
-                      ({form.applicant.firstName} {form.applicant.lastName})
+                      ({form.applicant?.firstName} {form.applicant?.lastName})
                     </span>
                   </Badge>
                 </TableCell>
@@ -70,7 +67,7 @@ export default async function ClientApplicationsTable({
           )}
         </TableBody>
       </Table>
-      {forms && forms.length < total && (
+      {forms && forms.length < totalCount && (
         <Pagination currentPage={currentPage} totalPages={totalPages} />
       )}
     </div>
