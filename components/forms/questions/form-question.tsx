@@ -30,26 +30,26 @@ export default function FormQuestion({ question, viewOnly = false }: FormQuestio
     <div className="flex flex-col gap-[10px] p-[4px] text-[14px]">
       <div className="flex justify-between">
         <div className="relative w-[calc(100%-50px)]">
-          <span>{question.prompt}</span>
-          {question.isRequired && (
+          <span>{question?.prompt}</span>
+          {question?.isRequired && (
             <span className="absolute mt-[-6px] text-[24px] text-[red]">*</span>
           )}
-          {question.helperText && (
+          {question?.helperText && (
             <Popover>
               <PopoverTrigger asChild>
-                <span className={`absolute ${question.isRequired ? 'ml-[12px]' : 'ml-[6px]'}`}>
+                <span className={`absolute ${question?.isRequired ? 'ml-[12px]' : 'ml-[6px]'}`}>
                   <LiaQuestionCircle className="h-[21px] w-[21px] cursor-pointer text-n-450 data-[state=open]:text-n-800" />
                 </span>
               </PopoverTrigger>
               <PopoverContent side="right" align="start" className="max-w-[340px]">
-                <div className="p-[8px] text-[12px]">{question.helperText}</div>
+                <div className="p-[8px] text-[12px]">{question?.helperText}</div>
               </PopoverContent>
             </Popover>
           )}
         </div>
         <div className="">
           <IoCheckmarkCircle
-            className={`h-[20px] w-[20px] ${question.answer?.isAcceptable ? 'text-g-700' : 'text-n-400'}`}
+            className={`h-[20px] w-[20px] ${question?.answer?.isAcceptable ? 'text-g-700' : 'text-n-400'}`}
           />
         </div>
       </div>

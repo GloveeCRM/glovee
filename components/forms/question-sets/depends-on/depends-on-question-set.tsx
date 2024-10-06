@@ -22,7 +22,7 @@ export default function DependsOnQuestionSet({
 
   return (
     <div className="flex flex-col gap-[12px]">
-      <FormQuestion key={question.id} question={question} viewOnly={viewOnly} />
+      <FormQuestion key={question?.id} question={question} viewOnly={viewOnly} />
       {questionSetsToDisplay && questionSetsToDisplay.length > 0 && (
         <>
           <Separator className="bg-n-400" />

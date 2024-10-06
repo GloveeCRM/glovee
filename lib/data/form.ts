@@ -2,20 +2,32 @@
 
 import { FormQuestionSetType, FormType } from '@/lib/types/form'
 import { GLOVEE_API_URL } from '@/lib/constants/api'
-import { getSession, getSessionPayload, getSessionUserID } from '@/lib/auth/session'
+import { getSession, getSessionPayload } from '@/lib/auth/session'
 import { File } from '../types/file'
 import { getCurrentOrgName } from '../utils/server'
 import { keysToCamelCase } from '../utils/json'
 
 interface SearchFormsInput {
-  filters?: { formID?: number; userID?: number; applicationID?: number }
+  filters?: {
+    formID?: number
+    userID?: number
+    applicationID?: number
+    includeCategories?: boolean
+    includeSections?: boolean
+  }
   query?: string
   limit?: number
   offset?: number
 }
 
 export async function searchForms({
-  filters = { formID: 0, userID: 0, applicationID: 0 },
+  filters = {
+    formID: 0,
+    userID: 0,
+    applicationID: 0,
+    includeCategories: false,
+    includeSections: false,
+  },
   query = '',
   limit = 0,
   offset = 0,
@@ -31,6 +43,8 @@ export async function searchForms({
   queryParams.append('user_id', filters.userID?.toString() || '')
   queryParams.append('application_id', filters.applicationID?.toString() || '')
   queryParams.append('form_id', filters.formID?.toString() || '')
+  queryParams.append('include_categories', filters.includeCategories?.toString() || '')
+  queryParams.append('include_sections', filters.includeSections?.toString() || '')
   queryParams.append('search_query', query)
   queryParams.append('limit', limit.toString())
   queryParams.append('offset', offset.toString())
@@ -49,6 +63,7 @@ export async function searchForms({
 
     const data = await response.json()
     const camelData = keysToCamelCase(data)
+    console.log('camelData', JSON.stringify(camelData, null, 2))
     if (camelData.status === 'error') {
       return { forms: null, totalCount: 0 }
     } else {
@@ -59,15 +74,34 @@ export async function searchForms({
   }
 }
 
-export async function fetchApplicantInformation(orgName: string, clientID: number, formID: number) {
+interface FetchFormQuestionSetsInput {
+  filters: {
+    userID?: number
+    sectionID?: number
+    includeQuestions?: boolean
+    includeAnswers?: boolean
+  }
+}
+
+export async function fetchFormQuestionSets({
+  filters = { userID: 0, sectionID: 0, includeQuestions: false, includeAnswers: false },
+}: FetchFormQuestionSetsInput): Promise<FormQuestionSetType[]> {
   const accessToken = await getSession()
   if (!accessToken) {
-    return null
+    return []
   }
+
+  const orgName = await getCurrentOrgName()
+
+  const queryParams = new URLSearchParams()
+  queryParams.append('user_id', filters.userID?.toString() || '')
+  queryParams.append('section_id', filters.sectionID?.toString() || '')
+  queryParams.append('include_questions', filters.includeQuestions?.toString() || '')
+  queryParams.append('include_answers', filters.includeAnswers?.toString() || '')
 
   try {
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/form/client/${clientID}/form/${formID}/applicant`,
+      `${GLOVEE_API_URL}/v1/${orgName}/form/question-sets?${queryParams.toString()}`,
       {
         method: 'GET',
         headers: {
@@ -78,9 +112,10 @@ export async function fetchApplicantInformation(orgName: string, clientID: numbe
     )
 
     const data = await response.json()
-    return data.data.applicant
+    const camelData = keysToCamelCase(data)
+    return camelData.data.questionSets
   } catch (error) {
-    return null
+    return []
   }
 }
 
@@ -108,68 +143,6 @@ export async function fetchFullForm(formID: number, orgName: string): Promise<Fo
     return data.data.form
   } catch (error) {
     return null
-  }
-}
-
-export async function fetchClientFormIncludingCategoriesAndSections(
-  orgName: string,
-  formID: number
-): Promise<FormType | null> {
-  const accessToken = await getSession()
-  if (!accessToken) {
-    return null
-  }
-  const payload = await getSessionPayload()
-  const clientID = payload?.user.id || 0
-
-  const queryParams = new URLSearchParams()
-  queryParams.append('user_id', clientID.toString())
-
-  try {
-    const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/form/${formID}/including-categories-and-sections?${queryParams.toString()}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    )
-
-    const data = await response.json()
-    return data.data.form
-  } catch (error) {
-    return null
-  }
-}
-
-export async function fetchSectionQuestionSets(
-  orgName: string,
-  clientID: number,
-  sectionID: number
-): Promise<FormQuestionSetType[]> {
-  const accessToken = await getSession()
-  if (!accessToken) {
-    return []
-  }
-
-  try {
-    const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/form/client/${clientID}/form/section/${sectionID}/question-sets`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    )
-
-    const data = await response.json()
-    return data.data.questionSets
-  } catch (error) {
-    return []
   }
 }
 

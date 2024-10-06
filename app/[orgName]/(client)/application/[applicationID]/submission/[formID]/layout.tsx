@@ -1,12 +1,12 @@
 import { redirect } from 'next/navigation'
 
 import { FormStatusTypes } from '@/lib/types/form'
+import { getSessionUserID } from '@/lib/auth/session'
 import { searchForms } from '@/lib/data/form'
 import FormContextProvider from '@/contexts/form-context'
 import ClientFormSidebar from '@/components/client/client-form-sidebar'
-import { getSessionUserID } from '@/lib/auth/session'
 
-interface ApplicationLayoutProps {
+interface SubmissionLayoutProps {
   children: React.ReactNode
   params: {
     applicationID: string
@@ -14,10 +14,10 @@ interface ApplicationLayoutProps {
   }
 }
 
-export default async function ApplicationLayout({
+export default async function SubmissionLayout({
   children,
   params,
-}: Readonly<ApplicationLayoutProps>) {
+}: Readonly<SubmissionLayoutProps>) {
   const userID = await getSessionUserID()
   const formID = parseInt(params.formID)
   const applicationID = parseInt(params.applicationID)
@@ -28,20 +28,16 @@ export default async function ApplicationLayout({
   const form = forms?.[0]
   const categories = form?.categories || []
 
-  if (form?.status === FormStatusTypes.SUBMITTED) {
-    redirect(`/application/${applicationID}/submission/${formID}`)
-  } else if (form?.status !== FormStatusTypes.CREATED) {
+  if (form?.status === FormStatusTypes.CREATED) {
+    redirect(`/application/${applicationID}/form/${formID}`)
+  } else if (form?.status !== FormStatusTypes.SUBMITTED) {
     redirect(`/application/${applicationID}/forms`)
   }
 
   return (
     <FormContextProvider formID={formID}>
-      <div id="client-form-layout" className="flex overflow-hidden">
-        <ClientFormSidebar
-          applicationID={applicationID}
-          categories={categories}
-          type="inProgress"
-        />
+      <div id="client-submission-layout" className="flex overflow-hidden">
+        <ClientFormSidebar applicationID={formID} categories={categories} type="submitted" />
         <div className="h-screen flex-1">{children}</div>
       </div>
     </FormContextProvider>

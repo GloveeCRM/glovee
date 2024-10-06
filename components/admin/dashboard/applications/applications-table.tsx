@@ -2,7 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
-import { searchForms } from '@/lib/data/form'
+import { searchApplications } from '@/lib/data/application'
 import {
   Table,
   TableBody,
@@ -11,8 +11,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { Badge } from '@/components/ui/badge'
 import { Pagination } from '@/components/ui/pagination'
+import { formatDateToShortMonthDayYearTime } from '@/lib/utils/date'
 
 interface ApplicationsTableProps {
   query?: string
@@ -25,10 +25,10 @@ export default async function ApplicationsTable({
 }: ApplicationsTableProps) {
   const totalRowsPerPage = 14
   const offset = currentPage * totalRowsPerPage - totalRowsPerPage
-  const { forms, totalCount } = await searchForms({
-    query: query,
+  const { applications, totalCount } = await searchApplications({
+    query,
     limit: totalRowsPerPage,
-    offset: offset,
+    offset,
   })
   const totalPages = Math.ceil(totalCount / totalRowsPerPage)
 
@@ -39,56 +39,55 @@ export default async function ApplicationsTable({
           <TableRow>
             <TableHead>Application ID</TableHead>
             <TableHead>Client</TableHead>
-            <TableHead>Template</TableHead>
-            <TableHead>Role</TableHead>
-            <TableHead>Status</TableHead>
+            <TableHead>Created At</TableHead>
+            <TableHead>Updated At</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {forms && forms.length > 0 ? (
-            forms.map((form) => (
-              <TableRow key={form.id}>
-                <TableCell>{form.id}</TableCell>
+          {applications && applications.length > 0 ? (
+            applications.map((application) => (
+              <TableRow key={application.applicationID}>
                 <TableCell>
-                  <Link href={`/admin/clients/${form.client?.id || 0}`}>
+                  <Link href={`/admin/application/${application.applicationID}`}>
+                    <span className="cursor-pointer hover:text-blue-500">
+                      {application.applicationID}
+                    </span>
+                  </Link>
+                </TableCell>
+                <TableCell>
+                  <Link href={`/admin/clients/${application.owner.id}`}>
                     <div className="flex w-max items-center gap-[6px] hover:text-blue-500">
                       <Image
-                        src={form.client?.avatarURL || DEFAULT_MALE_CLIENT_LOGO_URL}
+                        src={application.owner.avatarURL || DEFAULT_MALE_CLIENT_LOGO_URL}
                         alt=""
                         width={30}
                         height={30}
                         className="rounded-full"
                       />
                       <div>
-                        {form.client?.firstName} {form.client?.lastName}
+                        {application.owner.firstName} {application.owner.lastName}
                       </div>
                     </div>
                   </Link>
                 </TableCell>
-                <TableCell className="text-nowrap">{form.formName}</TableCell>
-                <TableCell>
-                  <Badge variant="secondary" className="gap-[2px]">
-                    <span className="font-semibold">{form.role}</span>
-                    <span className="truncate">
-                      ({form.applicant?.firstName} {form.applicant?.lastName})
-                    </span>
-                  </Badge>
+                <TableCell className="text-nowrap">
+                  {formatDateToShortMonthDayYearTime({ date: application.createdAt })}
                 </TableCell>
-                <TableCell>
-                  <Badge>{form.status}</Badge>
+                <TableCell className="text-nowrap">
+                  {formatDateToShortMonthDayYearTime({ date: application.updatedAt })}
                 </TableCell>
               </TableRow>
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={5} className="py-[12px] text-center text-n-500">
+              <TableCell colSpan={4} className="py-[12px] text-center text-n-500">
                 No applications found
               </TableCell>
             </TableRow>
           )}
         </TableBody>
       </Table>
-      {forms && forms.length < totalCount && (
+      {applications && applications.length < totalCount && (
         <Pagination currentPage={currentPage} totalPages={totalPages} />
       )}
     </div>

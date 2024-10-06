@@ -9,6 +9,8 @@ import {
 } from '@/components/ui/table'
 import { Pagination } from '@/components/ui/pagination'
 import { Badge } from '@/components/ui/badge'
+import { searchApplications } from '@/lib/data/application'
+import { formatDateToShortMonthDayYearTime } from '@/lib/utils/date'
 
 interface ClientApplicationsTableProps {
   clientID: number
@@ -21,12 +23,14 @@ export default async function ClientApplicationsTable({
 }: ClientApplicationsTableProps) {
   const totalRowsPerPage = 12
   const offset = currentPage * totalRowsPerPage - totalRowsPerPage
-  const { forms, totalCount } = await searchForms({
+  const { applications, totalCount } = await searchApplications({
     filters: { userID: clientID },
     limit: totalRowsPerPage,
     offset: offset,
   })
   const totalPages = Math.ceil(totalCount / totalRowsPerPage)
+
+  const hasApplications = applications && applications.length > 0
 
   return (
     <div className="flex h-full flex-col overflow-auto">
@@ -34,40 +38,33 @@ export default async function ClientApplicationsTable({
         <TableHeader className="sticky top-0 bg-white shadow-sm">
           <TableRow>
             <TableHead>Application ID</TableHead>
-            <TableHead>Template</TableHead>
-            <TableHead>Role</TableHead>
-            <TableHead>Status</TableHead>
+            <TableHead>Created At</TableHead>
+            <TableHead>Updated At</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {forms && forms.length > 0 ? (
-            forms.map((form) => (
-              <TableRow key={form.id} className="h-[42px]">
-                <TableCell>{form.id}</TableCell>
-                <TableCell className="truncate">{form.formName}</TableCell>
+          {hasApplications ? (
+            applications.map((application) => (
+              <TableRow key={application.applicationID} className="h-[42px]">
+                <TableCell>{application.applicationID}</TableCell>
                 <TableCell>
-                  <Badge variant="secondary" className="gap-[2px]">
-                    <span className="font-semibold">{form.role}</span>
-                    <span className="truncate">
-                      ({form.applicant?.firstName} {form.applicant?.lastName})
-                    </span>
-                  </Badge>
+                  <span>{formatDateToShortMonthDayYearTime({ date: application.createdAt })}</span>
                 </TableCell>
                 <TableCell>
-                  <Badge>{form.status}</Badge>
+                  <span>{formatDateToShortMonthDayYearTime({ date: application.updatedAt })}</span>
                 </TableCell>
               </TableRow>
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={4} className="py-[12px] text-center text-n-500">
+              <TableCell colSpan={3} className="py-[12px] text-center text-n-500">
                 No forms found
               </TableCell>
             </TableRow>
           )}
         </TableBody>
       </Table>
-      {forms && forms.length < totalCount && (
+      {applications && applications.length < totalCount && (
         <Pagination currentPage={currentPage} totalPages={totalPages} />
       )}
     </div>

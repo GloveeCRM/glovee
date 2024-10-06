@@ -1,9 +1,5 @@
 import { searchForms } from '@/lib/data/form'
 
-interface ApplicationPageParams {
-  applicationID: number
-}
-
 interface ApplicationPageProps {
   params: {
     applicationID: number

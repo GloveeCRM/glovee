@@ -15,7 +15,6 @@ interface ClientFormSummaryCardProps {
 }
 
 export default function ClientFormSummaryCard({ form }: ClientFormSummaryCardProps) {
-  console.log(JSON.stringify(form, null, 2))
   return (
     <div className="items-center justify-between rounded-lg border border-n-500 p-[10px]">
       <div>

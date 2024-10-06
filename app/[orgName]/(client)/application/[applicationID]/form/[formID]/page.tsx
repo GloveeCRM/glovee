@@ -1,22 +1,28 @@
 import { FormQuestionSetType } from '@/lib/types/form'
-import { fetchSectionQuestionSets } from '@/lib/data/form'
+import { fetchFormQuestionSets } from '@/lib/data/form'
 import { getSessionPayload } from '@/lib/auth/session'
 import FormQuestionSet from '@/components/forms/question-sets/form-question-set'
+import { nestQuestionSets } from '@/lib/utils/form'
 
 export default async function ClientApplicationPage({
-  params,
   searchParams,
 }: {
-  params: { orgName: string }
   searchParams: { section?: string }
 }) {
-  const orgName = params.orgName
   const payload = await getSessionPayload()
   const clientID = payload?.user?.id || 0
-  const sectionId = parseInt(searchParams.section || '0')
-  const questionSets = await fetchSectionQuestionSets(orgName, clientID, sectionId)
+  const sectionID = parseInt(searchParams.section || '0')
+  const questionSets = await fetchFormQuestionSets({
+    filters: {
+      userID: clientID,
+      sectionID: sectionID,
+      includeQuestions: true,
+      includeAnswers: true,
+    },
+  })
+  const nestedQuestionSets = nestQuestionSets(questionSets)
 
-  return <QuestionSetWrapper questionSets={questionSets} />
+  return <QuestionSetWrapper questionSets={nestedQuestionSets} />
 }
 
 interface QuestionSetWrapperProps {

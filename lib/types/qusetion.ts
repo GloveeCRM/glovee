@@ -44,7 +44,7 @@ export type BaseAnswerType = {
 export function isTextInputQuestionType(
   question: BaseQuestionType
 ): question is TextInputQuestionType {
-  return question.type === QuestionTypes.TEXT_INPUT
+  return question?.type === QuestionTypes.TEXT_INPUT
 }
 
 export type TextInputQuestionSettings = BaseQuestionSettings & {
@@ -58,7 +58,7 @@ export type TextInputQuestionType = BaseQuestionType & {
 export function isTextareaQuestionType(
   question: BaseQuestionType
 ): question is TextareaQuestionType {
-  return question.type === QuestionTypes.TEXTAREA
+  return question?.type === QuestionTypes.TEXTAREA
 }
 
 export type TextareaQuestionSettings = BaseQuestionSettings & {
@@ -72,7 +72,7 @@ export type TextareaQuestionType = BaseQuestionType & {
 }
 
 export function isSelectQuestionType(question: BaseQuestionType): question is SelectQuestionType {
-  return question.type === QuestionTypes.SELECT
+  return question?.type === QuestionTypes.SELECT
 }
 
 export type SelectQuestionOptionType = {
@@ -94,7 +94,7 @@ export type SelectQuestionType = BaseQuestionType & {
 export function isDateInputQuestionType(
   question: BaseQuestionType
 ): question is DateInputQuestionType {
-  return question.type === QuestionTypes.DATE_INPUT
+  return question?.type === QuestionTypes.DATE_INPUT
 }
 
 export type DateInputQuestionSettings = BaseQuestionSettings & {
@@ -107,7 +107,7 @@ export type DateInputQuestionType = BaseQuestionType & {
 }
 
 export function isRadioQuestionType(question: BaseQuestionType): question is RadioQuestionType {
-  return question.type === QuestionTypes.RADIO
+  return question?.type === QuestionTypes.RADIO
 }
 
 export type RadioQuestionOptionType = {
@@ -130,7 +130,7 @@ export type RadioQuestionType = BaseQuestionType & {
 export function isCheckboxQuestionType(
   question: BaseQuestionType
 ): question is CheckboxQuestionType {
-  return question.type === QuestionTypes.CHECKBOX
+  return question?.type === QuestionTypes.CHECKBOX
 }
 
 export type CheckboxQuestionOptionType = {
@@ -153,7 +153,7 @@ export type CheckboxQuestionType = BaseQuestionType & {
 export function isDocumentQuestionType(
   question: BaseQuestionType
 ): question is DocumentQuestionType {
-  return question.type === QuestionTypes.DOCUMENT
+  return question?.type === QuestionTypes.DOCUMENT
 }
 
 export type DocumentQuestionType = BaseQuestionType
