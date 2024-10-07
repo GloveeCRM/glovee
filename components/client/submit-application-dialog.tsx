@@ -4,9 +4,8 @@ import { useState } from 'react'
 import toast from 'react-hot-toast'
 import { ImSpinner2 } from 'react-icons/im'
 
-import { FormType } from '@/lib/types/form'
-import { submitFormById } from '@/lib/actions/form'
-import { useOrgContext } from '@/contexts/org-context'
+import { FormStatusTypes, FormType } from '@/lib/types/form'
+import { setFormStatus } from '@/lib/actions/form'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -16,19 +15,20 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import { useAuthContext } from '@/contexts/auth-context'
 
 interface SubmitFormDialogProps {
   form: FormType
 }
 
 export default function SubmitFormDialog({ form }: SubmitFormDialogProps) {
-  const { orgName } = useOrgContext()
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+  const { sessionUserID } = useAuthContext()
 
   function handleSubmitForm() {
     setIsSubmitting(true)
-    submitFormById(form.id, orgName)
+    setFormStatus(form.id, FormStatusTypes.SUBMITTED, sessionUserID || 0)
       .then((response) => {
         if (response.success) {
           submitFormSuccessToast(response.success)

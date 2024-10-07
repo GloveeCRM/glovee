@@ -7,7 +7,9 @@ import { uploadFileToS3 } from '@/lib/utils/s3'
 import { fetchFormAnswerFileUploadIntent } from '@/lib/data/form'
 import { saveAnswer } from '@/lib/actions/form'
 import { useOrgContext } from '@/contexts/org-context'
+import { useAuthContext } from '@/contexts/auth-context'
 import { useFormContext } from '@/contexts/form-context'
+import { keysCamelCaseToSnakeCase } from '@/lib/utils/json'
 
 interface Answer {
   text?: string
@@ -18,6 +20,7 @@ interface Answer {
 
 export default function useAnswer(questionID: number, initialAnswer: Answer) {
   const { orgName } = useOrgContext()
+  const { sessionUserID } = useAuthContext()
   const { formID } = useFormContext()
   const [answer, setAnswer] = useState<Answer>(initialAnswer)
   const [message, setMessage] = useState<string>('')
@@ -26,7 +29,7 @@ export default function useAnswer(questionID: number, initialAnswer: Answer) {
     setMessage('Saving')
     setAnswer(newAnswer)
 
-    saveAnswer({ orgName, questionID, ...newAnswer }).then((data) => {
+    saveAnswer({ userID: sessionUserID || 0, questionID, ...newAnswer }).then((data) => {
       setMessage(data.success ? 'Saved!' : 'Failed to save changes!')
 
       if (data.data.answer.files.length > 0) {
@@ -49,7 +52,7 @@ export default function useAnswer(questionID: number, initialAnswer: Answer) {
     } as File
 
     const uploadIntent = await fetchFormAnswerFileUploadIntent(
-      orgName,
+      sessionUserID || 0,
       formID,
       questionID,
       fileToUpload

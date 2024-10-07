@@ -5,7 +5,7 @@ import { GLOVEE_API_URL } from '@/lib/constants/api'
 import { getSession, getSessionPayload } from '@/lib/auth/session'
 import { File } from '../types/file'
 import { getCurrentOrgName } from '../utils/server'
-import { keysToCamelCase } from '../utils/json'
+import { keysCamelCaseToSnakeCase, keysSnakeCaseToCamelCase } from '../utils/json'
 
 interface SearchFormsInput {
   filters?: {
@@ -62,8 +62,7 @@ export async function searchForms({
     )
 
     const data = await response.json()
-    const camelData = keysToCamelCase(data)
-    console.log('camelData', JSON.stringify(camelData, null, 2))
+    const camelData = keysSnakeCaseToCamelCase(data)
     if (camelData.status === 'error') {
       return { forms: null, totalCount: 0 }
     } else {
@@ -112,7 +111,7 @@ export async function fetchFormQuestionSets({
     )
 
     const data = await response.json()
-    const camelData = keysToCamelCase(data)
+    const camelData = keysSnakeCaseToCamelCase(data)
     return camelData.data.questionSets
   } catch (error) {
     return []
@@ -147,7 +146,7 @@ export async function fetchFullForm(formID: number, orgName: string): Promise<Fo
 }
 
 export async function fetchFormAnswerFileUploadIntent(
-  orgName: string,
+  userID: number,
   formID: number,
   questionID: number,
   file: File
@@ -156,34 +155,42 @@ export async function fetchFormAnswerFileUploadIntent(
   file: File
 } | null> {
   try {
-    const payload = await getSessionPayload()
-    const userID = payload?.user.id || 0
-
     const accessToken = await getSession()
     if (!accessToken) {
       return null
     }
 
+    const orgName = await getCurrentOrgName()
+
+    const queryParams = new URLSearchParams()
+    queryParams.append('user_id', userID.toString() || '')
+
+    const body = {
+      formID,
+      questionID,
+      file,
+    }
+    const bodySnakeCase = keysCamelCaseToSnakeCase(body)
+
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/form/client/${userID}/form/${formID}/question/${questionID}/create-form-answer-file-upload-intent`,
+      `${GLOVEE_API_URL}/v1/${orgName}/form/question/answer/file-upload-intent?${queryParams.toString()}`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
         },
-        body: JSON.stringify({
-          file: file,
-        }),
+        body: JSON.stringify(bodySnakeCase),
       }
     )
 
     const data = await response.json()
+    const camelData = keysSnakeCaseToCamelCase(data)
 
     if (data.status === 'error') {
       return null
     } else {
-      return data.data
+      return camelData.data
     }
   } catch (error) {
     return null

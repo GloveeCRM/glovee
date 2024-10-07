@@ -8,6 +8,7 @@ import { createQuestionSetAndQuestions, deleteQuestionSet } from '@/lib/actions/
 import { useOrgContext } from '@/contexts/org-context'
 import { Separator } from '@/components/ui/separator'
 import FormQuestionSet from '../form-question-set'
+import { useAuthContext } from '@/contexts/auth-context'
 
 interface LoopQuestionSetProps {
   questionSet: FormQuestionSetType
@@ -15,12 +16,12 @@ interface LoopQuestionSetProps {
 }
 
 export default function LoopQuestionSet({ questionSet, viewOnly = false }: LoopQuestionSetProps) {
-  const { orgName } = useOrgContext()
+  const { sessionUserID } = useAuthContext()
 
   const questionSets = questionSet.questionSets
 
   function handleDeleteQuestionSet(questionSetID: number) {
-    deleteQuestionSet(orgName, questionSetID)
+    deleteQuestionSet(sessionUserID || 0, questionSetID)
   }
 
   return (
@@ -55,13 +56,13 @@ export default function LoopQuestionSet({ questionSet, viewOnly = false }: LoopQ
 }
 
 function RepeatQuestionSet({ questionSet }: { questionSet: FormQuestionSetType }) {
-  const { orgName } = useOrgContext()
+  const { sessionUserID } = useAuthContext()
 
   function handleClick() {
     let questionSetToClone = questionSet.questionSets?.[0] as FormQuestionSetType
     questionSetToClone = { ...questionSetToClone, position: questionSet.questionSets?.length || 0 }
     if (questionSetToClone) {
-      createQuestionSetAndQuestions(orgName, questionSetToClone)
+      createQuestionSetAndQuestions(sessionUserID || 0, questionSetToClone)
     }
   }
 

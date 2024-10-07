@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Toaster } from 'react-hot-toast'
 
 import '@/app/globals.css'
-import { getSession } from '@/lib/auth/session'
+import { getSession, getSessionUserID } from '@/lib/auth/session'
 import OrgProvider from '@/contexts/org-context'
 import AuthProvider from '@/contexts/auth-context'
 import DragAndDropProvider from '@/contexts/drag-and-drop-context'
@@ -23,10 +23,11 @@ interface RootLayoutProps {
 
 export default async function RootLayout({ params, children }: RootLayoutProps) {
   const session = await getSession()
+  const sessionUserID = await getSessionUserID()
   const orgName = params.orgName
 
   return (
-    <AuthProvider orgName={orgName} token={session}>
+    <AuthProvider orgName={orgName} token={session} sessionUserID={sessionUserID}>
       <OrgProvider orgName={orgName}>
         <DragAndDropProvider>
           <html lang="en">

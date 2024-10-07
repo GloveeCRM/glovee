@@ -8,10 +8,12 @@ import { refreshToken } from '@/lib/actions/auth'
 
 type AuthContextType = {
   token: string | null
+  sessionUserID: number | null
 }
 
 const authContextDefaultValues: AuthContextType = {
   token: null,
+  sessionUserID: null,
 }
 
 const AuthContext = createContext<AuthContextType>(authContextDefaultValues)
@@ -19,12 +21,19 @@ const AuthContext = createContext<AuthContextType>(authContextDefaultValues)
 interface AuthProviderProps {
   orgName: string
   token: string | null
+  sessionUserID: number | null
   children: React.ReactNode
 }
 
-export default function AuthProvider({ orgName, token, children }: AuthProviderProps) {
+export default function AuthProvider({
+  orgName,
+  token,
+  sessionUserID,
+  children,
+}: AuthProviderProps) {
   const value = {
     token,
+    sessionUserID,
   }
 
   useEffect(() => {

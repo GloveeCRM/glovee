@@ -8,6 +8,8 @@ import { CreateFormSchema } from '@/lib/zod/schemas'
 import { getSession, getSessionPayload } from '@/lib/auth/session'
 import { File } from '../types/file'
 import { FormQuestionSetType, FormStatusTypes } from '../types/form'
+import { getCurrentOrgName } from '../utils/server'
+import { keysCamelCaseToSnakeCase, keysSnakeCaseToCamelCase } from '../utils/json'
 
 export async function createNewForm(
   orgName: string,
@@ -46,26 +48,36 @@ export async function createNewForm(
   }
 }
 
-export async function submitFormById(
+export async function setFormStatus(
   formID: number,
-  orgName: string
+  status: FormStatusTypes,
+  userID: number
 ): Promise<{ success?: string; error?: string }> {
   try {
     const accessToken = await getSession()
-    const payload = await getSessionPayload()
-    const clientID = payload?.user?.id || 0
+    if (!accessToken) {
+      return { error: 'Unauthorized' }
+    }
 
-    const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/form/client/${clientID}/form/${formID}/set-status`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({ status: FormStatusTypes.SUBMITTED }),
-      }
-    )
+    const orgName = await getCurrentOrgName()
+
+    const queryParams = new URLSearchParams()
+    queryParams.append('user_id', userID?.toString() || '')
+
+    const body = {
+      formID,
+      status,
+    }
+    const bodySnakeCase = keysCamelCaseToSnakeCase(body)
+
+    const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/form/set-status?${queryParams}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(bodySnakeCase),
+    })
 
     const data = await response.json()
 
@@ -81,7 +93,7 @@ export async function submitFormById(
 }
 
 interface SaveAnswerProps {
-  orgName: string
+  userID: number
   questionID: number
   text?: string
   optionIDs?: number[]
@@ -90,7 +102,7 @@ interface SaveAnswerProps {
 }
 
 export async function saveAnswer({
-  orgName,
+  userID,
   questionID,
   text,
   optionIDs,
@@ -98,10 +110,13 @@ export async function saveAnswer({
   files,
 }: SaveAnswerProps): Promise<{ success?: string; error?: string; data?: any }> {
   const accessToken = await getSession()
-  const payload = await getSessionPayload()
-  const clientID = payload?.user?.id || 0
+  if (!accessToken) {
+    return { error: 'Unauthorized' }
+  }
 
-  const body = JSON.stringify({
+  const orgName = await getCurrentOrgName()
+
+  const body = {
     questionID,
     answer: {
       questionID,
@@ -110,28 +125,32 @@ export async function saveAnswer({
       optionIDs,
       date,
     },
-  })
+  }
+  const bodySnakeCase = keysCamelCaseToSnakeCase(body)
+
+  const queryParams = new URLSearchParams()
+  queryParams.append('user_id', userID?.toString() || '')
 
   try {
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/form/client/${clientID}/question/${questionID}/update-answer`,
+      `${GLOVEE_API_URL}/v1/${orgName}/form/question/answer?${queryParams}`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
         },
-        body: body,
+        body: JSON.stringify(bodySnakeCase),
       }
     )
 
     const data = await response.json()
-
+    const camelData = keysSnakeCaseToCamelCase(data)
     if (data.status === 'error') {
-      return { error: data.error }
+      return { error: camelData.error }
     } else {
       revalidatePath('/application')
-      return { success: 'Answer saved!', data: data.data }
+      return { success: 'Answer saved!', data: camelData.data }
     }
   } catch (error) {
     return { error: 'Failed to save answer!' }
@@ -139,34 +158,39 @@ export async function saveAnswer({
 }
 
 export async function createQuestionSetAndQuestions(
-  orgName: string,
+  userID: number,
   questionSet: FormQuestionSetType
 ): Promise<{ success?: string; error?: string }> {
   const accessToken = await getSession()
-  const payload = await getSessionPayload()
-  const clientID = payload?.user?.id || 0
+  if (!accessToken) {
+    return { error: 'Unauthorized' }
+  }
 
-  const body = JSON.stringify({
-    questionSet,
-  })
+  const orgName = await getCurrentOrgName()
+
+  const queryParams = new URLSearchParams()
+  queryParams.append('user_id', userID?.toString() || '')
+
+  const body = { questionSet }
+  const bodySnakeCase = keysCamelCaseToSnakeCase(body)
 
   try {
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/form/client/${clientID}/form/create-question-set`,
+      `${GLOVEE_API_URL}/v1/${orgName}/form/question-set/create?${queryParams}`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
         },
-        body: body,
+        body: JSON.stringify(bodySnakeCase),
       }
     )
 
     const data = await response.json()
-
+    const camelData = keysSnakeCaseToCamelCase(data)
     if (data.status === 'error') {
-      return { error: data.error }
+      return { error: camelData.error }
     } else {
       revalidatePath('/application')
       return { success: 'Question set created!' }
@@ -177,16 +201,23 @@ export async function createQuestionSetAndQuestions(
 }
 
 export async function deleteQuestionSet(
-  orgName: string,
+  userID: number,
   questionSetID: number
 ): Promise<{ success?: string; error?: string }> {
   const accessToken = await getSession()
-  const payload = await getSessionPayload()
-  const clientID = payload?.user?.id || 0
+  if (!accessToken) {
+    return { error: 'Unauthorized' }
+  }
+
+  const orgName = await getCurrentOrgName()
+
+  const queryParams = new URLSearchParams()
+  queryParams.append('user_id', userID?.toString() || '')
+  queryParams.append('question_set_id', questionSetID?.toString() || '')
 
   try {
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/form/client/${clientID}/form/question-set/${questionSetID}`,
+      `${GLOVEE_API_URL}/v1/${orgName}/form/question-set/delete?${queryParams}`,
       {
         method: 'DELETE',
         headers: {

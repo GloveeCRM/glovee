@@ -3,7 +3,7 @@
 import { getSession } from '../auth/session'
 import { GLOVEE_API_URL } from '../constants/api'
 import { ApplicationType } from '../types/application'
-import { keysToCamelCase } from '../utils/json'
+import { keysSnakeCaseToCamelCase } from '../utils/json'
 import { getCurrentOrgName } from '../utils/server'
 
 interface SearchApplicationsInput {
@@ -49,7 +49,7 @@ export async function searchApplications({
     )
 
     const data = await response.json()
-    const camelData = keysToCamelCase(data)
+    const camelData = keysSnakeCaseToCamelCase(data)
     if (data.status === 'error') {
       return { applications: null, totalCount: 0 }
     } else {
