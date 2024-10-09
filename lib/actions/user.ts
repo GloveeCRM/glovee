@@ -96,39 +96,6 @@ export async function updateClientProfilePicture(
   }
 }
 
-export async function updateClientStatus(
-  orgName: string,
-  id: number,
-  status: UserStatusTypes
-): Promise<{ success?: string; error?: string }> {
-  const accessToken = await getSession()
-  if (!accessToken) {
-    return { error: 'Unauthorized' }
-  }
-
-  try {
-    const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/admin/client/${id}/status`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify({ status }),
-    })
-
-    const data = await response.json()
-
-    if (data.status === 'error') {
-      return { error: data.error }
-    } else {
-      revalidatePath(`/admin/clients/${id}`)
-      return { success: data.data.message }
-    }
-  } catch (error) {
-    return { error: 'Something went wrong!' }
-  }
-}
-
 export async function createNewClient(
   orgName: string,
   values: z.infer<typeof CreateClientSchema>

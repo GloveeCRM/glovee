@@ -3,8 +3,7 @@
 import toast from 'react-hot-toast'
 
 import { UserStatusTypes } from '@/lib/types/user'
-import { updateClientStatus } from '@/lib/actions/user'
-import { useOrgContext } from '@/contexts/org-context'
+import { updateUser } from '@/lib/actions/user'
 import { Button } from '@/components/ui/button'
 
 interface SetUserStatusButtonProps {
@@ -13,8 +12,6 @@ interface SetUserStatusButtonProps {
 }
 
 export default function SetUserStatusButton({ userId, newStatus }: SetUserStatusButtonProps) {
-  const { orgName } = useOrgContext()
-
   function userStatusUpdateSuccessToast(message: string) {
     toast.success((t) => message, {
       duration: 3000,
@@ -30,7 +27,7 @@ export default function SetUserStatusButton({ userId, newStatus }: SetUserStatus
   }
 
   async function handleClickSetStatus() {
-    updateClientStatus(orgName, userId, newStatus).then((res) => {
+    updateUser(userId, { status: newStatus }).then((res) => {
       if (res.error) {
         userStatusUpdateErrorToast(res.error || 'Failed to update user status!')
       } else {
