@@ -1,9 +1,9 @@
 import Link from 'next/link'
 import Image from 'next/image'
 
-import { UserStatusTypes } from '@/lib/types/user'
+import { UserRoleTypes, UserStatusTypes } from '@/lib/types/user'
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
-import { searchClients } from '@/lib/data/user'
+import { searchUsers } from '@/lib/data/user'
 import {
   Table,
   TableBody,
@@ -23,12 +23,13 @@ interface ClientsTableProps {
 
 export default async function ClientsTable({ orgName, query, currentPage }: ClientsTableProps) {
   const totalRowsPerPage = 14
-  const { clients, total } = await searchClients(
-    orgName,
+  const offset = currentPage * totalRowsPerPage - totalRowsPerPage
+  const { users, total } = await searchUsers({
+    filters: { role: UserRoleTypes.ORG_CLIENT },
     query,
-    totalRowsPerPage,
-    currentPage * totalRowsPerPage - totalRowsPerPage
-  )
+    limit: totalRowsPerPage,
+    offset,
+  })
   const totalPages = Math.ceil(total / totalRowsPerPage)
 
   return (
@@ -44,13 +45,13 @@ export default async function ClientsTable({ orgName, query, currentPage }: Clie
           </TableRow>
         </TableHeader>
         <TableBody>
-          {clients && clients.length > 0 ? (
-            clients.map((client) => (
-              <TableRow key={client.id}>
+          {users && users.length > 0 ? (
+            users.map((user) => (
+              <TableRow key={user.id}>
                 <TableCell>
                   <div className="w-max">
                     <Image
-                      src={client.avatarURL || DEFAULT_MALE_CLIENT_LOGO_URL}
+                      src={user.avatarURL || DEFAULT_MALE_CLIENT_LOGO_URL}
                       alt=""
                       width={30}
                       height={30}
@@ -59,17 +60,15 @@ export default async function ClientsTable({ orgName, query, currentPage }: Clie
                   </div>
                 </TableCell>
                 <TableCell className="text-nowrap">
-                  <Link href={`/admin/clients/${client.id}`} className="hover:text-blue-500">
-                    {client.firstName} {client.lastName}
+                  <Link href={`/admin/clients/${user.id}`} className="hover:text-blue-500">
+                    {user.firstName} {user.lastName}
                   </Link>
                 </TableCell>
-                <TableCell>{client.email}</TableCell>
-                <TableCell>{client.id}</TableCell>
+                <TableCell>{user.email}</TableCell>
+                <TableCell>{user.id}</TableCell>
                 <TableCell>
-                  <Badge
-                    variant={client.status === UserStatusTypes.ACTIVE ? 'default' : 'secondary'}
-                  >
-                    {client.status}
+                  <Badge variant={user.status === UserStatusTypes.ACTIVE ? 'default' : 'secondary'}>
+                    {user.status}
                   </Badge>
                 </TableCell>
               </TableRow>
@@ -83,7 +82,7 @@ export default async function ClientsTable({ orgName, query, currentPage }: Clie
           )}
         </TableBody>
       </Table>
-      {clients && clients.length < total && (
+      {users && users.length < total && (
         <Pagination currentPage={currentPage} totalPages={totalPages} />
       )}
     </div>

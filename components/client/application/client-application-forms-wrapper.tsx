@@ -1,4 +1,3 @@
-import { FormRoleTypes } from '@/lib/types/form'
 import { searchForms } from '@/lib/data/form'
 import ClientFormSummaryCard from '../client-form-summary-card'
 import { getSessionUserID } from '@/lib/auth/session'
@@ -12,7 +11,7 @@ export default async function ClientApplicationFormsWrapper({
 }: ClientApplicationFormsWrapperProps) {
   const userID = await getSessionUserID()
   const { forms } = await searchForms({
-    filters: { applicationID, userID },
+    filters: { applicationID, userID, includeCategories: true },
   })
 
   const hasForms = forms && forms?.length > 0

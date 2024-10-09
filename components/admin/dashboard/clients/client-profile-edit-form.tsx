@@ -7,8 +7,7 @@ import toast from 'react-hot-toast'
 
 import { UserType } from '@/lib/types/user'
 import { UpdateClientSchema } from '@/lib/zod/schemas'
-import { updateClientProfile } from '@/lib/actions/user'
-import { useOrgContext } from '@/contexts/org-context'
+import { updateUser } from '@/lib/actions/user'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -28,8 +27,6 @@ interface ClientProfileEditProps {
 }
 
 export default function ClientProfileEditForm({ onClose, client }: ClientProfileEditProps) {
-  const { orgName } = useOrgContext()
-
   const defaultFormValues = {
     firstName: client.firstName,
     lastName: client.lastName,
@@ -56,7 +53,7 @@ export default function ClientProfileEditForm({ onClose, client }: ClientProfile
   }
 
   async function handleUpdateClientInformation(values: z.infer<typeof UpdateClientSchema>) {
-    updateClientProfile(orgName, client.id, values).then((res) => {
+    updateUser(client.id, values).then((res) => {
       if (res.success) {
         clientInformationUpdateSuccessToast(res.success)
         onClose()

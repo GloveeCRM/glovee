@@ -11,9 +11,9 @@ import { IoClose } from 'react-icons/io5'
 
 import { TemplateType } from '@/lib/types/template'
 import { FormRoleTypes } from '@/lib/types/form'
-import { UserType } from '@/lib/types/user'
+import { UserRoleTypes, UserType } from '@/lib/types/user'
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
-import { searchClients } from '@/lib/data/user'
+import { searchUsers } from '@/lib/data/user'
 import { searchTemplates } from '@/lib/data/template'
 import { createNewForm } from '@/lib/actions/form'
 import { CreateFormSchema } from '@/lib/zod/schemas'
@@ -71,8 +71,10 @@ export default function CreateNewApplicationButton({ client }: CreateNewApplicat
     })
 
     if (!client) {
-      searchClients(orgName).then((res) => {
-        setClients(res.clients)
+      searchUsers({
+        filters: { role: UserRoleTypes.ORG_CLIENT },
+      }).then((res) => {
+        setClients(res.users)
       })
     }
   }, [orgName, client])

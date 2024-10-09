@@ -1,4 +1,7 @@
-import { searchForms } from '@/lib/data/form'
+import Link from 'next/link'
+
+import { searchApplications } from '@/lib/data/application'
+import { formatDateToShortMonthDayYearTime } from '@/lib/utils/date'
 import {
   Table,
   TableBody,
@@ -8,9 +11,6 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Pagination } from '@/components/ui/pagination'
-import { Badge } from '@/components/ui/badge'
-import { searchApplications } from '@/lib/data/application'
-import { formatDateToShortMonthDayYearTime } from '@/lib/utils/date'
 
 interface ClientApplicationsTableProps {
   clientID: number
@@ -46,7 +46,13 @@ export default async function ClientApplicationsTable({
           {hasApplications ? (
             applications.map((application) => (
               <TableRow key={application.applicationID} className="h-[42px]">
-                <TableCell>{application.applicationID}</TableCell>
+                <TableCell>
+                  <Link href={`/admin/application/${application.applicationID}`}>
+                    <span className="cursor-pointer hover:text-blue-500">
+                      {application.applicationID}
+                    </span>
+                  </Link>
+                </TableCell>
                 <TableCell>
                   <span>{formatDateToShortMonthDayYearTime({ date: application.createdAt })}</span>
                 </TableCell>

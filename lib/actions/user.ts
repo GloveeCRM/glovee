@@ -3,47 +3,57 @@
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 
-import { UserStatusTypes } from '@/lib/types/user'
+import { UserStatusTypes, UserType } from '@/lib/types/user'
 import { GLOVEE_API_URL } from '@/lib/constants/api'
-import { CreateClientSchema, UpdateClientSchema } from '@/lib/zod/schemas'
+import { CreateClientSchema } from '@/lib/zod/schemas'
 import { getSession } from '@/lib/auth/session'
+import { getCurrentOrgName } from '../utils/server'
+import { keysCamelCaseToSnakeCase } from '../utils/json'
 
-export async function updateClientProfile(
-  orgName: string,
-  clientID: number,
-  values: z.infer<typeof UpdateClientSchema>
+export async function updateUser(
+  userID: number,
+  updateFields: Partial<UserType>
 ): Promise<{ success?: string; error?: string; errors?: any }> {
-  if (clientID === 0) {
-    return { errors: { clientId: 'Client is required' } }
+  if (userID === 0) {
+    return { errors: { userID: 'UserID is required' } }
   }
 
-  const { firstName, lastName, email } = values
-
   const accessToken = await getSession()
+  if (!accessToken) {
+    return { error: 'Unauthorized' }
+  }
+
+  const orgName = await getCurrentOrgName()
+
+  const queryParams = new URLSearchParams()
+  queryParams.append('user_id', userID.toString())
+
+  const body = {
+    userID,
+    updateFields,
+  }
+  const bodySnakeCase = keysCamelCaseToSnakeCase(body)
 
   try {
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/user/admin/client/${clientID}/profile`,
+      `${GLOVEE_API_URL}/v1/${orgName}/user/update?${queryParams.toString()}`,
       {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
         },
-        body: JSON.stringify({
-          firstName: firstName,
-          lastName: lastName,
-          email: email,
-        }),
+        body: JSON.stringify(bodySnakeCase),
       }
     )
 
     const data = await response.json()
+    const dataCamelCase = keysCamelCaseToSnakeCase(data)
 
-    if (data.status === 'error') {
-      return { error: data.error }
+    if (dataCamelCase.status === 'error') {
+      return { error: dataCamelCase.error }
     } else {
-      revalidatePath(`/admin/clients/${clientID}`)
+      revalidatePath(`/admin/clients/${userID}`)
       return { success: 'Client updated!' }
     }
   } catch (error) {
