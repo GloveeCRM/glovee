@@ -48,7 +48,7 @@ export default async function ApplicationsTable({
             applications.map((application) => (
               <TableRow key={application.applicationID}>
                 <TableCell>
-                  <Link href={`/admin/application/${application.applicationID}`}>
+                  <Link href={`/admin/application/${application.applicationID}/forms`}>
                     <span className="cursor-pointer hover:text-blue-500">
                       {application.applicationID}
                     </span>

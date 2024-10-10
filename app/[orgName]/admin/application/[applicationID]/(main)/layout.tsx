@@ -1,3 +1,5 @@
+import AdminApplicationSidebar from '@/components/admin/application/admin-application-sidebar'
+
 interface ApplicationLayoutParams {
   applicationID: number
 }
@@ -12,7 +14,8 @@ export default function ApplicationLayout({ children, params }: Readonly<Applica
 
   return (
     <div id="client-application-layout" className="flex overflow-hidden">
-      <div className="h-screen flex-1 p-[8px]">{children}</div>
+      <AdminApplicationSidebar applicationID={applicationID} />
+      <div className="h-screen flex-1 overflow-y-auto">{children}</div>
     </div>
   )
 }

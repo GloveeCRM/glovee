@@ -97,7 +97,7 @@ export async function signup(
   const { email, password, firstName, lastName } = values
 
   try {
-    const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/client/register`, {
+    const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

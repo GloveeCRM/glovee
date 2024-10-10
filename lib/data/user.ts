@@ -62,7 +62,6 @@ export async function searchUsers({
 }
 
 export async function fetchProfilePictureUploadURL(
-  orgName: string,
   clientID: number,
   mimeType: string
 ): Promise<string | null> {
@@ -72,8 +71,14 @@ export async function fetchProfilePictureUploadURL(
       return null
     }
 
+    const orgName = await getCurrentOrgName()
+
+    const queryParams = new URLSearchParams()
+    queryParams.append('user_id', clientID.toString())
+    queryParams.append('mime_type', mimeType)
+
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/user/admin/client/${clientID}/profile-picture-upload-url?mimeType=${mimeType}`,
+      `${GLOVEE_API_URL}/v1/${orgName}/user/avatar/upload-intent?${queryParams.toString()}`,
       {
         method: 'GET',
         headers: {
@@ -84,11 +89,11 @@ export async function fetchProfilePictureUploadURL(
     )
 
     const data = await response.json()
-
+    const camelCaseData = keysSnakeCaseToCamelCase(data)
     if (data.status === 'error') {
       return null
     } else {
-      return data.data.uploadURL
+      return camelCaseData.data.uploadURL
     }
   } catch (error) {
     return null

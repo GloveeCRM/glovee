@@ -1,15 +1,14 @@
 'use client'
 
+import { useRef } from 'react'
 import Image from 'next/image'
 import { HiOutlinePencilSquare } from 'react-icons/hi2'
+import { BiTrash } from 'react-icons/bi'
 
 import { UserType } from '@/lib/types/user'
 import { uploadFileToS3 } from '@/lib/utils/s3'
 import { fetchProfilePictureUploadURL } from '@/lib/data/user'
-import { useOrgContext } from '@/contexts/org-context'
-import { updateClientProfilePicture } from '@/lib/actions/user'
-import { BiTrash } from 'react-icons/bi'
-import { useRef } from 'react'
+import { updateUser } from '@/lib/actions/user'
 
 interface ClientProfilePictureProps {
   url: string
@@ -18,8 +17,6 @@ interface ClientProfilePictureProps {
 }
 
 export default function ClientProfilePicture({ url, client, editable }: ClientProfilePictureProps) {
-  const { orgName } = useOrgContext()
-
   const inputRef = useRef<HTMLInputElement>(null)
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -28,7 +25,7 @@ export default function ClientProfilePicture({ url, client, editable }: ClientPr
       return
     }
 
-    const uploadURL = await fetchProfilePictureUploadURL(orgName, client.id, file.type)
+    const uploadURL = await fetchProfilePictureUploadURL(client.id, file.type)
     if (!uploadURL) {
       console.error('Failed to fetch upload URL')
       return
@@ -40,7 +37,7 @@ export default function ClientProfilePicture({ url, client, editable }: ClientPr
       return
     }
 
-    const updateRes = await updateClientProfilePicture(orgName, client.id, uploadRes.url || '')
+    const updateRes = await updateUser(client.id, { avatarURL: uploadRes.url || '' })
     if (updateRes.error) {
       console.error('Failed to update profile picture')
       return
@@ -52,7 +49,7 @@ export default function ClientProfilePicture({ url, client, editable }: ClientPr
   }
 
   function handleDelete() {
-    updateClientProfilePicture(orgName, client.id, '')
+    updateUser(client.id, { avatarURL: '' })
   }
 
   return (
