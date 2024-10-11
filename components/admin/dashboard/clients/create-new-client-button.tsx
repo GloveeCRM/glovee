@@ -8,9 +8,8 @@ import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { BiMessageSquareError } from 'react-icons/bi'
 
-import { createNewClient } from '@/lib/actions/user'
+import { createUser } from '@/lib/actions/user'
 import { CreateClientSchema } from '@/lib/zod/schemas'
-import { useOrgContext } from '@/contexts/org-context'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -32,7 +31,6 @@ import { Input } from '@/components/ui/input'
 import { Callout } from '@/components/ui/callout'
 
 export default function CreateNewClientButton() {
-  const { orgName } = useOrgContext()
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
   const defaultFormValues = {
@@ -61,7 +59,7 @@ export default function CreateNewClientButton() {
   }
 
   function handleCreateClient(values: z.infer<typeof CreateClientSchema>) {
-    createNewClient(orgName, values).then((res) => {
+    createUser(values).then((res) => {
       if (res.success) {
         setIsOpen(false)
         clientCreationSuccessToast(res.success || 'Client created!')

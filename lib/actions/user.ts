@@ -60,36 +60,39 @@ export async function updateUser(
     return { error: 'Something went wrong!' }
   }
 }
-
-export async function createNewClient(
-  orgName: string,
-  values: z.infer<typeof CreateClientSchema>
+export async function createUser(
+  newUser: Partial<UserType>
 ): Promise<{ success?: string; error?: string }> {
-  const { firstName, lastName, email } = values
-
   const accessToken = await getSession()
+  if (!accessToken) {
+    return { error: 'Unauthorized' }
+  }
+
+  const orgName = await getCurrentOrgName()
+
+  const body = {
+    user: newUser,
+  }
+  const bodySnakeCase = keysCamelCaseToSnakeCase(body)
 
   try {
-    const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/admin/client/create`, {
+    const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/create`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`,
       },
-      body: JSON.stringify({
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-      }),
+      body: JSON.stringify(bodySnakeCase),
     })
 
     const data = await response.json()
+    const dataCamelCase = keysCamelCaseToSnakeCase(data)
 
-    if (data.status === 'error') {
-      return { error: data.error }
+    if (dataCamelCase.status === 'error') {
+      return { error: dataCamelCase.error }
     } else {
       revalidatePath('/admin/clients')
-      return { success: 'Client created!' }
+      return { success: 'User created successfully!' }
     }
   } catch (error) {
     return { error: 'Something went wrong!' }

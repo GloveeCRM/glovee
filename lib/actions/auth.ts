@@ -18,6 +18,7 @@ import {
 } from '@/lib/zod/schemas'
 
 import { getSession, getSessionPayload, removeSession, setSession } from '@/lib/auth/session'
+import { keysCamelCaseToSnakeCase } from '../utils/json'
 
 export async function login(
   orgName: string,
@@ -96,13 +97,23 @@ export async function signup(
 }> {
   const { email, password, firstName, lastName } = values
 
+  const body = {
+    user: {
+      email,
+      firstName,
+      lastName,
+    },
+    password,
+  }
+  const bodySnakeCase = keysCamelCaseToSnakeCase(body)
+
   try {
     const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email, password, firstName, lastName }),
+      body: JSON.stringify(bodySnakeCase),
     })
 
     const data = await response.json()

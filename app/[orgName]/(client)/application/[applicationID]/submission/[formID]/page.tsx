@@ -17,22 +17,26 @@ import {
   RadioQuestionOptionType,
   SelectQuestionOptionType,
 } from '@/lib/types/qusetion'
-import { fetchSectionQuestionSets } from '@/lib/data/form'
+import { fetchFormQuestionSets } from '@/lib/data/form'
 import { getSessionPayload } from '@/lib/auth/session'
 import { Separator } from '@/components/ui/separator'
 
 export default async function ClientSubmissionPage({
-  params,
   searchParams,
 }: {
-  params: { orgName: string }
   searchParams: { section?: string }
 }) {
-  const orgName = params.orgName
   const payload = await getSessionPayload()
   const clientID = payload?.user?.id || 0
-  const sectionId = parseInt(searchParams.section || '0')
-  const questionSets = await fetchSectionQuestionSets(orgName, clientID, sectionId)
+  const sectionID = parseInt(searchParams.section || '0')
+  const questionSets = await fetchFormQuestionSets({
+    filters: {
+      userID: clientID,
+      sectionID: sectionID,
+      includeQuestions: true,
+      includeAnswers: true,
+    },
+  })
 
   const questions = extractQuestionsFromQuestionSets(questionSets)
 
