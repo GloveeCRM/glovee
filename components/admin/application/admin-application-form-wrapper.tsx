@@ -11,7 +11,7 @@ export default async function AdminApplicationFormsWrapper({
 }: AdminApplicationFormsWrapperProps) {
   const userID = await getSessionUserID()
   const { forms } = await searchForms({
-    filters: { applicationID, userID, includeCategories: true },
+    filters: { applicationID, userID },
   })
 
   const hasForms = forms && forms?.length > 0
