@@ -1,7 +1,5 @@
 'use server'
 
-import { z } from 'zod'
-
 import { UserRoleTypes } from '@/lib/types/user'
 import { GLOVEE_API_URL } from '@/lib/constants/api'
 import {
@@ -10,25 +8,29 @@ import {
   DEFAULT_ORG_MANAGEMENT_LOGIN_REDIRECT,
 } from '@/lib/constants/routes'
 
-import {
-  LoginSchema,
-  SignupSchema,
-  NewPasswordSchema,
-  ForgotPasswordSchema,
-} from '@/lib/zod/schemas'
-
 import { getSession, getSessionPayload, removeSession, setSession } from '@/lib/auth/session'
-import { keysCamelCaseToSnakeCase } from '../utils/json'
+import { keysCamelCaseToSnakeCase, keysSnakeCaseToCamelCase } from '../utils/json'
+import { getCurrentOrgName } from '../utils/server'
 
-export async function login(
-  orgName: string,
-  values: z.infer<typeof LoginSchema>
-): Promise<{
+interface LoginInputDTO {
+  email: string
+  password: string
+}
+
+interface LoginOutputDTO {
   success?: string
   data?: Record<string, any>
   error?: string
-}> {
-  const { email, password } = values
+}
+
+export async function login({ email, password }: LoginInputDTO): Promise<LoginOutputDTO> {
+  const orgName = await getCurrentOrgName()
+
+  const body = {
+    email,
+    password,
+  }
+  const bodySnakeCase = keysCamelCaseToSnakeCase(body)
 
   try {
     const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/login`, {
@@ -36,15 +38,16 @@ export async function login(
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify(bodySnakeCase),
     })
 
     const data = await response.json()
+    const camelCaseData = keysSnakeCaseToCamelCase(data)
 
-    if (data.status === 'error') {
-      return { error: data.error }
+    if (camelCaseData.status === 'error') {
+      return { error: camelCaseData.error }
     } else {
-      await setSession(data.data.accessToken)
+      await setSession(camelCaseData.data.accessToken)
       const tokenPayload = await getSessionPayload()
       const redirectLink =
         tokenPayload?.user.role === UserRoleTypes.ORG_ADMIN ||
@@ -60,26 +63,38 @@ export async function login(
   }
 }
 
-export async function refreshToken(orgName: string): Promise<{ success?: string; error?: string }> {
-  const accessToken = await getSession()
+interface RefreshTokenOutputDTO {
+  success?: string
+  error?: string
+}
 
+export async function refreshToken(): Promise<RefreshTokenOutputDTO> {
+  const accessToken = await getSession()
   if (!accessToken) {
     return { error: 'Token not found!' }
   }
+
+  const orgName = await getCurrentOrgName()
+
+  const body = {
+    accessToken,
+  }
+  const bodySnakeCase = keysCamelCaseToSnakeCase(body)
 
   try {
     const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/refresh-token`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ accessToken }),
+      body: JSON.stringify(bodySnakeCase),
     })
 
     const data = await response.json()
+    const camelCaseData = keysSnakeCaseToCamelCase(data)
 
-    if (data.status === 'error') {
-      return { error: data.error }
+    if (camelCaseData.status === 'error') {
+      return { error: camelCaseData.error }
     } else {
-      await setSession(data.data.accessToken)
+      await setSession(camelCaseData.data.accessToken)
       return { success: 'Token refreshed!' }
     }
   } catch (error) {
@@ -87,15 +102,26 @@ export async function refreshToken(orgName: string): Promise<{ success?: string;
   }
 }
 
-export async function signup(
-  orgName: string,
-  values: z.infer<typeof SignupSchema>
-): Promise<{
+interface SignupInputDTO {
+  email: string
+  password: string
+  firstName: string
+  lastName: string
+}
+
+interface SignupOutputDTO {
   success?: string
   data?: Record<string, any>
   error?: string
-}> {
-  const { email, password, firstName, lastName } = values
+}
+
+export async function signup({
+  email,
+  password,
+  firstName,
+  lastName,
+}: SignupInputDTO): Promise<SignupOutputDTO> {
+  const orgName = await getCurrentOrgName()
 
   const body = {
     user: {
@@ -117,11 +143,12 @@ export async function signup(
     })
 
     const data = await response.json()
+    const camelCaseData = keysSnakeCaseToCamelCase(data)
 
-    if (data.status === 'error') {
-      return { error: data.error }
+    if (camelCaseData.status === 'error') {
+      return { error: camelCaseData.error }
     } else {
-      await setSession(data.data.accessToken)
+      await setSession(camelCaseData.data.accessToken)
       const tokenPayload = await getSessionPayload()
       const redirectLink =
         tokenPayload?.organization?.orgName === 'org'
@@ -143,14 +170,24 @@ export async function logout() {
   return await removeSession()
 }
 
-export async function forgotPassword(
-  orgName: string,
-  values: z.infer<typeof ForgotPasswordSchema>
-): Promise<{
+interface ForgotPasswordInputDTO {
+  email: string
+}
+
+interface ForgotPasswordOutputDTO {
   success?: string
   error?: string
-}> {
-  const { email } = values
+}
+
+export async function forgotPassword({
+  email,
+}: ForgotPasswordInputDTO): Promise<ForgotPasswordOutputDTO> {
+  const orgName = await getCurrentOrgName()
+
+  const body = {
+    email,
+  }
+  const bodySnakeCase = keysCamelCaseToSnakeCase(body)
 
   try {
     const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/forgot-password`, {
@@ -158,31 +195,44 @@ export async function forgotPassword(
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email }),
+      body: JSON.stringify(bodySnakeCase),
     })
 
     const data = await response.json()
+    const camelCaseData = keysSnakeCaseToCamelCase(data)
 
-    if (data.status === 'error') {
-      return { error: data.error }
+    if (camelCaseData.status === 'error') {
+      return { error: camelCaseData.error }
     } else {
-      return { success: data.data.message }
+      return { success: camelCaseData.data.message }
     }
   } catch (error) {
     return { error: 'Something went wrong!' }
   }
 }
 
-export async function resetPassword(
-  orgName: string,
-  resetPasswordToken: string,
-  values: z.infer<typeof NewPasswordSchema>
-): Promise<{
+interface ResetPasswordInputDTO {
+  resetPasswordToken: string
+  password: string
+}
+
+interface ResetPasswordOutputDTO {
   success?: string
   error?: string
   data?: Record<string, any>
-}> {
-  const { password } = values
+}
+
+export async function resetPassword({
+  resetPasswordToken,
+  password,
+}: ResetPasswordInputDTO): Promise<ResetPasswordOutputDTO> {
+  const orgName = await getCurrentOrgName()
+
+  const body = {
+    resetPasswordToken,
+    newPassword: password,
+  }
+  const bodySnakeCase = keysCamelCaseToSnakeCase(body)
 
   try {
     const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/reset-password`, {
@@ -190,15 +240,16 @@ export async function resetPassword(
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ resetPasswordToken, newPassword: password }),
+      body: JSON.stringify(bodySnakeCase),
     })
 
     const data = await response.json()
+    const camelCaseData = keysSnakeCaseToCamelCase(data)
 
-    if (data.status === 'error') {
-      return { error: data.error }
+    if (camelCaseData.status === 'error') {
+      return { error: camelCaseData.error }
     } else {
-      return { success: data.data.message, data: { redirectLink: '/login' } }
+      return { success: camelCaseData.data.message, data: { redirectLink: '/login' } }
     }
   } catch (error) {
     return { error: 'Something went wrong!' }

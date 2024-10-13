@@ -6,10 +6,8 @@ import { File } from '@/lib/types/file'
 import { uploadFileToS3 } from '@/lib/utils/s3'
 import { fetchFormAnswerFileUploadIntent } from '@/lib/data/form'
 import { saveAnswer } from '@/lib/actions/form'
-import { useOrgContext } from '@/contexts/org-context'
 import { useAuthContext } from '@/contexts/auth-context'
 import { useFormContext } from '@/contexts/form-context'
-import { keysCamelCaseToSnakeCase } from '@/lib/utils/json'
 
 interface Answer {
   text?: string
@@ -19,7 +17,6 @@ interface Answer {
 }
 
 export default function useAnswer(questionID: number, initialAnswer: Answer) {
-  const { orgName } = useOrgContext()
   const { sessionUserID } = useAuthContext()
   const { formID } = useFormContext()
   const [answer, setAnswer] = useState<Answer>(initialAnswer)

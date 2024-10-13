@@ -19,18 +19,12 @@ const authContextDefaultValues: AuthContextType = {
 const AuthContext = createContext<AuthContextType>(authContextDefaultValues)
 
 interface AuthProviderProps {
-  orgName: string
   token: string | null
   sessionUserID: number | null
   children: React.ReactNode
 }
 
-export default function AuthProvider({
-  orgName,
-  token,
-  sessionUserID,
-  children,
-}: AuthProviderProps) {
+export default function AuthProvider({ token, sessionUserID, children }: AuthProviderProps) {
   const value = {
     token,
     sessionUserID,
@@ -38,7 +32,7 @@ export default function AuthProvider({
 
   useEffect(() => {
     async function updateSession() {
-      refreshToken(orgName)
+      refreshToken()
         .then(async (data) => {
           if (data.error) {
             await removeSession()

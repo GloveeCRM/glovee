@@ -9,7 +9,6 @@ import { BiMessageSquareError } from 'react-icons/bi'
 
 import { resetPassword } from '@/lib/actions/auth'
 import { NewPasswordSchema } from '@/lib/zod/schemas'
-import { useOrgContext } from '@/contexts/org-context'
 import {
   Form,
   FormControl,
@@ -27,9 +26,7 @@ interface NewPasswordFormProps {
   resetPasswordToken: string
 }
 
-export default function ForgotPasswordForm({ resetPasswordToken }: NewPasswordFormProps) {
-  const { orgName } = useOrgContext()
-
+export default function NewPasswordForm({ resetPasswordToken }: NewPasswordFormProps) {
   const defaultFormValues = {
     password: '',
   }
@@ -39,8 +36,10 @@ export default function ForgotPasswordForm({ resetPasswordToken }: NewPasswordFo
     defaultValues: defaultFormValues,
   })
 
-  function handleForgotPassword(orgName: string, values: z.infer<typeof NewPasswordSchema>) {
-    resetPassword(orgName, resetPasswordToken, values).then((res) => {
+  function handleForgotPassword(values: z.infer<typeof NewPasswordSchema>) {
+    const { password } = values
+
+    resetPassword({ resetPasswordToken, password }).then((res) => {
       if (res.success) {
         form.setError('root.success', {
           message: res.success,
@@ -69,7 +68,7 @@ export default function ForgotPasswordForm({ resetPasswordToken }: NewPasswordFo
       </h1>
       <Separator className="mb-[16px] bg-n-300" />
       <Form {...form}>
-        <form onSubmit={form.handleSubmit((values) => handleForgotPassword(orgName, values))}>
+        <form onSubmit={form.handleSubmit(handleForgotPassword)}>
           <FormField
             control={form.control}
             name="password"

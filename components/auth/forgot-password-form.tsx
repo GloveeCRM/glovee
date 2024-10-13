@@ -35,8 +35,10 @@ export default function ForgotPasswordForm() {
     defaultValues: defaultFormValues,
   })
 
-  function handleForgotPassword(orgName: string, values: z.infer<typeof ForgotPasswordSchema>) {
-    forgotPassword(orgName, values).then((res) => {
+  function handleForgotPassword(values: z.infer<typeof ForgotPasswordSchema>) {
+    const { email } = values
+
+    forgotPassword({ email }).then((res) => {
       if (res.success) {
         form.setError('root.success', {
           message: res.success,
@@ -62,7 +64,7 @@ export default function ForgotPasswordForm() {
       </h1>
       <Separator className="mb-[16px] bg-n-300" />
       <Form {...form}>
-        <form onSubmit={form.handleSubmit((values) => handleForgotPassword(orgName, values))}>
+        <form onSubmit={form.handleSubmit(handleForgotPassword)}>
           <FormField
             control={form.control}
             name="email"

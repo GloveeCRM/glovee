@@ -9,7 +9,6 @@ import { BiMessageSquareError } from 'react-icons/bi'
 
 import { login } from '@/lib/actions/auth'
 import { LoginSchema } from '@/lib/zod/schemas'
-import { useOrgContext } from '@/contexts/org-context'
 import {
   Form,
   FormControl,
@@ -24,8 +23,6 @@ import { Separator } from '@/components//ui/separator'
 import { Callout } from '@/components/ui/callout'
 
 export default function LoginForm() {
-  const { orgName } = useOrgContext()
-
   const defaultFormValues = {
     email: '',
     password: '',
@@ -36,8 +33,10 @@ export default function LoginForm() {
     defaultValues: defaultFormValues,
   })
 
-  function handleLogin(orgName: string, values: z.infer<typeof LoginSchema>) {
-    login(orgName, values).then((res) => {
+  function handleLogin(values: z.infer<typeof LoginSchema>) {
+    const { email, password } = values
+
+    login({ email, password }).then((res) => {
       if (res.success) {
         form.setError('root.success', {
           message: res.success,
@@ -63,7 +62,7 @@ export default function LoginForm() {
       </h1>
       <Separator className="mb-[16px] bg-n-300" />
       <Form {...form}>
-        <form onSubmit={form.handleSubmit((values) => handleLogin(orgName, values))}>
+        <form onSubmit={form.handleSubmit(handleLogin)}>
           <FormField
             control={form.control}
             name="email"

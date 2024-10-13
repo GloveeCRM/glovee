@@ -38,8 +38,10 @@ export default function SignUpForm() {
     defaultValues: defaultFormValues,
   })
 
-  function handleSignup(orgName: string, values: z.infer<typeof SignupSchema>) {
-    signup(orgName, values).then((res) => {
+  function handleSignup(values: z.infer<typeof SignupSchema>) {
+    const { email, password, firstName, lastName } = values
+
+    signup({ email, password, firstName, lastName }).then((res) => {
       if (res.success) {
         form.setError('root.success', {
           message: res.success,
@@ -65,7 +67,7 @@ export default function SignUpForm() {
       </h1>
       <Separator className="mb-[16px] bg-n-300" />
       <Form {...form}>
-        <form onSubmit={form.handleSubmit((values) => handleSignup(orgName, values))}>
+        <form onSubmit={form.handleSubmit(handleSignup)}>
           <FormField
             control={form.control}
             name="firstName"

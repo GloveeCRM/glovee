@@ -10,22 +10,16 @@ export const metadata: Metadata = {
   description: '',
 }
 
-interface RootLayoutParams {
-  orgName: string
-}
-
 interface RootLayoutProps {
-  params: RootLayoutParams
   children: React.ReactNode
 }
 
-export default async function RootLayout({ params, children }: RootLayoutProps) {
+export default async function RootLayout({ children }: RootLayoutProps) {
   const session = await getSession()
-  const orgName = params.orgName
   const sessionUserID = await getSessionUserID()
 
   return (
-    <AuthProvider orgName={orgName} token={session} sessionUserID={sessionUserID}>
+    <AuthProvider token={session} sessionUserID={sessionUserID}>
       <html lang="en">
         <body id="admin-app">
           <div className="flex">
