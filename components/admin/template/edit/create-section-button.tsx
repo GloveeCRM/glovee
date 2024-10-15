@@ -9,10 +9,10 @@ interface CreateSectionButtonProps {
 }
 
 export default function CreateSectionButton({ type, categoryID }: CreateSectionButtonProps) {
-  const { createSectionInTemplateCategory } = useSectionActions()
+  const { createSection } = useSectionActions()
 
   function handleClick() {
-    createSectionInTemplateCategory(categoryID)
+    createSection(categoryID)
   }
 
   return (

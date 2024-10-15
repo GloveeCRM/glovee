@@ -3,7 +3,7 @@
 import { useEffect, useState, useTransition } from 'react'
 import { ImSpinner2 } from 'react-icons/im'
 
-import { TemplateType } from '@/lib/types/template'
+import { FormTemplateType } from '@/lib/types/template'
 import { updateFullTemplateByID } from '@/lib/actions/template'
 import { useOrgContext } from '@/contexts/org-context'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
@@ -15,7 +15,7 @@ export default function SaveTemplateButton() {
 
   const { orgName } = useOrgContext()
 
-  function saveTemplateChanges(templateID: number, template: TemplateType) {
+  function saveTemplateChanges(templateID: number, template: FormTemplateType) {
     setMessage('Saving changes...')
     startTransition(() => {
       updateFullTemplateByID(orgName, templateID, template)

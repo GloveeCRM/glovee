@@ -7,26 +7,33 @@ import TemplateCardOptionsMenuButton from './template-card-options-menu-button'
 
 interface TemplateCardProps {
   orgName: string
-  id: number
+  formTemplateID: number
+  formID: number
   title: string
   description?: string
 }
 
-export default function TemplateCard({ orgName, id, title, description }: TemplateCardProps) {
+export default function TemplateCard({
+  orgName,
+  formTemplateID,
+  formID,
+  title,
+  description,
+}: TemplateCardProps) {
   return (
     <div className="flex flex-col justify-between rounded-md border border-n-500 p-[8px]">
       <div className="mb-[8px] flex justify-between gap-[10px]">
         <p className="text-[16px] font-bold">{title}</p>
-        <TemplateCardOptionsMenuButton orgName={orgName} templateID={id} />
+        <TemplateCardOptionsMenuButton orgName={orgName} templateID={formTemplateID} />
       </div>
       <div>
         {description && <p className="mb-[10px] line-clamp-3 text-[14px]">{description}</p>}
         <div className="flex gap-[8px]">
           <Button asChild size="md" fullWidth>
-            <Link href={`/admin/template/${id}/preview`}>View</Link>
+            <Link href={`/admin/form-template/${formID}/preview`}>View</Link>
           </Button>
           <Button asChild size="md">
-            <Link href={`/admin/template/${id}/edit`}>
+            <Link href={`/admin/template/${formTemplateID}/form/${formID}/edit`}>
               <HiOutlinePencilSquare className="h-[20px] w-[20px]" />
             </Link>
           </Button>

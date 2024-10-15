@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react'
 import { FiEdit, FiMoreHorizontal } from 'react-icons/fi'
 import { BiTrash } from 'react-icons/bi'
 
-import { TemplateCategoryType } from '@/lib/types/template'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
 import useCategoryActions from '@/hooks/template/use-category-actions'
 import {
@@ -15,9 +14,10 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import TemplateEditSidebarSectionWrapper from './template-edit-sidebar-section-wrapper'
+import { FormCategoryType } from '@/lib/types/form'
 
 interface TemplateEditSidebarCategoryProps {
-  category: TemplateCategoryType
+  category: FormCategoryType
   isExpanded: boolean
 }
 

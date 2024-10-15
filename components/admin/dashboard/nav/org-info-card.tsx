@@ -1,14 +1,15 @@
 import Image from 'next/image'
 
 import { DEFAULT_ORG_LOGO_URL } from '@/lib/constants/images'
-import { fetchOrganizationProfile } from '@/lib/data/organization'
+import { fetchOrganizationProfile, searchOrganizations } from '@/lib/data/organization'
 
 interface OrgInfoCardProps {
   orgName: string
 }
 
 export default async function OrgInfoCard({ orgName }: OrgInfoCardProps) {
-  const org = await fetchOrganizationProfile(orgName)
+  const orgs = await searchOrganizations({ filters: { orgName } })
+  const org = orgs?.organizations?.[0] || null
 
   return (
     <div

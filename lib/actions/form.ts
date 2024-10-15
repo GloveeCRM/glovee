@@ -4,35 +4,55 @@ import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 
 import { GLOVEE_API_URL } from '@/lib/constants/api'
-import { CreateFormSchema } from '@/lib/zod/schemas'
-import { getSession, getSessionPayload } from '@/lib/auth/session'
+import { getSession } from '@/lib/auth/session'
 import { File } from '../types/file'
-import { FormQuestionSetType, FormStatusTypes } from '../types/form'
+import {
+  FormQuestionSetType,
+  FormStatusTypes,
+  FormCategoryType,
+  FormSectionType,
+} from '../types/form'
 import { getCurrentOrgName } from '../utils/server'
 import { keysCamelCaseToSnakeCase, keysSnakeCaseToCamelCase } from '../utils/json'
 
-export async function createNewForm(
-  orgName: string,
-  values: z.infer<typeof CreateFormSchema>
-): Promise<{ success?: string; error?: string }> {
-  const { clientID, role, applicantFirstName, applicantLastName, templateID } = values
+type CreateNewFormInputDTO = {
+  ownerID: number
+  role: string
+  templateID: number
+}
 
+type CreateNewFormOutputDTO = {
+  success?: string
+  error?: string
+}
+
+export async function createNewForm({
+  ownerID,
+  role,
+  templateID,
+}: CreateNewFormInputDTO): Promise<CreateNewFormOutputDTO> {
   const accessToken = await getSession()
+  if (!accessToken) {
+    return { error: 'Unauthorized' }
+  }
+
+  const orgName = await getCurrentOrgName()
+
+  const body = {
+    ownerID,
+    templateID: templateID || null,
+    role,
+  }
+  const bodySnakeCase = keysCamelCaseToSnakeCase(body)
 
   try {
-    const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/form/admin/create`, {
+    const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/form/create`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`,
       },
-      body: JSON.stringify({
-        clientID,
-        templateID: templateID || null,
-        role,
-        applicantFirstName,
-        applicantLastName,
-      }),
+      body: JSON.stringify(bodySnakeCase),
     })
 
     const data = await response.json()
@@ -237,5 +257,119 @@ export async function deleteQuestionSet(
     }
   } catch (error) {
     return { error: 'Failed to delete question set!' }
+  }
+}
+
+interface CreateFormCategoryInputDTO {
+  userID: number
+  formCategory: Partial<FormCategoryType>
+}
+
+type CreateFormCategoryOutputDTO = {
+  error?: string
+  success?: string
+  formCategory?: FormCategoryType
+}
+
+export async function createFormCategory({
+  userID,
+  formCategory,
+}: CreateFormCategoryInputDTO): Promise<CreateFormCategoryOutputDTO> {
+  const accessToken = await getSession()
+  if (!accessToken) {
+    return { error: 'Unauthorized' }
+  }
+
+  const orgName = await getCurrentOrgName()
+
+  const queryParams = new URLSearchParams()
+  queryParams.append('user_id', userID?.toString() || '')
+
+  const body = {
+    formCategory,
+  }
+  const bodySnakeCase = keysCamelCaseToSnakeCase(body)
+
+  try {
+    const response = await fetch(
+      `${GLOVEE_API_URL}/v1/${orgName}/form/category/create?${queryParams}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(bodySnakeCase),
+      }
+    )
+
+    const data = await response.json()
+    const camelData = keysSnakeCaseToCamelCase(data)
+    console.log('camelData', JSON.stringify(camelData, null, 2))
+    if (data.status === 'error') {
+      return { error: camelData.error }
+    } else {
+      revalidatePath('/admin/forms')
+      return { success: 'Form category created!', formCategory: camelData.data }
+    }
+  } catch (error) {
+    return { error: 'Failed to create form category!' }
+  }
+}
+
+interface CreateFormSectionInputDTO {
+  userID: number
+  formSection: Partial<FormSectionType>
+}
+
+type CreateFormSectionOutputDTO = {
+  error?: string
+  success?: string
+  formSection?: FormSectionType
+}
+
+export async function createFormSection({
+  userID,
+  formSection,
+}: CreateFormSectionInputDTO): Promise<CreateFormSectionOutputDTO> {
+  const accessToken = await getSession()
+  if (!accessToken) {
+    return { error: 'Unauthorized' }
+  }
+
+  const orgName = await getCurrentOrgName()
+
+  const queryParams = new URLSearchParams()
+  queryParams.append('user_id', userID?.toString() || '')
+
+  const body = {
+    formSection,
+  }
+  const bodySnakeCase = keysCamelCaseToSnakeCase(body)
+
+  try {
+    const response = await fetch(
+      `${GLOVEE_API_URL}/v1/${orgName}/form/section/create?${queryParams}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(bodySnakeCase),
+      }
+    )
+
+    const data = await response.json()
+    const camelData = keysSnakeCaseToCamelCase(data)
+    console.log('camelData', JSON.stringify(camelData, null, 2))
+    if (data.status === 'error') {
+      return { error: camelData.error }
+    } else {
+      revalidatePath('/admin/forms')
+      return { success: 'Form section created!', formSection: camelData.data }
+    }
+  } catch (error) {
+    return { error: 'Failed to create form section!' }
   }
 }

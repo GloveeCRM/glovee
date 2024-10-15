@@ -26,20 +26,29 @@ export type FormType = {
   organizationID: number
   client: UserType
   role: FormRoleTypes
-  formName: string
   applicant: Applicant
   status: FormStatusTypes
   completionRate: number
   categories?: FormCategoryType[]
+  formID: number
+  formName: string
+  formDescription: string
+  formStatus: FormStatusTypes
+  createdBy: UserType
+  createdAt: string
+  updatedAt: string
 }
 
 export type FormCategoryType = {
   id: number
   name: string
   position: number
-  formID: number
   completionRate: number
   sections?: FormSectionType[]
+  categoryID: number
+  formID: number
+  categoryName: string
+  categoryPosition: number
 }
 
 export type FormSectionType = {
@@ -49,6 +58,9 @@ export type FormSectionType = {
   categoryID: number
   completionRate: number
   questionSets?: FormQuestionSetType[]
+  sectionID: number
+  sectionName: string
+  sectionPosition: number
 }
 
 export enum FormQuestionSetTypes {

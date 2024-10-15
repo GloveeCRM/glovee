@@ -62,11 +62,11 @@ export async function searchForms({
     )
 
     const data = await response.json()
-    const camelData = keysSnakeCaseToCamelCase(data)
-    if (camelData.status === 'error') {
+    const camelCaseData = keysSnakeCaseToCamelCase(data)
+    if (camelCaseData.status === 'error') {
       return { forms: null, totalCount: 0 }
     } else {
-      return { forms: camelData.data.forms, totalCount: camelData.data.total }
+      return { forms: camelCaseData.data.forms, totalCount: camelCaseData.data.total }
     }
   } catch (error) {
     return { forms: null, totalCount: 0 }
@@ -115,33 +115,6 @@ export async function fetchFormQuestionSets({
     return camelData.data.questionSets
   } catch (error) {
     return []
-  }
-}
-
-export async function fetchFullForm(formID: number, orgName: string): Promise<FormType | null> {
-  const accessToken = await getSession()
-  if (!accessToken) {
-    return null
-  }
-  const payload = await getSessionPayload()
-  const clientID = payload?.user.id || 0
-
-  try {
-    const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/form/client/${clientID}/full-form/${formID}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    )
-
-    const data = await response.json()
-    return data.data.form
-  } catch (error) {
-    return null
   }
 }
 

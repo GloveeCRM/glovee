@@ -59,7 +59,12 @@ export default function CreateNewClientButton() {
   }
 
   function handleCreateClient(values: z.infer<typeof CreateClientSchema>) {
-    createUser(values).then((res) => {
+    const newUser = {
+      firstName: values.firstName,
+      lastName: values.lastName,
+      email: values.email,
+    }
+    createUser({ newUser }).then((res) => {
       if (res.success) {
         setIsOpen(false)
         clientCreationSuccessToast(res.success || 'Client created!')

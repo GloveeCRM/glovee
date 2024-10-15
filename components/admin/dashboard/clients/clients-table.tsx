@@ -26,7 +26,7 @@ export default async function ClientsTable({ orgName, query, currentPage }: Clie
   const offset = currentPage * totalRowsPerPage - totalRowsPerPage
   const { users, total } = await searchUsers({
     filters: { role: UserRoleTypes.ORG_CLIENT },
-    query,
+    searchQuery: query,
     limit: totalRowsPerPage,
     offset,
   })

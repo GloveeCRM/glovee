@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import toast from 'react-hot-toast'
 import { BiTrash } from 'react-icons/bi'
 import { FiMoreHorizontal } from 'react-icons/fi'
 
@@ -11,8 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { deleteTemplateByID } from '@/lib/actions/template'
-import toast from 'react-hot-toast'
+import { deleteFormTemplateByID } from '@/lib/actions/template'
 
 interface TemplateCardOptionsMenuButtonProps {
   orgName: string
@@ -39,8 +39,8 @@ export default function TemplateCardOptionsMenuButton({
     })
   }
 
-  function handleDeleteTemplate(orgName: string, templateID: number) {
-    deleteTemplateByID(orgName, templateID).then((res) => {
+  function handleDeleteTemplate(templateID: number) {
+    deleteFormTemplateByID({ formTemplateID: templateID }).then((res) => {
       if (res?.success) {
         templateDeleteSuccessToast(res.success || 'Template deleted successfully!')
       } else {
@@ -66,7 +66,7 @@ export default function TemplateCardOptionsMenuButton({
         <DropdownMenuGroup>
           <DropdownMenuItem
             className="flex gap-[6px] focus:text-red-500"
-            onClick={() => handleDeleteTemplate(orgName, templateID)}
+            onClick={() => handleDeleteTemplate(templateID)}
           >
             <BiTrash className="h-[16px] w-[16px]" />
             <span>Delete Template</span>

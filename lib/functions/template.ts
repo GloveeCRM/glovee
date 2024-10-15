@@ -1,15 +1,19 @@
-import { TemplateCategoryType, TemplateQuestionSetType, TemplateType } from '@/lib/types/template'
+import {
+  TemplateCategoryType,
+  TemplateQuestionSetType,
+  FormTemplateType,
+} from '@/lib/types/template'
 
-export function setTemplateOnLocalStorage(templateId: number, template: TemplateType) {
+export function setTemplateOnLocalStorage(templateId: number, template: FormTemplateType) {
   localStorage.setItem(`template_${templateId}`, JSON.stringify(template))
 }
 
-export function getTemplateFromLocalStorage(templateId: number): TemplateType | null {
+export function getTemplateFromLocalStorage(templateId: number): FormTemplateType | null {
   const localTemplate = localStorage.getItem(`template_${templateId}`)
   return localTemplate ? JSON.parse(localTemplate) : null
 }
 
-export function formatTemplate(template: TemplateType): TemplateType {
+export function formatTemplate(template: FormTemplateType): FormTemplateType {
   // Deep copy the template to avoid mutating the original data
   let formattedTemplate = JSON.parse(JSON.stringify(template))
 

@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form'
 import { GoPlus } from 'react-icons/go'
 
 import { TemplateSchema } from '@/lib/zod/schemas'
-import { createNewTemplate } from '@/lib/actions/template'
+import { createTemplate } from '@/lib/actions/template'
 import { useOrgContext } from '@/contexts/org-context'
 import {
   Dialog,
@@ -59,11 +59,12 @@ export default function CreateNewTemplateButton() {
   }
 
   function handleCreateTemplate(values: z.infer<typeof TemplateSchema>) {
-    createNewTemplate(orgName, values)
+    const { name, description } = values
+    createTemplate({ form: { formName: name, formDescription: description } })
       .then((res) => {
         if (res.success) {
           templateCreationSuccessToast(res.success)
-        } else {
+        } else if (res.error) {
           templateCreationErrorToast(res.error)
         }
       })

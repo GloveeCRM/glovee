@@ -11,21 +11,26 @@ interface SearchUsersInput {
     userID?: number
     role: string
   }
-  query?: string
+  searchQuery?: string
   limit?: number
   offset?: number
 }
 
+type SearchUsersOutputDTO = {
+  users: UserType[] | null
+  totalCount: number
+}
+
 export async function searchUsers({
   filters = { userID: 0, role: '' },
-  query = '',
+  searchQuery = '',
   limit = 0,
   offset = 0,
-}: SearchUsersInput): Promise<{ users: UserType[] | null; total: number }> {
+}: SearchUsersInput): Promise<SearchUsersOutputDTO | null> {
   try {
     const accessToken = await getSession()
     if (!accessToken) {
-      return { users: null, total: 0 }
+      return { users: null, totalCount: 0 }
     }
 
     const orgName = await getCurrentOrgName()
@@ -33,7 +38,7 @@ export async function searchUsers({
     const queryParams = new URLSearchParams()
     queryParams.append('user_id', filters.userID?.toString() || '')
     queryParams.append('role', filters.role)
-    queryParams.append('search_query', query)
+    queryParams.append('search_query', searchQuery)
     queryParams.append('limit', limit.toString())
     queryParams.append('offset', offset.toString())
 
@@ -52,12 +57,12 @@ export async function searchUsers({
     const camelCaseData = keysSnakeCaseToCamelCase(data)
 
     if (camelCaseData.status === 'error') {
-      return { users: null, total: 0 }
+      return { users: null, totalCount: 0 }
     } else {
-      return { users: camelCaseData.data.clients, total: camelCaseData.data.total }
+      return { users: camelCaseData.data.users, totalCount: camelCaseData.data.totalCount }
     }
   } catch (error) {
-    return { users: null, total: 0 }
+    return { users: null, totalCount: 0 }
   }
 }
 

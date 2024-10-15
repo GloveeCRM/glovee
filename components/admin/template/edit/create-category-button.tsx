@@ -3,15 +3,15 @@ import { FiPlus } from 'react-icons/fi'
 import useCategoryActions from '@/hooks/template/use-category-actions'
 
 interface CreateCategoryButtonProps {
-  templateID: number
+  formID: number
   type: 'add' | 'create'
 }
 
-export default function CreateCategoryButton({ templateID, type }: CreateCategoryButtonProps) {
-  const { createCategoryInTemplate } = useCategoryActions()
+export default function CreateCategoryButton({ formID, type }: CreateCategoryButtonProps) {
+  const { createCategory } = useCategoryActions()
 
   function handleClick() {
-    createCategoryInTemplate(templateID)
+    createCategory(formID)
   }
 
   return (

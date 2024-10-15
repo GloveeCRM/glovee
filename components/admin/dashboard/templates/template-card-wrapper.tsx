@@ -6,19 +6,20 @@ interface TemplateCardWrapperProps {
 }
 
 export default async function TemplateCardWrapper({ orgName }: TemplateCardWrapperProps) {
-  const templates = await searchTemplates(orgName)
+  const { formTemplates } = await searchTemplates({})
 
   return (
     <>
-      {templates && templates.length > 0 ? (
+      {formTemplates && formTemplates.length > 0 ? (
         <div className="grid grid-cols-1 gap-[8px] overflow-y-auto md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {templates.map((template) => (
+          {formTemplates.map((formTemplate) => (
             <TemplateCard
               orgName={orgName}
-              key={template.id}
-              id={template.id}
-              title={template.name}
-              description={template.description}
+              key={formTemplate.id}
+              formTemplateID={formTemplate.formTemplateID}
+              formID={formTemplate.form?.formID || 0}
+              title={formTemplate.form?.formName || ''}
+              description={formTemplate.form?.formDescription || ''}
             />
           ))}
         </div>

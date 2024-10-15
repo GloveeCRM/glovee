@@ -9,7 +9,7 @@ import toast from 'react-hot-toast'
 import { GoPlus } from 'react-icons/go'
 import { IoClose } from 'react-icons/io5'
 
-import { TemplateType } from '@/lib/types/template'
+import { FormTemplateType } from '@/lib/types/template'
 import { FormRoleTypes } from '@/lib/types/form'
 import { UserRoleTypes, UserType } from '@/lib/types/user'
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
@@ -61,20 +61,20 @@ interface CreateNewApplicationButtonProp {
 export default function CreateNewApplicationButton({ client }: CreateNewApplicationButtonProp) {
   const { orgName } = useOrgContext()
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const [templates, setTemplates] = useState<TemplateType[] | null>(null)
+  const [templates, setTemplates] = useState<FormTemplateType[] | null>(null)
   const [clients, setClients] = useState<UserType[] | null>(null)
   const [isSearchingClients, setIsSearchingClients] = useState<boolean>(false)
 
   useEffect(() => {
-    searchTemplates(orgName).then((res) => {
-      setTemplates(res)
+    searchTemplates({}).then((res) => {
+      setTemplates(res.formTemplates)
     })
 
     if (!client) {
       searchUsers({
         filters: { role: UserRoleTypes.ORG_CLIENT },
       }).then((res) => {
-        setClients(res.users)
+        setClients(res?.users || null)
       })
     }
   }, [orgName, client])
@@ -107,7 +107,12 @@ export default function CreateNewApplicationButton({ client }: CreateNewApplicat
   }
 
   async function handleCreateApplication(values: z.infer<typeof CreateFormSchema>) {
-    createNewForm(orgName, values)
+    const { clientID, role, templateID } = values
+    createNewForm({
+      ownerID: clientID,
+      role,
+      templateID,
+    })
       .then((res) => {
         if (res.success) {
           applicationCreationSuccessToast(res.success || 'Application created!')

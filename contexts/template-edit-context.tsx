@@ -2,16 +2,20 @@
 
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react'
 
-import { fetchFullTemplateById } from '@/lib/data/template'
-import { TemplateType } from '@/lib/types/template'
+import { fetchFullTemplateById, searchTemplates } from '@/lib/data/template'
+import { FormTemplateType } from '@/lib/types/template'
 import { getTemplateFromLocalStorage, setTemplateOnLocalStorage } from '@/lib/functions/template'
+import { FormCategoryType } from '@/lib/types/form'
+import { searchForms } from '@/lib/data/form'
+import { useAuthContext } from './auth-context'
 
 type TemplateEditContextType = {
-  templateID: number
-  template: TemplateType | null
-  setTemplate: Dispatch<SetStateAction<TemplateType | null>>
-  savedTemplate: TemplateType | null
-  setSavedTemplate: Dispatch<SetStateAction<TemplateType | null>>
+  formID: number
+  formTemplateID: number
+  template: FormTemplateType | null
+  setTemplate: Dispatch<SetStateAction<FormTemplateType | null>>
+  savedTemplate: FormTemplateType | null
+  setSavedTemplate: Dispatch<SetStateAction<FormTemplateType | null>>
   isTemplateChanged: boolean
   setIsTemplateChanged: Dispatch<SetStateAction<boolean>>
   selectedCategoryID: number
@@ -22,10 +26,13 @@ type TemplateEditContextType = {
   setSelectedQuestionSetID: Dispatch<SetStateAction<number>>
   selectedQuestionID: number
   setSelectedQuestionID: Dispatch<SetStateAction<number>>
+  formCategories: FormCategoryType[] | null
+  setFormCategories: Dispatch<SetStateAction<FormCategoryType[] | null>>
 }
 
 const templateEditContextDefaultValues: TemplateEditContextType = {
-  templateID: 0,
+  formID: 0,
+  formTemplateID: 0,
   template: null,
   setTemplate: () => {},
   savedTemplate: null,
@@ -40,23 +47,28 @@ const templateEditContextDefaultValues: TemplateEditContextType = {
   setSelectedQuestionSetID: () => {},
   selectedQuestionID: 0,
   setSelectedQuestionID: () => {},
+  formCategories: null,
+  setFormCategories: () => {},
 }
 
 const TemplateEditContext = createContext<TemplateEditContextType>(templateEditContextDefaultValues)
 
 interface TemplateEditProviderProps {
   orgName: string
-  templateID: number
+  formID: number
+  formTemplateID: number
   children: React.ReactNode
 }
 
 export default function TemplateEditProvider({
   orgName,
-  templateID,
+  formID,
+  formTemplateID,
   children,
 }: TemplateEditProviderProps) {
-  const [template, setTemplate] = useState<TemplateType | null>(null)
-  const [savedTemplate, setSavedTemplate] = useState<TemplateType | null>(null)
+  const [template, setTemplate] = useState<FormTemplateType | null>(null)
+  const [formCategories, setFormCategories] = useState<FormCategoryType[] | null>(null)
+  const [savedTemplate, setSavedTemplate] = useState<FormTemplateType | null>(null)
   const [selectedCategoryID, setSelectedCategoryID] = useState<number>(
     template?.categories?.[0]?.id || 0
   )
@@ -67,52 +79,87 @@ export default function TemplateEditProvider({
   const [selectedQuestionID, setSelectedQuestionID] = useState<number>(0)
   const [isTemplateChanged, setIsTemplateChanged] = useState<boolean>(false)
 
+  const { sessionUserID } = useAuthContext()
+
+  // useEffect(() => {
+  //   async function fetchAndSetInitialTemplate() {
+  //     const fetchedTemplate = await fetchFullTemplateById(orgName, templateID)
+  //     setSavedTemplate(fetchedTemplate)
+
+  //     const localTemplate = getTemplateFromLocalStorage(templateID)
+  //     if (localTemplate) {
+  //       setTemplate(localTemplate)
+  //     } else {
+  //       setTemplate(fetchedTemplate)
+  //     }
+  //   }
+
+  //   fetchAndSetInitialTemplate()
+  // }, [templateID])
+
+  // useEffect(() => {
+  //   if (template) {
+  //     setTemplateOnLocalStorage(templateID, template)
+  //   }
+
+  //   function setDefaultSelections() {
+  //     if (!template || !template.categories) return
+
+  //     if (!selectedCategoryID) {
+  //       setSelectedCategoryID(template.categories?.[0]?.id)
+  //     }
+
+  //     if (!selectedSectionID && template.categories?.[0]?.sections) {
+  //       setSelectedSectionID(template.categories[0].sections[0]?.id || 0)
+  //     }
+  //   }
+
+  //   setDefaultSelections()
+
+  //   function detectAndSetIsTemplateChanged() {
+  //     const currentTemplateStr = JSON.stringify(template)
+  //     const savedTemplateStr = JSON.stringify(savedTemplate)
+  //     setIsTemplateChanged(currentTemplateStr !== savedTemplateStr)
+  //   }
+
+  //   detectAndSetIsTemplateChanged()
+  // }, [template, savedTemplate, selectedCategoryID, selectedSectionID, templateID])
+
   useEffect(() => {
-    async function fetchAndSetInitialTemplate() {
-      const fetchedTemplate = await fetchFullTemplateById(orgName, templateID)
-      setSavedTemplate(fetchedTemplate)
-
-      const localTemplate = getTemplateFromLocalStorage(templateID)
-      if (localTemplate) {
-        setTemplate(localTemplate)
-      } else {
-        setTemplate(fetchedTemplate)
-      }
+    async function fetchAndSetTemplate() {
+      const { formTemplates } = await searchTemplates({
+        filters: {
+          formTemplateID: formTemplateID,
+        },
+      })
+      const template = formTemplates?.[0] || null
+      setTemplate(template)
     }
 
-    fetchAndSetInitialTemplate()
-  }, [templateID])
+    fetchAndSetTemplate()
+  }, [formTemplateID])
 
   useEffect(() => {
-    if (template) {
-      setTemplateOnLocalStorage(templateID, template)
+    async function fetchAndSetFormCategories() {
+      const { forms } = await searchForms({
+        filters: {
+          userID: sessionUserID || 0,
+          formID: formID,
+          includeCategories: true,
+          includeSections: true,
+        },
+      })
+      const form = forms?.[0]
+      const categories = form?.categories || []
+      setFormCategories(categories)
     }
 
-    function setDefaultSelections() {
-      if (!template || !template.categories) return
-
-      if (!selectedCategoryID) {
-        setSelectedCategoryID(template.categories?.[0]?.id)
-      }
-
-      if (!selectedSectionID && template.categories?.[0]?.sections) {
-        setSelectedSectionID(template.categories[0].sections[0]?.id || 0)
-      }
-    }
-
-    setDefaultSelections()
-
-    function detectAndSetIsTemplateChanged() {
-      const currentTemplateStr = JSON.stringify(template)
-      const savedTemplateStr = JSON.stringify(savedTemplate)
-      setIsTemplateChanged(currentTemplateStr !== savedTemplateStr)
-    }
-
-    detectAndSetIsTemplateChanged()
-  }, [template, savedTemplate, selectedCategoryID, selectedSectionID, templateID])
+    fetchAndSetFormCategories()
+  }, [template])
 
   const value = {
-    templateID,
+    formID,
+    formTemplateID,
     template,
     setTemplate,
     savedTemplate,
@@ -127,6 +174,8 @@ export default function TemplateEditProvider({
     setSelectedQuestionSetID,
     selectedQuestionID,
     setSelectedQuestionID,
+    formCategories,
+    setFormCategories,
   }
 
   return <TemplateEditContext.Provider value={value}>{children}</TemplateEditContext.Provider>

@@ -37,7 +37,10 @@ export default function ClientProfilePicture({ url, client, editable }: ClientPr
       return
     }
 
-    const updateRes = await updateUser(client.id, { avatarURL: uploadRes.url || '' })
+    const updateRes = await updateUser({
+      userID: client.id,
+      updateFields: { avatarURL: uploadRes.url || '' },
+    })
     if (updateRes.error) {
       console.error('Failed to update profile picture')
       return
@@ -49,7 +52,7 @@ export default function ClientProfilePicture({ url, client, editable }: ClientPr
   }
 
   function handleDelete() {
-    updateUser(client.id, { avatarURL: '' })
+    updateUser({ userID: client.id, updateFields: { avatarURL: '' } })
   }
 
   return (

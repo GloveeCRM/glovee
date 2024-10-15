@@ -3,51 +3,91 @@
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 
-import { TemplateType } from '@/lib/types/template'
+import { FormTemplateType } from '@/lib/types/template'
 import { GLOVEE_API_URL } from '@/lib/constants/api'
-import { TemplateSchema } from '@/lib/zod/schemas'
-import { getSession } from '@/lib/auth/session'
+import { getSession, getSessionUserID } from '@/lib/auth/session'
+import { getCurrentOrgName } from '../utils/server'
+import { keysCamelCaseToSnakeCase, keysSnakeCaseToCamelCase } from '../utils/json'
+import { FormType } from '../types/form'
 
-export async function createNewTemplate(orgName: string, values: z.infer<typeof TemplateSchema>) {
-  const { name, description } = values
+interface CreateNewTemplateInputDTO {
+  form: Partial<FormType>
+}
 
+interface CreateNewTemplateOutputDTO {
+  success?: string
+  error?: string
+}
+
+export async function createTemplate({
+  form,
+}: CreateNewTemplateInputDTO): Promise<CreateNewTemplateOutputDTO> {
   const accessToken = await getSession()
   if (!accessToken) {
     return { error: 'Failed to get access token!' }
   }
+  const userID = await getSessionUserID()
+  const orgName = await getCurrentOrgName()
+
+  const queryParams = new URLSearchParams()
+  queryParams.append('user_id', userID.toString())
+
+  const body = {
+    form,
+  }
+  const bodySnakeCase = keysCamelCaseToSnakeCase(body)
 
   try {
-    const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/template/admin/create`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify({ name, description }),
-    })
+    const response = await fetch(
+      `${GLOVEE_API_URL}/v1/${orgName}/template/create?${queryParams.toString()}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(bodySnakeCase),
+      }
+    )
 
     const data = await response.json()
-
+    const camelData = keysSnakeCaseToCamelCase(data)
     if (data.status === 'error') {
-      return { error: data.error }
+      return { error: camelData.error }
     } else {
       revalidatePath('/admin/templates')
-      return { success: 'Template created!' }
+      return { success: 'Template created successfully' }
     }
   } catch (error) {
     return { error: 'Failed to create template!' }
   }
 }
 
-export async function deleteTemplateByID(orgName: string, templateID: number) {
+interface DeleteTemplateByIDInputDTO {
+  formTemplateID: number
+}
+
+interface DeleteTemplateByIDOutputDTO {
+  success?: string
+  error?: string
+}
+
+export async function deleteFormTemplateByID({
+  formTemplateID,
+}: DeleteTemplateByIDInputDTO): Promise<DeleteTemplateByIDOutputDTO> {
   const accessToken = await getSession()
   if (!accessToken) {
     return { error: 'Failed to get access token!' }
   }
 
+  const orgName = await getCurrentOrgName()
+
+  const queryParams = new URLSearchParams()
+  queryParams.append('form_template_id', formTemplateID.toString())
+
   try {
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/template/admin/delete/${templateID}`,
+      `${GLOVEE_API_URL}/v1/${orgName}/template/delete?${queryParams.toString()}`,
       {
         method: 'DELETE',
         headers: {
@@ -58,12 +98,12 @@ export async function deleteTemplateByID(orgName: string, templateID: number) {
     )
 
     const data = await response.json()
-
+    const camelCaseData = keysSnakeCaseToCamelCase(data)
     if (data.status === 'error') {
-      return { error: data.error }
+      return { error: camelCaseData.error }
     } else {
       revalidatePath('/admin/templates')
-      return { success: data.data.message }
+      return { success: camelCaseData.data.message }
     }
   } catch (error) {
     return { error: 'Failed to delete template!' }
@@ -73,7 +113,7 @@ export async function deleteTemplateByID(orgName: string, templateID: number) {
 export async function updateFullTemplateByID(
   orgName: string,
   templateID: number,
-  template: TemplateType
+  template: FormTemplateType
 ): Promise<{ success?: string; error?: string }> {
   const accessToken = await getSession()
   if (!accessToken) {

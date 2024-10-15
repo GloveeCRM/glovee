@@ -4,7 +4,8 @@ import TemplateEditToolbar from '@/components/admin/template/edit/template-edit-
 
 interface TemplateEditLayoutParams {
   orgName: string
-  id: number
+  formID: number
+  formTemplateID: number
 }
 
 interface TemplateEditLayoutProps {
@@ -13,12 +14,13 @@ interface TemplateEditLayoutProps {
 }
 
 export default function TemplateEditLayout({ params, children }: TemplateEditLayoutProps) {
-  const templateID = params.id
+  const formID = Number(params.formID)
+  const formTemplateID = Number(params.formTemplateID)
   const orgName = params.orgName
 
   return (
     <div id="template-edit-layout" className="flex">
-      <TemplateEditProvider orgName={orgName} templateID={templateID}>
+      <TemplateEditProvider orgName={orgName} formID={formID} formTemplateID={formTemplateID}>
         <TemplateEditSidebar />
         <div className="h-svh w-full min-w-0 overflow-y-scroll bg-n-400">{children}</div>
         <TemplateEditToolbar />

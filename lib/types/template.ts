@@ -1,11 +1,18 @@
+import { FormType } from './form'
 import { QuestionType } from './qusetion'
+import { UserType } from './user'
 
-export type TemplateType = {
+export type FormTemplateType = {
   id: number
-  organizationID: number
   name: string
   description?: string
   categories?: TemplateCategoryType[]
+  formTemplateID: number
+  organizationID: number
+  createdBy: UserType
+  createdAt: string
+  updatedAt: string
+  form?: FormType
 }
 
 export type TemplateCategoryType = {
