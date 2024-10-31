@@ -70,7 +70,10 @@ interface LoginPostgrestProps {
 }
 
 interface LoginPostgrestResponse {
-  accessToken?: string
+  data?: {
+    accessToken: string
+    redirectLink: string
+  }
   error?: string
 }
 
@@ -87,22 +90,47 @@ export async function loginPostgrest({
   }
   const bodySnakeCase = keysCamelCaseToSnakeCase(body)
 
-  const response = await fetch(`${GLOVEE_API_URL}/rpc/login`, {
+  return fetch(`${GLOVEE_API_URL}/rpc/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(bodySnakeCase),
   })
+    .then(async (response) => {
+      const data = await response.json()
+      if (!response.ok) {
+        throw data
+      }
+      return data
+    })
+    .then(async (data) => {
+      const camelCaseData = keysSnakeCaseToCamelCase(data)
+      const accessToken = camelCaseData.accessToken
+      await setSession(accessToken)
 
-  const data = await response.json()
-  const camelCaseData = keysSnakeCaseToCamelCase(data)
+      const tokenPayload = await getSessionPayload()
+      if (!tokenPayload) {
+        throw { hint: 'something_went_wrong' }
+      }
 
-  if (camelCaseData.status === 'error') {
-    return { error: camelCaseData.error || 'Something went wrong!' }
-  } else {
-    return { accessToken: camelCaseData.data.accessToken }
-  }
+      const redirectLink =
+        tokenPayload?.user.role === UserRoleTypes.ORG_ADMIN ||
+        tokenPayload?.user.role === UserRoleTypes.ORG_OWNER
+          ? DEFAULT_ORG_ADMIN_LOGIN_REDIRECT
+          : tokenPayload?.user.role === UserRoleTypes.ORG_CLIENT
+            ? DEFAULT_ORG_CLIENT_LOGIN_REDIRECT
+            : '/'
+      return {
+        data: {
+          accessToken,
+          redirectLink,
+        },
+      }
+    })
+    .catch((error) => {
+      return { error: error_messages(error.hint || 'something_went_wrong') }
+    })
 }
 
 interface RefreshTokenOutputDTO {
@@ -271,7 +299,6 @@ export async function register({
       }
     })
     .catch((error) => {
-      console.log(error)
       return { error: error_messages(error.hint || 'something_went_wrong') }
     })
 }

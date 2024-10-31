@@ -39,8 +39,7 @@ export default function SignUpForm() {
     const { email, password, firstName, lastName } = values
 
     register({ email, password, firstName, lastName }).then((res) => {
-      if (res.data) {
-        console.log(res.data)
+      if (!res.error) {
         form.setError('root.success', {
           message: 'Please check your email for verification',
         })
