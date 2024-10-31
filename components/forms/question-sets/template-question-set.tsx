@@ -17,9 +17,10 @@ import {
 import FlatQuestionSetEdit from './flat/flat-question-set-edit'
 import LoopQuestionSetEdit from './loop/loop-question-set-edit'
 import DependsOnQuestionSetEdit from './depends-on/depends-on-question-set-edit'
+import { FormQuestionSetType, FormQuestionSetTypes } from '@/lib/types/form'
 
 interface TemplateQuestionSetProps {
-  questionSet: TemplateQuestionSetType
+  questionSet: FormQuestionSetType
 }
 
 export default function TemplateQuestionSet({ questionSet }: TemplateQuestionSetProps) {
@@ -31,9 +32,9 @@ export default function TemplateQuestionSet({ questionSet }: TemplateQuestionSet
 
   const templateQuestionSetRef = useRef<HTMLDivElement>(null)
 
-  const isFlat = questionSet.type === TemplateQuestionSetTypes.FLAT
-  const isLoop = questionSet.type === TemplateQuestionSetTypes.LOOP
-  const isDependsOn = questionSet.type === TemplateQuestionSetTypes.DEPENDS_ON
+  const isFlat = questionSet.type === FormQuestionSetTypes.FLAT
+  const isLoop = questionSet.type === FormQuestionSetTypes.LOOP
+  const isDependsOn = questionSet.type === FormQuestionSetTypes.DEPENDS_ON
 
   function handleClickQuestionSet(e: React.MouseEvent<HTMLDivElement>) {
     e.stopPropagation()

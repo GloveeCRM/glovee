@@ -27,8 +27,12 @@ export default function TemplateEditSidebarSection({
   const [isEditing, setIsEditing] = useState<boolean>(false)
   const [isOptionsMenuOpen, setIsOptionsMenuOpen] = useState<boolean>(false)
 
+  if (section.sectionName === 'Untitled Section 235') {
+    console.log('section', section)
+  }
+
   const { setSelectedSectionID } = useTemplateEditContext()
-  const { updateSectionName, removeSectionFromTemplateCategory } = useSectionActions()
+  const { removeSectionFromTemplateCategory, updateSections, deleteSection } = useSectionActions()
 
   const sectionInputRef = useRef<HTMLTextAreaElement>(null)
 
@@ -42,7 +46,7 @@ export default function TemplateEditSidebarSection({
   }
 
   function handleClickDeleteSection() {
-    removeSectionFromTemplateCategory(section.sectionID)
+    deleteSection([section.sectionID])
   }
 
   function handleOptionsDropdownMenuOpenChange(isOpen: boolean) {
@@ -53,7 +57,7 @@ export default function TemplateEditSidebarSection({
     if (e.key === 'Enter') {
       e.preventDefault()
       setIsEditing(false)
-      updateSectionName(section.sectionID, e.currentTarget.value)
+      updateSections([{ ...section, sectionName: sectionInputRef.current?.value || '' }])
     } else if (e.key === 'Escape') {
       e.preventDefault()
       setIsEditing(false)
@@ -76,7 +80,7 @@ export default function TemplateEditSidebarSection({
     function handleClickOutside(e: MouseEvent) {
       if (sectionInputRef.current && !sectionInputRef.current.contains(e.target as Node)) {
         setIsEditing(false)
-        updateSectionName(section.sectionID, sectionInputRef.current.value)
+        updateSections([{ ...section, sectionName: sectionInputRef.current.value }])
       }
     }
 
@@ -95,7 +99,7 @@ export default function TemplateEditSidebarSection({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [isEditing, sectionInputRef, section.sectionID, updateSectionName])
+  }, [isEditing, sectionInputRef, section.sectionID, updateSections])
 
   return (
     <div

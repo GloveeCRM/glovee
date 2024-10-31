@@ -9,7 +9,7 @@ export default function QuestionsEditBoard() {
   const { template, selectedCategoryID, selectedSectionID } = useTemplateEditContext()
 
   const templateQuestionSets = template?.categories
-    ?.find((category) => category.id === selectedCategoryID)
+    ?.find((category) => category.categoryID === selectedCategoryID)
     ?.sections?.find((section) => section.id === selectedSectionID)?.questionSets
 
   return (

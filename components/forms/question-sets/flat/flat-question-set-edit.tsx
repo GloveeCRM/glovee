@@ -2,9 +2,10 @@ import { TemplateQuestionSetType } from '@/lib/types/template'
 import NonEmptyQuestionSetDropzone from '../non-empty-question-set-dropzone'
 import TemplateQuestion from '../../questions/template-question'
 import EmptyQuestionSetDropzone from '../empty-question-set-dropzone'
+import { FormQuestionSetType } from '@/lib/types/form'
 
 interface FlatQuestionSetEditProps {
-  questionSet: TemplateQuestionSetType
+  questionSet: FormQuestionSetType
 }
 
 export default function FlatQuestionSetEdit({ questionSet }: FlatQuestionSetEditProps) {

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-import { TemplateQuestionSetType, TemplateQuestionSetTypes } from '@/lib/types/template'
+import { FormQuestionSetType, FormQuestionSetTypes } from '@/lib/types/form'
 import { QuestionType, QuestionTypes, RadioQuestionType } from '@/lib/types/qusetion'
 import { generateRandomID } from '@/lib/utils/id'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
@@ -10,7 +10,7 @@ import useQuestionActions from '@/hooks/template/use-question-actions'
 import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
 
 interface NonEmptyQuestionSetDropzoneProps {
-  questionSet: TemplateQuestionSetType
+  questionSet: FormQuestionSetType
   position: number
   dependsOn?: number
 }
@@ -25,9 +25,9 @@ export default function NonEmptyQuestionSetDropzone({
   const { getQuestionsInQuestionSet, createQuestionInQuestionSet } = useQuestionActions()
   const { createQuestionSetInSection } = useQuestionSetActions()
 
-  const isFlat = questionSet.type === TemplateQuestionSetTypes.FLAT
-  const isLoop = questionSet.type === TemplateQuestionSetTypes.LOOP
-  const isDependsOn = questionSet.type === TemplateQuestionSetTypes.DEPENDS_ON
+  const isFlat = questionSet.type === FormQuestionSetTypes.FLAT
+  const isLoop = questionSet.type === FormQuestionSetTypes.LOOP
+  const isDependsOn = questionSet.type === FormQuestionSetTypes.DEPENDS_ON
 
   const isQuestionOverFlat = isFlat && draggedObject?.type === 'question'
   const isQuestionSetOverLoop = isLoop && draggedObject?.type === 'questionSet'
@@ -127,7 +127,7 @@ export default function NonEmptyQuestionSetDropzone({
         createQuestionInQuestionSet(questionSet.id, newQuestion)
       } else {
         const newQuestionSetID = generateRandomID()
-        const newQuestionSet: TemplateQuestionSetType = {
+        const newQuestionSet: FormQuestionSetType = {
           id: newQuestionSetID,
           type: draggedObject.object.type,
           position: position,
@@ -135,11 +135,11 @@ export default function NonEmptyQuestionSetDropzone({
           questionSetID: questionSet.id,
         }
 
-        if (questionSet.type === TemplateQuestionSetTypes.DEPENDS_ON) {
+        if (questionSet.type === FormQuestionSetTypes.DEPENDS_ON) {
           newQuestionSet.dependsOn = dependsOn
         }
 
-        if (newQuestionSet.type === TemplateQuestionSetTypes.DEPENDS_ON) {
+        if (newQuestionSet.type === FormQuestionSetTypes.DEPENDS_ON) {
           const newQuestionID = generateRandomID()
           const newQuestion: RadioQuestionType = {
             id: newQuestionID,

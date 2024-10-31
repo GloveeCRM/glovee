@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-import { TemplateQuestionSetType, TemplateQuestionSetTypes } from '@/lib/types/template'
+import { FormQuestionSetType, FormQuestionSetTypes } from '@/lib/types/form'
 import { QuestionTypes, RadioQuestionType } from '@/lib/types/qusetion'
 import { generateRandomID } from '@/lib/utils/id'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
@@ -13,7 +13,7 @@ export default function EmptySectionDropzone() {
   const [isDraggedOver, setIsDraggedOver] = useState<boolean>(false)
   const { selectedSectionID } = useTemplateEditContext()
   const { draggedObject, setDraggedObject } = useDragAndDropContext()
-  const { createQuestionSetInSection } = useQuestionSetActions()
+  const { createQuestionSetInSection, createQuestionSet } = useQuestionSetActions()
 
   const isDropAllowed = isDraggedOver && draggedObject?.type === 'questionSet'
 
@@ -37,15 +37,14 @@ export default function EmptySectionDropzone() {
     setIsDraggedOver(false)
     if (isDropAllowed) {
       const questionSetID = generateRandomID()
-      const newQuestionSet: TemplateQuestionSetType = {
+      const newQuestionSet: FormQuestionSetType = {
         id: questionSetID,
         type: draggedObject.object.type,
         position: 0,
         sectionID: selectedSectionID,
-        questionSetID: null,
         questions: [],
       }
-      if (newQuestionSet.type === TemplateQuestionSetTypes.DEPENDS_ON) {
+      if (newQuestionSet.type === FormQuestionSetTypes.DEPENDS_ON) {
         const questionID = generateRandomID()
         const newQuestion: RadioQuestionType = {
           id: questionID,
@@ -66,7 +65,7 @@ export default function EmptySectionDropzone() {
         }
         newQuestionSet.questions = [newQuestion]
       }
-      createQuestionSetInSection(selectedSectionID, newQuestionSet)
+      createQuestionSet(newQuestionSet)
       setDraggedObject(null)
     }
   }

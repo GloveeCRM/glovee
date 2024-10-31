@@ -2,7 +2,8 @@
 
 import { useAuthContext } from '@/contexts/auth-context'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
-import { createFormSection } from '@/lib/actions/form'
+import { createFormSection, deleteFormSections, updateFormSections } from '@/lib/actions/form'
+import { FormSectionType } from '@/lib/types/form'
 import { generateRandomID } from '@/lib/utils/id'
 
 export default function useSectionActions() {
@@ -16,7 +17,7 @@ export default function useSectionActions() {
     if (!categoryID) return
 
     const categorySections = formCategories?.find(
-      (category) => category.id === categoryID
+      (category) => category.categoryID === categoryID
     )?.sections
 
     const newFormSection = {
@@ -45,6 +46,46 @@ export default function useSectionActions() {
       }
     } else {
       console.error('Failed to create form section')
+    }
+  }
+
+  async function updateSections(sections: FormSectionType[]) {
+    if (!sections.length) return
+    const categorySections = formCategories?.find(
+      (category) => category.categoryID === sections[0].categoryID
+    )?.sections
+
+    const { formSections } = await updateFormSections({
+      userID: sessionUserID || 0,
+      formSections: sections,
+    })
+    if (formSections) {
+      const updatedCategories = formCategories?.map((category) => {
+        const updatedSections = categorySections?.map((section) => {
+          const updatedSection = formSections.find(
+            (updated) => updated.sectionID === section.sectionID
+          )
+          return updatedSection || section
+        })
+        return { ...category, sections: updatedSections }
+      })
+      if (updatedCategories) {
+        setFormCategories(updatedCategories)
+      } else {
+        console.error('Failed to update form categories')
+      }
+    } else {
+      console.error('Failed to update form sections')
+    }
+  }
+
+  async function deleteSection(sectionIDs: number[]) {
+    const { error } = await deleteFormSections({
+      userID: sessionUserID || 0,
+      formSectionIDs: sectionIDs,
+    })
+    if (error) {
+      console.error('Failed to delete form section')
     }
   }
 
@@ -110,5 +151,7 @@ export default function useSectionActions() {
     removeSectionFromTemplateCategory,
     updateSectionName,
     createSection,
+    updateSections,
+    deleteSection,
   }
 }

@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 
-import { fetchTemplateById } from '@/lib/data/template'
+import { searchTemplates } from '@/lib/data/template'
 import QuestionsEditBoard from '@/components/admin/template/edit/questions-edit-board'
 
 interface TemplateEditPageProps {
@@ -13,7 +13,14 @@ interface TemplateEditPageProps {
 export default async function TemplateEditPage({ params }: TemplateEditPageProps) {
   const templateID = parseInt(params.id)
   const orgName = params.orgName
-  const template = await fetchTemplateById(orgName, templateID)
+  const templates = await searchTemplates({
+    filters: {
+      formTemplateID: templateID,
+      includeCategories: false,
+      includeSections: false,
+    },
+  })
+  const template = templates.formTemplates?.[0]
 
   if (!template) {
     notFound()

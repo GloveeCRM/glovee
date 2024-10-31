@@ -32,12 +32,12 @@ export default function TemplateEditSidebarCategory({
 
   const { selectedCategoryID, setSelectedCategoryID, setSelectedSectionID } =
     useTemplateEditContext()
-  const { removeCategoryFromTemplate, updateTemplateCategoryName } = useCategoryActions()
+  const { removeCategoryFromTemplate, updateCategory, deleteCategory } = useCategoryActions()
 
   function handleClickCategory() {
-    if (selectedCategoryID !== category.id) {
-      setSelectedCategoryID(category.id)
-      setSelectedSectionID(category.sections?.[0]?.id || 0)
+    if (selectedCategoryID !== category.categoryID) {
+      setSelectedCategoryID(category.categoryID)
+      setSelectedSectionID(category.sections?.[0]?.categoryID || 0)
     }
   }
 
@@ -46,7 +46,7 @@ export default function TemplateEditSidebarCategory({
   }
 
   function handleClickDeleteCategory() {
-    removeCategoryFromTemplate(category.id)
+    deleteCategory(category.categoryID)
     setSelectedCategoryID(0)
   }
 
@@ -58,7 +58,13 @@ export default function TemplateEditSidebarCategory({
     if (e.key === 'Enter') {
       e.preventDefault()
       setIsEditing(false)
-      updateTemplateCategoryName(category.id, e.currentTarget.value)
+      if (categoryTitleInputRef.current?.value) {
+        updateCategory(
+          category.categoryID,
+          categoryTitleInputRef.current.value || '',
+          category.categoryPosition
+        )
+      }
     } else if (e.key === 'Escape') {
       e.preventDefault()
       setIsEditing(false)
@@ -84,7 +90,11 @@ export default function TemplateEditSidebarCategory({
         !categoryTitleInputRef.current.contains(e.target as Node)
       ) {
         setIsEditing(false)
-        updateTemplateCategoryName(category.id, categoryTitleInputRef.current.value)
+        updateCategory(
+          category.categoryID,
+          categoryTitleInputRef.current.value,
+          category.categoryPosition
+        )
       }
     }
 
@@ -103,7 +113,7 @@ export default function TemplateEditSidebarCategory({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [isEditing, categoryTitleInputRef, category.id, updateTemplateCategoryName])
+  }, [isEditing, categoryTitleInputRef, category.categoryID, updateCategory])
 
   return (
     <div className="text-[14px] text-n-400">
@@ -111,7 +121,7 @@ export default function TemplateEditSidebarCategory({
         <textarea
           ref={categoryTitleInputRef}
           className="mb-[7px] ml-[1px] mt-[4px] block w-[221px] resize-none overflow-hidden rounded border-[1px] border-n-500 bg-n-700/70 px-[4px] pb-[2px] pt-[1px] text-n-100 focus:border-[1px] focus:border-n-500 focus:outline-none"
-          defaultValue={category.name}
+          defaultValue={category.categoryName}
           onChange={handleTitleChange}
           onKeyDown={handleKeyDown}
         />
@@ -123,7 +133,7 @@ export default function TemplateEditSidebarCategory({
           <div
             className={`${!isExpanded && 'truncate text-n-400 group-hover/category:w-[calc(100%-28px)] group-hover/category:truncate'} text-n-100`}
           >
-            {category.name}
+            {category.categoryName}
           </div>
           <DropdownMenu open={isOptionsMenuOpen} onOpenChange={handleOptionsDropdownMenuOpenChange}>
             <DropdownMenuTrigger
@@ -151,7 +161,7 @@ export default function TemplateEditSidebarCategory({
       )}
       {isExpanded && (
         <TemplateEditSidebarSectionWrapper
-          categoryID={category.id}
+          categoryID={category.categoryID}
           sections={category.sections || []}
         />
       )}

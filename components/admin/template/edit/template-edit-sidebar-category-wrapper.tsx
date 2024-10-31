@@ -20,7 +20,7 @@ export default function TemplateEditSidebarCategoryWrapper() {
     <div id="template-edit-sidebar-category-wrapper">
       <div className="flex flex-col gap-[4px]">
         {formCategories?.map((category: FormCategoryType) => (
-          <Fragment key={category.id}>
+          <Fragment key={category.categoryID}>
             <TemplateEditSidebarCategory
               category={category}
               isExpanded={selectedCategoryID === category.id}

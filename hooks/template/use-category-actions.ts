@@ -2,7 +2,7 @@
 
 import { useAuthContext } from '@/contexts/auth-context'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
-import { createFormCategory } from '@/lib/actions/form'
+import { createFormCategory, deleteFormCategory, updateFormCategory } from '@/lib/actions/form'
 import { generateRandomID } from '@/lib/utils/id'
 
 export default function useCategoryActions() {
@@ -27,6 +27,50 @@ export default function useCategoryActions() {
       setFormCategories([...(formCategories || []), formCategory])
     } else {
       console.error('Failed to create form category')
+    }
+  }
+
+  async function updateCategory(
+    categoryID: number,
+    categoryName: string,
+    categoryPosition: number
+  ) {
+    if (!categoryID) return
+
+    const { formCategory } = await updateFormCategory({
+      userID: sessionUserID || 0,
+      formCategory: {
+        categoryID,
+        categoryName,
+        categoryPosition,
+      },
+    })
+    if (formCategory) {
+      setFormCategories(
+        (prevCategories) =>
+          prevCategories?.map((category) =>
+            category.id === categoryID ? formCategory : category
+          ) ?? null
+      )
+    } else {
+      console.error('Failed to update form category')
+    }
+  }
+
+  async function deleteCategory(categoryID: number) {
+    if (!categoryID) return
+
+    const { success } = await deleteFormCategory({
+      userID: sessionUserID || 0,
+      formCategoryID: categoryID,
+    })
+    if (success) {
+      setFormCategories(
+        (prevCategories) =>
+          prevCategories?.filter((category) => category.categoryID !== categoryID) ?? null
+      )
+    } else {
+      console.error('Failed to delete form category')
     }
   }
 
@@ -72,5 +116,7 @@ export default function useCategoryActions() {
     removeCategoryFromTemplate,
     updateTemplateCategoryName,
     createCategory,
+    updateCategory,
+    deleteCategory,
   }
 }

@@ -2,20 +2,18 @@
 
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react'
 
-import { fetchFullTemplateById, searchTemplates } from '@/lib/data/template'
-import { FormTemplateType } from '@/lib/types/template'
-import { getTemplateFromLocalStorage, setTemplateOnLocalStorage } from '@/lib/functions/template'
-import { FormCategoryType } from '@/lib/types/form'
+import { searchTemplates } from '@/lib/data/template'
+import { FormCategoryType, FormType } from '@/lib/types/form'
 import { searchForms } from '@/lib/data/form'
 import { useAuthContext } from './auth-context'
 
 type TemplateEditContextType = {
   formID: number
   formTemplateID: number
-  template: FormTemplateType | null
-  setTemplate: Dispatch<SetStateAction<FormTemplateType | null>>
-  savedTemplate: FormTemplateType | null
-  setSavedTemplate: Dispatch<SetStateAction<FormTemplateType | null>>
+  template: FormType | null
+  setTemplate: Dispatch<SetStateAction<FormType | null>>
+  savedTemplate: FormType | null
+  setSavedTemplate: Dispatch<SetStateAction<FormType | null>>
   isTemplateChanged: boolean
   setIsTemplateChanged: Dispatch<SetStateAction<boolean>>
   selectedCategoryID: number
@@ -66,9 +64,9 @@ export default function TemplateEditProvider({
   formTemplateID,
   children,
 }: TemplateEditProviderProps) {
-  const [template, setTemplate] = useState<FormTemplateType | null>(null)
+  const [template, setTemplate] = useState<FormType | null>(null)
   const [formCategories, setFormCategories] = useState<FormCategoryType[] | null>(null)
-  const [savedTemplate, setSavedTemplate] = useState<FormTemplateType | null>(null)
+  const [savedTemplate, setSavedTemplate] = useState<FormType | null>(null)
   const [selectedCategoryID, setSelectedCategoryID] = useState<number>(
     template?.categories?.[0]?.id || 0
   )

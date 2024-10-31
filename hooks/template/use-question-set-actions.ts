@@ -1,15 +1,19 @@
 'use client'
 
+import { useAuthContext } from '@/contexts/auth-context'
 import { useTemplateEditContext } from '@/contexts/template-edit-context'
-import { TemplateQuestionSetType } from '@/lib/types/template'
+import { createQuestionSetAndQuestions } from '@/lib/actions/form'
+import { FormQuestionSetType } from '@/lib/types/form'
 
 export default function useQuestionSetActions() {
   const { template, setTemplate } = useTemplateEditContext()
 
+  const { sessionUserID } = useAuthContext()
+
   function getQuestionSetById(
     questionSetID: number,
-    questionSets: TemplateQuestionSetType[] | null = null
-  ): TemplateQuestionSetType | null {
+    questionSets: FormQuestionSetType[] | null = null
+  ): FormQuestionSetType | null {
     if (!template || !template.categories) return null
 
     // If this is the initial call, start with the top-level question sets
@@ -27,7 +31,7 @@ export default function useQuestionSetActions() {
 
       // If the question set has nested question sets, search recursively
       if (questionSet.questionSets) {
-        const foundQuestionSet: TemplateQuestionSetType | null = getQuestionSetById(
+        const foundQuestionSet: FormQuestionSetType | null = getQuestionSetById(
           questionSetID,
           questionSet.questionSets
         )
@@ -53,7 +57,7 @@ export default function useQuestionSetActions() {
     }
   }
 
-  function createQuestionSetInSection(sectionID: number, newQuestionSet: TemplateQuestionSetType) {
+  function createQuestionSetInSection(sectionID: number, newQuestionSet: FormQuestionSetType) {
     if (!template || !template.categories) return
 
     const updatedCategories = template.categories.map((category) => {
@@ -76,10 +80,14 @@ export default function useQuestionSetActions() {
     setTemplate({ ...template, categories: updatedCategories })
   }
 
+  async function createQuestionSet(newQuestionSet: FormQuestionSetType) {
+    await createQuestionSetAndQuestions(sessionUserID || 0, newQuestionSet)
+  }
+
   function insertQuestionSetRecursively(
-    existingQuestionSets: TemplateQuestionSetType[],
-    newQuestionSet: TemplateQuestionSetType
-  ): TemplateQuestionSetType[] {
+    existingQuestionSets: FormQuestionSetType[],
+    newQuestionSet: FormQuestionSetType
+  ): FormQuestionSetType[] {
     // If the new question set has a parent ID, the logic for nesting inside a specific parent is applied
     if (newQuestionSet.questionSetID) {
       return existingQuestionSets.map((existingQuestionSet) => {
@@ -127,7 +135,7 @@ export default function useQuestionSetActions() {
     }
   }
 
-  function updatePositions(questionSets: TemplateQuestionSetType[]): TemplateQuestionSetType[] {
+  function updatePositions(questionSets: FormQuestionSetType[]): FormQuestionSetType[] {
     return questionSets
       .sort((a, b) => a.position - b.position)
       .map((questionSet, index) => ({ ...questionSet, position: index }))
@@ -156,12 +164,12 @@ export default function useQuestionSetActions() {
   }
 
   function removeQuestionSetRecursively(
-    existingQuestionSets: TemplateQuestionSetType[],
+    existingQuestionSets: FormQuestionSetType[],
     questionSetIDToRemove: number,
     removedQuestionSetPosition: number | null = null // Default to null when not provided
-  ): TemplateQuestionSetType[] {
+  ): FormQuestionSetType[] {
     let isRemoved = false
-    let updatedQuestionSets = existingQuestionSets.reduce<TemplateQuestionSetType[]>(
+    let updatedQuestionSets = existingQuestionSets.reduce<FormQuestionSetType[]>(
       (acc, questionSet) => {
         if (questionSet.id === questionSetIDToRemove) {
           // Capture the position of the question set being removed
@@ -218,6 +226,7 @@ export default function useQuestionSetActions() {
   }
 
   return {
+    createQuestionSet,
     getQuestionSetById,
     getQuestionSetsInSection,
     createQuestionSetInSection,

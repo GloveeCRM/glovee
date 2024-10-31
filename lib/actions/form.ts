@@ -193,7 +193,7 @@ export async function createQuestionSetAndQuestions(
 
   const body = { questionSet }
   const bodySnakeCase = keysCamelCaseToSnakeCase(body)
-
+  console.log('bodySnakeCase', JSON.stringify(bodySnakeCase, null, 2))
   try {
     const response = await fetch(
       `${GLOVEE_API_URL}/v1/${orgName}/form/question-set/create?${queryParams}`,
@@ -209,6 +209,7 @@ export async function createQuestionSetAndQuestions(
 
     const data = await response.json()
     const camelData = keysSnakeCaseToCamelCase(data)
+    console.log('camelData', JSON.stringify(camelData, null, 2))
     if (data.status === 'error') {
       return { error: camelData.error }
     } else {
@@ -216,6 +217,7 @@ export async function createQuestionSetAndQuestions(
       return { success: 'Question set created!' }
     }
   } catch (error) {
+    console.error('error', error)
     return { error: 'Failed to create question set!' }
   }
 }
@@ -305,15 +307,120 @@ export async function createFormCategory({
 
     const data = await response.json()
     const camelData = keysSnakeCaseToCamelCase(data)
-    console.log('camelData', JSON.stringify(camelData, null, 2))
     if (data.status === 'error') {
       return { error: camelData.error }
     } else {
-      revalidatePath('/admin/forms')
+      revalidatePath('/admin/template')
       return { success: 'Form category created!', formCategory: camelData.data }
     }
   } catch (error) {
     return { error: 'Failed to create form category!' }
+  }
+}
+
+interface UpdateFormCategoryInputDTO {
+  userID: number
+  formCategory: Partial<FormCategoryType>
+}
+
+type UpdateFormCategoryOutputDTO = {
+  error?: string
+  success?: string
+  formCategory?: FormCategoryType
+}
+
+export async function updateFormCategory({
+  userID,
+  formCategory,
+}: UpdateFormCategoryInputDTO): Promise<UpdateFormCategoryOutputDTO> {
+  const accessToken = await getSession()
+  if (!accessToken) {
+    return { error: 'Unauthorized' }
+  }
+
+  const orgName = await getCurrentOrgName()
+
+  const queryParams = new URLSearchParams()
+  queryParams.append('user_id', userID?.toString() || '')
+
+  const body = {
+    formCategory,
+  }
+  const bodySnakeCase = keysCamelCaseToSnakeCase(body)
+
+  try {
+    const response = await fetch(
+      `${GLOVEE_API_URL}/v1/${orgName}/form/category/update?${queryParams}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(bodySnakeCase),
+      }
+    )
+
+    const data = await response.json()
+    const camelData = keysSnakeCaseToCamelCase(data)
+    if (data.status === 'error') {
+      return { error: camelData.error }
+    } else {
+      revalidatePath('/admin/template')
+      return { success: 'Form category updated!', formCategory: camelData.data }
+    }
+  } catch (error) {
+    return { error: 'Failed to update form category!' }
+  }
+}
+
+interface DeleteFormCategoryInputDTO {
+  userID: number
+  formCategoryID: number
+}
+
+type DeleteFormCategoryOutputDTO = {
+  error?: string
+  success?: string
+}
+
+export async function deleteFormCategory({
+  userID,
+  formCategoryID,
+}: DeleteFormCategoryInputDTO): Promise<DeleteFormCategoryOutputDTO> {
+  const accessToken = await getSession()
+  if (!accessToken) {
+    return { error: 'Unauthorized' }
+  }
+
+  const orgName = await getCurrentOrgName()
+
+  const queryParams = new URLSearchParams()
+  queryParams.append('user_id', userID?.toString() || '')
+  queryParams.append('form_category_id', formCategoryID?.toString() || '')
+
+  try {
+    const response = await fetch(
+      `${GLOVEE_API_URL}/v1/${orgName}/form/category/delete?${queryParams}`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    )
+
+    const data = await response.json()
+    const camelData = keysSnakeCaseToCamelCase(data)
+    if (data.status === 'error') {
+      return { error: camelData.error }
+    } else {
+      revalidatePath('/admin/template')
+      return { success: 'Form category deleted!' }
+    }
+  } catch (error) {
+    return { error: 'Failed to delete form category!' }
   }
 }
 
@@ -362,14 +469,132 @@ export async function createFormSection({
 
     const data = await response.json()
     const camelData = keysSnakeCaseToCamelCase(data)
-    console.log('camelData', JSON.stringify(camelData, null, 2))
     if (data.status === 'error') {
       return { error: camelData.error }
     } else {
-      revalidatePath('/admin/forms')
+      revalidatePath('/admin/template')
       return { success: 'Form section created!', formSection: camelData.data }
     }
   } catch (error) {
     return { error: 'Failed to create form section!' }
+  }
+}
+
+interface UpdateFormSectionInputDTO {
+  userID: number
+  formSections: Partial<FormSectionType>[]
+}
+
+type UpdateFormSectionOutputDTO = {
+  error?: string
+  success?: string
+  formSections?: FormSectionType[]
+}
+
+export async function updateFormSections({
+  userID,
+  formSections,
+}: UpdateFormSectionInputDTO): Promise<UpdateFormSectionOutputDTO> {
+  const accessToken = await getSession()
+  if (!accessToken) {
+    return { error: 'Unauthorized' }
+  }
+
+  const orgName = await getCurrentOrgName()
+
+  const queryParams = new URLSearchParams()
+  queryParams.append('user_id', userID?.toString() || '')
+
+  const body = {
+    formSections,
+  }
+  const bodySnakeCase = keysCamelCaseToSnakeCase(body)
+
+  try {
+    const response = await fetch(
+      `${GLOVEE_API_URL}/v1/${orgName}/form/section/update?${queryParams}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(bodySnakeCase),
+      }
+    )
+
+    const data = await response.json()
+    const camelData = keysSnakeCaseToCamelCase(data)
+    console.log('body', JSON.stringify(bodySnakeCase, null, 2))
+    console.log('camelData', JSON.stringify(camelData, null, 2))
+    if (data.status === 'error') {
+      return { error: camelData.error }
+    } else {
+      revalidatePath('/admin/template')
+      return { success: 'Form section updated!', formSections: camelData.data.formSections }
+    }
+  } catch (error) {
+    return { error: 'Failed to update form section!' }
+  }
+}
+
+interface DeleteFormSectionInputDTO {
+  userID: number
+  formSectionIDs: number[]
+}
+
+type DeleteFormSectionOutputDTO = {
+  error?: string
+  success?: string
+}
+
+export async function deleteFormSections({
+  userID,
+  formSectionIDs,
+}: DeleteFormSectionInputDTO): Promise<DeleteFormSectionOutputDTO> {
+  const accessToken = await getSession()
+  if (!accessToken) {
+    return { error: 'Unauthorized' }
+  }
+
+  console.log('formSectionIDs', formSectionIDs)
+
+  const orgName = await getCurrentOrgName()
+
+  const queryParams = new URLSearchParams()
+  queryParams.append('user_id', userID?.toString() || '')
+
+  const body = {
+    formSectionIDs,
+  }
+  console.log('body', JSON.stringify(body, null, 2))
+  const bodySnakeCase = keysCamelCaseToSnakeCase(body)
+
+  try {
+    const response = await fetch(
+      `${GLOVEE_API_URL}/v1/${orgName}/form/section/delete?${queryParams}`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(bodySnakeCase),
+      }
+    )
+
+    const data = await response.json()
+    const camelData = keysSnakeCaseToCamelCase(data)
+    console.log('body', JSON.stringify(bodySnakeCase, null, 2))
+    console.log('camelData', JSON.stringify(camelData, null, 2))
+    if (data.status === 'error') {
+      return { error: camelData.error }
+    } else {
+      revalidatePath('/admin/template')
+      return { success: 'Form section deleted!' }
+    }
+  } catch (error) {
+    console.error('error', error)
+    return { error: 'Failed to delete form section!' }
   }
 }

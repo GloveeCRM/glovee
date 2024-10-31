@@ -5,6 +5,7 @@ import { GLOVEE_API_URL } from '@/lib/constants/api'
 import { getSession } from '@/lib/auth/session'
 import { getCurrentOrgName } from '../utils/server'
 import { keysSnakeCaseToCamelCase } from '../utils/json'
+import { FormType } from '../types/form'
 
 interface SearchTemplatesFiltersDTO {
   formTemplateID?: number
@@ -20,7 +21,7 @@ interface SearchTemplatesInputDTO {
 }
 
 interface SearchTemplatesOutputDTO {
-  formTemplates: FormTemplateType[] | null
+  formTemplates: FormType[] | null
   totalCount: number
 }
 

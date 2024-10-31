@@ -8,9 +8,10 @@ import { generateRandomID } from '@/lib/utils/id'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
 import useQuestionActions from '@/hooks/template/use-question-actions'
+import { FormQuestionSetType, FormQuestionSetTypes } from '@/lib/types/form'
 
 interface EmptyQuestionSetDropzoneProps {
-  questionSet: TemplateQuestionSetType
+  questionSet: FormQuestionSetType
   dependsOn?: number
 }
 
@@ -23,9 +24,9 @@ export default function EmptyQuestionSetDropzone({
   const { createQuestionSetInSection } = useQuestionSetActions()
   const { createQuestionInQuestionSet } = useQuestionActions()
 
-  const isFlat = questionSet.type === TemplateQuestionSetTypes.FLAT
-  const isLoop = questionSet.type === TemplateQuestionSetTypes.LOOP
-  const isDependsOn = questionSet.type === TemplateQuestionSetTypes.DEPENDS_ON
+  const isFlat = questionSet.type === FormQuestionSetTypes.FLAT
+  const isLoop = questionSet.type === FormQuestionSetTypes.LOOP
+  const isDependsOn = questionSet.type === FormQuestionSetTypes.DEPENDS_ON
 
   const isQuestionOverFlat = isFlat && draggedObject?.type === 'question'
   const isQuestionSetOverLoop = isLoop && draggedObject?.type === 'questionSet'
@@ -115,7 +116,7 @@ export default function EmptyQuestionSetDropzone({
         createQuestionInQuestionSet(questionSet.id, newQuestion)
       } else {
         const newQuestionSetID = generateRandomID()
-        const newQuestionSet: TemplateQuestionSetType = {
+        const newQuestionSet: FormQuestionSetType = {
           id: newQuestionSetID,
           type: draggedObject.object.type,
           position: 0,
@@ -123,11 +124,11 @@ export default function EmptyQuestionSetDropzone({
           questionSetID: questionSet.id,
         }
 
-        if (questionSet.type === TemplateQuestionSetTypes.DEPENDS_ON) {
+        if (questionSet.type === FormQuestionSetTypes.DEPENDS_ON) {
           newQuestionSet.dependsOn = dependsOn
         }
 
-        if (newQuestionSet.type === TemplateQuestionSetTypes.DEPENDS_ON) {
+        if (newQuestionSet.type === FormQuestionSetTypes.DEPENDS_ON) {
           const newQuestionID = generateRandomID()
           const newQuestion: RadioQuestionType = {
             id: newQuestionID,

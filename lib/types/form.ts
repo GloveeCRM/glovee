@@ -75,7 +75,7 @@ export type FormQuestionSetType = {
   position: number
   dependsOn?: number
   sectionID: number
-  questionSetID: number
+  questionSetID?: number
   questionSets?: FormQuestionSetType[]
   questions?: QuestionType[]
 }

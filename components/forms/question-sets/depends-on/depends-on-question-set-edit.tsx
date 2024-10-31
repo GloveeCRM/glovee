@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { FiEdit2 } from 'react-icons/fi'
 
-import { TemplateQuestionSetType } from '@/lib/types/template'
+import { FormQuestionSetType } from '@/lib/types/form'
 import { QuestionType, QuestionTypes, RadioQuestionType } from '@/lib/types/qusetion'
 import { generateRandomID } from '@/lib/utils/id'
 import useQuestionActions from '@/hooks/template/use-question-actions'
@@ -12,7 +12,7 @@ import EmptyQuestionSetDropzone from '../empty-question-set-dropzone'
 import TemplateQuestionSet from '../template-question-set'
 
 interface DependsOnQuestionSetEditProps {
-  questionSet: TemplateQuestionSetType
+  questionSet: FormQuestionSetType
 }
 
 export default function DependsOnQuestionSetEdit({ questionSet }: DependsOnQuestionSetEditProps) {

@@ -1,12 +1,12 @@
 import { FiPlus } from 'react-icons/fi'
 
-import { TemplateQuestionSetType } from '@/lib/types/template'
+import { FormQuestionSetType } from '@/lib/types/form'
 import NonEmptyQuestionSetDropzone from '../non-empty-question-set-dropzone'
 import EmptyQuestionSetDropzone from '../empty-question-set-dropzone'
 import TemplateQuestionSet from '../template-question-set'
 
 interface LoopQuestionSetEditProps {
-  questionSet: TemplateQuestionSetType
+  questionSet: FormQuestionSetType
 }
 
 export default function LoopQuestionSetEdit({ questionSet }: LoopQuestionSetEditProps) {
