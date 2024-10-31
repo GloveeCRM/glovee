@@ -3,52 +3,47 @@
 import { createContext, useContext, useEffect } from 'react'
 
 import { DEFAULT_LOGOUT_REDIRECT } from '@/lib/constants/routes'
-import { removeSession } from '@/lib/auth/session'
-import { refreshToken } from '@/lib/actions/auth'
+import { removeRefreshToken, removeSession } from '@/lib/auth/session'
+import { refreshTokens } from '@/lib/actions/auth'
 
 type AuthContextType = {
-  token: string | null
+  accessToken: string | null
   sessionUserID: number | null
 }
 
 const authContextDefaultValues: AuthContextType = {
-  token: null,
+  accessToken: null,
   sessionUserID: null,
 }
 
 const AuthContext = createContext<AuthContextType>(authContextDefaultValues)
 
 interface AuthProviderProps {
-  token: string | null
+  accessToken: string | null
   sessionUserID: number | null
   children: React.ReactNode
 }
 
-export default function AuthProvider({ token, sessionUserID, children }: AuthProviderProps) {
+export default function AuthProvider({ accessToken, sessionUserID, children }: AuthProviderProps) {
   const value = {
-    token,
+    accessToken,
     sessionUserID,
   }
 
   useEffect(() => {
     async function updateSession() {
-      refreshToken()
-        .then(async (data) => {
-          if (data.error) {
-            await removeSession()
-            window.location.href = DEFAULT_LOGOUT_REDIRECT
-          }
-        })
-        .catch(async () => {
-          await removeSession()
-          window.location.href = DEFAULT_LOGOUT_REDIRECT
-        })
+      const { error } = await refreshTokens()
+      if (error) {
+        await removeSession()
+        await removeRefreshToken()
+        window.location.href = DEFAULT_LOGOUT_REDIRECT
+      }
     }
 
-    if (token) {
+    if (accessToken) {
       updateSession()
     }
-  }, [token])
+  }, [accessToken])
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

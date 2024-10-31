@@ -16,8 +16,9 @@ const errors = {
   password_missing_number: 'Password must contain at least one number',
   password_missing_special_character: 'Password must contain at least one special character',
   organization_not_found: 'Organization not found',
+  token_not_found: 'Token not found',
 }
 
-export const error_messages = (error_code: string) => {
+export const errorMessages = (error_code: string) => {
   return errors[error_code as keyof typeof errors] || 'unknown_error'
 }

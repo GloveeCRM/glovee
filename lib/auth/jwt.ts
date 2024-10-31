@@ -1,11 +1,10 @@
 import { jwtVerify } from 'jose'
 
-import { jwtSecret } from '@/lib/constants/jwt'
 import { JWTPayloadType } from '@/lib/types/jwt'
 
-export async function parseJWT(token: string): Promise<JWTPayloadType | null> {
+export async function parseJWT(token: string, secret: Uint8Array): Promise<JWTPayloadType | null> {
   try {
-    const { payload } = await jwtVerify(token, jwtSecret, { algorithms: ['HS256'] })
+    const { payload } = await jwtVerify(token, secret, { algorithms: ['HS256'] })
     return payload as JWTPayloadType
   } catch (error) {
     return null

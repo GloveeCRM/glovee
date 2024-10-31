@@ -8,10 +8,18 @@ import {
   DEFAULT_ORG_MANAGEMENT_LOGIN_REDIRECT,
 } from '@/lib/constants/routes'
 
-import { getSession, getSessionPayload, removeSession, setSession } from '@/lib/auth/session'
+import {
+  getRefreshToken,
+  getSessionPayload,
+  removeRefreshToken,
+  removeSession,
+  setRefreshToken,
+  setSession,
+} from '@/lib/auth/session'
 import { keysCamelCaseToSnakeCase, keysSnakeCaseToCamelCase } from '../utils/json'
 import { getCurrentOrgName } from '../utils/server'
-import { error_messages } from '../constants/errors'
+import { apiRequest } from '../utils/http'
+import { errorMessages } from '../constants/errors'
 
 interface LoginInputDTO {
   email: string
@@ -72,6 +80,7 @@ interface LoginPostgrestProps {
 interface LoginPostgrestResponse {
   data?: {
     accessToken: string
+    refreshToken: string
     redirectLink: string
   }
   error?: string
@@ -83,93 +92,131 @@ export async function loginPostgrest({
 }: LoginPostgrestProps): Promise<LoginPostgrestResponse> {
   const orgName = await getCurrentOrgName()
 
-  const body = {
-    email,
-    password,
-    orgName,
-  }
-  const bodySnakeCase = keysCamelCaseToSnakeCase(body)
-
-  return fetch(`${GLOVEE_API_URL}/rpc/login`, {
+  const { data, error } = await apiRequest<{ accessToken: string; refreshToken: string }>({
+    path: 'rpc/login',
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+    data: {
+      email,
+      password,
+      orgName,
     },
-    body: JSON.stringify(bodySnakeCase),
+    authRequired: false,
   })
-    .then(async (response) => {
-      const data = await response.json()
-      if (!response.ok) {
-        throw data
-      }
-      return data
-    })
-    .then(async (data) => {
-      const camelCaseData = keysSnakeCaseToCamelCase(data)
-      const accessToken = camelCaseData.accessToken
-      await setSession(accessToken)
 
-      const tokenPayload = await getSessionPayload()
-      if (!tokenPayload) {
-        throw { hint: 'something_went_wrong' }
-      }
+  if (error) {
+    return { error }
+  }
 
-      const redirectLink =
-        tokenPayload?.user.role === UserRoleTypes.ORG_ADMIN ||
-        tokenPayload?.user.role === UserRoleTypes.ORG_OWNER
-          ? DEFAULT_ORG_ADMIN_LOGIN_REDIRECT
-          : tokenPayload?.user.role === UserRoleTypes.ORG_CLIENT
-            ? DEFAULT_ORG_CLIENT_LOGIN_REDIRECT
-            : '/'
-      return {
-        data: {
-          accessToken,
-          redirectLink,
-        },
-      }
-    })
-    .catch((error) => {
-      return { error: error_messages(error.hint || 'something_went_wrong') }
-    })
+  if (data?.accessToken && data?.refreshToken) {
+    await setSession(data.accessToken)
+    await setRefreshToken(data.refreshToken)
+    const tokenPayload = await getSessionPayload()
+
+    if (!tokenPayload) {
+      return { error: errorMessages('something_went_wrong') }
+    }
+
+    const redirectLink =
+      tokenPayload?.user.role === UserRoleTypes.ORG_ADMIN ||
+      tokenPayload?.user.role === UserRoleTypes.ORG_OWNER
+        ? DEFAULT_ORG_ADMIN_LOGIN_REDIRECT
+        : tokenPayload?.user.role === UserRoleTypes.ORG_CLIENT
+          ? DEFAULT_ORG_CLIENT_LOGIN_REDIRECT
+          : '/'
+    return {
+      data: { accessToken: data.accessToken, refreshToken: data.refreshToken, redirectLink },
+    }
+  }
+
+  return { error: errorMessages('something_went_wrong') }
 }
 
-interface RefreshTokenOutputDTO {
-  success?: string
+interface RegisterProps {
+  email: string
+  password: string
+  firstName: string
+  lastName: string
+}
+
+interface RegisterResponse {
+  data?: {
+    user: UserType
+    redirectURL: string
+  }
   error?: string
 }
 
-export async function refreshToken(): Promise<RefreshTokenOutputDTO> {
-  const accessToken = await getSession()
-  if (!accessToken) {
-    return { error: 'Token not found!' }
-  }
-
+export async function register({
+  email,
+  password,
+  firstName,
+  lastName,
+}: RegisterProps): Promise<RegisterResponse> {
   const orgName = await getCurrentOrgName()
 
-  const body = {
-    accessToken,
+  const { data, error } = await apiRequest<{ user: UserType }>({
+    path: 'rpc/register_client',
+    method: 'POST',
+    data: {
+      email,
+      password,
+      firstName,
+      lastName,
+      orgName,
+    },
+    authRequired: false,
+  })
+
+  if (error) {
+    return { error }
   }
-  const bodySnakeCase = keysCamelCaseToSnakeCase(body)
 
-  try {
-    const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/refresh-token`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(bodySnakeCase),
-    })
+  if (data?.user) {
+    const redirectURL =
+      (data.user.role as UserRoleTypes) === UserRoleTypes.ORG_CLIENT
+        ? DEFAULT_ORG_CLIENT_LOGIN_REDIRECT
+        : (data.user.role as UserRoleTypes) === UserRoleTypes.ORG_ADMIN
+          ? DEFAULT_ORG_ADMIN_LOGIN_REDIRECT
+          : '/'
 
-    const data = await response.json()
-    const camelCaseData = keysSnakeCaseToCamelCase(data)
-
-    if (camelCaseData.status === 'error') {
-      return { error: camelCaseData.error }
-    } else {
-      await setSession(camelCaseData.data.accessToken)
-      return { success: 'Token refreshed!' }
-    }
-  } catch (error) {
-    return { error: 'Something went wrong!' }
+    return { data: { user: data.user, redirectURL } }
   }
+
+  return { error: errorMessages('something_went_wrong') }
+}
+
+interface RefreshTokensResponse {
+  error?: string
+}
+
+export async function refreshTokens(): Promise<RefreshTokensResponse> {
+  const refreshToken = await getRefreshToken()
+  if (!refreshToken) {
+    return { error: errorMessages('token_not_found') }
+  }
+
+  const { data, error } = await apiRequest<{ accessToken: string; refreshToken: string }>({
+    path: 'rpc/refresh_tokens',
+    method: 'POST',
+    data: {
+      refreshToken,
+    },
+    authRequired: false,
+  })
+
+  if (error) {
+    await removeSession()
+    await removeRefreshToken()
+    return { error }
+  }
+
+  if (data?.accessToken && data?.refreshToken) {
+    await setSession(data.accessToken)
+    await setRefreshToken(data.refreshToken)
+    return {}
+  }
+
+  return { error: errorMessages('something_went_wrong') }
 }
 
 interface SignupInputDTO {
@@ -234,73 +281,6 @@ export async function signup({
   } catch (error) {
     return { error: 'Something went wrong!' }
   }
-}
-
-interface RegisterProps {
-  email: string
-  password: string
-  firstName: string
-  lastName: string
-}
-
-interface RegisterResponse {
-  data?: {
-    user: UserType
-    redirectURL: string
-  }
-  error?: string
-}
-
-export async function register({
-  email,
-  password,
-  firstName,
-  lastName,
-}: RegisterProps): Promise<RegisterResponse> {
-  const orgName = await getCurrentOrgName()
-
-  const body = {
-    email,
-    password,
-    firstName,
-    lastName,
-    orgName,
-  }
-  const bodySnakeCase = keysCamelCaseToSnakeCase(body)
-
-  return fetch(`${GLOVEE_API_URL}/rpc/register_client`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(bodySnakeCase),
-  })
-    .then(async (response) => {
-      const data = await response.json()
-      if (!response.ok) {
-        throw data
-      }
-      return data
-    })
-    .then((data) => {
-      const camelCaseData = keysSnakeCaseToCamelCase(data)
-      const redirectURL =
-        (camelCaseData.user.role as UserRoleTypes) === UserRoleTypes.ORG_CLIENT
-          ? DEFAULT_ORG_CLIENT_LOGIN_REDIRECT
-          : (camelCaseData.user.role as UserRoleTypes) === UserRoleTypes.ORG_ADMIN
-            ? DEFAULT_ORG_ADMIN_LOGIN_REDIRECT
-            : '/'
-
-      return {
-        data: {
-          user: camelCaseData.user,
-          redirectURL,
-        },
-      }
-    })
-    .catch((error) => {
-      return { error: error_messages(error.hint || 'something_went_wrong') }
-    })
 }
 
 export async function logout() {
