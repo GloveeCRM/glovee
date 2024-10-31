@@ -11,14 +11,14 @@ export type UserType = {
 }
 
 export enum UserRoleTypes {
-  G_OWNER = 'G_OWNER',
-  G_ADMIN = 'G_ADMIN',
-  ORG_OWNER = 'ORG_OWNER',
-  ORG_ADMIN = 'ORG_ADMIN',
-  ORG_CLIENT = 'ORG_CLIENT',
+  G_OWNER = 'g_owner',
+  G_ADMIN = 'g_admin',
+  ORG_OWNER = 'org_owner',
+  ORG_ADMIN = 'org_admin',
+  ORG_CLIENT = 'org_client',
 }
 
 export enum UserStatusTypes {
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE',
+  ACTIVE = 'active',
+  INACTIVE = 'inactive',
 }

@@ -7,9 +7,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { FaRegCheckCircle } from 'react-icons/fa'
 import { BiMessageSquareError } from 'react-icons/bi'
 
-import { signup } from '@/lib/actions/auth'
+import { register } from '@/lib/actions/auth'
 import { SignupSchema } from '@/lib/zod/schemas'
-import { useOrgContext } from '@/contexts/org-context'
 import {
   Form,
   FormControl,
@@ -24,8 +23,6 @@ import { Separator } from '@/components/ui/separator'
 import { Callout } from '@/components/ui/callout'
 
 export default function SignUpForm() {
-  const { orgName } = useOrgContext()
-
   const defaultFormValues = {
     firstName: '',
     lastName: '',
@@ -41,13 +38,14 @@ export default function SignUpForm() {
   function handleSignup(values: z.infer<typeof SignupSchema>) {
     const { email, password, firstName, lastName } = values
 
-    signup({ email, password, firstName, lastName }).then((res) => {
-      if (res.success) {
+    register({ email, password, firstName, lastName }).then((res) => {
+      if (res.data) {
+        console.log(res.data)
         form.setError('root.success', {
-          message: res.success,
+          message: 'Please check your email for verification',
         })
         setTimeout(() => {
-          window.location.href = res.data?.redirectLink
+          window.location.href = res.data?.redirectURL || '/'
         }, 500)
       } else {
         form.setError('root.error', {

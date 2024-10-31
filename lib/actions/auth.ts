@@ -1,6 +1,6 @@
 'use server'
 
-import { UserRoleTypes } from '@/lib/types/user'
+import { UserRoleTypes, UserType } from '@/lib/types/user'
 import { GLOVEE_API_URL } from '@/lib/constants/api'
 import {
   DEFAULT_ORG_ADMIN_LOGIN_REDIRECT,
@@ -11,6 +11,7 @@ import {
 import { getSession, getSessionPayload, removeSession, setSession } from '@/lib/auth/session'
 import { keysCamelCaseToSnakeCase, keysSnakeCaseToCamelCase } from '../utils/json'
 import { getCurrentOrgName } from '../utils/server'
+import { error_messages } from '../constants/errors'
 
 interface LoginInputDTO {
   email: string
@@ -60,6 +61,47 @@ export async function login({ email, password }: LoginInputDTO): Promise<LoginOu
     }
   } catch (error) {
     return { error: 'Something went wrong!' }
+  }
+}
+
+interface LoginPostgrestProps {
+  email: string
+  password: string
+}
+
+interface LoginPostgrestResponse {
+  accessToken?: string
+  error?: string
+}
+
+export async function loginPostgrest({
+  email,
+  password,
+}: LoginPostgrestProps): Promise<LoginPostgrestResponse> {
+  const orgName = await getCurrentOrgName()
+
+  const body = {
+    email,
+    password,
+    orgName,
+  }
+  const bodySnakeCase = keysCamelCaseToSnakeCase(body)
+
+  const response = await fetch(`${GLOVEE_API_URL}/rpc/login`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(bodySnakeCase),
+  })
+
+  const data = await response.json()
+  const camelCaseData = keysSnakeCaseToCamelCase(data)
+
+  if (camelCaseData.status === 'error') {
+    return { error: camelCaseData.error || 'Something went wrong!' }
+  } else {
+    return { accessToken: camelCaseData.data.accessToken }
   }
 }
 
@@ -164,6 +206,74 @@ export async function signup({
   } catch (error) {
     return { error: 'Something went wrong!' }
   }
+}
+
+interface RegisterProps {
+  email: string
+  password: string
+  firstName: string
+  lastName: string
+}
+
+interface RegisterResponse {
+  data?: {
+    user: UserType
+    redirectURL: string
+  }
+  error?: string
+}
+
+export async function register({
+  email,
+  password,
+  firstName,
+  lastName,
+}: RegisterProps): Promise<RegisterResponse> {
+  const orgName = await getCurrentOrgName()
+
+  const body = {
+    email,
+    password,
+    firstName,
+    lastName,
+    orgName,
+  }
+  const bodySnakeCase = keysCamelCaseToSnakeCase(body)
+
+  return fetch(`${GLOVEE_API_URL}/rpc/register_client`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(bodySnakeCase),
+  })
+    .then(async (response) => {
+      const data = await response.json()
+      if (!response.ok) {
+        throw data
+      }
+      return data
+    })
+    .then((data) => {
+      const camelCaseData = keysSnakeCaseToCamelCase(data)
+      const redirectURL =
+        (camelCaseData.user.role as UserRoleTypes) === UserRoleTypes.ORG_CLIENT
+          ? DEFAULT_ORG_CLIENT_LOGIN_REDIRECT
+          : (camelCaseData.user.role as UserRoleTypes) === UserRoleTypes.ORG_ADMIN
+            ? DEFAULT_ORG_ADMIN_LOGIN_REDIRECT
+            : '/'
+
+      return {
+        data: {
+          user: camelCaseData.user,
+          redirectURL,
+        },
+      }
+    })
+    .catch((error) => {
+      console.log(error)
+      return { error: error_messages(error.hint || 'something_went_wrong') }
+    })
 }
 
 export async function logout() {
