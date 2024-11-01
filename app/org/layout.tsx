@@ -19,7 +19,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   const sessionUserID = await getSessionUserID()
 
   return (
-    <AuthProvider token={session} sessionUserID={sessionUserID}>
+    <AuthProvider accessToken={session} sessionUserID={sessionUserID}>
       <html lang="en">
         <body id="admin-app">
           <div className="flex">

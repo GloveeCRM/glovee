@@ -21,63 +21,12 @@ import { getCurrentOrgName } from '../utils/server'
 import { apiRequest } from '../utils/http'
 import { errorMessages } from '../constants/errors'
 
-interface LoginInputDTO {
+interface LoginProps {
   email: string
   password: string
 }
 
-interface LoginOutputDTO {
-  success?: string
-  data?: Record<string, any>
-  error?: string
-}
-
-export async function login({ email, password }: LoginInputDTO): Promise<LoginOutputDTO> {
-  const orgName = await getCurrentOrgName()
-
-  const body = {
-    email,
-    password,
-  }
-  const bodySnakeCase = keysCamelCaseToSnakeCase(body)
-
-  try {
-    const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(bodySnakeCase),
-    })
-
-    const data = await response.json()
-    const camelCaseData = keysSnakeCaseToCamelCase(data)
-
-    if (camelCaseData.status === 'error') {
-      return { error: camelCaseData.error }
-    } else {
-      await setSession(camelCaseData.data.accessToken)
-      const tokenPayload = await getSessionPayload()
-      const redirectLink =
-        tokenPayload?.user.role === UserRoleTypes.ORG_ADMIN ||
-        tokenPayload?.user.role === UserRoleTypes.ORG_OWNER
-          ? DEFAULT_ORG_ADMIN_LOGIN_REDIRECT
-          : tokenPayload?.user.role === UserRoleTypes.ORG_CLIENT
-            ? DEFAULT_ORG_CLIENT_LOGIN_REDIRECT
-            : '/'
-      return { success: 'Login Successful!', data: { redirectLink: redirectLink } }
-    }
-  } catch (error) {
-    return { error: 'Something went wrong!' }
-  }
-}
-
-interface LoginPostgrestProps {
-  email: string
-  password: string
-}
-
-interface LoginPostgrestResponse {
+interface LoginResponse {
   data?: {
     accessToken: string
     refreshToken: string
@@ -86,10 +35,7 @@ interface LoginPostgrestResponse {
   error?: string
 }
 
-export async function loginPostgrest({
-  email,
-  password,
-}: LoginPostgrestProps): Promise<LoginPostgrestResponse> {
+export async function login({ email, password }: LoginProps): Promise<LoginResponse> {
   const orgName = await getCurrentOrgName()
 
   const { data, error } = await apiRequest<{ accessToken: string; refreshToken: string }>({

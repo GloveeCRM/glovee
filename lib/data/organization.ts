@@ -1,22 +1,37 @@
 import { OrganizationType } from '@/lib/types/organization'
 import { GLOVEE_API_URL } from '@/lib/constants/api'
-import { getSession } from '../auth/session'
-import { getCurrentOrgName } from '../utils/server'
 import { keysSnakeCaseToCamelCase } from '../utils/json'
+import { apiRequest } from '../utils/http'
+import { errorMessages } from '../constants/errors'
 
-export async function fetchOrganizationProfile(orgName: string): Promise<OrganizationType | null> {
-  try {
-    const response = await fetch(`${GLOVEE_API_URL}/v1/organization/${orgName}/profile`)
+interface FetchOrganizationProfileProps {
+  orgName: string
+}
 
-    const data = await response.json()
+interface FetchOrganizationProfileResponse {
+  error?: string
+  organization?: OrganizationType
+}
 
-    if (data.error) {
-      return null
-    } else {
-      return data.data.organization
-    }
-  } catch {
-    return null
+export async function fetchOrganizationProfile({
+  orgName,
+}: FetchOrganizationProfileProps): Promise<FetchOrganizationProfileResponse> {
+  const { data: organizations, error } = await apiRequest<OrganizationType[]>({
+    path: `organizations?org_name=eq.${orgName}&limit=1`,
+    method: 'GET',
+    authRequired: false,
+  })
+
+  console.log(organizations)
+
+  if (error) {
+    return { error }
+  }
+
+  if (organizations && organizations.length > 0) {
+    return { organization: organizations[0] }
+  } else {
+    return { error: errorMessages('organization_not_found') }
   }
 }
 

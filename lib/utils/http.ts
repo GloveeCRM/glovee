@@ -5,8 +5,8 @@ import { getSession } from '../auth/session'
 
 interface ApiRequestProps {
   path: string
-  method: string
-  data: Record<string, any>
+  method?: string
+  data?: Record<string, any>
   authRequired?: boolean
 }
 

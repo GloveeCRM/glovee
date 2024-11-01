@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { FaRegCheckCircle } from 'react-icons/fa'
 import { BiMessageSquareError } from 'react-icons/bi'
 
-import { loginPostgrest } from '@/lib/actions/auth'
+import { login } from '@/lib/actions/auth'
 import { LoginSchema } from '@/lib/zod/schemas'
 import {
   Form,
@@ -36,7 +36,7 @@ export default function LoginForm() {
   function handleLogin(values: z.infer<typeof LoginSchema>) {
     const { email, password } = values
 
-    loginPostgrest({ email, password }).then((res) => {
+    login({ email, password }).then((res) => {
       if (!res.error) {
         form.setError('root.success', {
           message: 'Login successful!',

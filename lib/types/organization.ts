@@ -1,6 +1,8 @@
 export type OrganizationType = {
-  id: string
+  organizationID: string
   name: string
   orgName: string
   logoURL: string
+  createdAt: string
+  updatedAt: string
 }
