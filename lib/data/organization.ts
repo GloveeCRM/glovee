@@ -22,8 +22,6 @@ export async function fetchOrganizationProfile({
     authRequired: false,
   })
 
-  console.log(organizations)
-
   if (error) {
     return { error }
   }

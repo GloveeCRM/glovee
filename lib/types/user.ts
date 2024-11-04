@@ -1,13 +1,13 @@
 export type UserType = {
-  id: number
+  userID: number
   organizationID: number
+  email: string
   firstName: string
   lastName: string
-  email: string
-  emailVerified: string
-  avatarURL: string
   role: string
   status: UserStatusTypes
+  profilePictureFileID: string
+  profilePictureURL: string
 }
 
 export enum UserRoleTypes {

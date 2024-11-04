@@ -1,9 +1,9 @@
 import Link from 'next/link'
 import Image from 'next/image'
 
-import { UserRoleTypes, UserStatusTypes } from '@/lib/types/user'
+import { UserStatusTypes } from '@/lib/types/user'
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
-import { searchUsers } from '@/lib/data/user'
+import { searchClients } from '@/lib/data/user'
 import {
   Table,
   TableBody,
@@ -16,21 +16,21 @@ import { Badge } from '@/components/ui/badge'
 import { Pagination } from '@/components/ui/pagination'
 
 interface ClientsTableProps {
-  orgName: string
   query: string
   currentPage: number
 }
 
-export default async function ClientsTable({ orgName, query, currentPage }: ClientsTableProps) {
+export default async function ClientsTable({ query, currentPage }: ClientsTableProps) {
   const totalRowsPerPage = 14
   const offset = currentPage * totalRowsPerPage - totalRowsPerPage
-  const { users, total } = await searchUsers({
-    filters: { role: UserRoleTypes.ORG_CLIENT },
+  const { clients, totalCount } = await searchClients({
+    filters: {},
     searchQuery: query,
     limit: totalRowsPerPage,
     offset,
   })
-  const totalPages = Math.ceil(total / totalRowsPerPage)
+
+  const totalPages = Math.ceil(totalCount / totalRowsPerPage)
 
   return (
     <div className="mt-[20px] flex h-full flex-col overflow-auto">
@@ -45,13 +45,13 @@ export default async function ClientsTable({ orgName, query, currentPage }: Clie
           </TableRow>
         </TableHeader>
         <TableBody>
-          {users && users.length > 0 ? (
-            users.map((user) => (
-              <TableRow key={user.id}>
+          {clients && clients.length > 0 ? (
+            clients.map((client) => (
+              <TableRow key={client.userID}>
                 <TableCell>
                   <div className="w-max">
                     <Image
-                      src={user.avatarURL || DEFAULT_MALE_CLIENT_LOGO_URL}
+                      src={client.profilePictureURL || DEFAULT_MALE_CLIENT_LOGO_URL}
                       alt=""
                       width={30}
                       height={30}
@@ -60,15 +60,17 @@ export default async function ClientsTable({ orgName, query, currentPage }: Clie
                   </div>
                 </TableCell>
                 <TableCell className="text-nowrap">
-                  <Link href={`/admin/clients/${user.id}`} className="hover:text-blue-500">
-                    {user.firstName} {user.lastName}
+                  <Link href={`/admin/clients/${client.userID}`} className="hover:text-blue-500">
+                    {client.firstName} {client.lastName}
                   </Link>
                 </TableCell>
-                <TableCell>{user.email}</TableCell>
-                <TableCell>{user.id}</TableCell>
+                <TableCell>{client.email}</TableCell>
+                <TableCell>{client.userID}</TableCell>
                 <TableCell>
-                  <Badge variant={user.status === UserStatusTypes.ACTIVE ? 'default' : 'secondary'}>
-                    {user.status}
+                  <Badge
+                    variant={client.status === UserStatusTypes.ACTIVE ? 'default' : 'secondary'}
+                  >
+                    {client.status}
                   </Badge>
                 </TableCell>
               </TableRow>
@@ -82,7 +84,7 @@ export default async function ClientsTable({ orgName, query, currentPage }: Clie
           )}
         </TableBody>
       </Table>
-      {users && users.length < total && (
+      {clients && clients.length < totalCount && (
         <Pagination currentPage={currentPage} totalPages={totalPages} />
       )}
     </div>

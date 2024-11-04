@@ -8,11 +8,13 @@ interface ApiRequestProps {
   method?: string
   data?: Record<string, any>
   authRequired?: boolean
+  headers?: Record<string, string>
 }
 
 interface ApiRequestResponse<T = any> {
   data?: T
   error?: string
+  headers?: Headers
 }
 
 export async function apiRequest<T = any>({
@@ -20,12 +22,14 @@ export async function apiRequest<T = any>({
   method = 'GET',
   data = {},
   authRequired = false,
+  headers = {},
 }: ApiRequestProps): Promise<ApiRequestResponse<T>> {
   const url = new URL(`${GLOVEE_API_URL}/${path}`)
   const options: RequestInit = {
     method,
     headers: {
       'Content-Type': 'application/json',
+      ...headers,
     },
   }
 
@@ -33,6 +37,7 @@ export async function apiRequest<T = any>({
     const accessToken = await getSession()
     if (accessToken) {
       options.headers = {
+        ...options.headers,
         Authorization: `Bearer ${accessToken}`,
       }
     } else {
@@ -54,8 +59,32 @@ export async function apiRequest<T = any>({
       throw responseData
     }
 
-    return { data: keysSnakeCaseToCamelCase(responseData) }
+    return { data: keysSnakeCaseToCamelCase(responseData), headers: response.headers }
   } catch (error: any) {
-    return { error: errorMessages(error?.hint || 'something_went_wrong') }
+    return { error: error.hint || error.message || 'something_went_wrong' }
   }
+}
+
+interface ExtractTotalCountFromHeadersProps {
+  headers: Headers | undefined
+}
+
+interface ExtractTotalCountFromHeadersResponse {
+  totalCount: number | undefined
+}
+
+export function extractTotalCountFromHeaders({
+  headers,
+}: ExtractTotalCountFromHeadersProps): ExtractTotalCountFromHeadersResponse {
+  if (!headers) {
+    return { totalCount: undefined }
+  }
+
+  const contentRange = headers.get('Content-Range')
+  if (!contentRange) {
+    return { totalCount: undefined }
+  }
+
+  const totalCount = contentRange.split('/')[1]
+  return { totalCount: parseInt(totalCount) }
 }

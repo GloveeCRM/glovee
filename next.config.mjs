@@ -15,6 +15,11 @@ const nextConfig = {
         hostname: process.env.NEXT_PUBLIC_BLOB_HOST || 'default',
         port: '',
       },
+      {
+        protocol: 'https',
+        hostname: process.env.NEXT_PUBLIC_S3_CA_CENTRAL_1_HOST || 'default',
+        port: '',
+      },
     ],
   },
 }

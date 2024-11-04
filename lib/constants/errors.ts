@@ -17,6 +17,7 @@ const errors = {
   password_missing_special_character: 'Password must contain at least one special character',
   organization_not_found: 'Organization not found',
   token_not_found: 'Token not found',
+  no_clients_found: 'No clients found',
 }
 
 export const errorMessages = (error_code: string) => {
