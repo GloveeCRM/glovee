@@ -50,7 +50,7 @@ export async function login({ email, password }: LoginProps): Promise<LoginRespo
   })
 
   if (error) {
-    return { error }
+    return { error: errorMessages(error) }
   }
 
   if (data?.accessToken && data?.refreshToken) {
@@ -114,7 +114,7 @@ export async function register({
   })
 
   if (error) {
-    return { error }
+    return { error: errorMessages(error) }
   }
 
   if (data?.user) {
@@ -153,7 +153,7 @@ export async function refreshTokens(): Promise<RefreshTokensResponse> {
   if (error) {
     await removeSession()
     await removeRefreshToken()
-    return { error }
+    return { error: errorMessages(error) }
   }
 
   if (data?.accessToken && data?.refreshToken) {

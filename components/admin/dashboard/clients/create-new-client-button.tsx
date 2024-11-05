@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { BiMessageSquareError } from 'react-icons/bi'
 
-import { createUser } from '@/lib/actions/user'
+import { createClient } from '@/lib/actions/user'
 import { CreateClientSchema } from '@/lib/zod/schemas'
 import { Button } from '@/components/ui/button'
 import {
@@ -29,6 +29,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Callout } from '@/components/ui/callout'
+import { errorMessages } from '@/lib/constants/errors'
 
 export default function CreateNewClientButton() {
   const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -58,25 +59,24 @@ export default function CreateNewClientButton() {
     })
   }
 
-  function handleCreateClient(values: z.infer<typeof CreateClientSchema>) {
-    const newUser = {
+  async function handleCreateClient(values: z.infer<typeof CreateClientSchema>) {
+    const res = await createClient({
       firstName: values.firstName,
       lastName: values.lastName,
       email: values.email,
-    }
-    createUser({ newUser }).then((res) => {
-      if (res.success) {
-        setIsOpen(false)
-        clientCreationSuccessToast(res.success || 'Client created!')
-      } else if (res.error === 'a user with this email exists in the organization') {
-        form.setError('root.error', {
-          message: res.error,
-        })
-      } else {
-        setIsOpen(false)
-        clientCreationErrorToast(res.error || 'Failed to create client')
-      }
     })
+
+    if (res.data?.user) {
+      setIsOpen(false)
+      clientCreationSuccessToast(`${res.data.user.firstName} ${res.data.user.lastName} created!`)
+    } else if (res.error) {
+      form.setError('root.error', {
+        message: res.error,
+      })
+    } else {
+      setIsOpen(false)
+      clientCreationErrorToast(errorMessages('something_went_wrong'))
+    }
   }
 
   function handleDialogOpenChange(isOpen: boolean) {

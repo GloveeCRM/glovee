@@ -7,6 +7,49 @@ import { GLOVEE_API_URL } from '@/lib/constants/api'
 import { getSession } from '@/lib/auth/session'
 import { getCurrentOrgName } from '@/lib/utils/server'
 import { keysCamelCaseToSnakeCase } from '@/lib/utils/json'
+import { apiRequest } from '../utils/http'
+import { errorMessages } from '../constants/errors'
+
+interface CreateClientProps {
+  firstName: string
+  lastName: string
+  email: string
+}
+
+interface CreateClientResponse {
+  data?: {
+    user: UserType
+  }
+  error?: string
+}
+
+export async function createClient({
+  firstName,
+  lastName,
+  email,
+}: CreateClientProps): Promise<CreateClientResponse> {
+  const orgName = await getCurrentOrgName()
+
+  const { data, error } = await apiRequest<{ user: UserType }>({
+    path: 'rpc/create_client',
+    method: 'POST',
+    data: {
+      email,
+      firstName,
+      lastName,
+      orgName,
+    },
+    authRequired: true,
+  })
+
+  if (error) {
+    revalidatePath('/admin/clients')
+    return { error: errorMessages(error) }
+  } else {
+    revalidatePath('/admin/clients')
+    return { data }
+  }
+}
 
 type UpdateUserInputDTO = {
   userID: number
