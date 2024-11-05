@@ -25,7 +25,7 @@ export default function ClientProfileCard({ client }: ClientProfileCardProps) {
     <div className="flex items-end justify-between rounded-md border border-n-700 bg-n-700 px-[14px] py-[18px] text-n-100">
       <div className="flex gap-[8px]">
         <ClientProfilePicture
-          url={client.avatarURL || DEFAULT_MALE_CLIENT_LOGO_URL}
+          url={client.profilePictureURL || DEFAULT_MALE_CLIENT_LOGO_URL}
           client={client}
           editable={isEditing}
         />
@@ -45,7 +45,7 @@ export default function ClientProfileCard({ client }: ClientProfileCardProps) {
               <div className="flex flex-col gap-[6px]">
                 <span className="text-[12px]">{client.email}</span>
                 <Badge variant="default" size="md" className="bg-n-500 text-n-100">
-                  {client.id}
+                  {client.userID}
                 </Badge>
               </div>
             </div>
@@ -60,7 +60,7 @@ export default function ClientProfileCard({ client }: ClientProfileCardProps) {
       </div>
       <div>
         <SetUserStatusButton
-          userId={client.id}
+          userId={client.userID}
           newStatus={
             client.status === UserStatusTypes.ACTIVE
               ? UserStatusTypes.INACTIVE
