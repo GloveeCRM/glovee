@@ -43,6 +43,7 @@ export async function removeSession() {
 
 export async function setRefreshToken(token: string) {
   const payload = await parseJWT(token, refreshTokenSecret)
+
   if (payload) {
     const jwtExpiryDate = new Date(payload.exp * 1000)
     cookies().set('refreshToken', token, {
@@ -53,6 +54,9 @@ export async function setRefreshToken(token: string) {
       path: '/',
     })
   } else {
+    console.error(
+      'Error setting refresh token - Removing refresh token from cookies - Token or secret missing'
+    )
     await removeRefreshToken()
   }
 }

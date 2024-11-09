@@ -3,15 +3,15 @@
 import toast from 'react-hot-toast'
 
 import { UserStatusTypes } from '@/lib/types/user'
-import { updateUser } from '@/lib/actions/user'
+import { updateUserStatus } from '@/lib/actions/user'
 import { Button } from '@/components/ui/button'
 
 interface SetUserStatusButtonProps {
-  userId: number
+  userID: number
   newStatus: UserStatusTypes
 }
 
-export default function SetUserStatusButton({ userId, newStatus }: SetUserStatusButtonProps) {
+export default function SetUserStatusButton({ userID, newStatus }: SetUserStatusButtonProps) {
   function userStatusUpdateSuccessToast(message: string) {
     toast.success((t) => message, {
       duration: 3000,
@@ -27,11 +27,11 @@ export default function SetUserStatusButton({ userId, newStatus }: SetUserStatus
   }
 
   async function handleClickSetStatus() {
-    updateUser(userId, { status: newStatus }).then((res) => {
-      if (res.error) {
-        userStatusUpdateErrorToast(res.error || 'Failed to update user status!')
+    updateUserStatus({ userID: userID, status: newStatus }).then((res) => {
+      if (res.data?.status) {
+        userStatusUpdateSuccessToast('User status set to ' + res.data?.status)
       } else {
-        userStatusUpdateSuccessToast(res.success || 'User status updated!')
+        userStatusUpdateErrorToast(res.error || 'Failed to update user status!')
       }
     })
   }

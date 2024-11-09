@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 
-import { UserType } from '@/lib/types/user'
+import { UserStatusTypes, UserType } from '@/lib/types/user'
 import { GLOVEE_API_URL } from '@/lib/constants/api'
 import { getSession } from '@/lib/auth/session'
 import { getCurrentOrgName } from '@/lib/utils/server'
@@ -51,65 +51,35 @@ export async function createClient({
   }
 }
 
-type UpdateUserInputDTO = {
+interface UpdateUserStatusProps {
   userID: number
-  updateFields: Partial<UserType>
+  status: UserStatusTypes
 }
 
-type UpdateUserOutputDTO = {
-  success?: string
+interface UpdateUserStatusResponse {
+  data?: {
+    status: UserStatusTypes
+  }
   error?: string
-  errors?: any
 }
 
-export async function updateUser({
+export async function updateUserStatus({
   userID,
-  updateFields,
-}: UpdateUserInputDTO): Promise<UpdateUserOutputDTO> {
-  if (userID === 0) {
-    return { errors: { userID: 'UserID is required' } }
-  }
+  status,
+}: UpdateUserStatusProps): Promise<UpdateUserStatusResponse> {
+  const { data, error } = await apiRequest<{ status: UserStatusTypes }>({
+    path: 'rpc/update_user_status',
+    method: 'POST',
+    data: { userID, status },
+    authRequired: true,
+  })
 
-  const accessToken = await getSession()
-  if (!accessToken) {
-    return { error: 'Unauthorized' }
-  }
-
-  const orgName = await getCurrentOrgName()
-
-  const queryParams = new URLSearchParams()
-  queryParams.append('user_id', userID.toString())
-
-  const body = {
-    userID,
-    updateFields,
-  }
-  const bodySnakeCase = keysCamelCaseToSnakeCase(body)
-
-  try {
-    const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/user/update?${queryParams.toString()}`,
-      {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify(bodySnakeCase),
-      }
-    )
-
-    const data = await response.json()
-    const dataCamelCase = keysCamelCaseToSnakeCase(data)
-
-    if (dataCamelCase.status === 'error') {
-      return { error: dataCamelCase.error }
-    } else {
-      revalidatePath(`/admin/clients/${userID}`)
-      return { success: 'Client updated!' }
-    }
-  } catch (error) {
-    return { error: 'Something went wrong!' }
+  if (error) {
+    revalidatePath(`/admin/clients/${userID}`)
+    return { error: errorMessages(error) }
+  } else {
+    revalidatePath(`/admin/clients/${userID}`)
+    return { data }
   }
 }
 

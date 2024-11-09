@@ -60,7 +60,7 @@ export default function ClientProfileCard({ client }: ClientProfileCardProps) {
       </div>
       <div>
         <SetUserStatusButton
-          userId={client.userID}
+          userID={client.userID}
           newStatus={
             client.status === UserStatusTypes.ACTIVE
               ? UserStatusTypes.INACTIVE
