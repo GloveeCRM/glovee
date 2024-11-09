@@ -6,8 +6,10 @@ export type UserType = {
   lastName: string
   role: string
   status: UserStatusTypes
-  profilePictureFileID: string
-  profilePictureURL: string
+  profilePictureFileID?: string
+  profilePictureURL?: string
+  createdAt?: string
+  updatedAt?: string
 }
 
 export enum UserRoleTypes {

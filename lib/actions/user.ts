@@ -3,10 +3,7 @@
 import { revalidatePath } from 'next/cache'
 
 import { UserStatusTypes, UserType } from '@/lib/types/user'
-import { GLOVEE_API_URL } from '@/lib/constants/api'
-import { getSession } from '@/lib/auth/session'
 import { getCurrentOrgName } from '@/lib/utils/server'
-import { keysCamelCaseToSnakeCase } from '@/lib/utils/json'
 import { apiRequest } from '../utils/http'
 import { errorMessages } from '../constants/errors'
 
@@ -83,49 +80,39 @@ export async function updateUserStatus({
   }
 }
 
-type CreateUserInputDTO = {
-  newUser: Partial<UserType>
+interface UpdateUserProfileProps {
+  userID: number
+  firstName?: string
+  lastName?: string
+  email?: string
+  profilePictureFileID?: number
 }
 
-type CreateUserOutputDTO = {
-  success?: string
+interface UpdateUserProfileResponse {
+  user?: UserType
   error?: string
-  errors?: any
 }
 
-export async function createUser({ newUser }: CreateUserInputDTO): Promise<CreateUserOutputDTO> {
-  const accessToken = await getSession()
-  if (!accessToken) {
-    return { error: 'Unauthorized' }
-  }
+export async function updateUserProfile({
+  userID,
+  firstName,
+  lastName,
+  email,
+  profilePictureFileID,
+}: UpdateUserProfileProps): Promise<UpdateUserProfileResponse> {
+  const { data, error } = await apiRequest<{ user: UserType }>({
+    path: 'rpc/update_user',
+    method: 'POST',
+    data: { userID, firstName, lastName, email, profilePictureFileID },
+    authRequired: true,
+  })
 
-  const orgName = await getCurrentOrgName()
-
-  const body = {
-    user: newUser,
-  }
-  const bodySnakeCase = keysCamelCaseToSnakeCase(body)
-
-  try {
-    const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/create`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify(bodySnakeCase),
-    })
-
-    const data = await response.json()
-    const dataCamelCase = keysCamelCaseToSnakeCase(data)
-
-    if (dataCamelCase.status === 'error') {
-      return { error: dataCamelCase.error }
-    } else {
-      revalidatePath('/admin/clients')
-      return { success: 'User created successfully!' }
-    }
-  } catch (error) {
-    return { error: 'Something went wrong!' }
+  revalidatePath(`/admin/clients/${userID}`)
+  if (data?.user) {
+    return { user: data.user }
+  } else if (error) {
+    return { error: errorMessages(error) }
+  } else {
+    return { error: errorMessages('something_went_wrong') }
   }
 }

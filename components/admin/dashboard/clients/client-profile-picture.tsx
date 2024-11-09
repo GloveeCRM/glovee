@@ -8,7 +8,7 @@ import { BiTrash } from 'react-icons/bi'
 import { UserType } from '@/lib/types/user'
 import { uploadFileToS3 } from '@/lib/utils/s3'
 import { fetchProfilePictureUploadURL } from '@/lib/data/user'
-import { updateUser } from '@/lib/actions/user'
+import { updateUserProfile } from '@/lib/actions/user'
 
 interface ClientProfilePictureProps {
   url: string
@@ -25,7 +25,7 @@ export default function ClientProfilePicture({ url, client, editable }: ClientPr
       return
     }
 
-    const uploadURL = await fetchProfilePictureUploadURL(client.id, file.type)
+    const uploadURL = await fetchProfilePictureUploadURL(client.userID, file.type)
     if (!uploadURL) {
       console.error('Failed to fetch upload URL')
       return
@@ -37,9 +37,9 @@ export default function ClientProfilePicture({ url, client, editable }: ClientPr
       return
     }
 
-    const updateRes = await updateUser({
-      userID: client.id,
-      updateFields: { avatarURL: uploadRes.url || '' },
+    const updateRes = await updateUserProfile({
+      userID: client.userID,
+      profilePictureFileID: 1,
     })
     if (updateRes.error) {
       console.error('Failed to update profile picture')
@@ -52,7 +52,7 @@ export default function ClientProfilePicture({ url, client, editable }: ClientPr
   }
 
   function handleDelete() {
-    updateUser({ userID: client.id, updateFields: { avatarURL: '' } })
+    updateUserProfile({ userID: client.userID, profilePictureFileID: 0 })
   }
 
   return (

@@ -7,7 +7,7 @@ import toast from 'react-hot-toast'
 
 import { UserType } from '@/lib/types/user'
 import { UpdateClientSchema } from '@/lib/zod/schemas'
-import { updateUser } from '@/lib/actions/user'
+import { updateUserProfile } from '@/lib/actions/user'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -53,17 +53,19 @@ export default function ClientProfileEditForm({ onClose, client }: ClientProfile
   }
 
   async function handleUpdateClientInformation(values: z.infer<typeof UpdateClientSchema>) {
-    updateUser(client.id, values).then((res) => {
-      if (res.success) {
-        clientInformationUpdateSuccessToast(res.success)
+    updateUserProfile({
+      userID: client.userID,
+      firstName: values.firstName,
+      lastName: values.lastName,
+      email: values.email,
+    }).then(({ user, error }) => {
+      if (user) {
+        clientInformationUpdateSuccessToast(`${user.firstName} ${user.lastName} updated!`)
         onClose()
-      } else if (res.error === 'a user with this email exists in the organization') {
+      } else if (error) {
         form.setError('root.error', {
-          message: res.error,
+          message: error,
         })
-      } else {
-        clientInformationUpdateErrorToast(res.error || 'Failed to update client information!')
-        onClose()
       }
     })
   }
