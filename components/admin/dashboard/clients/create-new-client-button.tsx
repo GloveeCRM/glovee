@@ -60,18 +60,18 @@ export default function CreateNewClientButton() {
   }
 
   async function handleCreateClient(values: z.infer<typeof CreateClientSchema>) {
-    const res = await createClient({
+    const { user, error } = await createClient({
       firstName: values.firstName,
       lastName: values.lastName,
       email: values.email,
     })
 
-    if (res.data?.user) {
+    if (user) {
       setIsOpen(false)
-      clientCreationSuccessToast(`${res.data.user.firstName} ${res.data.user.lastName} created!`)
-    } else if (res.error) {
+      clientCreationSuccessToast(`${user.firstName} ${user.lastName} created!`)
+    } else if (error) {
       form.setError('root.error', {
-        message: res.error,
+        message: error,
       })
     } else {
       setIsOpen(false)

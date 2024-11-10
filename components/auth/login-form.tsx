@@ -33,23 +33,21 @@ export default function LoginForm() {
     defaultValues: defaultFormValues,
   })
 
-  function handleLogin(values: z.infer<typeof LoginSchema>) {
+  async function handleLogin(values: z.infer<typeof LoginSchema>) {
     const { email, password } = values
-
-    login({ email, password }).then((res) => {
-      if (!res.error) {
-        form.setError('root.success', {
-          message: 'Login successful!',
-        })
-        setTimeout(() => {
-          window.location.href = res.data?.redirectLink || '/'
-        }, 500)
-      } else {
-        form.setError('root.error', {
-          message: res.error,
-        })
-      }
-    })
+    const { redirectLink, error } = await login({ email, password })
+    if (!error) {
+      form.setError('root.success', {
+        message: 'Login successful!',
+      })
+      setTimeout(() => {
+        window.location.href = redirectLink || '/'
+      }, 500)
+    } else {
+      form.setError('root.error', {
+        message: error,
+      })
+    }
   }
 
   return (

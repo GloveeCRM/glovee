@@ -35,23 +35,22 @@ export default function SignUpForm() {
     defaultValues: defaultFormValues,
   })
 
-  function handleSignup(values: z.infer<typeof SignupSchema>) {
+  async function handleSignup(values: z.infer<typeof SignupSchema>) {
     const { email, password, firstName, lastName } = values
 
-    register({ email, password, firstName, lastName }).then((res) => {
-      if (!res.error) {
-        form.setError('root.success', {
-          message: 'Please check your email for verification',
-        })
-        setTimeout(() => {
-          window.location.href = res.data?.redirectURL || '/'
-        }, 500)
-      } else {
-        form.setError('root.error', {
-          message: res.error,
-        })
-      }
-    })
+    const { redirectURL, error } = await register({ email, password, firstName, lastName })
+    if (!error) {
+      form.setError('root.success', {
+        message: 'Please check your email for verification',
+      })
+      setTimeout(() => {
+        window.location.href = redirectURL || '/'
+      }, 500)
+    } else {
+      form.setError('root.error', {
+        message: error,
+      })
+    }
   }
 
   return (

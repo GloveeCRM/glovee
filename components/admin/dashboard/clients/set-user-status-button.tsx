@@ -27,13 +27,12 @@ export default function SetUserStatusButton({ userID, newStatus }: SetUserStatus
   }
 
   async function handleClickSetStatus() {
-    updateUserStatus({ userID: userID, status: newStatus }).then((res) => {
-      if (res.data?.status) {
-        userStatusUpdateSuccessToast('User status set to ' + res.data?.status)
-      } else {
-        userStatusUpdateErrorToast(res.error || 'Failed to update user status!')
-      }
-    })
+    const { status, error } = await updateUserStatus({ userID: userID, status: newStatus })
+    if (status) {
+      userStatusUpdateSuccessToast('User status set to ' + status)
+    } else {
+      userStatusUpdateErrorToast(error || 'Failed to update user status!')
+    }
   }
 
   return (

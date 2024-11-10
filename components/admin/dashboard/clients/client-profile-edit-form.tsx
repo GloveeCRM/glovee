@@ -53,21 +53,20 @@ export default function ClientProfileEditForm({ onClose, client }: ClientProfile
   }
 
   async function handleUpdateClientInformation(values: z.infer<typeof UpdateClientSchema>) {
-    updateUserProfile({
+    const { user, error } = await updateUserProfile({
       userID: client.userID,
       firstName: values.firstName,
       lastName: values.lastName,
       email: values.email,
-    }).then(({ user, error }) => {
-      if (user) {
-        clientInformationUpdateSuccessToast(`${user.firstName} ${user.lastName} updated!`)
-        onClose()
-      } else if (error) {
-        form.setError('root.error', {
-          message: error,
-        })
-      }
     })
+    if (user) {
+      clientInformationUpdateSuccessToast(`${user.firstName} ${user.lastName} updated!`)
+      onClose()
+    } else if (error) {
+      form.setError('root.error', {
+        message: error,
+      })
+    }
   }
 
   return (

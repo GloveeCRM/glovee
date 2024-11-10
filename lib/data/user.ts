@@ -80,66 +80,6 @@ export async function searchClients({
   }
 }
 
-interface SearchUsersProps {
-  filters?: {
-    userID?: number
-    role: string
-  }
-  searchQuery?: string
-  limit?: number
-  offset?: number
-}
-
-type SearchUsersResponse = {
-  users: UserType[] | null
-  totalCount: number
-}
-
-export async function searchUsers({
-  filters = { userID: 0, role: '' },
-  searchQuery = '',
-  limit = 0,
-  offset = 0,
-}: SearchUsersProps): Promise<SearchUsersResponse | null> {
-  try {
-    const accessToken = await getSession()
-    if (!accessToken) {
-      return { users: null, totalCount: 0 }
-    }
-
-    const orgName = await getCurrentOrgName()
-
-    const queryParams = new URLSearchParams()
-    queryParams.append('user_id', filters.userID?.toString() || '')
-    queryParams.append('role', filters.role)
-    queryParams.append('search_query', searchQuery)
-    queryParams.append('limit', limit.toString())
-    queryParams.append('offset', offset.toString())
-
-    const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/user/search?${queryParams.toString()}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    )
-
-    const data = await response.json()
-    const camelCaseData = keysSnakeCaseToCamelCase(data)
-
-    if (camelCaseData.status === 'error') {
-      return { users: null, totalCount: 0 }
-    } else {
-      return { users: camelCaseData.data.users, totalCount: camelCaseData.data.totalCount }
-    }
-  } catch (error) {
-    return { users: null, totalCount: 0 }
-  }
-}
-
 interface FetchProfilePictureUploadURLProps {
   userID: number
   fileName: string

@@ -5,7 +5,6 @@ import { revalidatePath } from 'next/cache'
 import { UserStatusTypes, UserType } from '@/lib/types/user'
 import { getCurrentOrgName } from '@/lib/utils/server'
 import { apiRequest } from '../utils/http'
-import { errorMessages } from '../constants/errors'
 
 interface CreateClientProps {
   firstName: string
@@ -14,9 +13,7 @@ interface CreateClientProps {
 }
 
 interface CreateClientResponse {
-  data?: {
-    user: UserType
-  }
+  user?: UserType
   error?: string
 }
 
@@ -39,13 +36,8 @@ export async function createClient({
     authRequired: true,
   })
 
-  if (error) {
-    revalidatePath('/admin/clients')
-    return { error: errorMessages(error) }
-  } else {
-    revalidatePath('/admin/clients')
-    return { data }
-  }
+  revalidatePath('/admin/clients')
+  return { user: data?.user, error }
 }
 
 interface UpdateUserStatusProps {
@@ -54,9 +46,7 @@ interface UpdateUserStatusProps {
 }
 
 interface UpdateUserStatusResponse {
-  data?: {
-    status: UserStatusTypes
-  }
+  status?: UserStatusTypes
   error?: string
 }
 
@@ -71,13 +61,8 @@ export async function updateUserStatus({
     authRequired: true,
   })
 
-  if (error) {
-    revalidatePath(`/admin/clients/${userID}`)
-    return { error: errorMessages(error) }
-  } else {
-    revalidatePath(`/admin/clients/${userID}`)
-    return { data }
-  }
+  revalidatePath(`/admin/clients/${userID}`)
+  return { status: data?.status, error }
 }
 
 interface UpdateUserProfileProps {
@@ -108,13 +93,7 @@ export async function updateUserProfile({
   })
 
   revalidatePath(`/admin/clients/${userID}`)
-  if (data?.user) {
-    return { user: data.user }
-  } else if (error) {
-    return { error: errorMessages(error) }
-  } else {
-    return { error: errorMessages('something_went_wrong') }
-  }
+  return { user: data?.user, error }
 }
 
 interface UpdateUserProfilePictureProps {
@@ -127,9 +106,7 @@ interface UpdateUserProfilePictureProps {
 }
 
 interface UpdateUserProfilePictureResponse {
-  data?: {
-    url: string
-  }
+  url?: string
   error?: string
 }
 
@@ -149,5 +126,5 @@ export async function updateUserProfilePicture({
   })
 
   revalidatePath(`/admin/clients/${userID}`)
-  return { data, error }
+  return { url: data?.url, error }
 }

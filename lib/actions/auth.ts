@@ -27,11 +27,9 @@ interface LoginProps {
 }
 
 interface LoginResponse {
-  data?: {
-    accessToken: string
-    refreshToken: string
-    redirectLink: string
-  }
+  accessToken?: string
+  refreshToken?: string
+  redirectLink?: string
   error?: string
 }
 
@@ -50,7 +48,7 @@ export async function login({ email, password }: LoginProps): Promise<LoginRespo
   })
 
   if (error) {
-    return { error: errorMessages(error) }
+    return { error }
   }
 
   if (data?.accessToken && data?.refreshToken) {
@@ -70,7 +68,9 @@ export async function login({ email, password }: LoginProps): Promise<LoginRespo
           ? DEFAULT_ORG_CLIENT_LOGIN_REDIRECT
           : '/'
     return {
-      data: { accessToken: data.accessToken, refreshToken: data.refreshToken, redirectLink },
+      accessToken: data.accessToken,
+      refreshToken: data.refreshToken,
+      redirectLink,
     }
   }
 
@@ -85,10 +85,8 @@ interface RegisterProps {
 }
 
 interface RegisterResponse {
-  data?: {
-    user: UserType
-    redirectURL: string
-  }
+  user?: UserType
+  redirectURL?: string
   error?: string
 }
 
@@ -114,7 +112,7 @@ export async function register({
   })
 
   if (error) {
-    return { error: errorMessages(error) }
+    return { error }
   }
 
   if (data?.user) {
@@ -125,7 +123,7 @@ export async function register({
           ? DEFAULT_ORG_ADMIN_LOGIN_REDIRECT
           : '/'
 
-    return { data: { user: data.user, redirectURL } }
+    return { user: data.user, redirectURL }
   }
 
   return { error: errorMessages('something_went_wrong') }
@@ -153,7 +151,7 @@ export async function refreshTokens(): Promise<RefreshTokensResponse> {
   if (error) {
     await removeSession()
     await removeRefreshToken()
-    return { error: errorMessages(error) }
+    return { error }
   }
 
   if (data?.accessToken && data?.refreshToken) {
@@ -165,74 +163,11 @@ export async function refreshTokens(): Promise<RefreshTokensResponse> {
   return { error: errorMessages('something_went_wrong') }
 }
 
-interface SignupInputDTO {
-  email: string
-  password: string
-  firstName: string
-  lastName: string
-}
-
-interface SignupOutputDTO {
-  success?: string
-  data?: Record<string, any>
-  error?: string
-}
-
-export async function signup({
-  email,
-  password,
-  firstName,
-  lastName,
-}: SignupInputDTO): Promise<SignupOutputDTO> {
-  const orgName = await getCurrentOrgName()
-
-  const body = {
-    user: {
-      email,
-      firstName,
-      lastName,
-    },
-    password,
-  }
-  const bodySnakeCase = keysCamelCaseToSnakeCase(body)
-
-  try {
-    const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/register`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(bodySnakeCase),
-    })
-
-    const data = await response.json()
-    const camelCaseData = keysSnakeCaseToCamelCase(data)
-
-    if (camelCaseData.status === 'error') {
-      return { error: camelCaseData.error }
-    } else {
-      await setSession(camelCaseData.data.accessToken)
-      const tokenPayload = await getSessionPayload()
-      const redirectLink =
-        tokenPayload?.organization?.orgName === 'org'
-          ? DEFAULT_ORG_MANAGEMENT_LOGIN_REDIRECT
-          : tokenPayload?.user.role === UserRoleTypes.ORG_ADMIN ||
-              tokenPayload?.user.role === UserRoleTypes.ORG_OWNER
-            ? DEFAULT_ORG_ADMIN_LOGIN_REDIRECT
-            : tokenPayload?.user.role === UserRoleTypes.ORG_CLIENT
-              ? DEFAULT_ORG_CLIENT_LOGIN_REDIRECT
-              : '/'
-      return { success: 'Successfully Signed Up!', data: { redirectLink: redirectLink } }
-    }
-  } catch (error) {
-    return { error: 'Something went wrong!' }
-  }
-}
-
 export async function logout() {
   return await removeSession()
 }
 
+// TODO: Update forgot password logic
 interface ForgotPasswordInputDTO {
   email: string
 }
@@ -274,6 +209,7 @@ export async function forgotPassword({
   }
 }
 
+// TODO: Update reset password logic
 interface ResetPasswordInputDTO {
   resetPasswordToken: string
   password: string

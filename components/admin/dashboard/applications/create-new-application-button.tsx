@@ -13,7 +13,7 @@ import { FormTemplateType } from '@/lib/types/template'
 import { FormRoleTypes } from '@/lib/types/form'
 import { UserRoleTypes, UserType } from '@/lib/types/user'
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
-import { searchUsers } from '@/lib/data/user'
+import { searchClients } from '@/lib/data/user'
 import { searchTemplates } from '@/lib/data/template'
 import { createNewForm } from '@/lib/actions/form'
 import { CreateFormSchema } from '@/lib/zod/schemas'
@@ -66,21 +66,21 @@ export default function CreateNewApplicationButton({ client }: CreateNewApplicat
   const [isSearchingClients, setIsSearchingClients] = useState<boolean>(false)
 
   useEffect(() => {
+    async function fetchClients() {
+      const { clients } = await searchClients({})
+      setClients(clients || null)
+    }
+
     searchTemplates({}).then((res) => {
       setTemplates(res.formTemplates)
     })
-
     if (!client) {
-      searchUsers({
-        filters: { role: UserRoleTypes.ORG_CLIENT },
-      }).then((res) => {
-        setClients(res?.users || null)
-      })
+      fetchClients()
     }
   }, [orgName, client])
 
   const defaultFormValues = {
-    clientID: client?.id || 0,
+    clientID: client?.userID || 0,
     role: '',
     applicantFirstName: '',
     applicantLastName: '',
@@ -154,7 +154,7 @@ export default function CreateNewApplicationButton({ client }: CreateNewApplicat
                       <FormLabel>Client</FormLabel>
                       <div className="flex items-center gap-[8px] p-[4px] text-[14px] text-gray-700">
                         <Image
-                          src={client?.avatarURL || DEFAULT_MALE_CLIENT_LOGO_URL}
+                          src={client?.profilePictureURL || DEFAULT_MALE_CLIENT_LOGO_URL}
                           alt="CLient Logo"
                           width={30}
                           height={30}
@@ -182,16 +182,16 @@ export default function CreateNewApplicationButton({ client }: CreateNewApplicat
                             <div className="flex items-center gap-[8px]">
                               <Image
                                 src={
-                                  clients?.find((c) => c.id === field.value)?.avatarURL ||
-                                  DEFAULT_MALE_CLIENT_LOGO_URL
+                                  clients?.find((c) => c.userID === field.value)
+                                    ?.profilePictureURL || DEFAULT_MALE_CLIENT_LOGO_URL
                                 }
                                 alt=""
                                 className="rounded-full"
                                 width={30}
                                 height={30}
                               />
-                              {clients?.find((c) => c.id === field.value)?.firstName}{' '}
-                              {clients?.find((c) => c.id === field.value)?.lastName}
+                              {clients?.find((c) => c.userID === field.value)?.firstName}{' '}
+                              {clients?.find((c) => c.userID === field.value)?.lastName}
                             </div>
                             <div className="cursor-pointer" onClick={() => field.onChange(0)}>
                               <IoClose className="h-[20px] w-[20px]" />
@@ -221,13 +221,15 @@ export default function CreateNewApplicationButton({ client }: CreateNewApplicat
                                 {clients?.map((client) => (
                                   <>
                                     <CommandItem
-                                      key={client.id}
+                                      key={client.userID}
                                       value={client.firstName + ' ' + client.lastName}
-                                      onSelect={() => field.onChange(client.id)}
+                                      onSelect={() => field.onChange(client.userID)}
                                     >
                                       <div className="flex items-center gap-[8px]">
                                         <Image
-                                          src={client.avatarURL || DEFAULT_MALE_CLIENT_LOGO_URL}
+                                          src={
+                                            client.profilePictureURL || DEFAULT_MALE_CLIENT_LOGO_URL
+                                          }
                                           alt=""
                                           className="rounded-full"
                                           width={25}
