@@ -80,7 +80,7 @@ export async function searchClients({
   }
 }
 
-interface SearchUsersInput {
+interface SearchUsersProps {
   filters?: {
     userID?: number
     role: string
@@ -90,7 +90,7 @@ interface SearchUsersInput {
   offset?: number
 }
 
-type SearchUsersOutputDTO = {
+type SearchUsersResponse = {
   users: UserType[] | null
   totalCount: number
 }
@@ -100,7 +100,7 @@ export async function searchUsers({
   searchQuery = '',
   limit = 0,
   offset = 0,
-}: SearchUsersInput): Promise<SearchUsersOutputDTO | null> {
+}: SearchUsersProps): Promise<SearchUsersResponse | null> {
   try {
     const accessToken = await getSession()
     if (!accessToken) {
@@ -140,41 +140,37 @@ export async function searchUsers({
   }
 }
 
-export async function fetchProfilePictureUploadURL(
-  clientID: number,
+interface FetchProfilePictureUploadURLProps {
+  userID: number
+  fileName: string
   mimeType: string
-): Promise<string | null> {
-  try {
-    const accessToken = await getSession()
-    if (!accessToken) {
-      return null
-    }
+}
 
-    const orgName = await getCurrentOrgName()
-
-    const queryParams = new URLSearchParams()
-    queryParams.append('user_id', clientID.toString())
-    queryParams.append('mime_type', mimeType)
-
-    const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/user/avatar/upload-intent?${queryParams.toString()}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    )
-
-    const data = await response.json()
-    const camelCaseData = keysSnakeCaseToCamelCase(data)
-    if (data.status === 'error') {
-      return null
-    } else {
-      return camelCaseData.data.uploadURL
-    }
-  } catch (error) {
-    return null
+interface FetchProfilePictureUploadURLResponse {
+  data?: {
+    url: string
+    objectKey: string
   }
+  error?: string
+}
+
+export async function fetchProfilePictureUploadURL({
+  userID,
+  fileName,
+  mimeType,
+}: FetchProfilePictureUploadURLProps): Promise<FetchProfilePictureUploadURLResponse> {
+  const orgName = await getCurrentOrgName()
+
+  const queryParams = new URLSearchParams()
+  queryParams.append('org_name', orgName || '')
+  queryParams.append('user_id', userID.toString())
+  queryParams.append('file_name', fileName)
+  queryParams.append('mime_type', mimeType)
+  const { data, error } = await apiRequest<{ url: string; objectKey: string }>({
+    path: `rpc/profile_picture_upload_url?${queryParams.toString()}`,
+    method: 'GET',
+    authRequired: true,
+  })
+
+  return { data, error }
 }

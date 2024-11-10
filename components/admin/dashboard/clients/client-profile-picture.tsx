@@ -8,7 +8,7 @@ import { BiTrash } from 'react-icons/bi'
 import { UserType } from '@/lib/types/user'
 import { uploadFileToS3 } from '@/lib/utils/s3'
 import { fetchProfilePictureUploadURL } from '@/lib/data/user'
-import { updateUserProfile } from '@/lib/actions/user'
+import { updateUserProfile, updateUserProfilePicture } from '@/lib/actions/user'
 
 interface ClientProfilePictureProps {
   url: string
@@ -25,23 +25,36 @@ export default function ClientProfilePicture({ url, client, editable }: ClientPr
       return
     }
 
-    const uploadURL = await fetchProfilePictureUploadURL(client.userID, file.type)
-    if (!uploadURL) {
-      console.error('Failed to fetch upload URL')
+    const { data: uploadURLData, error: uploadURLDataError } = await fetchProfilePictureUploadURL({
+      userID: client.userID,
+      fileName: file.name,
+      mimeType: file.type,
+    })
+
+    if (uploadURLDataError) {
+      console.error(uploadURLDataError)
       return
     }
 
-    const uploadRes = await uploadFileToS3(uploadURL, file)
+    if (!uploadURLData?.url) {
+      console.error('No upload URL received')
+      return
+    }
+
+    const uploadRes = await uploadFileToS3(uploadURLData.url, file)
     if (!uploadRes.success) {
       console.error('Failed to upload file to S3')
       return
     }
 
-    const updateRes = await updateUserProfile({
+    const { error: updateProfilePictureError } = await updateUserProfilePicture({
       userID: client.userID,
-      profilePictureFileID: 1,
+      objectKey: uploadURLData.objectKey,
+      fileName: file.name,
+      mimeType: file.type,
+      size: file.size,
     })
-    if (updateRes.error) {
+    if (updateProfilePictureError) {
       console.error('Failed to update profile picture')
       return
     }

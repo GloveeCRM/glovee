@@ -116,3 +116,38 @@ export async function updateUserProfile({
     return { error: errorMessages('something_went_wrong') }
   }
 }
+
+interface UpdateUserProfilePictureProps {
+  userID: number
+  objectKey: string
+  fileName: string
+  mimeType: string
+  size: number
+  metadata?: Record<string, string>
+}
+
+interface UpdateUserProfilePictureResponse {
+  data?: {
+    url: string
+  }
+  error?: string
+}
+
+export async function updateUserProfilePicture({
+  userID,
+  objectKey,
+  fileName,
+  mimeType,
+  size,
+  metadata,
+}: UpdateUserProfilePictureProps): Promise<UpdateUserProfilePictureResponse> {
+  const { data, error } = await apiRequest<{ url: string }>({
+    path: 'rpc/create_user_profile_picture',
+    method: 'POST',
+    data: { userID, objectKey, fileName, mimeType, size, metadata },
+    authRequired: true,
+  })
+
+  revalidatePath(`/admin/clients/${userID}`)
+  return { data, error }
+}

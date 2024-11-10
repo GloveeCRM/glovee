@@ -17,6 +17,7 @@ interface ApiRequestResponse<T = any> {
   headers?: Headers
 }
 
+// TODO: Add error translation at this level
 export async function apiRequest<T = any>({
   path,
   method = 'GET',
