@@ -1,4 +1,4 @@
-import ApplicationsTable from '@/components/admin/dashboard/applications/applications-table-old'
+import ApplicationsTable from '@/components/admin/dashboard/applications/applications-table'
 import ApplicationPageToolbar from '@/components/admin/dashboard/applications/applications-page-toolbar'
 
 interface ApplicationsPageSearchParams {
@@ -17,7 +17,7 @@ export default function ApplicationsPage({ searchParams }: ApplicationsPageProps
   return (
     <div className="flex h-[calc(100svh-16px)] flex-col gap-[8px] overflow-hidden">
       <ApplicationPageToolbar />
-      <ApplicationsTable query={query} currentPage={currentPage} />
+      <ApplicationsTable searchQuery={query} currentPage={currentPage} />
     </div>
   )
 }
