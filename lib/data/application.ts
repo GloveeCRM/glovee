@@ -33,14 +33,35 @@ export async function searchApplications({
 }: SearchApplicationsProps): Promise<SearchApplicationsResponse> {
   const queryParams = new URLSearchParams()
   if (filters?.applicationID) {
-    queryParams.append('application_id', filters?.applicationID?.toString() || '')
+    queryParams.append('application_id', `eq.${filters?.applicationID}`)
   }
   if (filters?.userID) {
-    queryParams.append('user_id', filters?.userID?.toString() || '')
+    queryParams.append('user_id', `eq.${filters?.userID}`)
   }
+
   if (searchQuery) {
-    queryParams.append('search_query', searchQuery)
+    const term = searchQuery.trim()
+    const numericTerm = term.replace(/\D/g, '')
+
+    const searchConditions = []
+
+    // Search in owner->email and owner->full_name
+    searchConditions.push(`owner->>email.ilike.*${term}*`)
+    searchConditions.push(`owner->>full_name.ilike.*${term}*`)
+
+    // Add application_id search if numeric
+    if (numericTerm && !filters?.applicationID) {
+      searchConditions.push(`application_id.eq.${numericTerm}`)
+    }
+
+    // Add user_id search if numeric
+    if (numericTerm && !filters?.userID) {
+      searchConditions.push(`user_id.eq.${numericTerm}`)
+    }
+
+    queryParams.append('or', `(${searchConditions.join(',')})`)
   }
+
   if (limit) {
     queryParams.append('limit', limit?.toString() || '')
   }

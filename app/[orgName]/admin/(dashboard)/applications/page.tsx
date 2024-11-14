@@ -1,4 +1,4 @@
-import ApplicationsTable from '@/components/admin/dashboard/applications/applications-table'
+import ApplicationsTable from '@/components/admin/dashboard/applications/applications-table-old'
 import ApplicationPageToolbar from '@/components/admin/dashboard/applications/applications-page-toolbar'
 
 interface ApplicationsPageSearchParams {

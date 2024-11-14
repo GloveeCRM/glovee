@@ -2,7 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
-import { searchApplications, searchApplicationsOld } from '@/lib/data/application'
+import { searchApplicationsOld } from '@/lib/data/application'
 import {
   Table,
   TableBody,
@@ -15,18 +15,18 @@ import { Pagination } from '@/components/ui/pagination'
 import { formatDateToShortMonthDayYearTime } from '@/lib/utils/date'
 
 interface ApplicationsTableProps {
-  searchQuery?: string
+  query?: string
   currentPage?: number
 }
 
 export default async function ApplicationsTable({
-  searchQuery,
+  query,
   currentPage = 1,
 }: ApplicationsTableProps) {
   const totalRowsPerPage = 14
   const offset = currentPage * totalRowsPerPage - totalRowsPerPage
-  const { applications, totalCount } = await searchApplications({
-    searchQuery,
+  const { applications, totalCount } = await searchApplicationsOld({
+    query,
     limit: totalRowsPerPage,
     offset,
   })

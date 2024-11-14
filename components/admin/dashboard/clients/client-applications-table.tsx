@@ -1,7 +1,8 @@
 import Link from 'next/link'
 
-import { searchApplicationsOld } from '@/lib/data/application'
+import { searchApplications } from '@/lib/data/application'
 import { formatDateToShortMonthDayYearTime } from '@/lib/utils/date'
+
 import {
   Table,
   TableBody,
@@ -23,7 +24,7 @@ export default async function ClientApplicationsTable({
 }: ClientApplicationsTableProps) {
   const totalRowsPerPage = 12
   const offset = currentPage * totalRowsPerPage - totalRowsPerPage
-  const { applications, totalCount } = await searchApplicationsOld({
+  const { applications, totalCount } = await searchApplications({
     filters: { userID: clientID },
     limit: totalRowsPerPage,
     offset: offset,
@@ -64,7 +65,7 @@ export default async function ClientApplicationsTable({
           ) : (
             <TableRow>
               <TableCell colSpan={3} className="py-[12px] text-center text-n-500">
-                No forms found
+                No applications found
               </TableCell>
             </TableRow>
           )}
