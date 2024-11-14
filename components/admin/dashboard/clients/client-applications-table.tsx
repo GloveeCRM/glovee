@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import { searchApplications } from '@/lib/data/application'
+import { searchApplicationsOld } from '@/lib/data/application'
 import { formatDateToShortMonthDayYearTime } from '@/lib/utils/date'
 import {
   Table,
@@ -23,7 +23,7 @@ export default async function ClientApplicationsTable({
 }: ClientApplicationsTableProps) {
   const totalRowsPerPage = 12
   const offset = currentPage * totalRowsPerPage - totalRowsPerPage
-  const { applications, totalCount } = await searchApplications({
+  const { applications, totalCount } = await searchApplicationsOld({
     filters: { userID: clientID },
     limit: totalRowsPerPage,
     offset: offset,

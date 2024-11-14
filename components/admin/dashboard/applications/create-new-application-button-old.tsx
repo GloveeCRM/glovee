@@ -9,11 +9,15 @@ import toast from 'react-hot-toast'
 import { GoPlus } from 'react-icons/go'
 import { IoClose } from 'react-icons/io5'
 
+import { FormTemplateType } from '@/lib/types/template'
+import { FormRoleTypes } from '@/lib/types/form'
+import { UserRoleTypes, UserType } from '@/lib/types/user'
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
-import { UserType } from '@/lib/types/user'
 import { searchClients } from '@/lib/data/user'
-import { createApplication } from '@/lib/actions/application'
-import { CreateApplicationSchema } from '@/lib/zod/schemas'
+import { searchTemplates } from '@/lib/data/template'
+import { createNewForm } from '@/lib/actions/form'
+import { CreateFormSchema } from '@/lib/zod/schemas'
+import { useOrgContext } from '@/contexts/org-context'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -32,7 +36,14 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-
+import { Input } from '@/components/ui/input'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import {
   Command,
   CommandEmpty,
@@ -48,7 +59,9 @@ interface CreateNewApplicationButtonProp {
 }
 
 export default function CreateNewApplicationButton({ client }: CreateNewApplicationButtonProp) {
+  const { orgName } = useOrgContext()
   const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [templates, setTemplates] = useState<FormTemplateType[] | null>(null)
   const [clients, setClients] = useState<UserType[] | null>(null)
   const [isSearchingClients, setIsSearchingClients] = useState<boolean>(false)
 
@@ -58,17 +71,24 @@ export default function CreateNewApplicationButton({ client }: CreateNewApplicat
       setClients(clients || null)
     }
 
+    searchTemplates({}).then((res) => {
+      setTemplates(null)
+    })
     if (!client) {
       fetchClients()
     }
-  }, [client])
+  }, [orgName, client])
 
   const defaultFormValues = {
     clientID: client?.userID || 0,
+    role: '',
+    applicantFirstName: '',
+    applicantLastName: '',
+    templateID: 0,
   }
 
-  const form = useForm<z.infer<typeof CreateApplicationSchema>>({
-    resolver: zodResolver(CreateApplicationSchema),
+  const form = useForm<z.infer<typeof CreateFormSchema>>({
+    resolver: zodResolver(CreateFormSchema),
     defaultValues: defaultFormValues,
   })
 
@@ -86,17 +106,23 @@ export default function CreateNewApplicationButton({ client }: CreateNewApplicat
     })
   }
 
-  async function handleCreateApplication(values: z.infer<typeof CreateApplicationSchema>) {
-    const { clientID } = values
-    const { application, error } = await createApplication({
-      userID: clientID,
+  async function handleCreateApplication(values: z.infer<typeof CreateFormSchema>) {
+    const { clientID, role, templateID } = values
+    createNewForm({
+      ownerID: clientID,
+      role,
+      templateID,
     })
-    if (application) {
-      applicationCreationSuccessToast('Application created!')
-    } else {
-      applicationCreationErrorToast(error || 'Failed to create application!')
-    }
-    setIsOpen(false)
+      .then((res) => {
+        if (res.success) {
+          applicationCreationSuccessToast(res.success || 'Application created!')
+        } else {
+          applicationCreationErrorToast(res.error || 'Failed to create application!')
+        }
+      })
+      .finally(() => {
+        setIsOpen(false)
+      })
   }
 
   function handleDialogOpenChange(isOpen: boolean) {
@@ -226,7 +252,89 @@ export default function CreateNewApplicationButton({ client }: CreateNewApplicat
                 }}
               />
             )}
-            <div className="mt-[24px] flex gap-[8px]">
+            <FormField
+              control={form.control}
+              name="role"
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>Role</FormLabel>
+                    <Select onValueChange={(value) => field.onChange(value)}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a role" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {Object.values(FormRoleTypes).map((role) => (
+                          <SelectItem key={role} value={role}>
+                            {role?.charAt(0).toUpperCase() + role?.slice(1).toLowerCase()}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )
+              }}
+            />
+            <FormField
+              control={form.control}
+              name="applicantFirstName"
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>First Name</FormLabel>
+                    <FormControl>
+                      <Input type="text" placeholder="First Name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )
+              }}
+            />
+            <FormField
+              control={form.control}
+              name="applicantLastName"
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>Last Name</FormLabel>
+                    <FormControl>
+                      <Input type="text" placeholder="Last Name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )
+              }}
+            />
+            <FormField
+              control={form.control}
+              name="templateID"
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>Template</FormLabel>
+                    <Select onValueChange={(value) => field.onChange(Number(value))}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a template" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {templates?.map((template) => (
+                          <SelectItem key={template.id} value={String(template.id)}>
+                            {template.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )
+              }}
+            />
+            <div className="mt-[16px] flex gap-[8px]">
               <DialogClose asChild>
                 <Button variant="secondary" fullWidth={true}>
                   Cancel

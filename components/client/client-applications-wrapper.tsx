@@ -1,10 +1,10 @@
 import { getSessionUserID } from '@/lib/auth/session'
-import { searchApplications } from '@/lib/data/application'
+import { searchApplicationsOld } from '@/lib/data/application'
 import ClientApplicationSummaryCard from './application/client-application-summary-card'
 
 export default async function ClientApplicationsWrapper() {
   const userID = await getSessionUserID()
-  const { applications } = await searchApplications({
+  const { applications } = await searchApplicationsOld({
     filters: { userID },
   })
 

@@ -3,22 +3,79 @@
 import { getSession } from '../auth/session'
 import { GLOVEE_API_URL } from '../constants/api'
 import { ApplicationType } from '../types/application'
+import { apiRequest, extractTotalCountFromHeaders } from '../utils/http'
 import { keysSnakeCaseToCamelCase } from '../utils/json'
 import { getCurrentOrgName } from '../utils/server'
 
-interface SearchApplicationsInput {
+interface SearchApplicationsFilters {
+  applicationID?: number
+  userID?: number
+}
+
+interface SearchApplicationsProps {
+  filters?: SearchApplicationsFilters
+  searchQuery?: string
+  limit?: number
+  offset?: number
+}
+
+interface SearchApplicationsResponse {
+  error?: string
+  applications?: ApplicationType[] | null
+  totalCount: number
+}
+
+export async function searchApplications({
+  filters,
+  searchQuery,
+  limit,
+  offset,
+}: SearchApplicationsProps): Promise<SearchApplicationsResponse> {
+  const queryParams = new URLSearchParams()
+  if (filters?.applicationID) {
+    queryParams.append('application_id', filters?.applicationID?.toString() || '')
+  }
+  if (filters?.userID) {
+    queryParams.append('user_id', filters?.userID?.toString() || '')
+  }
+  if (searchQuery) {
+    queryParams.append('search_query', searchQuery)
+  }
+  if (limit) {
+    queryParams.append('limit', limit?.toString() || '')
+  }
+  if (offset) {
+    queryParams.append('offset', offset?.toString() || '')
+  }
+
+  const { data, error, headers } = await apiRequest<ApplicationType[]>({
+    path: `applications?${queryParams.toString()}`,
+    method: 'GET',
+    authRequired: true,
+  })
+
+  const { totalCount } = extractTotalCountFromHeaders({ headers })
+
+  if (error) {
+    return { error, totalCount: totalCount || 0 }
+  }
+
+  return { applications: data, totalCount: totalCount || 0 }
+}
+
+interface SearchApplicationsInputOld {
   filters?: { applicationID?: number; userID?: number }
   query?: string
   limit?: number
   offset?: number
 }
 
-export async function searchApplications({
+export async function searchApplicationsOld({
   filters = { applicationID: 0, userID: 0 },
   query = '',
   limit = 0,
   offset = 0,
-}: SearchApplicationsInput): Promise<{
+}: SearchApplicationsInputOld): Promise<{
   applications: ApplicationType[] | null
   totalCount: number
 }> {

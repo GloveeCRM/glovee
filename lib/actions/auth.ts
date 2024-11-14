@@ -168,18 +168,18 @@ export async function logout() {
 }
 
 // TODO: Update forgot password logic
-interface ForgotPasswordInputDTO {
+interface ForgotPasswordProps {
   email: string
 }
 
-interface ForgotPasswordOutputDTO {
+interface ForgotPasswordResponse {
   success?: string
   error?: string
 }
 
 export async function forgotPassword({
   email,
-}: ForgotPasswordInputDTO): Promise<ForgotPasswordOutputDTO> {
+}: ForgotPasswordProps): Promise<ForgotPasswordResponse> {
   const orgName = await getCurrentOrgName()
 
   const body = {

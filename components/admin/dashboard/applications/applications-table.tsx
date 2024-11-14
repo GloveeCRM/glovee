@@ -2,7 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
-import { searchApplications } from '@/lib/data/application'
+import { searchApplicationsOld } from '@/lib/data/application'
 import {
   Table,
   TableBody,
@@ -25,7 +25,7 @@ export default async function ApplicationsTable({
 }: ApplicationsTableProps) {
   const totalRowsPerPage = 14
   const offset = currentPage * totalRowsPerPage - totalRowsPerPage
-  const { applications, totalCount } = await searchApplications({
+  const { applications, totalCount } = await searchApplicationsOld({
     query,
     limit: totalRowsPerPage,
     offset,
@@ -55,10 +55,10 @@ export default async function ApplicationsTable({
                   </Link>
                 </TableCell>
                 <TableCell>
-                  <Link href={`/admin/clients/${application.owner.id}`}>
+                  <Link href={`/admin/clients/${application.owner.userID}`}>
                     <div className="flex w-max items-center gap-[6px] hover:text-blue-500">
                       <Image
-                        src={application.owner.avatarURL || DEFAULT_MALE_CLIENT_LOGO_URL}
+                        src={application.owner.profilePictureURL || DEFAULT_MALE_CLIENT_LOGO_URL}
                         alt=""
                         width={30}
                         height={30}
