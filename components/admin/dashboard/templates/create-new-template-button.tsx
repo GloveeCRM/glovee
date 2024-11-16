@@ -7,8 +7,7 @@ import toast from 'react-hot-toast'
 import { useForm } from 'react-hook-form'
 import { GoPlus } from 'react-icons/go'
 
-import { TemplateSchema } from '@/lib/zod/schemas'
-import { createTemplate } from '@/lib/actions/template'
+import { CreateFormTemplateSchema } from '@/lib/zod/schemas'
 import { useOrgContext } from '@/contexts/org-context'
 import {
   Dialog,
@@ -28,19 +27,17 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
+import { createFormTemplate } from '@/lib/actions/form'
 
 export default function CreateNewTemplateButton() {
-  const { orgName } = useOrgContext()
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
   const defaultFormValues = {
-    name: '',
-    description: '',
+    templateName: '',
   }
 
-  const form = useForm<z.infer<typeof TemplateSchema>>({
-    resolver: zodResolver(TemplateSchema),
+  const form = useForm<z.infer<typeof CreateFormTemplateSchema>>({
+    resolver: zodResolver(CreateFormTemplateSchema),
     defaultValues: defaultFormValues,
   })
 
@@ -58,19 +55,15 @@ export default function CreateNewTemplateButton() {
     })
   }
 
-  function handleCreateTemplate(values: z.infer<typeof TemplateSchema>) {
-    const { name, description } = values
-    createTemplate({ form: { formName: name, formDescription: description } })
-      .then((res) => {
-        if (res.success) {
-          templateCreationSuccessToast(res.success)
-        } else if (res.error) {
-          templateCreationErrorToast(res.error)
-        }
-      })
-      .finally(() => {
-        setIsOpen(false)
-      })
+  async function handleCreateTemplate(values: z.infer<typeof CreateFormTemplateSchema>) {
+    const { templateName } = values
+    const { error } = await createFormTemplate({ templateName })
+    if (error) {
+      templateCreationErrorToast(error)
+    } else {
+      templateCreationSuccessToast('Template created successfully')
+    }
+    setIsOpen(false)
   }
 
   function handleDialogOpenChange(isOpen: boolean) {
@@ -94,7 +87,7 @@ export default function CreateNewTemplateButton() {
           <form onSubmit={form.handleSubmit(handleCreateTemplate)}>
             <FormField
               control={form.control}
-              name="name"
+              name="templateName"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Template Name</FormLabel>
@@ -105,24 +98,8 @@ export default function CreateNewTemplateButton() {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem className="mb-[16px]">
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="This template is used to collect personal information."
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
 
-            <div className="flex gap-[8px]">
+            <div className="mt-[16px] flex gap-[8px]">
               <DialogClose asChild>
                 <Button variant="secondary" fullWidth={true}>
                   Cancel

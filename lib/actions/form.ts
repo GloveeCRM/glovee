@@ -1,7 +1,6 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { z } from 'zod'
 
 import { GLOVEE_API_URL } from '@/lib/constants/api'
 import { getSession } from '@/lib/auth/session'
@@ -14,6 +13,30 @@ import {
 } from '../types/form'
 import { getCurrentOrgName } from '../utils/server'
 import { keysCamelCaseToSnakeCase, keysSnakeCaseToCamelCase } from '../utils/json'
+import { apiRequest } from '../utils/http'
+import { FormTemplateType } from '../types/template'
+
+interface CreateFormTemplateProps {
+  templateName: string
+}
+
+interface CreateFormTemplateResponse {
+  error?: string
+}
+
+export async function createFormTemplate({
+  templateName,
+}: CreateFormTemplateProps): Promise<CreateFormTemplateResponse> {
+  const { error } = await apiRequest<{ formTemplate: FormTemplateType }>({
+    path: 'rpc/create_form_template',
+    method: 'POST',
+    data: { templateName },
+    authRequired: true,
+  })
+
+  revalidatePath('/admin/templates')
+  return { error }
+}
 
 type CreateNewFormInputDTO = {
   ownerID: number

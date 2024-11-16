@@ -24,8 +24,8 @@ export const CreateFormSchema = z.object({
   templateID: z.number().int().positive({ message: 'Template is required' }),
 })
 
-export const TemplateSchema = z.object({
-  name: z
+export const CreateFormTemplateSchema = z.object({
+  templateName: z
     .string({
       required_error: 'Title is required',
       invalid_type_error: 'Title is not valid',
@@ -33,7 +33,6 @@ export const TemplateSchema = z.object({
     .min(3, {
       message: 'Minimum 3 characters required',
     }),
-  description: z.string(),
 })
 
 export const NewPasswordSchema = z.object({
