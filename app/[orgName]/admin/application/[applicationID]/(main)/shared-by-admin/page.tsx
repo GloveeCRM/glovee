@@ -1,7 +1,7 @@
 import { fetchApplicationFilesByAdmin } from '@/lib/data/application'
 
 import SendFileToClientButton from '@/components/admin/application/send-file-to-client-button'
-import ApplicationFilesWrapper from '@/components/admin/application/application-files-wrapper'
+import ApplicationFilesWrapper from '@/components/application/application-files-wrapper'
 
 interface SharedByAdminPageParams {
   applicationID: number
