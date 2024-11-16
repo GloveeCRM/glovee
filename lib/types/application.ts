@@ -7,3 +7,12 @@ export type ApplicationType = {
   updatedAt: string
   owner: UserType
 }
+
+export type ApplicationUpdateType = {
+  applicationUpdateID: number
+  applicationID: number
+  title: string
+  description: string
+  createdBy: UserType
+  createdAt: string
+}

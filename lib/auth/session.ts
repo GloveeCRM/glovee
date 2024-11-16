@@ -1,8 +1,10 @@
 'use server'
 
 import { cookies } from 'next/headers'
+
 import { parseJWT } from './jwt'
 import { accessTokenSecret, refreshTokenSecret } from '../constants/jwt'
+import { keysSnakeCaseToCamelCase } from '../utils/json'
 
 export async function setSession(token: string) {
   const payload = await parseJWT(token, accessTokenSecret)
@@ -29,7 +31,9 @@ export async function getSession(): Promise<string | null> {
 export async function getSessionPayload() {
   const session = await getSession()
   if (!session) return null
-  return parseJWT(session, accessTokenSecret)
+  const payload = await parseJWT(session, accessTokenSecret)
+  const camelCasePayload = keysSnakeCaseToCamelCase(payload)
+  return camelCasePayload
 }
 
 export async function getSessionUserID(): Promise<number> {

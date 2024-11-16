@@ -1,12 +1,15 @@
-import { UserRoleTypes } from './user'
+import { UserRoleTypes, UserStatusTypes } from './user'
 
 type JWTUserType = {
-  id: number
+  userID: number
   role: UserRoleTypes
+  email: string
+  organizationID: number
+  status: UserStatusTypes
 }
 
 type JWTOrganizationType = {
-  id: number
+  organizationID: number
   orgName: string
 }
 

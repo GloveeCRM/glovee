@@ -2,7 +2,7 @@
 
 import { getSession } from '../auth/session'
 import { GLOVEE_API_URL } from '../constants/api'
-import { ApplicationType } from '../types/application'
+import { ApplicationType, ApplicationUpdateType } from '../types/application'
 import { FileType } from '../types/file'
 import { apiRequest, extractTotalCountFromHeaders } from '../utils/http'
 import { keysSnakeCaseToCamelCase } from '../utils/json'
@@ -162,4 +162,28 @@ export async function fetchApplicationFilesByAdmin({
   })
 
   return { files: data?.applicationFiles, error }
+}
+
+interface FetchApplicationUpdatesProps {
+  applicationID: number
+}
+
+interface FetchApplicationUpdatesResponse {
+  updates?: ApplicationUpdateType[]
+  error?: string
+}
+
+export async function fetchApplicationUpdates({
+  applicationID,
+}: FetchApplicationUpdatesProps): Promise<FetchApplicationUpdatesResponse> {
+  const queryParams = new URLSearchParams()
+  queryParams.append('application_id', applicationID.toString())
+
+  const { data, error } = await apiRequest<{ applicationUpdates: ApplicationUpdateType[] }>({
+    path: `rpc/application_updates?${queryParams.toString()}`,
+    method: 'GET',
+    authRequired: true,
+  })
+
+  return { updates: data?.applicationUpdates, error }
 }

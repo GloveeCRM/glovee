@@ -62,6 +62,7 @@ export async function apiRequest<T = any>({
 
     return { data: keysSnakeCaseToCamelCase(responseData), headers: response.headers }
   } catch (error: any) {
+    console.error(error)
     return { error: errorMessages(error.hint || error.message || 'something_went_wrong') }
   }
 }
