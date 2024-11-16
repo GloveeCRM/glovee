@@ -2,6 +2,16 @@ import { QuestionType } from './qusetion'
 import { TemplateQuestionSetType, TemplateQuestionSetTypes } from './template'
 import { UserType } from './user'
 
+export type FormTemplateType = {
+  formTemplateID: number
+  organizationID: number
+  formID: number
+  templateName: string
+  createdBy: UserType
+  createdAt: string
+  form: FormType
+}
+
 export type Applicant = {
   firstName: string
   lastName: string

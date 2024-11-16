@@ -1,11 +1,57 @@
 'use server'
 
-import { FormQuestionSetType, FormType } from '@/lib/types/form'
+import { FormQuestionSetType, FormTemplateType, FormType } from '@/lib/types/form'
 import { GLOVEE_API_URL } from '@/lib/constants/api'
 import { getSession, getSessionPayload } from '@/lib/auth/session'
 import { FileType } from '../types/file'
 import { getCurrentOrgName } from '../utils/server'
 import { keysCamelCaseToSnakeCase, keysSnakeCaseToCamelCase } from '../utils/json'
+import { apiRequest, extractTotalCountFromHeaders } from '../utils/http'
+
+interface SearchFormTemplatesFilters {
+  templateID?: number
+}
+
+interface SearchFormTemplatesProps {
+  filters?: SearchFormTemplatesFilters
+  searchQuery?: string
+  limit?: number
+  offset?: number
+}
+
+interface SearchFormTemplatesResponse {
+  error?: string
+  formTemplates?: FormTemplateType[]
+  totalCount?: number
+}
+
+export async function searchFormTemplates({
+  filters,
+  limit,
+  offset,
+}: SearchFormTemplatesProps): Promise<SearchFormTemplatesResponse> {
+  const queryParams = new URLSearchParams()
+  if (filters?.templateID) {
+    queryParams.append('template_id', `eq.${filters?.templateID}`)
+  }
+
+  if (limit) {
+    queryParams.append('limit', limit?.toString() || '')
+  }
+  if (offset) {
+    queryParams.append('offset', offset?.toString() || '')
+  }
+
+  const { data, error, headers } = await apiRequest<FormTemplateType[]>({
+    path: `form_templates?${queryParams.toString()}`,
+    method: 'GET',
+    authRequired: true,
+  })
+
+  const { totalCount } = extractTotalCountFromHeaders({ headers })
+
+  return { error, formTemplates: data, totalCount: totalCount || 0 }
+}
 
 interface SearchFormsInput {
   filters?: {
