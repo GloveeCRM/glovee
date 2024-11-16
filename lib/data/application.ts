@@ -3,6 +3,7 @@
 import { getSession } from '../auth/session'
 import { GLOVEE_API_URL } from '../constants/api'
 import { ApplicationType } from '../types/application'
+import { FileType } from '../types/file'
 import { apiRequest, extractTotalCountFromHeaders } from '../utils/http'
 import { keysSnakeCaseToCamelCase } from '../utils/json'
 import { getCurrentOrgName } from '../utils/server'
@@ -82,6 +83,85 @@ export async function searchApplications({
   }
 
   return { applications: data, totalCount: totalCount || 0 }
+}
+
+interface FetchApplicationFileUploadURLProps {
+  applicationID: number
+  fileName: string
+  mimeType: string
+}
+
+interface FetchApplicationFileUploadURLResponse {
+  url?: string
+  objectKey?: string
+  error?: string
+}
+
+export async function fetchApplicationFileUploadURL({
+  applicationID,
+  fileName,
+  mimeType,
+}: FetchApplicationFileUploadURLProps): Promise<FetchApplicationFileUploadURLResponse> {
+  const queryParams = new URLSearchParams()
+  queryParams.append('application_id', applicationID.toString())
+  queryParams.append('file_name', fileName)
+  queryParams.append('mime_type', mimeType)
+
+  const { data, error } = await apiRequest<{ url: string; objectKey: string }>({
+    path: `rpc/application_file_upload_url?${queryParams.toString()}`,
+    method: 'GET',
+    authRequired: true,
+  })
+
+  return { url: data?.url, objectKey: data?.objectKey, error }
+}
+
+interface FetchApplicationFilesByClientProps {
+  applicationID: number
+}
+
+interface FetchApplicationFilesByClientResponse {
+  files?: FileType[]
+  error?: string
+}
+
+export async function fetchApplicationFilesByClient({
+  applicationID,
+}: FetchApplicationFilesByClientProps): Promise<FetchApplicationFilesByClientResponse> {
+  const queryParams = new URLSearchParams()
+  queryParams.append('application_id', applicationID.toString())
+
+  const { data, error } = await apiRequest<{ applicationFiles: FileType[] }>({
+    path: `rpc/application_files_by_client?${queryParams.toString()}`,
+    method: 'GET',
+    authRequired: true,
+  })
+
+  return { files: data?.applicationFiles, error }
+}
+
+interface FetchApplicationFilesByAdminProps {
+  applicationID: number
+}
+
+interface FetchApplicationFilesByAdminResponse {
+  files?: FileType[]
+  error?: string
+}
+
+export async function fetchApplicationFilesByAdmin({
+  applicationID,
+}: FetchApplicationFilesByAdminProps): Promise<FetchApplicationFilesByAdminResponse> {
+  const queryParams = new URLSearchParams()
+  queryParams.append('application_id', applicationID.toString())
+
+  const { data, error } = await apiRequest<{ applicationFiles: FileType[] }>({
+    path: `rpc/application_files_by_admin?${queryParams.toString()}`,
+    method: 'GET',
+    authRequired: true,
+  })
+
+  return { files: data?.applicationFiles, error }
 }
 
 interface SearchApplicationsInputOld {

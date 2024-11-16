@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-import { File } from '@/lib/types/file'
+import { FileType } from '@/lib/types/file'
 import { uploadFileToS3 } from '@/lib/utils/s3'
 import { fetchFormAnswerFileUploadIntent } from '@/lib/data/form'
 import { saveAnswer } from '@/lib/actions/form'
@@ -13,7 +13,7 @@ interface Answer {
   text?: string
   optionIDs?: number[]
   date?: string
-  files?: File[]
+  files?: FileType[]
 }
 
 export default function useAnswer(questionID: number, initialAnswer: Answer) {
@@ -46,7 +46,7 @@ export default function useAnswer(questionID: number, initialAnswer: Answer) {
       name: file.name,
       mimeType: file.type,
       size: file.size,
-    } as File
+    } as FileType
 
     const uploadIntent = await fetchFormAnswerFileUploadIntent(
       sessionUserID || 0,

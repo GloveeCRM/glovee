@@ -5,7 +5,7 @@ import { z } from 'zod'
 
 import { GLOVEE_API_URL } from '@/lib/constants/api'
 import { getSession } from '@/lib/auth/session'
-import { File } from '../types/file'
+import { FileType } from '../types/file'
 import {
   FormQuestionSetType,
   FormStatusTypes,
@@ -118,7 +118,7 @@ interface SaveAnswerProps {
   text?: string
   optionIDs?: number[]
   date?: string
-  files?: File[]
+  files?: FileType[]
 }
 
 export async function saveAnswer({

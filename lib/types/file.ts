@@ -1,16 +1,19 @@
-export type File = {
-  id: number
+export type FileType = {
+  fileID: number
   name: string
   mimeType: FileMimeType
   path: string
   size: number
   bucket: string
   objectKey: string
-  metadata: FileMetadata
-  presignedDownloadURL: string
+  metadata: FileMetadataType
+  url: string
+  createdAt: string
+  updatedAt: string
+  createdBy: string
 }
 
-export type FileMetadata = {
+export type FileMetadataType = {
   id: number
   fileID: number
   key: FileMetadataKey

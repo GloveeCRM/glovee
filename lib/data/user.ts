@@ -84,10 +84,8 @@ interface FetchProfilePictureUploadURLProps {
 }
 
 interface FetchProfilePictureUploadURLResponse {
-  data?: {
-    url: string
-    objectKey: string
-  }
+  url?: string
+  objectKey?: string
   error?: string
 }
 
@@ -109,5 +107,5 @@ export async function fetchProfilePictureUploadURL({
     authRequired: true,
   })
 
-  return { data, error }
+  return { url: data?.url, objectKey: data?.objectKey, error }
 }

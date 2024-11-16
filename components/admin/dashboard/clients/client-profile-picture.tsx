@@ -25,7 +25,11 @@ export default function ClientProfilePicture({ url, client, editable }: ClientPr
       return
     }
 
-    const { data: uploadURLData, error: uploadURLDataError } = await fetchProfilePictureUploadURL({
+    const {
+      url,
+      objectKey,
+      error: uploadURLDataError,
+    } = await fetchProfilePictureUploadURL({
       userID: client.userID,
       fileName: file.name,
       mimeType: file.type,
@@ -36,12 +40,12 @@ export default function ClientProfilePicture({ url, client, editable }: ClientPr
       return
     }
 
-    if (!uploadURLData?.url) {
+    if (!url) {
       console.error('No upload URL received')
       return
     }
 
-    const uploadRes = await uploadFileToS3(uploadURLData.url, file)
+    const uploadRes = await uploadFileToS3(url, file)
     if (!uploadRes.success) {
       console.error('Failed to upload file to S3')
       return
@@ -49,7 +53,7 @@ export default function ClientProfilePicture({ url, client, editable }: ClientPr
 
     const { error: updateProfilePictureError } = await updateUserProfilePicture({
       userID: client.userID,
-      objectKey: uploadURLData.objectKey,
+      objectKey: objectKey || '',
       fileName: file.name,
       mimeType: file.type,
       size: file.size,

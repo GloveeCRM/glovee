@@ -1,4 +1,4 @@
-import { File } from './file'
+import { FileType } from './file'
 
 export type BaseQuestionSettings = {}
 
@@ -38,7 +38,7 @@ export type BaseAnswerType = {
   text?: string
   date?: string
   optionIDs?: number[]
-  files?: File[]
+  files?: FileType[]
 }
 
 export function isTextInputQuestionType(

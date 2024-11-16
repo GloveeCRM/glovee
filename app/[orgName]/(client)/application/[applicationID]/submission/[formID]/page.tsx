@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { BsDot } from 'react-icons/bs'
 import { LuDownload, LuFileText } from 'react-icons/lu'
 
-import { File } from '@/lib/types/file'
+import { FileType } from '@/lib/types/file'
 import { FormQuestionSetType } from '@/lib/types/form'
 import {
   CheckboxQuestionOptionType,
@@ -88,13 +88,13 @@ function Answer({ question }: { question: QuestionType }) {
   }
 }
 
-function FilesAnswer({ files }: { files: File[] }) {
+function FilesAnswer({ files }: { files: FileType[] }) {
   return (
     <div className="flex flex-col gap-[8px]">
       {files.map((file) => (
         <div
           className="flex w-full items-center justify-between gap-[2px] rounded-[3px] border border-n-400 px-[8px] py-[10px]"
-          key={file.id}
+          key={file.fileID}
         >
           <div className="flex items-center gap-[6px] text-n-600">
             <div className="w-fit rounded-full bg-n-300/70 p-[8px]">
@@ -103,7 +103,7 @@ function FilesAnswer({ files }: { files: File[] }) {
             <span className="line-clamp-1">{file.name}</span>
           </div>
           <div className="flex items-center gap-[6px]">
-            <Link href={file.presignedDownloadURL} target="_blank">
+            <Link href={file.url} target="_blank">
               <span className="flex items-center gap-[4px] rounded-full bg-n-200 px-[8px] py-[2px] text-n-600 transition duration-75 hover:bg-n-300 hover:text-n-800">
                 <LuDownload className="h-[16px] w-[16px]" />
                 <span>Download</span>

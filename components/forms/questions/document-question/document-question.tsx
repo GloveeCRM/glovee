@@ -45,7 +45,7 @@ export default function DocumentQuestion({ question, readOnly }: DocumentQuestio
 
   async function handleFileDelete(fileID: number) {
     const currentFiles = answer.files || []
-    const newFiles = currentFiles.filter((f) => f.id !== fileID)
+    const newFiles = currentFiles.filter((f) => f.fileID !== fileID)
 
     updateAnswer({ ...answer, files: newFiles })
   }
@@ -61,7 +61,7 @@ export default function DocumentQuestion({ question, readOnly }: DocumentQuestio
       {answer.files && answer.files.length > 0 ? (
         answer.files.map((file) => (
           <div
-            key={file.id}
+            key={file.fileID}
             className="flex w-full items-center justify-between gap-[2px] rounded-[3px] border border-n-400 px-[8px] py-[10px]"
           >
             <div className="flex items-center gap-[6px] text-n-600">
@@ -72,7 +72,7 @@ export default function DocumentQuestion({ question, readOnly }: DocumentQuestio
             </div>
             <div className="flex items-center gap-[6px]">
               <div>
-                <Link href={file.presignedDownloadURL} target="_blank">
+                <Link href={file.url} target="_blank">
                   <span className="flex items-center gap-[4px] rounded-full bg-n-200 px-[8px] py-[2px] text-n-600 transition duration-75 hover:bg-n-300 hover:text-n-800">
                     <LuDownload className="h-[16px] w-[16px]" />
                     <span>Download</span>
@@ -81,7 +81,7 @@ export default function DocumentQuestion({ question, readOnly }: DocumentQuestio
               </div>
               <div
                 className="cursor-pointer rounded-full p-[6px] transition duration-75 hover:bg-red-100"
-                onClick={() => handleFileDelete(file.id)}
+                onClick={() => handleFileDelete(file.fileID)}
               >
                 <BiTrash className="h-[22px] w-[22px] text-red-500" />
               </div>
