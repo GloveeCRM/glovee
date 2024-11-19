@@ -1,12 +1,8 @@
-import { searchTemplates } from '@/lib/data/template'
-import TemplateCard from './template-card'
 import { searchFormTemplates } from '@/lib/data/form'
 
-interface TemplateCardWrapperProps {
-  orgName: string
-}
+import TemplateCard from './template-card'
 
-export default async function TemplateCardWrapper({ orgName }: TemplateCardWrapperProps) {
+export default async function TemplateCardWrapper() {
   const { formTemplates } = await searchFormTemplates({})
 
   return (
@@ -15,7 +11,6 @@ export default async function TemplateCardWrapper({ orgName }: TemplateCardWrapp
         <div className="grid grid-cols-1 gap-[8px] overflow-y-auto md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {formTemplates.map((formTemplate) => (
             <TemplateCard
-              orgName={orgName}
               key={formTemplate.formTemplateID}
               formTemplateID={formTemplate.formTemplateID}
               formID={formTemplate.form?.formID || 0}

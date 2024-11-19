@@ -12,16 +12,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { deleteFormTemplateByID } from '@/lib/actions/template'
+import { deleteFormTemplate } from '@/lib/actions/form'
 
 interface TemplateCardOptionsMenuButtonProps {
-  orgName: string
-  templateID: number
+  formTemplateID: number
 }
 
 export default function TemplateCardOptionsMenuButton({
-  orgName,
-  templateID,
+  formTemplateID,
 }: TemplateCardOptionsMenuButtonProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
@@ -39,14 +37,13 @@ export default function TemplateCardOptionsMenuButton({
     })
   }
 
-  function handleDeleteTemplate(templateID: number) {
-    deleteFormTemplateByID({ formTemplateID: templateID }).then((res) => {
-      if (res?.success) {
-        templateDeleteSuccessToast(res.success || 'Template deleted successfully!')
-      } else {
-        templateDeleteErrorToast(res.error || 'Failed to delete template!')
-      }
-    })
+  async function handleDeleteTemplate(formTemplateID: number) {
+    const { error } = await deleteFormTemplate({ formTemplateID })
+    if (!error) {
+      templateDeleteSuccessToast('Template deleted successfully!')
+    } else {
+      templateDeleteErrorToast(error || 'Failed to delete template!')
+    }
   }
 
   function handleDropdownMenuOpenChange(isOpen: boolean) {
@@ -66,7 +63,7 @@ export default function TemplateCardOptionsMenuButton({
         <DropdownMenuGroup>
           <DropdownMenuItem
             className="flex gap-[6px] focus:text-red-500"
-            onClick={() => handleDeleteTemplate(templateID)}
+            onClick={() => handleDeleteTemplate(formTemplateID)}
           >
             <BiTrash className="h-[16px] w-[16px]" />
             <span>Delete Template</span>

@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button'
 import TemplateCardOptionsMenuButton from './template-card-options-menu-button'
 
 interface TemplateCardProps {
-  orgName: string
   formTemplateID: number
   formID: number
   title: string
@@ -14,7 +13,6 @@ interface TemplateCardProps {
 }
 
 export default function TemplateCard({
-  orgName,
   formTemplateID,
   formID,
   title,
@@ -24,7 +22,7 @@ export default function TemplateCard({
     <div className="flex flex-col justify-between rounded-md border border-n-500 p-[8px]">
       <div className="mb-[8px] flex justify-between gap-[10px]">
         <p className="text-[16px] font-bold">{title}</p>
-        <TemplateCardOptionsMenuButton orgName={orgName} templateID={formTemplateID} />
+        <TemplateCardOptionsMenuButton formTemplateID={formTemplateID} />
       </div>
       <div>
         {description && <p className="mb-[10px] line-clamp-3 text-[14px]">{description}</p>}

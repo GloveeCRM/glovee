@@ -63,6 +63,28 @@ export async function updateFormTemplate({
   return { formTemplate: data?.formTemplate, error }
 }
 
+interface DeleteFormTemplateProps {
+  formTemplateID: number
+}
+
+interface DeleteFormTemplateResponse {
+  error?: string
+}
+
+export async function deleteFormTemplate({
+  formTemplateID,
+}: DeleteFormTemplateProps): Promise<DeleteFormTemplateResponse> {
+  const { error } = await apiRequest<{ success: boolean }>({
+    path: 'rpc/delete_form_template',
+    method: 'POST',
+    data: { formTemplateID },
+    authRequired: true,
+  })
+
+  revalidatePath('/admin/templates')
+  return { error }
+}
+
 type CreateNewFormInputDTO = {
   ownerID: number
   role: string
