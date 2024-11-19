@@ -21,7 +21,7 @@ export default function TemplateEditLayout({ params, children }: TemplateEditLay
   return (
     <div id="template-edit-layout" className="flex">
       <TemplateEditProvider orgName={orgName} formID={formID} formTemplateID={formTemplateID}>
-        <TemplateEditSidebar />
+        <TemplateEditSidebar formTemplateID={formTemplateID} />
         <div className="h-svh w-full min-w-0 overflow-y-scroll bg-n-400">{children}</div>
         <TemplateEditToolbar />
       </TemplateEditProvider>

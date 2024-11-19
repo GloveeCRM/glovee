@@ -14,7 +14,7 @@ import {
 import { getCurrentOrgName } from '../utils/server'
 import { keysCamelCaseToSnakeCase, keysSnakeCaseToCamelCase } from '../utils/json'
 import { apiRequest } from '../utils/http'
-import { FormTemplateType } from '../types/template'
+import { FormTemplateType } from '../types/form'
 
 interface CreateFormTemplateProps {
   templateName: string
@@ -36,6 +36,31 @@ export async function createFormTemplate({
 
   revalidatePath('/admin/templates')
   return { error }
+}
+
+interface UpdateFormTemplateProps {
+  formTemplate: Partial<FormTemplateType>
+}
+
+interface UpdateFormTemplateResponse {
+  formTemplate?: FormTemplateType
+  error?: string
+}
+
+export async function updateFormTemplate({
+  formTemplate,
+}: UpdateFormTemplateProps): Promise<UpdateFormTemplateResponse> {
+  const { data, error } = await apiRequest<{ formTemplate: FormTemplateType }>({
+    path: 'rpc/update_form_template',
+    method: 'POST',
+    data: {
+      formTemplateID: formTemplate.formTemplateID,
+      templateName: formTemplate.templateName,
+    },
+    authRequired: true,
+  })
+  revalidatePath(`/admin/template/${formTemplate.formTemplateID}`)
+  return { formTemplate: data?.formTemplate, error }
 }
 
 type CreateNewFormInputDTO = {

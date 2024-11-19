@@ -32,7 +32,7 @@ export async function searchFormTemplates({
 }: SearchFormTemplatesProps): Promise<SearchFormTemplatesResponse> {
   const queryParams = new URLSearchParams()
   if (filters?.templateID) {
-    queryParams.append('template_id', `eq.${filters?.templateID}`)
+    queryParams.append('form_template_id', `eq.${filters?.templateID}`)
   }
 
   if (limit) {

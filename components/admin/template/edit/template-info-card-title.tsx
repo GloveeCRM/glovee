@@ -3,19 +3,21 @@
 import { useEffect, useRef, useState } from 'react'
 import { MdOutlineModeEdit } from 'react-icons/md'
 
-import useTemplateActions from '@/hooks/template/use-template-actions'
+import { updateFormTemplate } from '@/lib/actions/form'
+import { toast } from 'react-hot-toast'
 
 interface TemplateInfoCardTitleProps {
+  formTemplateID: number
   title: string
   editable?: boolean
 }
 
 export default function TemplateInfoCardTitle({
+  formTemplateID,
   title,
   editable = false,
 }: TemplateInfoCardTitleProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false)
-  const { updateTemplateName } = useTemplateActions()
 
   const titleInputRef = useRef<HTMLTextAreaElement>(null)
 
@@ -23,10 +25,18 @@ export default function TemplateInfoCardTitle({
     setIsEditing(true)
   }
 
-  function handleSave() {
+  async function handleSave() {
     const newTitle = titleInputRef.current?.value || 'Untitled Template'
     setIsEditing(false)
-    updateTemplateName(newTitle)
+    const { error, formTemplate } = await updateFormTemplate({
+      formTemplate: {
+        formTemplateID: formTemplateID,
+        templateName: newTitle,
+      },
+    })
+    if (error) {
+      console.error(error)
+    }
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
