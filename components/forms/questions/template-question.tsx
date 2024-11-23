@@ -14,8 +14,8 @@ import {
   isTextInputQuestionType,
   isTextareaQuestionType,
 } from '@/lib/types/qusetion'
-import { useTemplateEditContext } from '@/contexts/template-edit-context'
-import useQuestionActions from '@/hooks/template/use-question-actions'
+import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+import useQuestionActions from '@/hooks/form-template/use-question-actions'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,7 +38,7 @@ interface TemplateQuestionProps {
 export default function TemplateQuestion({ question }: TemplateQuestionProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false)
   const [isOptionsMenuOpen, setIsOptionsMenuOpen] = useState<boolean>(false)
-  const { selectedQuestionID, setSelectedQuestionID } = useTemplateEditContext()
+  const { selectedQuestionID, setSelectedQuestionID } = useFormTemplateEditContext()
   const { removeQuestionFromQuestionSet, updateQuestion } = useQuestionActions()
 
   const questionRef = useRef<HTMLDivElement>(null)

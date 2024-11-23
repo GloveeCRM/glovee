@@ -1,36 +1,38 @@
 'use client'
 
-import { TemplateSectionType } from '@/lib/types/template'
-import { useTemplateEditContext } from '@/contexts/template-edit-context'
+import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+
 import TemplateEditSidebarSection from './template-edit-sidebar-section'
 import CreateSectionButton from './create-section-button'
-import { FormSectionType } from '@/lib/types/form'
 
 interface TemplateEditSidebarSectionWrapperProps {
   categoryID: number
-  sections: FormSectionType[]
 }
 
 export default function TemplateEditSidebarSectionWrapper({
   categoryID,
-  sections,
 }: TemplateEditSidebarSectionWrapperProps) {
-  const { selectedSectionID } = useTemplateEditContext()
+  const { selectedFormCategorySections, selectedFormSectionID } = useFormTemplateEditContext()
 
   return (
     <div className="mt-[2px] flex flex-col gap-[1px]">
-      {sections.length > 0 ? (
-        sections.map((section) => (
+      {selectedFormCategorySections && selectedFormCategorySections.length > 0 ? (
+        selectedFormCategorySections.map((section) => (
           <TemplateEditSidebarSection
-            key={section.sectionID}
+            key={section.formSectionID}
             section={section}
-            active={section.sectionID === selectedSectionID}
+            active={section.formSectionID === selectedFormSectionID}
           />
         ))
       ) : (
         <div className="py-[4px] pl-[24px] text-[12px] text-n-400">No sections</div>
       )}
-      <CreateSectionButton type={sections.length > 0 ? 'add' : 'create'} categoryID={categoryID} />
+      <CreateSectionButton
+        type={
+          selectedFormCategorySections && selectedFormCategorySections.length > 0 ? 'add' : 'create'
+        }
+        formCategoryID={categoryID}
+      />
     </div>
   )
 }

@@ -5,9 +5,9 @@ import { useState } from 'react'
 import { TemplateQuestionSetType, TemplateQuestionSetTypes } from '@/lib/types/template'
 import { QuestionTypes, RadioQuestionType } from '@/lib/types/qusetion'
 import { generateRandomID } from '@/lib/utils/id'
-import { useTemplateEditContext } from '@/contexts/template-edit-context'
+import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
-import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
+import useQuestionSetActions from '@/hooks/form-template/use-question-set-actions'
 
 interface NonEmptySectionDropzoneProps {
   position: number
@@ -15,7 +15,7 @@ interface NonEmptySectionDropzoneProps {
 
 export default function NonEmptySectionDropzone({ position }: NonEmptySectionDropzoneProps) {
   const [isDraggedOver, setIsDraggedOver] = useState<boolean>(false)
-  const { selectedSectionID } = useTemplateEditContext()
+  const { selectedSectionID } = useFormTemplateEditContext()
   const { draggedObject, setDraggedObject } = useDragAndDropContext()
   const { getQuestionSetsInSection, createQuestionSetInSection } = useQuestionSetActions()
 

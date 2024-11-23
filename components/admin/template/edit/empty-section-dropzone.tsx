@@ -6,12 +6,12 @@ import { FormQuestionSetType, FormQuestionSetTypes } from '@/lib/types/form'
 import { QuestionTypes, RadioQuestionType } from '@/lib/types/qusetion'
 import { generateRandomID } from '@/lib/utils/id'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
-import { useTemplateEditContext } from '@/contexts/template-edit-context'
-import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
+import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+import useQuestionSetActions from '@/hooks/form-template/use-question-set-actions'
 
 export default function EmptySectionDropzone() {
   const [isDraggedOver, setIsDraggedOver] = useState<boolean>(false)
-  const { selectedSectionID } = useTemplateEditContext()
+  const { selectedSectionID } = useFormTemplateEditContext()
   const { draggedObject, setDraggedObject } = useDragAndDropContext()
   const { createQuestionSetInSection, createQuestionSet } = useQuestionSetActions()
 

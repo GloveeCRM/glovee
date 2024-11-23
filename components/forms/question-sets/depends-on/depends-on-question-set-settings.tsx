@@ -4,7 +4,7 @@ import { TemplateQuestionSetType } from '@/lib/types/template'
 import RadioQuestionSettings from '../../questions/radio-question/radio-question-settings'
 import { isRadioQuestionType } from '@/lib/types/qusetion'
 import { useEffect } from 'react'
-import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
+import useQuestionSetActions from '@/hooks/form-template/use-question-set-actions'
 
 interface DependsOnQuestionSetSettingsProps {
   questionSet: TemplateQuestionSetType

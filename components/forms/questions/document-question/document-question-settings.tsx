@@ -3,7 +3,7 @@
 import { useDebouncedCallback } from 'use-debounce'
 
 import { DocumentQuestionType } from '@/lib/types/qusetion'
-import useQuestionActions from '@/hooks/template/use-question-actions'
+import useQuestionActions from '@/hooks/form-template/use-question-actions'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 import { Separator } from '@/components/ui/separator'

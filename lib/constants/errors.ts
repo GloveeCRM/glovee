@@ -18,6 +18,9 @@ const errors = {
   organization_not_found: 'Organization not found',
   token_not_found: 'Token not found',
   no_clients_found: 'No clients found',
+  missing_form_id: 'Form ID is required',
+  missing_category_position: 'Category position is required',
+  category_position_already_exists: 'Category position is taken',
 }
 
 export const errorMessages = (error_code: string) => {

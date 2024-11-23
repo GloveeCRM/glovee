@@ -2,10 +2,10 @@
 
 import { TemplateQuestionSetType } from '@/lib/types/template'
 import { QuestionType } from '@/lib/types/qusetion'
-import { useTemplateEditContext } from '@/contexts/template-edit-context'
+import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
 
 export default function useQuestionActions() {
-  const { template, setTemplate } = useTemplateEditContext()
+  const { template, setTemplate } = useFormTemplateEditContext()
 
   function getTemplateQuestionByID(questionID: number) {
     if (!template || !template.categories) return null

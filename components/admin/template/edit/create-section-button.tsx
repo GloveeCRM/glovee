@@ -1,18 +1,28 @@
 'use client'
 
-import useSectionActions from '@/hooks/template/use-section-actions'
 import { FiPlus } from 'react-icons/fi'
+
+import useFormSectionActions from '@/hooks/form-template/use-section-actions'
+import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
 
 interface CreateSectionButtonProps {
   type: 'add' | 'create'
-  categoryID: number
+  formCategoryID: number
 }
 
-export default function CreateSectionButton({ type, categoryID }: CreateSectionButtonProps) {
-  const { createSection } = useSectionActions()
+export default function CreateSectionButton({ type, formCategoryID }: CreateSectionButtonProps) {
+  const { selectedFormCategorySections } = useFormTemplateEditContext()
+  const { createFormSection } = useFormSectionActions()
 
   function handleClick() {
-    createSection(categoryID)
+    const newFormSection = {
+      formCategoryID,
+      sectionName: 'Untitled Section',
+      sectionPosition: (selectedFormCategorySections?.length || 0) + 1,
+    }
+    createFormSection({
+      newFormSection,
+    })
   }
 
   return (

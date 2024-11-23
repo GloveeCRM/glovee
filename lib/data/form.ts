@@ -1,6 +1,12 @@
 'use server'
 
-import { FormQuestionSetType, FormTemplateType, FormType } from '@/lib/types/form'
+import {
+  FormCategoryType,
+  FormQuestionSetType,
+  FormSectionType,
+  FormTemplateType,
+  FormType,
+} from '@/lib/types/form'
 import { GLOVEE_API_URL } from '@/lib/constants/api'
 import { getSession, getSessionPayload } from '@/lib/auth/session'
 import { FileType } from '../types/file'
@@ -51,6 +57,54 @@ export async function searchFormTemplates({
   const { totalCount } = extractTotalCountFromHeaders({ headers })
 
   return { error, formTemplates: data, totalCount: totalCount || 0 }
+}
+
+interface FetchFormTemplateCategoriesProps {
+  formTemplateID: number
+}
+
+interface FetchFormTemplateCategoriesResponse {
+  formCategories?: FormCategoryType[]
+  error?: string
+}
+
+export async function fetchFormTemplateCategories({
+  formTemplateID,
+}: FetchFormTemplateCategoriesProps): Promise<FetchFormTemplateCategoriesResponse> {
+  const queryParams = new URLSearchParams()
+  queryParams.append('form_template_id', formTemplateID.toString())
+
+  const { data, error } = await apiRequest<FormCategoryType[]>({
+    path: `rpc/form_template_categories?${queryParams.toString()}`,
+    method: 'GET',
+    authRequired: true,
+  })
+
+  return { error, formCategories: data }
+}
+
+interface FetchFormTemplateSectionsProps {
+  formTemplateID: number
+}
+
+interface FetchFormTemplateSectionsResponse {
+  formSections?: FormSectionType[]
+  error?: string
+}
+
+export async function fetchFormTemplateSections({
+  formTemplateID,
+}: FetchFormTemplateSectionsProps): Promise<FetchFormTemplateSectionsResponse> {
+  const queryParams = new URLSearchParams()
+  queryParams.append('form_template_id', formTemplateID.toString())
+
+  const { data, error } = await apiRequest<FormSectionType[]>({
+    path: `rpc/form_template_sections?${queryParams.toString()}`,
+    method: 'GET',
+    authRequired: true,
+  })
+
+  return { formSections: data, error }
 }
 
 interface SearchFormsInput {

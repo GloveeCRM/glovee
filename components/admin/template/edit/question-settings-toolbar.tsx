@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 
-import useQuestionActions from '@/hooks/template/use-question-actions'
+import useQuestionActions from '@/hooks/form-template/use-question-actions'
 import {
   isCheckboxQuestionType,
   isDateInputQuestionType,

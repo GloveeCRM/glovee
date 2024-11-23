@@ -5,8 +5,8 @@ import { FiMoreHorizontal } from 'react-icons/fi'
 import { BiTrash } from 'react-icons/bi'
 
 import { TemplateQuestionSetType, TemplateQuestionSetTypes } from '@/lib/types/template'
-import { useTemplateEditContext } from '@/contexts/template-edit-context'
-import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
+import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+import useQuestionSetActions from '@/hooks/form-template/use-question-set-actions'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,7 +24,7 @@ interface TemplateQuestionSetProps {
 }
 
 export default function TemplateQuestionSet({ questionSet }: TemplateQuestionSetProps) {
-  const { selectedQuestionSetID, setSelectedQuestionSetID } = useTemplateEditContext()
+  const { selectedQuestionSetID, setSelectedQuestionSetID } = useFormTemplateEditContext()
   const [isOptionsMenuOpen, setIsOptionsMenuOpen] = useState<boolean>(false)
   const { removeQuestionSetFromSection } = useQuestionSetActions()
 

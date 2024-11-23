@@ -6,10 +6,10 @@ import { ImSpinner2 } from 'react-icons/im'
 import { FormTemplateType } from '@/lib/types/template'
 import { updateFullTemplateByID } from '@/lib/actions/template'
 import { useOrgContext } from '@/contexts/org-context'
-import { useTemplateEditContext } from '@/contexts/template-edit-context'
+import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
 
 export default function SaveTemplateButton() {
-  const { templateID, template, isTemplateChanged, setSavedTemplate } = useTemplateEditContext()
+  const { templateID, template, isTemplateChanged, setSavedTemplate } = useFormTemplateEditContext()
   const [isPending, startTransition] = useTransition()
   const [message, setMessage] = useState<string>('')
 

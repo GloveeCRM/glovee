@@ -6,8 +6,8 @@ import { TemplateQuestionSetType, TemplateQuestionSetTypes } from '@/lib/types/t
 import { QuestionType, QuestionTypes, RadioQuestionType } from '@/lib/types/qusetion'
 import { generateRandomID } from '@/lib/utils/id'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
-import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
-import useQuestionActions from '@/hooks/template/use-question-actions'
+import useQuestionSetActions from '@/hooks/form-template/use-question-set-actions'
+import useQuestionActions from '@/hooks/form-template/use-question-actions'
 import { FormQuestionSetType, FormQuestionSetTypes } from '@/lib/types/form'
 
 interface EmptyQuestionSetDropzoneProps {

@@ -4,8 +4,10 @@ import { useEffect, useRef, useState } from 'react'
 import { FiEdit, FiMoreHorizontal } from 'react-icons/fi'
 import { BiTrash } from 'react-icons/bi'
 
-import { useTemplateEditContext } from '@/contexts/template-edit-context'
-import useCategoryActions from '@/hooks/template/use-category-actions'
+import { FormCategoryType } from '@/lib/types/form'
+import useFormCategoryActions from '@/hooks/form-template/use-category-actions'
+import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +16,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import TemplateEditSidebarSectionWrapper from './template-edit-sidebar-section-wrapper'
-import { FormCategoryType } from '@/lib/types/form'
 
 interface TemplateEditSidebarCategoryProps {
   category: FormCategoryType
@@ -30,14 +31,22 @@ export default function TemplateEditSidebarCategory({
 
   const categoryTitleInputRef = useRef<HTMLTextAreaElement>(null)
 
-  const { selectedCategoryID, setSelectedCategoryID, setSelectedSectionID } =
-    useTemplateEditContext()
-  const { removeCategoryFromTemplate, updateCategory, deleteCategory } = useCategoryActions()
+  const {
+    formCategories,
+    selectedFormCategoryID,
+    setSelectedFormCategoryID,
+    formSections,
+    setSelectedFormSectionID,
+  } = useFormTemplateEditContext()
+  const { updateFormCategories, deleteFormCategory } = useFormCategoryActions()
 
   function handleClickCategory() {
-    if (selectedCategoryID !== category.categoryID) {
-      setSelectedCategoryID(category.categoryID)
-      setSelectedSectionID(category.sections?.[0]?.categoryID || 0)
+    if (selectedFormCategoryID !== category.formCategoryID) {
+      setSelectedFormCategoryID(category.formCategoryID)
+      const categorySections = formSections?.filter(
+        (section) => section.formCategoryID === category.formCategoryID
+      )
+      setSelectedFormSectionID(categorySections?.[0]?.formSectionID || 0)
     }
   }
 
@@ -45,25 +54,45 @@ export default function TemplateEditSidebarCategory({
     setIsOptionsMenuOpen(isOpen)
   }
 
-  function handleClickDeleteCategory() {
-    deleteCategory(category.categoryID)
-    setSelectedCategoryID(0)
+  async function handleClickDeleteCategory() {
+    const { error } = await deleteFormCategory({
+      formCategoryID: category.formCategoryID,
+    })
+    if (error) {
+      console.error(error)
+    }
+    if (selectedFormCategoryID === category.formCategoryID) {
+      setSelectedFormCategoryID(formCategories?.[0]?.formCategoryID || 0)
+      const categorySections = formSections?.filter(
+        (section) => section.formCategoryID === category.formCategoryID
+      )
+      setSelectedFormSectionID(categorySections?.[0]?.formSectionID || 0)
+    }
   }
 
   function handleClickRenameCategory() {
     setIsEditing(true)
   }
 
-  function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+  async function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === 'Enter') {
       e.preventDefault()
       setIsEditing(false)
       if (categoryTitleInputRef.current?.value) {
-        updateCategory(
-          category.categoryID,
-          categoryTitleInputRef.current.value || '',
-          category.categoryPosition
-        )
+        const formCategoriesToUpdate = [
+          {
+            ...category,
+            categoryName: categoryTitleInputRef.current?.value || '',
+          },
+        ]
+        if (formCategoriesToUpdate) {
+          const { error } = await updateFormCategories({
+            formCategoriesToUpdate,
+          })
+          if (error) {
+            console.error(error)
+          }
+        }
       }
     } else if (e.key === 'Escape') {
       e.preventDefault()
@@ -84,17 +113,26 @@ export default function TemplateEditSidebarCategory({
   }
 
   useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
+    async function handleClickOutside(e: MouseEvent) {
       if (
         categoryTitleInputRef.current &&
         !categoryTitleInputRef.current.contains(e.target as Node)
       ) {
         setIsEditing(false)
-        updateCategory(
-          category.categoryID,
-          categoryTitleInputRef.current.value,
-          category.categoryPosition
-        )
+        const formCategoriesToUpdate = [
+          {
+            ...category,
+            categoryName: categoryTitleInputRef.current?.value || '',
+          },
+        ]
+        if (formCategoriesToUpdate) {
+          const { error } = await updateFormCategories({
+            formCategoriesToUpdate,
+          })
+          if (error) {
+            console.error(error)
+          }
+        }
       }
     }
 
@@ -113,7 +151,7 @@ export default function TemplateEditSidebarCategory({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [isEditing, categoryTitleInputRef, category.categoryID, updateCategory])
+  }, [isEditing, categoryTitleInputRef, formCategories, updateFormCategories])
 
   return (
     <div className="text-[14px] text-n-400">
@@ -159,12 +197,7 @@ export default function TemplateEditSidebarCategory({
           </DropdownMenu>
         </div>
       )}
-      {isExpanded && (
-        <TemplateEditSidebarSectionWrapper
-          categoryID={category.categoryID}
-          sections={category.sections || []}
-        />
-      )}
+      {isExpanded && <TemplateEditSidebarSectionWrapper categoryID={category.formCategoryID} />}
     </div>
   )
 }

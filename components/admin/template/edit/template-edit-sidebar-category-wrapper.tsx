@@ -2,15 +2,16 @@
 
 import { Fragment } from 'react'
 
-import { useTemplateEditContext } from '@/contexts/template-edit-context'
+import { FormCategoryType } from '@/lib/types/form'
+import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+
 import { Separator } from '@/components/ui/separator'
 import { TemplateEditSidebarCategoryWrapperSkeleton } from '@/components/skeletons'
 import TemplateEditSidebarCategory from './template-edit-sidebar-category'
 import CreateCategoryButton from './create-category-button'
-import { FormCategoryType } from '@/lib/types/form'
 
 export default function TemplateEditSidebarCategoryWrapper() {
-  const { formCategories, selectedCategoryID, formID } = useTemplateEditContext()
+  const { formCategories, selectedFormCategoryID } = useFormTemplateEditContext()
 
   if (!formCategories) {
     return <TemplateEditSidebarCategoryWrapperSkeleton />
@@ -20,16 +21,16 @@ export default function TemplateEditSidebarCategoryWrapper() {
     <div id="template-edit-sidebar-category-wrapper">
       <div className="flex flex-col gap-[4px]">
         {formCategories?.map((category: FormCategoryType) => (
-          <Fragment key={category.categoryID}>
+          <Fragment key={category.formCategoryID}>
             <TemplateEditSidebarCategory
               category={category}
-              isExpanded={selectedCategoryID === category.id}
+              isExpanded={selectedFormCategoryID === category.formCategoryID}
             />
             <Separator className="bg-n-600" />
           </Fragment>
         ))}
       </div>
-      <CreateCategoryButton formID={formID} type={formCategories.length === 0 ? 'create' : 'add'} />
+      <CreateCategoryButton type={formCategories.length === 0 ? 'create' : 'add'} />
     </div>
   )
 }

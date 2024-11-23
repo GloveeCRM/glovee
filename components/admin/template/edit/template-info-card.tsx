@@ -5,16 +5,15 @@ import { FormTemplateType } from '@/lib/types/form'
 import { TemplateInfoCardSkeleton } from '@/components/skeletons'
 import TemplateInfoCardTitle from './template-info-card-title'
 import TemplateInfoCardDescription from './template-info-card-description'
+import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
 
 interface TemplateInfoCardProps {
-  formTemplate?: FormTemplateType
   editable?: boolean
 }
 
-export default function TemplateInfoCard({
-  formTemplate,
-  editable = false,
-}: TemplateInfoCardProps) {
+export default function TemplateInfoCard({ editable = false }: TemplateInfoCardProps) {
+  const { formTemplate } = useFormTemplateEditContext()
+
   if (!formTemplate) {
     return <TemplateInfoCardSkeleton />
   }

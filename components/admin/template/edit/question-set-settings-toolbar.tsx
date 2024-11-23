@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 
-import useQuestionSetActions from '@/hooks/template/use-question-set-actions'
+import useQuestionSetActions from '@/hooks/form-template/use-question-set-actions'
 import {
   isDependsOnQuestionSetType,
   isFlatQuestionSetType,

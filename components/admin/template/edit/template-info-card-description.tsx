@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { MdOutlineModeEdit } from 'react-icons/md'
 
-import useTemplateActions from '@/hooks/template/use-template-actions'
+import useTemplateActions from '@/hooks/form-template/use-template-actions'
 
 interface TemplateInfoCardDescriptionProps {
   description: string
@@ -16,7 +16,7 @@ export default function TemplateInfoCardDescription({
 }: TemplateInfoCardDescriptionProps) {
   const [isExpanded, setIsExpanded] = useState<boolean>(false)
   const [isEditing, setIsEditing] = useState<boolean>(false)
-  const { updateTemplateDescription } = useTemplateActions()
+  const { updateFormTemplate } = useTemplateActions()
 
   const descriptionInputRef = useRef<HTMLTextAreaElement>(null)
 

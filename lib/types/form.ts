@@ -50,27 +50,23 @@ export type FormType = {
 }
 
 export type FormCategoryType = {
-  id: number
-  name: string
-  position: number
-  completionRate: number
-  sections?: FormSectionType[]
-  categoryID: number
+  formCategoryID: number
   formID: number
   categoryName: string
   categoryPosition: number
+  createdAt: string
+  completionRate: number
+  sections?: FormSectionType[]
 }
 
 export type FormSectionType = {
-  id: number
-  name: string
-  position: number
-  categoryID: number
-  completionRate: number
-  questionSets?: FormQuestionSetType[]
-  sectionID: number
+  formSectionID: number
+  formCategoryID: number
   sectionName: string
   sectionPosition: number
+  createdAt: string
+  completionRate: number
+  questionSets?: FormQuestionSetType[]
 }
 
 export enum FormQuestionSetTypes {

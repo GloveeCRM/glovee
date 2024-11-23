@@ -1,12 +1,12 @@
 'use client'
 
 import { useAuthContext } from '@/contexts/auth-context'
-import { useTemplateEditContext } from '@/contexts/template-edit-context'
+import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
 import { createQuestionSetAndQuestions } from '@/lib/actions/form'
 import { FormQuestionSetType } from '@/lib/types/form'
 
 export default function useQuestionSetActions() {
-  const { template, setTemplate } = useTemplateEditContext()
+  const { template, setTemplate } = useFormTemplateEditContext()
 
   const { sessionUserID } = useAuthContext()
 

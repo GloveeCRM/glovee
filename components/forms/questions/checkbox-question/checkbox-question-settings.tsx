@@ -7,7 +7,7 @@ import { FiEdit2, FiPlus } from 'react-icons/fi'
 
 import { CheckboxQuestionType, CheckboxQuestionOptionType } from '@/lib/types/qusetion'
 import { generateRandomID } from '@/lib/utils/id'
-import useQuestionActions from '@/hooks/template/use-question-actions'
+import useQuestionActions from '@/hooks/form-template/use-question-actions'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 import { Separator } from '@/components/ui/separator'

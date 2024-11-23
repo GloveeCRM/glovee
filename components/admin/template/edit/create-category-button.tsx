@@ -1,17 +1,28 @@
+'use client'
+
 import { FiPlus } from 'react-icons/fi'
 
-import useCategoryActions from '@/hooks/template/use-category-actions'
+import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+import useFormCategoryActions from '@/hooks/form-template/use-category-actions'
 
 interface CreateCategoryButtonProps {
-  formID: number
   type: 'add' | 'create'
 }
 
-export default function CreateCategoryButton({ formID, type }: CreateCategoryButtonProps) {
-  const { createCategory } = useCategoryActions()
+export default function CreateCategoryButton({ type }: CreateCategoryButtonProps) {
+  const { formCategories } = useFormTemplateEditContext()
+  const { createFormCategory } = useFormCategoryActions()
 
-  function handleClick() {
-    createCategory(formID)
+  async function handleClick() {
+    const { error } = await createFormCategory({
+      newFormCategory: {
+        categoryName: 'Untitled Category',
+        categoryPosition: formCategories ? formCategories.length + 1 : 1,
+      },
+    })
+    if (error) {
+      console.error(error)
+    }
   }
 
   return (

@@ -5,8 +5,9 @@ import { FiEdit, FiMoreHorizontal } from 'react-icons/fi'
 import { BiTrash } from 'react-icons/bi'
 
 import { FormSectionType } from '@/lib/types/form'
-import { useTemplateEditContext } from '@/contexts/template-edit-context'
-import useSectionActions from '@/hooks/template/use-section-actions'
+import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+import useFormSectionActions from '@/hooks/form-template/use-section-actions'
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,37 +28,51 @@ export default function TemplateEditSidebarSection({
   const [isEditing, setIsEditing] = useState<boolean>(false)
   const [isOptionsMenuOpen, setIsOptionsMenuOpen] = useState<boolean>(false)
 
-  if (section.sectionName === 'Untitled Section 235') {
-    console.log('section', section)
-  }
-
-  const { setSelectedSectionID } = useTemplateEditContext()
-  const { removeSectionFromTemplateCategory, updateSections, deleteSection } = useSectionActions()
+  const { setSelectedFormSectionID } = useFormTemplateEditContext()
+  const { updateFormSections, deleteFormSection } = useFormSectionActions()
 
   const sectionInputRef = useRef<HTMLTextAreaElement>(null)
 
   function handleClickSection(e: React.MouseEvent<HTMLDivElement>) {
     e.stopPropagation()
-    setSelectedSectionID(section.sectionID)
+    setSelectedFormSectionID(section.formSectionID)
   }
 
   function handleClickRenameSection() {
     setIsEditing(true)
   }
 
-  function handleClickDeleteSection() {
-    deleteSection([section.sectionID])
+  async function handleClickDeleteSection() {
+    const { error } = await deleteFormSection({ formSectionID: section.formSectionID })
+    if (error) {
+      console.error(error)
+    }
   }
 
   function handleOptionsDropdownMenuOpenChange(isOpen: boolean) {
     setIsOptionsMenuOpen(isOpen)
   }
 
-  function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+  async function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === 'Enter') {
       e.preventDefault()
       setIsEditing(false)
-      updateSections([{ ...section, sectionName: sectionInputRef.current?.value || '' }])
+      if (sectionInputRef.current?.value) {
+        const formSectionsToUpdate = [
+          {
+            ...section,
+            sectionName: sectionInputRef.current?.value || '',
+          },
+        ]
+        if (formSectionsToUpdate) {
+          const { error } = await updateFormSections({
+            formSectionsToUpdate,
+          })
+          if (error) {
+            console.error(error)
+          }
+        }
+      }
     } else if (e.key === 'Escape') {
       e.preventDefault()
       setIsEditing(false)
@@ -77,10 +92,25 @@ export default function TemplateEditSidebarSection({
   }
 
   useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
+    async function handleClickOutside(e: MouseEvent) {
       if (sectionInputRef.current && !sectionInputRef.current.contains(e.target as Node)) {
         setIsEditing(false)
-        updateSections([{ ...section, sectionName: sectionInputRef.current.value }])
+        if (sectionInputRef.current?.value) {
+          const formSectionsToUpdate = [
+            {
+              ...section,
+              sectionName: sectionInputRef.current?.value || '',
+            },
+          ]
+          if (formSectionsToUpdate) {
+            const { error } = await updateFormSections({
+              formSectionsToUpdate,
+            })
+            if (error) {
+              console.error(error)
+            }
+          }
+        }
       }
     }
 
@@ -99,7 +129,7 @@ export default function TemplateEditSidebarSection({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [isEditing, sectionInputRef, section.sectionID, updateSections])
+  }, [isEditing, sectionInputRef, section.formSectionID, updateFormSections])
 
   return (
     <div

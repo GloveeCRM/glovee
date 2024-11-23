@@ -31,7 +31,7 @@ export default function TemplateCard({
             <Link href={`/admin/form-template/${formID}/preview`}>View</Link>
           </Button>
           <Button asChild size="md">
-            <Link href={`/admin/template/${formTemplateID}/form/${formID}/edit`}>
+            <Link href={`/admin/form-template/${formTemplateID}/edit`}>
               <HiOutlinePencilSquare className="h-[20px] w-[20px]" />
             </Link>
           </Button>
