@@ -2,19 +2,19 @@
 
 import { revalidatePath } from 'next/cache'
 
-import { GLOVEE_API_URL } from '@/lib/constants/api'
-import { getSession } from '@/lib/auth/session'
 import { FileType } from '../types/file'
 import {
   FormQuestionSetType,
   FormStatusTypes,
   FormCategoryType,
   FormSectionType,
+  FormTemplateType,
 } from '../types/form'
+import { GLOVEE_API_URL } from '@/lib/constants/api'
+import { getSession } from '@/lib/auth/session'
 import { getCurrentOrgName } from '../utils/server'
-import { keysCamelCaseToSnakeCase, keysSnakeCaseToCamelCase } from '../utils/json'
 import { apiRequest } from '../utils/http'
-import { FormTemplateType } from '../types/form'
+import { keysCamelCaseToSnakeCase, keysSnakeCaseToCamelCase } from '../utils/json'
 
 interface CreateFormTemplateProps {
   templateName: string
@@ -226,6 +226,36 @@ export async function deleteFormTemplateSection({
   })
 
   return { formSections: data?.formSections, error }
+}
+
+interface CreateFormTemplateQuestionSetProps {
+  formQuestionSet: Partial<FormQuestionSetType>
+}
+
+interface CreateFormTemplateQuestionSetResponse {
+  formQuestionSets?: FormQuestionSetType[]
+  error?: string
+}
+
+export async function createFormTemplateQuestionSet({
+  formQuestionSet,
+}: CreateFormTemplateQuestionSetProps): Promise<CreateFormTemplateQuestionSetResponse> {
+  const { data, error } = await apiRequest<{ formQuestionSets: FormQuestionSetType[] }>({
+    path: 'rpc/create_form_template_question_set',
+    method: 'POST',
+    data: {
+      formSectionID: formQuestionSet.formSectionID,
+      formQuestionSetType: formQuestionSet.formQuestionSetType,
+      formQuestionSetPosition: formQuestionSet.formQuestionSetPosition,
+      dependsOnOptionID: formQuestionSet.dependsOnOptionID || null,
+      parentFormQuestionSetID: formQuestionSet.parentFormQuestionSetID || null,
+    },
+    authRequired: true,
+  })
+
+  console.log('questionSets', formQuestionSet)
+
+  return { formQuestionSets: data?.formQuestionSets, error }
 }
 
 interface CreateNewFormProps {

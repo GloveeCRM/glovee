@@ -21,6 +21,7 @@ const errors = {
   missing_form_id: 'Form ID is required',
   missing_category_position: 'Category position is required',
   category_position_already_exists: 'Category position is taken',
+  missing_form_question_set_position: 'Form question set position is required',
 }
 
 export const errorMessages = (error_code: string) => {

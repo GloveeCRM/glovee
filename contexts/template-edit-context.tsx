@@ -10,10 +10,16 @@ import {
   useState,
 } from 'react'
 
-import { FormCategoryType, FormSectionType, FormTemplateType } from '@/lib/types/form'
+import {
+  FormCategoryType,
+  FormQuestionSetType,
+  FormSectionType,
+  FormTemplateType,
+} from '@/lib/types/form'
 import {
   fetchFormTemplateCategories,
   fetchFormTemplateSections,
+  fetchFormTemplateQuestionSets,
   searchFormTemplates,
 } from '@/lib/data/form'
 
@@ -27,9 +33,14 @@ type FormTemplateEditContextType = {
   setSelectedFormCategoryID: Dispatch<SetStateAction<number>>
   formSections: FormSectionType[] | null
   setFormSections: Dispatch<SetStateAction<FormSectionType[] | null>>
+  formQuestionSets: FormQuestionSetType[] | null
+  setFormQuestionSets: Dispatch<SetStateAction<FormQuestionSetType[] | null>>
   selectedFormSectionID: number
   setSelectedFormSectionID: Dispatch<SetStateAction<number>>
+  selectedFormQuestionSetID: number
+  setSelectedFormQuestionSetID: Dispatch<SetStateAction<number>>
   selectedFormCategorySections: FormSectionType[] | undefined
+  selectedFormSectionQuestionSets: FormQuestionSetType[] | undefined
   // formID: number
   // template: FormType | null
   // setTemplate: Dispatch<SetStateAction<FormType | null>>
@@ -59,9 +70,14 @@ const formTemplateEditContextDefaultValues: FormTemplateEditContextType = {
   setSelectedFormCategoryID: () => {},
   formSections: null,
   setFormSections: () => {},
+  formQuestionSets: null,
+  setFormQuestionSets: () => {},
   selectedFormSectionID: 0,
   setSelectedFormSectionID: () => {},
+  selectedFormQuestionSetID: 0,
+  setSelectedFormQuestionSetID: () => {},
   selectedFormCategorySections: undefined,
+  selectedFormSectionQuestionSets: undefined,
   // formID: 0,
   // template: null,
   // setTemplate: () => {},
@@ -97,14 +113,30 @@ export default function FormTemplateEditProvider({
   const [formTemplate, setFormTemplate] = useState<FormTemplateType | null>(null)
   const [formCategories, setFormCategories] = useState<FormCategoryType[] | null>(null)
   const [formSections, setFormSections] = useState<FormSectionType[] | null>(null)
+  const [formQuestionSets, setFormQuestionSets] = useState<FormQuestionSetType[] | null>(null)
   const [selectedFormCategoryID, setSelectedFormCategoryID] = useState<number>(0)
   const [selectedFormSectionID, setSelectedFormSectionID] = useState<number>(0)
+  const [selectedFormQuestionSetID, setSelectedFormQuestionSetID] = useState<number>(0)
+
+  const selectedFormCategorySections = useMemo(() => {
+    return formSections?.filter((section) => section.formCategoryID === selectedFormCategoryID)
+  }, [formSections, selectedFormCategoryID])
+
+  const selectedFormSectionQuestionSets = useMemo(() => {
+    return formQuestionSets
+      ?.filter((questionSet) => questionSet.formSectionID === selectedFormSectionID)
+      .sort((a, b) => a.formQuestionSetPosition - b.formQuestionSetPosition)
+  }, [formQuestionSets, selectedFormSectionID])
+
+  const formCategoryExists = (formCategoryID: number) => {
+    return formCategories?.find((category) => category.formCategoryID === formCategoryID)
+  }
 
   useEffect(() => {
     async function fetchAndSetFormTemplate() {
       const { formTemplates } = await searchFormTemplates({
         filters: {
-          templateID: formTemplateID,
+          formTemplateID,
         },
         limit: 1,
       })
@@ -122,26 +154,36 @@ export default function FormTemplateEditProvider({
       setFormSections(formSections || null)
     }
 
+    async function fetchAndSetFormTemplateQuestionSets() {
+      const { formQuestionSets } = await fetchFormTemplateQuestionSets({ formTemplateID })
+      setFormQuestionSets(formQuestionSets || null)
+    }
+
     fetchAndSetFormTemplate()
     fetchAndSetFormTemplateCategories()
     fetchAndSetFormTemplateSections()
+    fetchAndSetFormTemplateQuestionSets()
   }, [formTemplateID])
 
   // Set the first category as selected if no category is selected
   useEffect(() => {
-    if (formCategories && formCategories.length > 0 && !selectedFormCategoryID) {
+    if (
+      formCategories &&
+      formCategories.length > 0 &&
+      (!selectedFormCategoryID || !formCategoryExists(selectedFormCategoryID))
+    ) {
       setSelectedFormCategoryID(formCategories[0].formCategoryID)
+    } else if (!formCategories || formCategories.length === 0) {
+      setSelectedFormCategoryID(0)
     }
   }, [formCategories])
-
-  const selectedFormCategorySections = useMemo(() => {
-    return formSections?.filter((section) => section.formCategoryID === selectedFormCategoryID)
-  }, [formSections, selectedFormCategoryID])
 
   // Set the selected category's first section when the selected category changes
   useEffect(() => {
     if (selectedFormCategorySections && selectedFormCategorySections.length > 0) {
       setSelectedFormSectionID(selectedFormCategorySections?.[0]?.formSectionID || 0)
+    } else if (!selectedFormCategorySections || selectedFormCategorySections.length === 0) {
+      setSelectedFormSectionID(0)
     }
   }, [selectedFormCategorySections])
 
@@ -245,9 +287,14 @@ export default function FormTemplateEditProvider({
     setSelectedFormCategoryID,
     formSections,
     setFormSections,
+    formQuestionSets,
+    setFormQuestionSets,
     selectedFormSectionID,
     setSelectedFormSectionID,
+    selectedFormQuestionSetID,
+    setSelectedFormQuestionSetID,
     selectedFormCategorySections,
+    selectedFormSectionQuestionSets,
     // formID,
     // template,
     // setTemplate,

@@ -1,5 +1,4 @@
 import { QuestionType } from './qusetion'
-import { TemplateQuestionSetType, TemplateQuestionSetTypes } from './template'
 import { UserType } from './user'
 
 export type FormTemplateType = {
@@ -10,12 +9,6 @@ export type FormTemplateType = {
   createdBy: UserType
   createdAt: string
   form: FormType
-}
-
-export type Applicant = {
-  firstName: string
-  lastName: string
-  imageURL: string
 }
 
 export enum FormStatusTypes {
@@ -31,22 +24,10 @@ export enum FormRoleTypes {
 }
 
 export type FormType = {
-  id: number
-  applicationID: number
-  organizationID: number
-  client: UserType
-  role: FormRoleTypes
-  applicant: Applicant
-  status: FormStatusTypes
-  completionRate: number
-  categories?: FormCategoryType[]
   formID: number
-  formName: string
-  formDescription: string
-  formStatus: FormStatusTypes
   createdBy: UserType
   createdAt: string
-  updatedAt: string
+  categories?: FormCategoryType[]
 }
 
 export type FormCategoryType = {
@@ -70,41 +51,31 @@ export type FormSectionType = {
 }
 
 export enum FormQuestionSetTypes {
-  FLAT = 'FLAT',
-  LOOP = 'LOOP',
-  DEPENDS_ON = 'DEPENDS_ON',
+  STATIC = 'static',
+  REPEATABLE = 'repeatable',
+  CONDITIONAL = 'conditional',
 }
 
 export type FormQuestionSetType = {
-  id: number
-  type: FormQuestionSetTypes
-  position: number
-  dependsOn?: number
-  sectionID: number
-  questionSetID?: number
+  formQuestionSetID: number
+  formSectionID: number
+  parentFormQuestionSetID?: number
+  formQuestionSetType: FormQuestionSetTypes
+  formQuestionSetPosition: number
+  dependsOnOptionID?: number
+  createdAt: string
   questionSets?: FormQuestionSetType[]
   questions?: QuestionType[]
 }
 
-export function isFlatQuestionSetType(questionSet: FormQuestionSetType | TemplateQuestionSetType) {
-  return (
-    questionSet.type === FormQuestionSetTypes.FLAT ||
-    questionSet.type === TemplateQuestionSetTypes.FLAT
-  )
+export function isStaticQuestionSetType(questionSet: FormQuestionSetType) {
+  return questionSet.formQuestionSetType === FormQuestionSetTypes.STATIC
 }
 
-export function isLoopQuestionSetType(questionSet: FormQuestionSetType | TemplateQuestionSetType) {
-  return (
-    questionSet.type === FormQuestionSetTypes.LOOP ||
-    questionSet.type === TemplateQuestionSetTypes.LOOP
-  )
+export function isRepeatableQuestionSetType(questionSet: FormQuestionSetType) {
+  return questionSet.formQuestionSetType === FormQuestionSetTypes.REPEATABLE
 }
 
-export function isDependsOnQuestionSetType(
-  questionSet: FormQuestionSetType | TemplateQuestionSetType
-) {
-  return (
-    questionSet.type === FormQuestionSetTypes.DEPENDS_ON ||
-    questionSet.type === TemplateQuestionSetTypes.DEPENDS_ON
-  )
+export function isConditionalQuestionSetType(questionSet: FormQuestionSetType) {
+  return questionSet.formQuestionSetType === FormQuestionSetTypes.CONDITIONAL
 }

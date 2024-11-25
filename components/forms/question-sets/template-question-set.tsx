@@ -4,7 +4,12 @@ import { useEffect, useRef, useState } from 'react'
 import { FiMoreHorizontal } from 'react-icons/fi'
 import { BiTrash } from 'react-icons/bi'
 
-import { TemplateQuestionSetType, TemplateQuestionSetTypes } from '@/lib/types/template'
+import {
+  FormQuestionSetType,
+  isStaticQuestionSetType,
+  isRepeatableQuestionSetType,
+  isConditionalQuestionSetType,
+} from '@/lib/types/form'
 import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
 import useQuestionSetActions from '@/hooks/form-template/use-question-set-actions'
 import {
@@ -14,31 +19,31 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+
 import FlatQuestionSetEdit from './flat/flat-question-set-edit'
 import LoopQuestionSetEdit from './loop/loop-question-set-edit'
 import DependsOnQuestionSetEdit from './depends-on/depends-on-question-set-edit'
-import { FormQuestionSetType, FormQuestionSetTypes } from '@/lib/types/form'
 
 interface TemplateQuestionSetProps {
   questionSet: FormQuestionSetType
 }
 
 export default function TemplateQuestionSet({ questionSet }: TemplateQuestionSetProps) {
-  const { selectedQuestionSetID, setSelectedQuestionSetID } = useFormTemplateEditContext()
+  const { selectedFormQuestionSetID, setSelectedFormQuestionSetID } = useFormTemplateEditContext()
   const [isOptionsMenuOpen, setIsOptionsMenuOpen] = useState<boolean>(false)
   const { removeQuestionSetFromSection } = useQuestionSetActions()
 
-  const isQuestionSetSelected = selectedQuestionSetID === questionSet.id
+  const isQuestionSetSelected = selectedFormQuestionSetID === questionSet.formQuestionSetID
 
   const templateQuestionSetRef = useRef<HTMLDivElement>(null)
 
-  const isFlat = questionSet.type === FormQuestionSetTypes.FLAT
-  const isLoop = questionSet.type === FormQuestionSetTypes.LOOP
-  const isDependsOn = questionSet.type === FormQuestionSetTypes.DEPENDS_ON
+  const isStatic = isStaticQuestionSetType(questionSet)
+  const isRepeatable = isRepeatableQuestionSetType(questionSet)
+  const isConditional = isConditionalQuestionSetType(questionSet)
 
   function handleClickQuestionSet(e: React.MouseEvent<HTMLDivElement>) {
     e.stopPropagation()
-    setSelectedQuestionSetID(questionSet.id)
+    setSelectedFormQuestionSetID(questionSet.formQuestionSetID)
   }
 
   function handleOptionsDropdownMenuOpenChange(isOpen: boolean) {
@@ -46,8 +51,8 @@ export default function TemplateQuestionSet({ questionSet }: TemplateQuestionSet
   }
 
   function handleClickDeleteQuestionSet() {
-    removeQuestionSetFromSection(questionSet.id)
-    setSelectedQuestionSetID(0)
+    removeQuestionSetFromSection(questionSet.formQuestionSetID)
+    setSelectedFormQuestionSetID(0)
   }
 
   useEffect(() => {
@@ -62,13 +67,13 @@ export default function TemplateQuestionSet({ questionSet }: TemplateQuestionSet
         templateQuestionSetRef.current &&
         !templateQuestionSetRef.current.contains(e.target as Node)
       ) {
-        setSelectedQuestionSetID(0)
+        setSelectedFormQuestionSetID(0)
       }
     }
 
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [setSelectedQuestionSetID])
+  }, [setSelectedFormQuestionSetID])
 
   return (
     <div className="py-[2px]">
@@ -95,11 +100,11 @@ export default function TemplateQuestionSet({ questionSet }: TemplateQuestionSet
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
-        {isFlat ? (
+        {isStatic ? (
           <FlatQuestionSetEdit questionSet={questionSet} />
-        ) : isLoop ? (
+        ) : isRepeatable ? (
           <LoopQuestionSetEdit questionSet={questionSet} />
-        ) : isDependsOn ? (
+        ) : isConditional ? (
           <DependsOnQuestionSetEdit questionSet={questionSet} />
         ) : null}
       </div>

@@ -1,6 +1,6 @@
 'use client'
 
-import { TemplateQuestionSetTypes } from '@/lib/types/template'
+import { FormQuestionSetTypes } from '@/lib/types/form'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 
 export default function FlatQuestionSetIcon() {
@@ -11,7 +11,7 @@ export default function FlatQuestionSetIcon() {
     setDraggedObject({
       type: 'questionSet',
       object: {
-        type: TemplateQuestionSetTypes.FLAT,
+        type: FormQuestionSetTypes.STATIC,
       },
     })
   }

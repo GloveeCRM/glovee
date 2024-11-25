@@ -6,25 +6,29 @@ import EmptySectionDropzone from './empty-section-dropzone'
 import NonEmptySectionDropzone from './non-empty-section-dropzone'
 
 export default function QuestionsEditBoard() {
-  const { template, selectedCategoryID, selectedSectionID } = useFormTemplateEditContext()
-
-  const templateQuestionSets = template?.categories
-    ?.find((category) => category.categoryID === selectedCategoryID)
-    ?.sections?.find((section) => section.id === selectedSectionID)?.questionSets
+  const { selectedFormSectionID, selectedFormSectionQuestionSets } = useFormTemplateEditContext()
 
   return (
-    <div id="questions-edit-board" className="rounded-lg bg-white p-[4px]">
-      {templateQuestionSets && templateQuestionSets.length > 0 ? (
-        templateQuestionSets.map((questionSet) => (
-          <div key={questionSet.id}>
-            {questionSet.position === 0 && <NonEmptySectionDropzone position={0} />}
-            <TemplateQuestionSet questionSet={questionSet} />
-            <NonEmptySectionDropzone position={questionSet.position + 1} />
-          </div>
-        ))
+    <>
+      {selectedFormSectionID ? (
+        <div id="questions-edit-board" className="rounded-lg bg-white p-[4px]">
+          {selectedFormSectionQuestionSets && selectedFormSectionQuestionSets.length > 0 ? (
+            selectedFormSectionQuestionSets.map((formQuestionSet) => (
+              <div key={formQuestionSet.formQuestionSetID}>
+                {formQuestionSet.formQuestionSetPosition === 1 && (
+                  <NonEmptySectionDropzone position={1} />
+                )}
+                <TemplateQuestionSet questionSet={formQuestionSet} />
+                <NonEmptySectionDropzone position={formQuestionSet.formQuestionSetPosition + 1} />
+              </div>
+            ))
+          ) : (
+            <EmptySectionDropzone />
+          )}
+        </div>
       ) : (
-        <EmptySectionDropzone />
+        <div>Create or select a section to begin editing questions</div>
       )}
-    </div>
+    </>
   )
 }

@@ -7,15 +7,15 @@ import {
   FormTemplateType,
   FormType,
 } from '@/lib/types/form'
+import { FileType } from '@/lib/types/file'
 import { GLOVEE_API_URL } from '@/lib/constants/api'
-import { getSession, getSessionPayload } from '@/lib/auth/session'
-import { FileType } from '../types/file'
-import { getCurrentOrgName } from '../utils/server'
-import { keysCamelCaseToSnakeCase, keysSnakeCaseToCamelCase } from '../utils/json'
-import { apiRequest, extractTotalCountFromHeaders } from '../utils/http'
+import { getSession } from '@/lib/auth/session'
+import { getCurrentOrgName } from '@/lib/utils/server'
+import { apiRequest, extractTotalCountFromHeaders } from '@/lib/utils/http'
+import { keysCamelCaseToSnakeCase, keysSnakeCaseToCamelCase } from '@/lib/utils/json'
 
 interface SearchFormTemplatesFilters {
-  templateID?: number
+  formTemplateID?: number
 }
 
 interface SearchFormTemplatesProps {
@@ -37,8 +37,8 @@ export async function searchFormTemplates({
   offset,
 }: SearchFormTemplatesProps): Promise<SearchFormTemplatesResponse> {
   const queryParams = new URLSearchParams()
-  if (filters?.templateID) {
-    queryParams.append('form_template_id', `eq.${filters?.templateID}`)
+  if (filters?.formTemplateID) {
+    queryParams.append('form_template_id', `eq.${filters?.formTemplateID}`)
   }
 
   if (limit) {
@@ -105,6 +105,30 @@ export async function fetchFormTemplateSections({
   })
 
   return { formSections: data, error }
+}
+
+interface FetchFormTemplateQuestionSetsProps {
+  formTemplateID: number
+}
+
+interface FetchFormTemplateQuestionSetsResponse {
+  formQuestionSets?: FormQuestionSetType[]
+  error?: string
+}
+
+export async function fetchFormTemplateQuestionSets({
+  formTemplateID,
+}: FetchFormTemplateQuestionSetsProps): Promise<FetchFormTemplateQuestionSetsResponse> {
+  const queryParams = new URLSearchParams()
+  queryParams.append('form_template_id', formTemplateID.toString())
+
+  const { data, error } = await apiRequest<FormQuestionSetType[]>({
+    path: `rpc/form_template_question_sets?${queryParams.toString()}`,
+    method: 'GET',
+    authRequired: true,
+  })
+
+  return { formQuestionSets: data, error }
 }
 
 interface SearchFormsInput {

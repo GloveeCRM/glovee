@@ -11,9 +11,9 @@ import useQuestionSetActions from '@/hooks/form-template/use-question-set-action
 
 export default function EmptySectionDropzone() {
   const [isDraggedOver, setIsDraggedOver] = useState<boolean>(false)
-  const { selectedSectionID } = useFormTemplateEditContext()
+  const { selectedFormSectionID } = useFormTemplateEditContext()
   const { draggedObject, setDraggedObject } = useDragAndDropContext()
-  const { createQuestionSetInSection, createQuestionSet } = useQuestionSetActions()
+  const { createFormQuestionSet } = useQuestionSetActions()
 
   const isDropAllowed = isDraggedOver && draggedObject?.type === 'questionSet'
 
@@ -32,19 +32,16 @@ export default function EmptySectionDropzone() {
     setIsDraggedOver(false)
   }
 
-  function handleDrop(e: React.DragEvent<HTMLDivElement>) {
+  async function handleDrop(e: React.DragEvent<HTMLDivElement>) {
     e.preventDefault()
     setIsDraggedOver(false)
     if (isDropAllowed) {
-      const questionSetID = generateRandomID()
-      const newQuestionSet: FormQuestionSetType = {
-        id: questionSetID,
-        type: draggedObject.object.type,
-        position: 0,
-        sectionID: selectedSectionID,
-        questions: [],
+      const newQuestionSet: Partial<FormQuestionSetType> = {
+        formQuestionSetType: draggedObject.object.type,
+        formQuestionSetPosition: 1,
+        formSectionID: selectedFormSectionID,
       }
-      if (newQuestionSet.type === FormQuestionSetTypes.DEPENDS_ON) {
+      if (newQuestionSet.formQuestionSetType === FormQuestionSetTypes.CONDITIONAL) {
         const questionID = generateRandomID()
         const newQuestion: RadioQuestionType = {
           id: questionID,
@@ -65,7 +62,10 @@ export default function EmptySectionDropzone() {
         }
         newQuestionSet.questions = [newQuestion]
       }
-      createQuestionSet(newQuestionSet)
+      const { error } = await createFormQuestionSet({ newFormQuestionSet: newQuestionSet })
+      if (error) {
+        console.error(error)
+      }
       setDraggedObject(null)
     }
   }

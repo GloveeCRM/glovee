@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-import { TemplateQuestionSetType, TemplateQuestionSetTypes } from '@/lib/types/template'
+import { FormQuestionSetType, FormQuestionSetTypes } from '@/lib/types/form'
 import { QuestionTypes, RadioQuestionType } from '@/lib/types/qusetion'
 import { generateRandomID } from '@/lib/utils/id'
 import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
@@ -15,13 +15,11 @@ interface NonEmptySectionDropzoneProps {
 
 export default function NonEmptySectionDropzone({ position }: NonEmptySectionDropzoneProps) {
   const [isDraggedOver, setIsDraggedOver] = useState<boolean>(false)
-  const { selectedSectionID } = useFormTemplateEditContext()
+  const { selectedFormSectionQuestionSets, selectedFormSectionID } = useFormTemplateEditContext()
   const { draggedObject, setDraggedObject } = useDragAndDropContext()
-  const { getQuestionSetsInSection, createQuestionSetInSection } = useQuestionSetActions()
+  const { createFormQuestionSet } = useQuestionSetActions()
 
   const isDropAllowed = isDraggedOver && draggedObject?.type === 'questionSet'
-
-  const questionSetsInSection = getQuestionSetsInSection(selectedSectionID)
 
   function handleDragEnter(e: React.DragEvent<HTMLDivElement>) {
     e.preventDefault()
@@ -44,15 +42,12 @@ export default function NonEmptySectionDropzone({ position }: NonEmptySectionDro
     e.preventDefault()
     setIsDraggedOver(false)
     if (isDropAllowed) {
-      const questionSetID = generateRandomID()
-      const newQuestionSet: TemplateQuestionSetType = {
-        id: questionSetID,
-        type: draggedObject.object.type,
-        position: position,
-        sectionID: selectedSectionID,
-        questions: [],
+      const newQuestionSet: Partial<FormQuestionSetType> = {
+        formSectionID: selectedFormSectionID,
+        formQuestionSetType: draggedObject.object.type,
+        formQuestionSetPosition: position,
       }
-      if (newQuestionSet.type === TemplateQuestionSetTypes.DEPENDS_ON) {
+      if (newQuestionSet.formQuestionSetType === FormQuestionSetTypes.CONDITIONAL) {
         const questionID = generateRandomID()
         const newQuestion: RadioQuestionType = {
           id: questionID,
@@ -73,13 +68,16 @@ export default function NonEmptySectionDropzone({ position }: NonEmptySectionDro
         }
         newQuestionSet.questions = [newQuestion]
       }
-      createQuestionSetInSection(selectedSectionID, newQuestionSet)
+      createFormQuestionSet({
+        newFormQuestionSet: newQuestionSet,
+      })
     }
     setDraggedObject(null)
   }
 
-  const isTheFirstDropzone = position === 0
-  const isTheLastDropzone = questionSetsInSection && questionSetsInSection.length === position
+  const isTheFirstDropzone = position === 1
+  const isTheLastDropzone =
+    selectedFormSectionQuestionSets && selectedFormSectionQuestionSets.length === position + 1
 
   return (
     <div
