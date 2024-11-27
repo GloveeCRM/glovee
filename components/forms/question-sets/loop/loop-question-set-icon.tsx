@@ -1,7 +1,7 @@
 import { FiPlus } from 'react-icons/fi'
 
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
-import { TemplateQuestionSetTypes } from '@/lib/types/template'
+import { FormQuestionSetTypes } from '@/lib/types/form'
 
 export default function LoopQuestionSetIcon() {
   const { setDraggedObject } = useDragAndDropContext()
@@ -11,7 +11,7 @@ export default function LoopQuestionSetIcon() {
     setDraggedObject({
       type: 'questionSet',
       object: {
-        type: TemplateQuestionSetTypes.LOOP,
+        type: FormQuestionSetTypes.REPEATABLE,
       },
     })
   }

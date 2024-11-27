@@ -1,4 +1,10 @@
-import { FormQuestionSetType, FormQuestionSetTypes } from '@/lib/types/form'
+import {
+  FormQuestionSetType,
+  isConditionalQuestionSetType,
+  isRepeatableQuestionSetType,
+  isStaticQuestionSetType,
+} from '@/lib/types/form'
+
 import FlatQuestionSet from './flat/flat-question-set'
 import LoopQuestionSet from './loop/loop-question-set'
 import DependsOnQuestionSet from './depends-on/depends-on-question-set'
@@ -8,17 +14,17 @@ interface FormQuestionSetProps {
 }
 
 export default function FormQuestionSet({ questionSet }: FormQuestionSetProps) {
-  const isFlat = questionSet.type === FormQuestionSetTypes.FLAT
-  const isLoop = questionSet.type === FormQuestionSetTypes.LOOP
-  const isDependsOn = questionSet.type === FormQuestionSetTypes.DEPENDS_ON
+  const isStatic = isStaticQuestionSetType(questionSet)
+  const isRepeatable = isRepeatableQuestionSetType(questionSet)
+  const isConditional = isConditionalQuestionSetType(questionSet)
 
   return (
     <div className="w-full">
-      {isFlat ? (
+      {isStatic ? (
         <FlatQuestionSet questionSet={questionSet} />
-      ) : isLoop ? (
+      ) : isRepeatable ? (
         <LoopQuestionSet questionSet={questionSet} />
-      ) : isDependsOn ? (
+      ) : isConditional ? (
         <DependsOnQuestionSet questionSet={questionSet} />
       ) : null}
     </div>

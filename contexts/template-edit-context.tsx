@@ -41,6 +41,7 @@ type FormTemplateEditContextType = {
   setSelectedFormQuestionSetID: Dispatch<SetStateAction<number>>
   selectedFormCategorySections: FormSectionType[] | undefined
   selectedFormSectionQuestionSets: FormQuestionSetType[] | undefined
+  getChildFormQuestionSets: (parentFormQuestionSetID: number) => FormQuestionSetType[] | undefined
   // formID: number
   // template: FormType | null
   // setTemplate: Dispatch<SetStateAction<FormType | null>>
@@ -78,6 +79,7 @@ const formTemplateEditContextDefaultValues: FormTemplateEditContextType = {
   setSelectedFormQuestionSetID: () => {},
   selectedFormCategorySections: undefined,
   selectedFormSectionQuestionSets: undefined,
+  getChildFormQuestionSets: () => undefined,
   // formID: 0,
   // template: null,
   // setTemplate: () => {},
@@ -124,12 +126,22 @@ export default function FormTemplateEditProvider({
 
   const selectedFormSectionQuestionSets = useMemo(() => {
     return formQuestionSets
-      ?.filter((questionSet) => questionSet.formSectionID === selectedFormSectionID)
+      ?.filter(
+        (questionSet) =>
+          questionSet.formSectionID === selectedFormSectionID &&
+          !questionSet.parentFormQuestionSetID
+      )
       .sort((a, b) => a.formQuestionSetPosition - b.formQuestionSetPosition)
   }, [formQuestionSets, selectedFormSectionID])
 
   const formCategoryExists = (formCategoryID: number) => {
     return formCategories?.find((category) => category.formCategoryID === formCategoryID)
+  }
+
+  const getChildFormQuestionSets = (parentFormQuestionSetID: number) => {
+    return formQuestionSets?.filter(
+      (formQuestionSet) => formQuestionSet.parentFormQuestionSetID === parentFormQuestionSetID
+    )
   }
 
   useEffect(() => {
@@ -295,6 +307,7 @@ export default function FormTemplateEditProvider({
     setSelectedFormQuestionSetID,
     selectedFormCategorySections,
     selectedFormSectionQuestionSets,
+    getChildFormQuestionSets,
     // formID,
     // template,
     // setTemplate,

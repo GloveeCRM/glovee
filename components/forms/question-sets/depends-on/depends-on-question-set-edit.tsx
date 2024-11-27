@@ -27,7 +27,9 @@ export default function DependsOnQuestionSetEdit({ questionSet }: DependsOnQuest
   const questionPromptInputRef = useRef<HTMLTextAreaElement>(null)
 
   const questionSets = questionSet.questionSets
-  const questionSetsToDisplay = questionSets?.filter((qs) => qs.dependsOn === selectedOption)
+  const questionSetsToDisplay = questionSets?.filter(
+    (qs) => qs.dependsOnOptionID === selectedOption
+  )
 
   const rawDependsOnQuestion: QuestionType = {
     id: generateRandomID(),
@@ -42,7 +44,7 @@ export default function DependsOnQuestionSetEdit({ questionSet }: DependsOnQuest
       ],
       display: 'inline',
     },
-    questionSetID: questionSet.id,
+    questionSetID: questionSet.formQuestionSetID,
     isRequired: false,
   }
 
@@ -179,18 +181,18 @@ export default function DependsOnQuestionSetEdit({ questionSet }: DependsOnQuest
         {questionSetsToDisplay && questionSetsToDisplay.length > 0 ? (
           <div className="rounded bg-b-300 px-[4px]">
             {questionSetsToDisplay.map((qs) => (
-              <div key={qs.id}>
-                {qs.position === 0 && (
+              <div key={qs.formQuestionSetID}>
+                {qs.formQuestionSetPosition === 0 && (
                   <NonEmptyQuestionSetDropzone
                     questionSet={questionSet}
                     position={0}
                     dependsOn={selectedOption}
                   />
                 )}
-                <TemplateQuestionSet questionSet={qs} />
+                <TemplateQuestionSet formQuestionSet={qs} />
                 <NonEmptyQuestionSetDropzone
                   questionSet={questionSet}
-                  position={questionSet.position + 1}
+                  position={qs.formQuestionSetPosition + 1}
                   dependsOn={selectedOption}
                 />
               </div>

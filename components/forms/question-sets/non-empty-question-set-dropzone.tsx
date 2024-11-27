@@ -2,7 +2,12 @@
 
 import { useState } from 'react'
 
-import { FormQuestionSetType, FormQuestionSetTypes } from '@/lib/types/form'
+import {
+  FormQuestionSetType,
+  isConditionalQuestionSetType,
+  isRepeatableQuestionSetType,
+  isStaticQuestionSetType,
+} from '@/lib/types/form'
 import { QuestionType, QuestionTypes, RadioQuestionType } from '@/lib/types/qusetion'
 import { generateRandomID } from '@/lib/utils/id'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
@@ -13,30 +18,32 @@ interface NonEmptyQuestionSetDropzoneProps {
   questionSet: FormQuestionSetType
   position: number
   dependsOn?: number
+  isFirstDropzone?: boolean
+  isLastDropzone?: boolean
 }
 
 export default function NonEmptyQuestionSetDropzone({
   questionSet,
   position,
   dependsOn,
+  isFirstDropzone = false,
+  isLastDropzone = false,
 }: NonEmptyQuestionSetDropzoneProps) {
   const [isDraggedOver, setIsDraggedOver] = useState<boolean>(false)
   const { draggedObject, setDraggedObject } = useDragAndDropContext()
-  const { getQuestionsInQuestionSet, createQuestionInQuestionSet } = useQuestionActions()
-  const { createQuestionSetInSection } = useQuestionSetActions()
+  const { createFormQuestionSet } = useQuestionSetActions()
 
-  const isFlat = questionSet.type === FormQuestionSetTypes.FLAT
-  const isLoop = questionSet.type === FormQuestionSetTypes.LOOP
-  const isDependsOn = questionSet.type === FormQuestionSetTypes.DEPENDS_ON
+  const isStatic = isStaticQuestionSetType(questionSet)
+  const isRepeatable = isRepeatableQuestionSetType(questionSet)
+  const isConditional = isConditionalQuestionSetType(questionSet)
 
-  const isQuestionOverFlat = isFlat && draggedObject?.type === 'question'
-  const isQuestionSetOverLoop = isLoop && draggedObject?.type === 'questionSet'
-  const isQuestionSetOverDependsOn = isDependsOn && draggedObject?.type === 'questionSet'
+  const isQuestionOverStatic = isStatic && draggedObject?.type === 'question'
+  const isQuestionSetOverRepeatable = isRepeatable && draggedObject?.type === 'questionSet'
+  const isQuestionSetOverConditional = isConditional && draggedObject?.type === 'questionSet'
 
   const isDropAllowed =
-    isDraggedOver && (isQuestionOverFlat || isQuestionSetOverLoop || isQuestionSetOverDependsOn)
-
-  const questionsInQuestionSet = getQuestionsInQuestionSet(questionSet.id)
+    isDraggedOver &&
+    (isQuestionOverStatic || isQuestionSetOverRepeatable || isQuestionSetOverConditional)
 
   function handleDragEnter(e: React.DragEvent<HTMLDivElement>) {
     e.preventDefault()
@@ -55,11 +62,11 @@ export default function NonEmptyQuestionSetDropzone({
     }
   }
 
-  function handleDrop(e: React.DragEvent<HTMLDivElement>) {
+  async function handleDrop(e: React.DragEvent<HTMLDivElement>) {
     e.preventDefault()
     setIsDraggedOver(false)
     if (isDropAllowed) {
-      if (isQuestionOverFlat) {
+      if (isQuestionOverStatic) {
         const isRadio = draggedObject.object.type === QuestionTypes.RADIO
         const isCheckbox = draggedObject.object.type === QuestionTypes.CHECKBOX
         const isSelect = draggedObject.object.type === QuestionTypes.SELECT
@@ -79,7 +86,7 @@ export default function NonEmptyQuestionSetDropzone({
               ],
               defaultOptionID: 0,
             },
-            questionSetID: questionSet.id,
+            questionSetID: questionSet.formQuestionSetID,
             isRequired: false,
           }
         } else if (isCheckbox) {
@@ -92,7 +99,7 @@ export default function NonEmptyQuestionSetDropzone({
               display: 'block',
               options: [{ id: generateRandomID(), position: 0, value: 'Option 1' }],
             },
-            questionSetID: questionSet.id,
+            questionSetID: questionSet.formQuestionSetID,
             isRequired: false,
           }
         } else if (isSelect) {
@@ -108,7 +115,7 @@ export default function NonEmptyQuestionSetDropzone({
               ],
               defaultOptionID: 0,
             },
-            questionSetID: questionSet.id,
+            questionSetID: questionSet.formQuestionSetID,
             isRequired: false,
           }
         } else {
@@ -120,26 +127,24 @@ export default function NonEmptyQuestionSetDropzone({
             settings: {
               placeholder: 'Placeholder text',
             },
-            questionSetID: questionSet.id,
+            questionSetID: questionSet.formQuestionSetID,
             isRequired: false,
           }
         }
-        createQuestionInQuestionSet(questionSet.id, newQuestion)
+        createQuestionInQuestionSet(questionSet.formQuestionSetID, newQuestion)
       } else {
-        const newQuestionSetID = generateRandomID()
-        const newQuestionSet: FormQuestionSetType = {
-          id: newQuestionSetID,
-          type: draggedObject.object.type,
-          position: position,
-          sectionID: questionSet.sectionID,
-          questionSetID: questionSet.id,
+        const newQuestionSet: Partial<FormQuestionSetType> = {
+          formQuestionSetType: draggedObject.object.type,
+          formQuestionSetPosition: position,
+          formSectionID: questionSet.formSectionID,
+          parentFormQuestionSetID: questionSet.formQuestionSetID,
         }
 
-        if (questionSet.type === FormQuestionSetTypes.DEPENDS_ON) {
-          newQuestionSet.dependsOn = dependsOn
+        if (isConditional) {
+          newQuestionSet.dependsOnOptionID = dependsOn
         }
 
-        if (newQuestionSet.type === FormQuestionSetTypes.DEPENDS_ON) {
+        if (isConditional) {
           const newQuestionID = generateRandomID()
           const newQuestion: RadioQuestionType = {
             id: newQuestionID,
@@ -160,18 +165,18 @@ export default function NonEmptyQuestionSetDropzone({
           }
           newQuestionSet.questions = [newQuestion]
         }
-        createQuestionSetInSection(questionSet.sectionID, newQuestionSet)
+        const { error } = await createFormQuestionSet({ newFormQuestionSet: newQuestionSet })
+        if (error) {
+          console.error(error)
+        }
       }
       setDraggedObject(null)
     }
   }
 
-  const isTheFirstDropzone = position === 0
-  const isTheLastDropzone = questionsInQuestionSet && questionsInQuestionSet.length === position
-
   return (
     <div
-      className={`h-[8px] bg-blue-300 opacity-0 transition-opacity duration-75 ${isTheFirstDropzone ? 'mb-[2px] rounded-tl-full rounded-tr-full' : isTheLastDropzone ? 'mt-[2px] rounded-bl-full rounded-br-full' : 'my-[2px] rounded-full'} ${isDropAllowed && 'bg-blue-500 opacity-100'}`}
+      className={`h-[8px] bg-blue-300 opacity-0 transition-opacity duration-75 ${isFirstDropzone ? 'mb-[2px] rounded-tl-full rounded-tr-full' : isLastDropzone ? 'mt-[2px] rounded-bl-full rounded-br-full' : 'my-[2px] rounded-full'} ${isDropAllowed && 'bg-blue-500 opacity-100'}`}
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
       onDragOver={handleDragOver}

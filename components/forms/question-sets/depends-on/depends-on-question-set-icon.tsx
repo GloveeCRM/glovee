@@ -1,7 +1,7 @@
 'use client'
 
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
-import { TemplateQuestionSetTypes } from '@/lib/types/template'
+import { FormQuestionSetTypes } from '@/lib/types/form'
 
 export default function DependsOnQuestionSetIcon() {
   const { setDraggedObject } = useDragAndDropContext()
@@ -11,7 +11,7 @@ export default function DependsOnQuestionSetIcon() {
     setDraggedObject({
       type: 'questionSet',
       object: {
-        type: TemplateQuestionSetTypes.DEPENDS_ON,
+        type: FormQuestionSetTypes.CONDITIONAL,
       },
     })
   }

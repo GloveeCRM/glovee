@@ -1,36 +1,50 @@
 import { FiPlus } from 'react-icons/fi'
 
 import { FormQuestionSetType } from '@/lib/types/form'
+import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+
 import NonEmptyQuestionSetDropzone from '../non-empty-question-set-dropzone'
 import EmptyQuestionSetDropzone from '../empty-question-set-dropzone'
 import TemplateQuestionSet from '../template-question-set'
 
 interface LoopQuestionSetEditProps {
-  questionSet: FormQuestionSetType
+  formQuestionSet: FormQuestionSetType
 }
 
-export default function LoopQuestionSetEdit({ questionSet }: LoopQuestionSetEditProps) {
-  const questionSets = questionSet.questionSets
+export default function LoopQuestionSetEdit({ formQuestionSet }: LoopQuestionSetEditProps) {
+  const { getChildFormQuestionSets } = useFormTemplateEditContext()
+  const childQuestionSets = getChildFormQuestionSets(formQuestionSet.formQuestionSetID)
 
   return (
     <div className="rounded bg-r-500 p-[8px] pt-[16px]">
-      {questionSets && questionSets.length > 0 ? (
+      {childQuestionSets && childQuestionSets.length > 0 ? (
         <div className="bg-r-200 px-[4px]">
-          {questionSets.map((qs) => (
-            <div key={qs.id}>
-              {qs.position === 0 && (
-                <NonEmptyQuestionSetDropzone position={0} questionSet={questionSet} />
+          {childQuestionSets.map((childQuestionSet) => (
+            <div key={childQuestionSet.formQuestionSetID}>
+              {childQuestionSet.formQuestionSetPosition === 1 && (
+                <NonEmptyQuestionSetDropzone
+                  position={1}
+                  questionSet={formQuestionSet}
+                  isFirstDropzone={true}
+                />
               )}
-              <TemplateQuestionSet key={qs.id} questionSet={qs} />
+              <TemplateQuestionSet
+                key={childQuestionSet.formQuestionSetID}
+                formQuestionSet={childQuestionSet}
+              />
               <NonEmptyQuestionSetDropzone
-                position={questionSet.position + 1}
-                questionSet={questionSet}
+                position={childQuestionSet.formQuestionSetPosition + 1}
+                questionSet={formQuestionSet}
+                isLastDropzone={
+                  childQuestionSets &&
+                  childQuestionSets.length === formQuestionSet.formQuestionSetPosition + 1
+                }
               />
             </div>
           ))}
         </div>
       ) : (
-        <EmptyQuestionSetDropzone questionSet={questionSet} />
+        <EmptyQuestionSetDropzone questionSet={formQuestionSet} />
       )}
       <LoopQuestionSetEditFooter />
     </div>

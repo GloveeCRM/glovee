@@ -51,7 +51,7 @@ export default function EmptyQuestionSetDropzone({
     setIsDraggedOver(false)
   }
 
-  function handleDrop(e: React.DragEvent<HTMLDivElement>) {
+  async function handleDrop(e: React.DragEvent<HTMLDivElement>) {
     e.preventDefault()
     if (isDropAllowed) {
       if (isQuestionOverStatic) {
@@ -123,9 +123,9 @@ export default function EmptyQuestionSetDropzone({
       } else {
         const newQuestionSet: Partial<FormQuestionSetType> = {
           formQuestionSetType: draggedObject.object.type,
-          formQuestionSetPosition: 0,
+          formQuestionSetPosition: 1,
           formSectionID: questionSet.formSectionID,
-          parentFormQuestionSetID: questionSet.parentFormQuestionSetID,
+          parentFormQuestionSetID: questionSet.formQuestionSetID,
         }
 
         if (questionSet.formQuestionSetType === FormQuestionSetTypes.DEPENDS_ON) {
@@ -153,7 +153,10 @@ export default function EmptyQuestionSetDropzone({
           }
           newQuestionSet.questions = [newQuestion]
         }
-        createFormTemplateQuestionSet(newQuestionSet)
+        const { error } = await createFormQuestionSet({ newFormQuestionSet: newQuestionSet })
+        if (error) {
+          console.error(error)
+        }
       }
     }
     setDraggedObject(null)

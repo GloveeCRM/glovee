@@ -18,7 +18,7 @@ export default function QuestionsEditBoard() {
                 {formQuestionSet.formQuestionSetPosition === 1 && (
                   <NonEmptySectionDropzone position={1} />
                 )}
-                <TemplateQuestionSet questionSet={formQuestionSet} />
+                <TemplateQuestionSet formQuestionSet={formQuestionSet} />
                 <NonEmptySectionDropzone position={formQuestionSet.formQuestionSetPosition + 1} />
               </div>
             ))
