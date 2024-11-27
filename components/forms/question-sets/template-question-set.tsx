@@ -31,7 +31,7 @@ interface TemplateQuestionSetProps {
 export default function TemplateQuestionSet({ formQuestionSet }: TemplateQuestionSetProps) {
   const { selectedFormQuestionSetID, setSelectedFormQuestionSetID } = useFormTemplateEditContext()
   const [isOptionsMenuOpen, setIsOptionsMenuOpen] = useState<boolean>(false)
-  const { removeQuestionSetFromSection } = useQuestionSetActions()
+  const { deleteFormQuestionSet } = useQuestionSetActions()
 
   const isQuestionSetSelected = selectedFormQuestionSetID === formQuestionSet.formQuestionSetID
 
@@ -50,8 +50,13 @@ export default function TemplateQuestionSet({ formQuestionSet }: TemplateQuestio
     setIsOptionsMenuOpen(isOpen)
   }
 
-  function handleClickDeleteQuestionSet() {
-    removeQuestionSetFromSection(formQuestionSet.formQuestionSetID)
+  async function handleClickDeleteQuestionSet() {
+    const { error } = await deleteFormQuestionSet({
+      formQuestionSetID: formQuestionSet.formQuestionSetID,
+    })
+    if (error) {
+      console.error(error)
+    }
     setSelectedFormQuestionSetID(0)
   }
 

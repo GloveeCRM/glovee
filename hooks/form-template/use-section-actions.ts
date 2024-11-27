@@ -43,7 +43,7 @@ export default function useFormSectionActions() {
       sectionName: newFormSection.sectionName || '',
       sectionPosition: newFormSection.sectionPosition || 0,
     })
-    if (formSection) {
+    if (formSection && !error) {
       setFormSections([...(formSections || []), formSection])
     }
     return { error }
@@ -56,11 +56,7 @@ export default function useFormSectionActions() {
       formSections: formSectionsToUpdate,
     })
     if (!error) {
-      if (formSections === null) {
-        setFormSections([])
-      } else {
-        setFormSections(formSections || [])
-      }
+      setFormSections(formSections || [])
     }
     return { error }
   }

@@ -253,7 +253,27 @@ export async function createFormTemplateQuestionSet({
     authRequired: true,
   })
 
-  console.log('questionSets', formQuestionSet)
+  return { formQuestionSets: data?.formQuestionSets, error }
+}
+
+interface DeleteFormTemplateQuestionSetProps {
+  formQuestionSetID: number
+}
+
+interface DeleteFormTemplateQuestionSetResponse {
+  formQuestionSets?: FormQuestionSetType[]
+  error?: string
+}
+
+export async function deleteFormTemplateQuestionSet({
+  formQuestionSetID,
+}: DeleteFormTemplateQuestionSetProps): Promise<DeleteFormTemplateQuestionSetResponse> {
+  const { data, error } = await apiRequest<{ formQuestionSets: FormQuestionSetType[] }>({
+    path: 'rpc/delete_form_template_question_set',
+    method: 'POST',
+    data: { formQuestionSetID },
+    authRequired: true,
+  })
 
   return { formQuestionSets: data?.formQuestionSets, error }
 }

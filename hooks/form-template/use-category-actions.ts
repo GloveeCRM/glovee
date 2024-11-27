@@ -43,7 +43,7 @@ export default function useFormCategoryActions() {
       categoryName: newFormCategory.categoryName || '',
       categoryPosition: newFormCategory.categoryPosition || 0,
     })
-    if (formCategory) {
+    if (formCategory && !error) {
       setFormCategories([...(formCategories || []), formCategory])
     }
     return { error }
@@ -56,11 +56,7 @@ export default function useFormCategoryActions() {
       formCategories: formCategoriesToUpdate,
     })
     if (!error) {
-      if (formCategories === null) {
-        setFormCategories([])
-      } else {
-        setFormCategories(formCategories || [])
-      }
+      setFormCategories(formCategories || [])
     }
     return { error }
   }

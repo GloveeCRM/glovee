@@ -1,7 +1,7 @@
 'use client'
 
 import { FormQuestionSetType } from '@/lib/types/form'
-import { createFormTemplateQuestionSet } from '@/lib/actions/form'
+import { createFormTemplateQuestionSet, deleteFormTemplateQuestionSet } from '@/lib/actions/form'
 import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
 
 interface CreateFormQuestionSetProps {
@@ -12,8 +12,16 @@ interface CreateFormQuestionSetResponse {
   error?: string
 }
 
+interface DeleteFormQuestionSetProps {
+  formQuestionSetID: number
+}
+
+interface DeleteFormQuestionSetResponse {
+  error?: string
+}
+
 export default function useQuestionSetActions() {
-  const { formQuestionSets, setFormQuestionSets } = useFormTemplateEditContext()
+  const { setFormQuestionSets } = useFormTemplateEditContext()
 
   async function createFormQuestionSet({
     newFormQuestionSet,
@@ -21,7 +29,19 @@ export default function useQuestionSetActions() {
     const { formQuestionSets, error } = await createFormTemplateQuestionSet({
       formQuestionSet: newFormQuestionSet,
     })
-    if (formQuestionSets) {
+    if (!error) {
+      setFormQuestionSets(formQuestionSets || [])
+    }
+    return { error }
+  }
+
+  async function deleteFormQuestionSet({
+    formQuestionSetID,
+  }: DeleteFormQuestionSetProps): Promise<DeleteFormQuestionSetResponse> {
+    const { formQuestionSets, error } = await deleteFormTemplateQuestionSet({
+      formQuestionSetID,
+    })
+    if (!error) {
       setFormQuestionSets(formQuestionSets || [])
     }
     return { error }
@@ -244,6 +264,7 @@ export default function useQuestionSetActions() {
 
   return {
     createFormQuestionSet,
+    deleteFormQuestionSet,
     // createQuestionSet,
     // getQuestionSetById,
     // getQuestionSetsInSection,
