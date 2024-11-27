@@ -37,7 +37,7 @@ export default function LoopQuestionSetEdit({ formQuestionSet }: LoopQuestionSet
                 questionSet={formQuestionSet}
                 isLastDropzone={
                   childQuestionSets &&
-                  childQuestionSets.length === formQuestionSet.formQuestionSetPosition + 1
+                  childQuestionSets.length === childQuestionSet.formQuestionSetPosition
                 }
               />
             </div>

@@ -11,9 +11,15 @@ import useQuestionSetActions from '@/hooks/form-template/use-question-set-action
 
 interface NonEmptySectionDropzoneProps {
   position: number
+  isFirstDropzone?: boolean
+  isLastDropzone?: boolean
 }
 
-export default function NonEmptySectionDropzone({ position }: NonEmptySectionDropzoneProps) {
+export default function NonEmptySectionDropzone({
+  position,
+  isFirstDropzone = false,
+  isLastDropzone = false,
+}: NonEmptySectionDropzoneProps) {
   const [isDraggedOver, setIsDraggedOver] = useState<boolean>(false)
   const { selectedFormSectionQuestionSets, selectedFormSectionID } = useFormTemplateEditContext()
   const { draggedObject, setDraggedObject } = useDragAndDropContext()
@@ -75,13 +81,9 @@ export default function NonEmptySectionDropzone({ position }: NonEmptySectionDro
     setDraggedObject(null)
   }
 
-  const isTheFirstDropzone = position === 1
-  const isTheLastDropzone =
-    selectedFormSectionQuestionSets && selectedFormSectionQuestionSets.length === position + 1
-
   return (
     <div
-      className={`h-[8px] bg-blue-300 opacity-0 transition-opacity duration-75 ${isTheFirstDropzone ? 'mb-[2px] rounded-tl-full rounded-tr-full' : isTheLastDropzone ? 'mt-[2px] rounded-bl-full rounded-br-full' : 'my-[2px] rounded-full'} ${isDropAllowed && 'bg-blue-500 opacity-100'}`}
+      className={`h-[8px] bg-blue-300 opacity-0 transition-opacity duration-75 ${isFirstDropzone ? 'mb-[2px] rounded-tl-full rounded-tr-full' : isLastDropzone ? 'mt-[2px] rounded-bl-full rounded-br-full' : 'my-[2px] rounded-full'} ${isDropAllowed && 'bg-blue-500 opacity-100'}`}
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
       onDragOver={handleDragOver}

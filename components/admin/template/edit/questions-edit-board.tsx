@@ -16,10 +16,16 @@ export default function QuestionsEditBoard() {
             selectedFormSectionQuestionSets.map((formQuestionSet) => (
               <div key={formQuestionSet.formQuestionSetID}>
                 {formQuestionSet.formQuestionSetPosition === 1 && (
-                  <NonEmptySectionDropzone position={1} />
+                  <NonEmptySectionDropzone position={1} isFirstDropzone={true} />
                 )}
                 <TemplateQuestionSet formQuestionSet={formQuestionSet} />
-                <NonEmptySectionDropzone position={formQuestionSet.formQuestionSetPosition + 1} />
+                <NonEmptySectionDropzone
+                  position={formQuestionSet.formQuestionSetPosition + 1}
+                  isLastDropzone={
+                    selectedFormSectionQuestionSets.length ===
+                    formQuestionSet.formQuestionSetPosition
+                  }
+                />
               </div>
             ))
           ) : (

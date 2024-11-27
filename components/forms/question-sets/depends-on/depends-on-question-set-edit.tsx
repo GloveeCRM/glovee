@@ -182,11 +182,12 @@ export default function DependsOnQuestionSetEdit({ questionSet }: DependsOnQuest
           <div className="rounded bg-b-300 px-[4px]">
             {questionSetsToDisplay.map((qs) => (
               <div key={qs.formQuestionSetID}>
-                {qs.formQuestionSetPosition === 0 && (
+                {qs.formQuestionSetPosition === 1 && (
                   <NonEmptyQuestionSetDropzone
                     questionSet={questionSet}
-                    position={0}
+                    position={1}
                     dependsOn={selectedOption}
+                    isFirstDropzone={true}
                   />
                 )}
                 <TemplateQuestionSet formQuestionSet={qs} />
@@ -194,6 +195,7 @@ export default function DependsOnQuestionSetEdit({ questionSet }: DependsOnQuest
                   questionSet={questionSet}
                   position={qs.formQuestionSetPosition + 1}
                   dependsOn={selectedOption}
+                  isLastDropzone={questionSetsToDisplay.length === qs.formQuestionSetPosition}
                 />
               </div>
             ))}

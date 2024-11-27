@@ -10,19 +10,25 @@ interface FlatQuestionSetEditProps {
 
 export default function FlatQuestionSetEdit({ questionSet }: FlatQuestionSetEditProps) {
   const questions = questionSet.questions || []
+
   return (
     <div className="rounded bg-g-500 p-[8px] pt-[16px]">
       {questions && questions.length > 0 ? (
         <div className="rounded bg-g-200/80 px-[6px] py-[2px]">
           {questions.map((question) => (
             <div key={question.id}>
-              {question.position === 0 && (
-                <NonEmptyQuestionSetDropzone position={0} questionSet={questionSet} />
+              {question.position === 1 && (
+                <NonEmptyQuestionSetDropzone
+                  position={1}
+                  questionSet={questionSet}
+                  isFirstDropzone={true}
+                />
               )}
               <TemplateQuestion question={question} />
               <NonEmptyQuestionSetDropzone
                 position={question.position + 1}
                 questionSet={questionSet}
+                isLastDropzone={questions.length === question.position + 1}
               />
             </div>
           ))}
