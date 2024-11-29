@@ -17,10 +17,8 @@ import {
   FormTemplateType,
 } from '@/lib/types/form'
 import {
-  fetchFormTemplateCategories,
-  fetchFormTemplateSections,
-  fetchFormTemplateQuestionSets,
-  searchFormTemplates,
+  fetchFormSectionQuestionSets,
+  fetchFormTemplateWithCategoriesAndSections,
 } from '@/lib/data/form'
 
 type FormTemplateEditContextType = {
@@ -33,14 +31,15 @@ type FormTemplateEditContextType = {
   setSelectedFormCategoryID: Dispatch<SetStateAction<number>>
   formSections: FormSectionType[] | null
   setFormSections: Dispatch<SetStateAction<FormSectionType[] | null>>
-  formQuestionSets: FormQuestionSetType[] | null
-  setFormQuestionSets: Dispatch<SetStateAction<FormQuestionSetType[] | null>>
+  selectedFormSectionQuestionSets: FormQuestionSetType[] | null
+  setSelectedFormSectionQuestionSets: Dispatch<SetStateAction<FormQuestionSetType[] | null>>
   selectedFormSectionID: number
   setSelectedFormSectionID: Dispatch<SetStateAction<number>>
   selectedFormQuestionSetID: number
   setSelectedFormQuestionSetID: Dispatch<SetStateAction<number>>
   selectedFormCategorySections: FormSectionType[] | undefined
-  selectedFormSectionQuestionSets: FormQuestionSetType[] | undefined
+  rootSelectedFormSectionQuestionSets: FormQuestionSetType[] | undefined
+  selectedFormQuestionSet: FormQuestionSetType | undefined
   getChildFormQuestionSets: (parentFormQuestionSetID: number) => FormQuestionSetType[] | undefined
   // formID: number
   // template: FormType | null
@@ -71,14 +70,15 @@ const formTemplateEditContextDefaultValues: FormTemplateEditContextType = {
   setSelectedFormCategoryID: () => {},
   formSections: null,
   setFormSections: () => {},
-  formQuestionSets: null,
-  setFormQuestionSets: () => {},
+  selectedFormSectionQuestionSets: null,
+  setSelectedFormSectionQuestionSets: () => {},
   selectedFormSectionID: 0,
   setSelectedFormSectionID: () => {},
   selectedFormQuestionSetID: 0,
   setSelectedFormQuestionSetID: () => {},
   selectedFormCategorySections: undefined,
-  selectedFormSectionQuestionSets: undefined,
+  rootSelectedFormSectionQuestionSets: undefined,
+  selectedFormQuestionSet: undefined,
   getChildFormQuestionSets: () => undefined,
   // formID: 0,
   // template: null,
@@ -115,7 +115,9 @@ export default function FormTemplateEditProvider({
   const [formTemplate, setFormTemplate] = useState<FormTemplateType | null>(null)
   const [formCategories, setFormCategories] = useState<FormCategoryType[] | null>(null)
   const [formSections, setFormSections] = useState<FormSectionType[] | null>(null)
-  const [formQuestionSets, setFormQuestionSets] = useState<FormQuestionSetType[] | null>(null)
+  const [selectedFormSectionQuestionSets, setSelectedFormSectionQuestionSets] = useState<
+    FormQuestionSetType[] | null
+  >(null)
   const [selectedFormCategoryID, setSelectedFormCategoryID] = useState<number>(0)
   const [selectedFormSectionID, setSelectedFormSectionID] = useState<number>(0)
   const [selectedFormQuestionSetID, setSelectedFormQuestionSetID] = useState<number>(0)
@@ -124,58 +126,53 @@ export default function FormTemplateEditProvider({
     return formSections?.filter((section) => section.formCategoryID === selectedFormCategoryID)
   }, [formSections, selectedFormCategoryID])
 
-  const selectedFormSectionQuestionSets = useMemo(() => {
-    return formQuestionSets
-      ?.filter(
-        (questionSet) =>
-          questionSet.formSectionID === selectedFormSectionID &&
-          !questionSet.parentFormQuestionSetID
-      )
-      .sort((a, b) => a.formQuestionSetPosition - b.formQuestionSetPosition)
-  }, [formQuestionSets, selectedFormSectionID])
+  const rootSelectedFormSectionQuestionSets = useMemo(() => {
+    return selectedFormSectionQuestionSets?.filter(
+      (questionSet) => !questionSet.parentFormQuestionSetID
+    )
+  }, [selectedFormSectionQuestionSets])
+
+  const selectedFormQuestionSet = useMemo(() => {
+    return selectedFormSectionQuestionSets?.find(
+      (questionSet) => questionSet.formQuestionSetID === selectedFormQuestionSetID
+    )
+  }, [selectedFormSectionQuestionSets, selectedFormQuestionSetID])
 
   const formCategoryExists = (formCategoryID: number) => {
     return formCategories?.find((category) => category.formCategoryID === formCategoryID)
   }
 
   const getChildFormQuestionSets = (parentFormQuestionSetID: number) => {
-    return formQuestionSets?.filter(
+    return selectedFormSectionQuestionSets?.filter(
       (formQuestionSet) => formQuestionSet.parentFormQuestionSetID === parentFormQuestionSetID
     )
   }
 
   useEffect(() => {
-    async function fetchAndSetFormTemplate() {
-      const { formTemplates } = await searchFormTemplates({
-        filters: {
-          formTemplateID,
-        },
-        limit: 1,
-      })
-      const formTemplate = formTemplates?.[0] || null
-      setFormTemplate(formTemplate)
-    }
-
-    async function fetchAndSetFormTemplateCategories() {
-      const { formCategories } = await fetchFormTemplateCategories({ formTemplateID })
+    async function fetchAndSetTemplateWithCategoriesAndSections() {
+      const { formTemplate, formCategories, formSections } =
+        await fetchFormTemplateWithCategoriesAndSections({ formTemplateID })
+      setFormTemplate(formTemplate || null)
       setFormCategories(formCategories || null)
-    }
-
-    async function fetchAndSetFormTemplateSections() {
-      const { formSections } = await fetchFormTemplateSections({ formTemplateID })
       setFormSections(formSections || null)
     }
 
-    async function fetchAndSetFormTemplateQuestionSets() {
-      const { formQuestionSets } = await fetchFormTemplateQuestionSets({ formTemplateID })
-      setFormQuestionSets(formQuestionSets || null)
+    fetchAndSetTemplateWithCategoriesAndSections()
+  }, [formTemplateID])
+
+  // Fetch the question sets for the selected section
+  useEffect(() => {
+    async function fetchAndSetFormSectionQuestionSets() {
+      const { formQuestionSets } = await fetchFormSectionQuestionSets({
+        formSectionID: selectedFormSectionID,
+      })
+      setSelectedFormSectionQuestionSets(formQuestionSets || null)
     }
 
-    fetchAndSetFormTemplate()
-    fetchAndSetFormTemplateCategories()
-    fetchAndSetFormTemplateSections()
-    fetchAndSetFormTemplateQuestionSets()
-  }, [formTemplateID])
+    if (selectedFormSectionID) {
+      fetchAndSetFormSectionQuestionSets()
+    }
+  }, [selectedFormSectionID])
 
   // Set the first category as selected if no category is selected
   useEffect(() => {
@@ -299,14 +296,15 @@ export default function FormTemplateEditProvider({
     setSelectedFormCategoryID,
     formSections,
     setFormSections,
-    formQuestionSets,
-    setFormQuestionSets,
+    selectedFormSectionQuestionSets,
+    setSelectedFormSectionQuestionSets,
     selectedFormSectionID,
     setSelectedFormSectionID,
     selectedFormQuestionSetID,
     setSelectedFormQuestionSetID,
     selectedFormCategorySections,
-    selectedFormSectionQuestionSets,
+    rootSelectedFormSectionQuestionSets,
+    selectedFormQuestionSet,
     getChildFormQuestionSets,
     // formID,
     // template,

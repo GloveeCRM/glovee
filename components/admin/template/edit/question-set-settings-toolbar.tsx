@@ -1,24 +1,21 @@
 import { motion } from 'framer-motion'
 
-import useQuestionSetActions from '@/hooks/form-template/use-question-set-actions'
 import {
-  isDependsOnQuestionSetType,
-  isFlatQuestionSetType,
-  isLoopQuestionSetType,
+  FormQuestionSetType,
+  isStaticQuestionSetType,
+  isRepeatableQuestionSetType,
+  isConditionalQuestionSetType,
 } from '@/lib/types/form'
+
 import DependsOnQuestionSetSettings from '@/components/forms/question-sets/depends-on/depends-on-question-set-settings'
 
 interface QuestionSetSettingsToolbarProps {
-  questionSetID: number
+  formQuestionSet: FormQuestionSetType
 }
 
 export default function QuestionSetSettingsToolbar({
-  questionSetID,
+  formQuestionSet,
 }: QuestionSetSettingsToolbarProps) {
-  const { getQuestionSetById } = useQuestionSetActions()
-
-  const questionSet = getQuestionSetById(questionSetID)
-
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -27,14 +24,14 @@ export default function QuestionSetSettingsToolbar({
       className="py-[6px] text-[14px]"
     >
       <div className="mb-[12px]">Question Set Settings</div>
-      {questionSet && (
+      {formQuestionSet && (
         <div className="flex flex-col gap-[10px]">
-          {isFlatQuestionSetType(questionSet) ? (
-            <div>Questions: {questionSet.questions?.length}</div>
-          ) : isLoopQuestionSetType(questionSet) ? (
+          {isStaticQuestionSetType(formQuestionSet) ? (
+            <div>Questions: {formQuestionSet.questions?.length}</div>
+          ) : isRepeatableQuestionSetType(formQuestionSet) ? (
             <div>loop</div>
-          ) : isDependsOnQuestionSetType(questionSet) ? (
-            <DependsOnQuestionSetSettings questionSet={questionSet} />
+          ) : isConditionalQuestionSetType(formQuestionSet) ? (
+            <DependsOnQuestionSetSettings formQuestionSet={formQuestionSet} />
           ) : (
             <div>Settings for this question set type are not available</div>
           )}

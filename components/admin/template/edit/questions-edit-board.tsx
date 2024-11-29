@@ -6,14 +6,15 @@ import EmptySectionDropzone from './empty-section-dropzone'
 import NonEmptySectionDropzone from './non-empty-section-dropzone'
 
 export default function QuestionsEditBoard() {
-  const { selectedFormSectionID, selectedFormSectionQuestionSets } = useFormTemplateEditContext()
+  const { selectedFormSectionID, rootSelectedFormSectionQuestionSets } =
+    useFormTemplateEditContext()
 
   return (
     <>
       {selectedFormSectionID ? (
         <div id="questions-edit-board" className="rounded-lg bg-white p-[4px]">
-          {selectedFormSectionQuestionSets && selectedFormSectionQuestionSets.length > 0 ? (
-            selectedFormSectionQuestionSets.map((formQuestionSet) => (
+          {rootSelectedFormSectionQuestionSets && rootSelectedFormSectionQuestionSets.length > 0 ? (
+            rootSelectedFormSectionQuestionSets.map((formQuestionSet) => (
               <div key={formQuestionSet.formQuestionSetID}>
                 {formQuestionSet.formQuestionSetPosition === 1 && (
                   <NonEmptySectionDropzone position={1} isFirstDropzone={true} />
@@ -22,7 +23,7 @@ export default function QuestionsEditBoard() {
                 <NonEmptySectionDropzone
                   position={formQuestionSet.formQuestionSetPosition + 1}
                   isLastDropzone={
-                    selectedFormSectionQuestionSets.length ===
+                    rootSelectedFormSectionQuestionSets.length ===
                     formQuestionSet.formQuestionSetPosition
                   }
                 />

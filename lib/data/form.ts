@@ -59,71 +59,58 @@ export async function searchFormTemplates({
   return { error, formTemplates: data, totalCount: totalCount || 0 }
 }
 
-interface FetchFormTemplateCategoriesProps {
+interface FetchFormTemplateWithCategoriesAndSectionsProps {
   formTemplateID: number
 }
 
-interface FetchFormTemplateCategoriesResponse {
+interface FetchFormTemplateWithCategoriesAndSectionsResponse {
+  formTemplate?: FormTemplateType
   formCategories?: FormCategoryType[]
-  error?: string
-}
-
-export async function fetchFormTemplateCategories({
-  formTemplateID,
-}: FetchFormTemplateCategoriesProps): Promise<FetchFormTemplateCategoriesResponse> {
-  const queryParams = new URLSearchParams()
-  queryParams.append('form_template_id', formTemplateID.toString())
-
-  const { data, error } = await apiRequest<FormCategoryType[]>({
-    path: `rpc/form_template_categories?${queryParams.toString()}`,
-    method: 'GET',
-    authRequired: true,
-  })
-
-  return { error, formCategories: data }
-}
-
-interface FetchFormTemplateSectionsProps {
-  formTemplateID: number
-}
-
-interface FetchFormTemplateSectionsResponse {
   formSections?: FormSectionType[]
   error?: string
 }
 
-export async function fetchFormTemplateSections({
+export async function fetchFormTemplateWithCategoriesAndSections({
   formTemplateID,
-}: FetchFormTemplateSectionsProps): Promise<FetchFormTemplateSectionsResponse> {
+}: FetchFormTemplateWithCategoriesAndSectionsProps): Promise<FetchFormTemplateWithCategoriesAndSectionsResponse> {
   const queryParams = new URLSearchParams()
   queryParams.append('form_template_id', formTemplateID.toString())
 
-  const { data, error } = await apiRequest<FormSectionType[]>({
-    path: `rpc/form_template_sections?${queryParams.toString()}`,
+  const { data, error } = await apiRequest<{
+    formTemplate: FormTemplateType
+    formCategories: FormCategoryType[]
+    formSections: FormSectionType[]
+  }>({
+    path: `rpc/form_template_with_categories_and_sections?${queryParams.toString()}`,
     method: 'GET',
     authRequired: true,
   })
 
-  return { formSections: data, error }
+  return {
+    formTemplate: data?.formTemplate,
+    formCategories: data?.formCategories,
+    formSections: data?.formSections,
+    error,
+  }
 }
 
-interface FetchFormTemplateQuestionSetsProps {
-  formTemplateID: number
+interface FetchFormSectionQuestionSetsProps {
+  formSectionID: number
 }
 
-interface FetchFormTemplateQuestionSetsResponse {
+interface FetchFormSectionQuestionSetsResponse {
   formQuestionSets?: FormQuestionSetType[]
   error?: string
 }
 
-export async function fetchFormTemplateQuestionSets({
-  formTemplateID,
-}: FetchFormTemplateQuestionSetsProps): Promise<FetchFormTemplateQuestionSetsResponse> {
+export async function fetchFormSectionQuestionSets({
+  formSectionID,
+}: FetchFormSectionQuestionSetsProps): Promise<FetchFormSectionQuestionSetsResponse> {
   const queryParams = new URLSearchParams()
-  queryParams.append('form_template_id', formTemplateID.toString())
+  queryParams.append('form_section_id', formSectionID.toString())
 
   const { data, error } = await apiRequest<FormQuestionSetType[]>({
-    path: `rpc/form_template_question_sets?${queryParams.toString()}`,
+    path: `rpc/form_template_section_question_sets?${queryParams.toString()}`,
     method: 'GET',
     authRequired: true,
   })

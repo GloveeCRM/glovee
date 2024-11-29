@@ -21,7 +21,7 @@ interface DeleteFormQuestionSetResponse {
 }
 
 export default function useQuestionSetActions() {
-  const { setFormQuestionSets } = useFormTemplateEditContext()
+  const { setSelectedFormSectionQuestionSets } = useFormTemplateEditContext()
 
   async function createFormQuestionSet({
     newFormQuestionSet,
@@ -30,7 +30,7 @@ export default function useQuestionSetActions() {
       formQuestionSet: newFormQuestionSet,
     })
     if (!error) {
-      setFormQuestionSets(formQuestionSets || [])
+      setSelectedFormSectionQuestionSets(formQuestionSets || [])
     }
     return { error }
   }
@@ -42,7 +42,7 @@ export default function useQuestionSetActions() {
       formQuestionSetID,
     })
     if (!error) {
-      setFormQuestionSets(formQuestionSets || [])
+      setSelectedFormSectionQuestionSets(formQuestionSets || [])
     }
     return { error }
   }

@@ -11,7 +11,6 @@ import {
 import { QuestionType, QuestionTypes, RadioQuestionType } from '@/lib/types/qusetion'
 import { generateRandomID } from '@/lib/utils/id'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
-import useQuestionActions from '@/hooks/form-template/use-question-actions'
 import useQuestionSetActions from '@/hooks/form-template/use-question-set-actions'
 
 interface NonEmptyQuestionSetDropzoneProps {

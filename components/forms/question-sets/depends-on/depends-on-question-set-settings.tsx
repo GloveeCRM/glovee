@@ -5,13 +5,14 @@ import RadioQuestionSettings from '../../questions/radio-question/radio-question
 import { isRadioQuestionType } from '@/lib/types/qusetion'
 import { useEffect } from 'react'
 import useQuestionSetActions from '@/hooks/form-template/use-question-set-actions'
+import { FormQuestionSetType } from '@/lib/types/form'
 
 interface DependsOnQuestionSetSettingsProps {
-  questionSet: TemplateQuestionSetType
+  formQuestionSet: FormQuestionSetType
 }
 
 export default function DependsOnQuestionSetSettings({
-  questionSet,
+  formQuestionSet,
 }: DependsOnQuestionSetSettingsProps) {
   const { removeQuestionSetFromSection } = useQuestionSetActions()
   const question = questionSet.questions?.[0]
