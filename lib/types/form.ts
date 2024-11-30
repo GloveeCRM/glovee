@@ -97,7 +97,7 @@ export type FormQuestionType = {
   formQuestionType: FormQuestionTypes
   formQuestionPosition: number
   createdAt: string
-  questionSettings: FormQuestionSettingsType
+  formQuestionSettings: FormQuestionSettingsType
 }
 
 export type FormQuestionSettingsType = {

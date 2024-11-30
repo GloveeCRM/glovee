@@ -33,23 +33,24 @@ import DocumentQuestion from './document-question/document-question'
 import { isDocumentQuestionType } from '@/lib/types/qusetion'
 
 interface TemplateQuestionProps {
-  question: FormQuestionType
+  formQuestion: FormQuestionType
 }
 
-export default function TemplateQuestion({ question }: TemplateQuestionProps) {
+export default function TemplateQuestion({ formQuestion }: TemplateQuestionProps) {
+  console.log('formQuestion', formQuestion)
   const [isEditing, setIsEditing] = useState<boolean>(false)
   const [isOptionsMenuOpen, setIsOptionsMenuOpen] = useState<boolean>(false)
-  const { selectedQuestionID, setSelectedQuestionID } = useFormTemplateEditContext()
-  const { removeQuestionFromQuestionSet, updateQuestion } = useQuestionActions()
+  const { selectedFormQuestionID, setSelectedFormQuestionID } = useFormTemplateEditContext()
+  const { deleteFormQuestion, updateFormQuestion } = useQuestionActions()
 
   const questionRef = useRef<HTMLDivElement>(null)
   const questionPromptInputRef = useRef<HTMLTextAreaElement>(null)
 
-  const isQuestionSelected = selectedQuestionID === question.formQuestionID
+  const isQuestionSelected = selectedFormQuestionID === formQuestion.formQuestionID
 
   function handleClickQuestion(e: React.MouseEvent<HTMLDivElement>) {
     e.stopPropagation()
-    setSelectedQuestionID(question.formQuestionID)
+    setSelectedFormQuestionID(formQuestion.formQuestionID)
   }
 
   function handleClickEditPrompt() {
@@ -73,15 +74,19 @@ export default function TemplateQuestion({ question }: TemplateQuestionProps) {
   }
 
   function handleClickDeleteQuestion() {
-    removeQuestionFromQuestionSet(question.formQuestionID)
-    setSelectedQuestionID(0)
+    deleteFormQuestion({ formQuestionID: formQuestion.formQuestionID })
+    setSelectedFormQuestionID(0)
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    let updatedFormQuestion: FormQuestionType = {
+      ...formQuestion,
+      formQuestionPrompt: e.currentTarget.value,
+    }
     if (e.key === 'Enter') {
       e.preventDefault()
       setIsEditing(false)
-      updateQuestion({ ...question, prompt: e.currentTarget.value })
+      updateFormQuestion({ updatedFormQuestion })
     } else if (e.key === 'Escape') {
       e.preventDefault()
       setIsEditing(false)
@@ -97,22 +102,26 @@ export default function TemplateQuestion({ question }: TemplateQuestionProps) {
       }
 
       if (questionRef.current && !questionRef.current.contains(e.target as Node)) {
-        setSelectedQuestionID(0)
+        setSelectedFormQuestionID(0)
       }
     }
 
     document.addEventListener('mousedown', handleClickOutsideQuestion)
     return () => document.removeEventListener('mousedown', handleClickOutsideQuestion)
-  }, [setSelectedQuestionID])
+  }, [setSelectedFormQuestionID])
 
   useEffect(() => {
     function handleClickOutsideQuestionPrompt(e: MouseEvent) {
+      let updatedFormQuestion: FormQuestionType = {
+        ...formQuestion,
+        formQuestionPrompt: questionPromptInputRef.current?.value || '',
+      }
       if (
         questionPromptInputRef.current &&
         !questionPromptInputRef.current.contains(e.target as Node)
       ) {
         setIsEditing(false)
-        updateQuestion({ ...question, prompt: questionPromptInputRef.current.value })
+        updateFormQuestion({ updatedFormQuestion })
       }
     }
 
@@ -131,7 +140,7 @@ export default function TemplateQuestion({ question }: TemplateQuestionProps) {
 
     document.addEventListener('mousedown', handleClickOutsideQuestionPrompt)
     return () => document.removeEventListener('mousedown', handleClickOutsideQuestionPrompt)
-  }, [question, isEditing])
+  }, [formQuestion, isEditing])
 
   return (
     <div
@@ -144,13 +153,13 @@ export default function TemplateQuestion({ question }: TemplateQuestionProps) {
           <textarea
             ref={questionPromptInputRef}
             className="mb-[8px] ml-[-3px] mr-[8px] block w-full resize-none overflow-hidden rounded-sm border-[2px] border-dashed border-b-300 bg-n-100 px-[2px] pb-[2px] pt-[1px] focus:border-[1px] focus:border-b-500 focus:outline-none"
-            defaultValue={question.formQuestionPrompt}
+            defaultValue={formQuestion.formQuestionPrompt}
             onChange={handlePromptChange}
             onKeyDown={handleKeyDown}
           />
         ) : (
           <div className="group/prompt mb-[10px] mr-[8px] mt-[2px] flex w-full gap-[8px]">
-            <div>{question.formQuestionPrompt}</div>
+            <div>{formQuestion.formQuestionPrompt}</div>
             <div
               onClick={handleClickEditPrompt}
               className="cursor-pointer opacity-0 transition duration-75 group-hover/prompt:opacity-100"
@@ -178,20 +187,20 @@ export default function TemplateQuestion({ question }: TemplateQuestionProps) {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      {isTextQuestionType(question) ? (
-        <TextInputQuestion question={question} readOnly={true} />
-      ) : isTextareaQuestionType(question) ? (
-        <TextareaQuestion question={question} readOnly={true} />
-      ) : isSelectQuestionType(question) ? (
-        <SelectQuestion question={question} readOnly={true} />
+      {isTextQuestionType(formQuestion) ? (
+        <TextInputQuestion question={formQuestion} readOnly={true} />
+      ) : isTextareaQuestionType(formQuestion) ? (
+        <TextareaQuestion question={formQuestion} readOnly={true} />
+      ) : isSelectQuestionType(formQuestion) ? (
+        <SelectQuestion question={formQuestion} readOnly={true} />
       ) : isDateQuestionType(question) ? (
-        <DateInputQuestion question={question} readOnly={true} />
-      ) : isRadioQuestionType(question) ? (
-        <RadioQuestion question={question} readOnly={true} />
-      ) : isCheckboxQuestionType(question) ? (
-        <CheckboxQuestion question={question} readOnly={true} />
+        <DateInputQuestion question={formQuestion} readOnly={true} />
+      ) : isRadioQuestionType(formQuestion) ? (
+        <RadioQuestion question={formQuestion} readOnly={true} />
+      ) : isCheckboxQuestionType(formQuestion) ? (
+        <CheckboxQuestion question={formQuestion} readOnly={true} />
       ) : isDocumentQuestionType(question) ? (
-        <DocumentQuestion question={question} readOnly={true} />
+        <DocumentQuestion question={formQuestion} readOnly={true} />
       ) : null}
     </div>
   )

@@ -299,8 +299,52 @@ export async function createFormTemplateQuestion({
       formQuestionPrompt: formQuestion.formQuestionPrompt,
       formQuestionType: formQuestion.formQuestionType,
       formQuestionPosition: formQuestion.formQuestionPosition,
-      formQuestionSettings: formQuestion.questionSettings,
+      formQuestionSettings: formQuestion.formQuestionSettings,
     },
+    authRequired: true,
+  })
+
+  return { formQuestions: data?.formQuestions, error }
+}
+
+interface DeleteFormTemplateQuestionProps {
+  formQuestionID: number
+}
+
+interface DeleteFormTemplateQuestionResponse {
+  formQuestions?: FormQuestionType[]
+  error?: string
+}
+
+export async function deleteFormTemplateQuestion({
+  formQuestionID,
+}: DeleteFormTemplateQuestionProps): Promise<DeleteFormTemplateQuestionResponse> {
+  const { data, error } = await apiRequest<{ formQuestions: FormQuestionType[] }>({
+    path: 'rpc/delete_form_template_question',
+    method: 'POST',
+    data: { formQuestionID },
+    authRequired: true,
+  })
+
+  return { formQuestions: data?.formQuestions, error }
+}
+
+interface UpdateFormTemplateQuestionProps {
+  updatedFormQuestion: Partial<FormQuestionType>
+}
+
+interface UpdateFormTemplateQuestionResponse {
+  formQuestions?: FormQuestionType[]
+  error?: string
+}
+
+export async function updateFormTemplateQuestion({
+  updatedFormQuestion,
+}: UpdateFormTemplateQuestionProps): Promise<UpdateFormTemplateQuestionResponse> {
+  const { data, error } = await apiRequest<{ formQuestions: FormQuestionType[] }>({
+    path: 'rpc/update_form_template_question',
+    method: 'POST',
+    data: { updatedFormQuestion },
     authRequired: true,
   })
 

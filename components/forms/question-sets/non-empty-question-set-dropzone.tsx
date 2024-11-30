@@ -79,7 +79,7 @@ export default function NonEmptyQuestionSetDropzone({
           formQuestionPrompt: 'Question',
           formQuestionType: draggedObject.object.type,
           formQuestionPosition: 1,
-          questionSettings: {} as FormQuestionSettingsType,
+          formQuestionSettings: {} as FormQuestionSettingsType,
         }
         if (isRadio) {
           newQuestion = {

@@ -27,7 +27,7 @@ export default function TextInputQuestion({ question, readOnly = false }: TextIn
     <div className="relative">
       <input
         type="text"
-        placeholder={question.questionSettings?.placeholder || 'placeholder'}
+        placeholder={question.formQuestionSettings?.placeholder || 'placeholder'}
         disabled={readOnly}
         defaultValue={answer.text || ''}
         onChange={handleChange}

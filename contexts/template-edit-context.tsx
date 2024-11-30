@@ -40,6 +40,8 @@ type FormTemplateEditContextType = {
   setSelectedFormSectionID: Dispatch<SetStateAction<number>>
   selectedFormQuestionSetID: number
   setSelectedFormQuestionSetID: Dispatch<SetStateAction<number>>
+  selectedFormQuestionID: number
+  setSelectedFormQuestionID: Dispatch<SetStateAction<number>>
   selectedFormCategorySections: FormSectionType[] | undefined
   rootSelectedFormSectionQuestionSets: FormQuestionSetType[] | undefined
   selectedFormQuestionSet: FormQuestionSetType | undefined
@@ -84,6 +86,8 @@ const formTemplateEditContextDefaultValues: FormTemplateEditContextType = {
   setSelectedFormSectionID: () => {},
   selectedFormQuestionSetID: 0,
   setSelectedFormQuestionSetID: () => {},
+  selectedFormQuestionID: 0,
+  setSelectedFormQuestionID: () => {},
   selectedFormCategorySections: undefined,
   rootSelectedFormSectionQuestionSets: undefined,
   selectedFormQuestionSet: undefined,
@@ -133,6 +137,7 @@ export default function FormTemplateEditProvider({
   const [selectedFormCategoryID, setSelectedFormCategoryID] = useState<number>(0)
   const [selectedFormSectionID, setSelectedFormSectionID] = useState<number>(0)
   const [selectedFormQuestionSetID, setSelectedFormQuestionSetID] = useState<number>(0)
+  const [selectedFormQuestionID, setSelectedFormQuestionID] = useState<number>(0)
 
   const selectedFormCategorySections = useMemo(() => {
     return formSections?.filter((section) => section.formCategoryID === selectedFormCategoryID)
@@ -326,6 +331,8 @@ export default function FormTemplateEditProvider({
     setSelectedFormSectionID,
     selectedFormQuestionSetID,
     setSelectedFormQuestionSetID,
+    selectedFormQuestionID,
+    setSelectedFormQuestionID,
     selectedFormCategorySections,
     rootSelectedFormSectionQuestionSets,
     selectedFormQuestionSet,

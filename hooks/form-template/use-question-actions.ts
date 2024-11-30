@@ -4,7 +4,11 @@ import { TemplateQuestionSetType } from '@/lib/types/template'
 import { QuestionType } from '@/lib/types/qusetion'
 import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
 import { FormQuestionType } from '@/lib/types/form'
-import { createFormTemplateQuestion } from '@/lib/actions/form'
+import {
+  createFormTemplateQuestion,
+  deleteFormTemplateQuestion,
+  updateFormTemplateQuestion,
+} from '@/lib/actions/form'
 
 interface CreateFormQuestionProps {
   newFormQuestion: Partial<FormQuestionType>
@@ -14,8 +18,23 @@ interface CreateFormQuestionResponse {
   error?: string
 }
 
+interface UpdateFormQuestionProps {
+  updatedFormQuestion: Partial<FormQuestionType>
+}
+
+interface UpdateFormQuestionResponse {
+  error?: string
+}
+
+interface DeleteFormQuestionProps {
+  formQuestionID: number
+}
+
+interface DeleteFormQuestionResponse {
+  error?: string
+}
+
 export default function useQuestionActions() {
-  // const { template, setTemplate } = useFormTemplateEditContext()
   const { setSelectedFormSectionQuestions } = useFormTemplateEditContext()
 
   async function createFormQuestion({
@@ -23,6 +42,30 @@ export default function useQuestionActions() {
   }: CreateFormQuestionProps): Promise<CreateFormQuestionResponse> {
     const { formQuestions, error } = await createFormTemplateQuestion({
       formQuestion: newFormQuestion,
+    })
+    if (!error) {
+      setSelectedFormSectionQuestions(formQuestions || [])
+    }
+    return { error }
+  }
+
+  async function updateFormQuestion({
+    updatedFormQuestion,
+  }: UpdateFormQuestionProps): Promise<UpdateFormQuestionResponse> {
+    const { formQuestions, error } = await updateFormTemplateQuestion({
+      updatedFormQuestion,
+    })
+    if (!error) {
+      setSelectedFormSectionQuestions(formQuestions || [])
+    }
+    return { error }
+  }
+
+  async function deleteFormQuestion({
+    formQuestionID,
+  }: DeleteFormQuestionProps): Promise<DeleteFormQuestionResponse> {
+    const { formQuestions, error } = await deleteFormTemplateQuestion({
+      formQuestionID,
     })
     if (!error) {
       setSelectedFormSectionQuestions(formQuestions || [])
@@ -264,6 +307,8 @@ export default function useQuestionActions() {
 
   return {
     createFormQuestion,
+    deleteFormQuestion,
+    updateFormQuestion,
     // getTemplateQuestionByID,
     // getQuestionsInQuestionSet,
     // createQuestionInQuestionSet,

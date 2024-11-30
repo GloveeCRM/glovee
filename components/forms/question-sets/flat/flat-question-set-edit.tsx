@@ -26,7 +26,7 @@ export default function FlatQuestionSetEdit({ questionSet }: FlatQuestionSetEdit
                   isFirstDropzone={true}
                 />
               )}
-              <TemplateQuestion question={question} />
+              <TemplateQuestion formQuestion={question} />
               <NonEmptyQuestionSetDropzone
                 position={question.formQuestionPosition + 1}
                 questionSet={questionSet}
