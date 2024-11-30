@@ -65,7 +65,7 @@ export type FormQuestionSetType = {
   dependsOnOptionID?: number
   createdAt: string
   questionSets?: FormQuestionSetType[]
-  questions?: QuestionType[]
+  questions?: FormQuestionType[]
 }
 
 export function isStaticQuestionSetType(questionSet: FormQuestionSetType) {
@@ -78,4 +78,32 @@ export function isRepeatableQuestionSetType(questionSet: FormQuestionSetType) {
 
 export function isConditionalQuestionSetType(questionSet: FormQuestionSetType) {
   return questionSet.formQuestionSetType === FormQuestionSetTypes.CONDITIONAL
+}
+
+export enum FormQuestionTypes {
+  TEXT = 'text',
+  TEXTAREA = 'textarea',
+  SELECT = 'select',
+  DATE = 'date',
+  RADIO = 'radio',
+  CHECKBOX = 'checkbox',
+  FILE = 'file',
+}
+
+export type FormQuestionType = {
+  formQuestionID: number
+  formQuestionSetID: number
+  questionPrompt: string
+  questionType: FormQuestionTypes
+  questionPosition: number
+  createdAt: string
+  questionSettings?: FormQuestionSettingsType
+}
+
+export type FormQuestionSettingsType = {
+  formQuestionSettingsID: number
+  formQuestionID: number
+  helperText: string
+  isRequired: boolean
+  createdAt: string
 }

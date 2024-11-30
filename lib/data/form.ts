@@ -3,6 +3,7 @@
 import {
   FormCategoryType,
   FormQuestionSetType,
+  FormQuestionType,
   FormSectionType,
   FormTemplateType,
   FormType,
@@ -94,28 +95,32 @@ export async function fetchFormTemplateWithCategoriesAndSections({
   }
 }
 
-interface FetchFormSectionQuestionSetsProps {
+interface FetchFormTemplateSectionQuestionSetsAndQuestionsProps {
   formSectionID: number
 }
 
-interface FetchFormSectionQuestionSetsResponse {
+interface FetchFormTemplateSectionQuestionSetsAndQuestionsResponse {
   formQuestionSets?: FormQuestionSetType[]
+  formQuestions?: FormQuestionType[]
   error?: string
 }
 
-export async function fetchFormSectionQuestionSets({
+export async function fetchFormTemplateSectionQuestionSetsAndQuestions({
   formSectionID,
-}: FetchFormSectionQuestionSetsProps): Promise<FetchFormSectionQuestionSetsResponse> {
+}: FetchFormTemplateSectionQuestionSetsAndQuestionsProps): Promise<FetchFormTemplateSectionQuestionSetsAndQuestionsResponse> {
   const queryParams = new URLSearchParams()
   queryParams.append('form_section_id', formSectionID.toString())
 
-  const { data, error } = await apiRequest<FormQuestionSetType[]>({
-    path: `rpc/form_template_section_question_sets?${queryParams.toString()}`,
+  const { data, error } = await apiRequest<{
+    formQuestionSets: FormQuestionSetType[]
+    formQuestions: FormQuestionType[]
+  }>({
+    path: `rpc/form_template_section_question_sets_and_questions?${queryParams.toString()}`,
     method: 'GET',
     authRequired: true,
   })
 
-  return { formQuestionSets: data, error }
+  return { formQuestionSets: data?.formQuestionSets, formQuestions: data?.formQuestions, error }
 }
 
 interface SearchFormsInput {

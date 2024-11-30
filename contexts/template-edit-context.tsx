@@ -13,11 +13,12 @@ import {
 import {
   FormCategoryType,
   FormQuestionSetType,
+  FormQuestionType,
   FormSectionType,
   FormTemplateType,
 } from '@/lib/types/form'
 import {
-  fetchFormSectionQuestionSets,
+  fetchFormTemplateSectionQuestionSetsAndQuestions,
   fetchFormTemplateWithCategoriesAndSections,
 } from '@/lib/data/form'
 
@@ -33,6 +34,8 @@ type FormTemplateEditContextType = {
   setFormSections: Dispatch<SetStateAction<FormSectionType[] | null>>
   selectedFormSectionQuestionSets: FormQuestionSetType[] | null
   setSelectedFormSectionQuestionSets: Dispatch<SetStateAction<FormQuestionSetType[] | null>>
+  selectedFormSectionQuestions: FormQuestionType[] | null
+  setSelectedFormSectionQuestions: Dispatch<SetStateAction<FormQuestionType[] | null>>
   selectedFormSectionID: number
   setSelectedFormSectionID: Dispatch<SetStateAction<number>>
   selectedFormQuestionSetID: number
@@ -72,6 +75,8 @@ const formTemplateEditContextDefaultValues: FormTemplateEditContextType = {
   setFormSections: () => {},
   selectedFormSectionQuestionSets: null,
   setSelectedFormSectionQuestionSets: () => {},
+  selectedFormSectionQuestions: null,
+  setSelectedFormSectionQuestions: () => {},
   selectedFormSectionID: 0,
   setSelectedFormSectionID: () => {},
   selectedFormQuestionSetID: 0,
@@ -118,6 +123,9 @@ export default function FormTemplateEditProvider({
   const [selectedFormSectionQuestionSets, setSelectedFormSectionQuestionSets] = useState<
     FormQuestionSetType[] | null
   >(null)
+  const [selectedFormSectionQuestions, setSelectedFormSectionQuestions] = useState<
+    FormQuestionType[] | null
+  >(null)
   const [selectedFormCategoryID, setSelectedFormCategoryID] = useState<number>(0)
   const [selectedFormSectionID, setSelectedFormSectionID] = useState<number>(0)
   const [selectedFormQuestionSetID, setSelectedFormQuestionSetID] = useState<number>(0)
@@ -153,8 +161,8 @@ export default function FormTemplateEditProvider({
       const { formTemplate, formCategories, formSections } =
         await fetchFormTemplateWithCategoriesAndSections({ formTemplateID })
       setFormTemplate(formTemplate || null)
-      setFormCategories(formCategories || null)
-      setFormSections(formSections || null)
+      setFormCategories(formCategories || [])
+      setFormSections(formSections || [])
     }
 
     fetchAndSetTemplateWithCategoriesAndSections()
@@ -162,15 +170,17 @@ export default function FormTemplateEditProvider({
 
   // Fetch the question sets for the selected section
   useEffect(() => {
-    async function fetchAndSetFormSectionQuestionSets() {
-      const { formQuestionSets } = await fetchFormSectionQuestionSets({
-        formSectionID: selectedFormSectionID,
-      })
-      setSelectedFormSectionQuestionSets(formQuestionSets || null)
+    async function fetchAndSetFormTemplateSectionQuestionSetsAndQuestions() {
+      const { formQuestionSets, formQuestions } =
+        await fetchFormTemplateSectionQuestionSetsAndQuestions({
+          formSectionID: selectedFormSectionID,
+        })
+      setSelectedFormSectionQuestionSets(formQuestionSets || [])
+      setSelectedFormSectionQuestions(formQuestions || [])
     }
 
     if (selectedFormSectionID) {
-      fetchAndSetFormSectionQuestionSets()
+      fetchAndSetFormTemplateSectionQuestionSetsAndQuestions()
     }
   }, [selectedFormSectionID])
 
@@ -196,6 +206,8 @@ export default function FormTemplateEditProvider({
     }
   }, [selectedFormCategorySections])
 
+  console.log('selectedFormSectionQuestionSets', selectedFormSectionQuestionSets)
+  console.log('selectedFormSectionQuestions', selectedFormSectionQuestions)
   // const [formCategories, setFormCategories] = useState<FormCategoryType[] | null>(null)
   // const [savedTemplate, setSavedTemplate] = useState<FormType | null>(null)
   // const [selectedCategoryID, setSelectedCategoryID] = useState<number>(
@@ -298,6 +310,8 @@ export default function FormTemplateEditProvider({
     setFormSections,
     selectedFormSectionQuestionSets,
     setSelectedFormSectionQuestionSets,
+    selectedFormSectionQuestions,
+    setSelectedFormSectionQuestions,
     selectedFormSectionID,
     setSelectedFormSectionID,
     selectedFormQuestionSetID,
