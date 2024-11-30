@@ -3,247 +3,271 @@
 import { TemplateQuestionSetType } from '@/lib/types/template'
 import { QuestionType } from '@/lib/types/qusetion'
 import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+import { FormQuestionType } from '@/lib/types/form'
+import { createFormTemplateQuestion } from '@/lib/actions/form'
+
+interface CreateFormQuestionProps {
+  newFormQuestion: Partial<FormQuestionType>
+}
+
+interface CreateFormQuestionResponse {
+  error?: string
+}
 
 export default function useQuestionActions() {
-  const { template, setTemplate } = useFormTemplateEditContext()
+  // const { template, setTemplate } = useFormTemplateEditContext()
+  const { setSelectedFormSectionQuestions } = useFormTemplateEditContext()
 
-  function getTemplateQuestionByID(questionID: number) {
-    if (!template || !template.categories) return null
-
-    function searchQuestions(questionSets: TemplateQuestionSetType[]): QuestionType | null {
-      for (const questionSet of questionSets) {
-        for (const question of questionSet.questions || []) {
-          if (question.id === questionID) return question
-        }
-
-        // Recursively search in nested question sets, if any
-        if (questionSet.questionSets && questionSet.questionSets.length > 0) {
-          const foundQuestion = searchQuestions(questionSet.questionSets)
-          if (foundQuestion) return foundQuestion
-        }
-      }
-      return null
+  async function createFormQuestion({
+    newFormQuestion,
+  }: CreateFormQuestionProps): Promise<CreateFormQuestionResponse> {
+    const { formQuestions, error } = await createFormTemplateQuestion({
+      formQuestion: newFormQuestion,
+    })
+    if (!error) {
+      setSelectedFormSectionQuestions(formQuestions || [])
     }
-
-    for (const category of template.categories) {
-      if (!category.sections) continue
-
-      for (const section of category.sections) {
-        if (!section.questionSets) continue
-
-        const foundQuestion = searchQuestions(section.questionSets)
-        if (foundQuestion) return foundQuestion
-      }
-    }
-
-    return null
+    return { error }
   }
 
-  function getQuestionsInQuestionSet(questionSetID: number) {
-    if (!template || !template.categories) return
+  // function getTemplateQuestionByID(questionID: number) {
+  //   if (!template || !template.categories) return null
 
-    // Recursive helper function to search within nested question sets
-    function searchQuestionSets(questionSets: TemplateQuestionSetType[]): QuestionType[] | null {
-      for (const questionSet of questionSets) {
-        // Base case: if the current question set matches, return its questions
-        if (questionSet.id === questionSetID) return questionSet.questions || null
+  //   function searchQuestions(questionSets: TemplateQuestionSetType[]): QuestionType | null {
+  //     for (const questionSet of questionSets) {
+  //       for (const question of questionSet.questions || []) {
+  //         if (question.id === questionID) return question
+  //       }
 
-        // Recursive case: if the question set has nested question sets, search within them
-        if (questionSet.questionSets && questionSet.questionSets.length > 0) {
-          const foundQuestions = searchQuestionSets(questionSet.questionSets)
-          if (foundQuestions) return foundQuestions // If questions are found in deeper layers, return them
-        }
-      }
-      return null // Return null if no matching question set is found at any level
-    }
+  //       // Recursively search in nested question sets, if any
+  //       if (questionSet.questionSets && questionSet.questionSets.length > 0) {
+  //         const foundQuestion = searchQuestions(questionSet.questionSets)
+  //         if (foundQuestion) return foundQuestion
+  //       }
+  //     }
+  //     return null
+  //   }
 
-    // Iterating through categories and sections to find and search within the question sets
-    for (const category of template.categories) {
-      if (!category.sections) continue
+  //   for (const category of template.categories) {
+  //     if (!category.sections) continue
 
-      for (const section of category.sections) {
-        if (!section.questionSets) continue
+  //     for (const section of category.sections) {
+  //       if (!section.questionSets) continue
 
-        // Call the recursive helper function to search within this section's question sets
-        const foundQuestions = searchQuestionSets(section.questionSets)
-        if (foundQuestions) return foundQuestions // If the matching question set was found, return its questions
-      }
-    }
+  //       const foundQuestion = searchQuestions(section.questionSets)
+  //       if (foundQuestion) return foundQuestion
+  //     }
+  //   }
 
-    return null // Return null if no matching question set is found in any section
-  }
+  //   return null
+  // }
 
-  function createQuestionInQuestionSet(questionSetID: number, newQuestion: QuestionType) {
-    if (!template || !template.categories) return
+  // function getQuestionsInQuestionSet(questionSetID: number) {
+  //   if (!template || !template.categories) return
 
-    const updatedCategories = template.categories.map((category) => {
-      if (!category.sections) return category
+  //   // Recursive helper function to search within nested question sets
+  //   function searchQuestionSets(questionSets: TemplateQuestionSetType[]): QuestionType[] | null {
+  //     for (const questionSet of questionSets) {
+  //       // Base case: if the current question set matches, return its questions
+  //       if (questionSet.id === questionSetID) return questionSet.questions || null
 
-      const updatedSections = category.sections.map((section) => {
-        const updatedQuestionSets = updateQuestionSetsWithNewQuestion(
-          section.questionSets || [],
-          questionSetID,
-          newQuestion
-        )
+  //       // Recursive case: if the question set has nested question sets, search within them
+  //       if (questionSet.questionSets && questionSet.questionSets.length > 0) {
+  //         const foundQuestions = searchQuestionSets(questionSet.questionSets)
+  //         if (foundQuestions) return foundQuestions // If questions are found in deeper layers, return them
+  //       }
+  //     }
+  //     return null // Return null if no matching question set is found at any level
+  //   }
 
-        return { ...section, questionSets: updatedQuestionSets }
-      })
+  //   // Iterating through categories and sections to find and search within the question sets
+  //   for (const category of template.categories) {
+  //     if (!category.sections) continue
 
-      return { ...category, sections: updatedSections }
-    })
+  //     for (const section of category.sections) {
+  //       if (!section.questionSets) continue
 
-    setTemplate({ ...template, categories: updatedCategories })
-  }
+  //       // Call the recursive helper function to search within this section's question sets
+  //       const foundQuestions = searchQuestionSets(section.questionSets)
+  //       if (foundQuestions) return foundQuestions // If the matching question set was found, return its questions
+  //     }
+  //   }
 
-  function updateQuestionSetsWithNewQuestion(
-    questionSets: TemplateQuestionSetType[],
-    questionSetID: number,
-    newQuestion: QuestionType
-  ): TemplateQuestionSetType[] {
-    return questionSets.map((questionSet) => {
-      // If this is the target question set
-      if (questionSet.id === questionSetID) {
-        // Adjust positions for existing questions if necessary
-        const updatedQuestions = [...(questionSet.questions || []), newQuestion]
-          .map((question, index, arr) => {
-            // Increment positions of questions that come after the new question's position
-            if (question.position >= newQuestion.position && question.id !== newQuestion.id) {
-              return { ...question, position: question.position + 1 }
-            }
-            return question
-          })
-          .sort((a, b) => a.position - b.position) // Ensure questions are sorted by their position after adjustment
+  //   return null // Return null if no matching question set is found in any section
+  // }
 
-        // Add the new question in its specified position
-        return { ...questionSet, questions: updatedQuestions }
-      } else if (questionSet.questionSets && questionSet.questionSets.length > 0) {
-        // Recursively search for the target question set in nested question sets
-        return {
-          ...questionSet,
-          questionSets: updateQuestionSetsWithNewQuestion(
-            questionSet.questionSets,
-            questionSetID,
-            newQuestion
-          ),
-        }
-      }
-      return questionSet
-    })
-  }
+  // function createQuestionInQuestionSet(questionSetID: number, newQuestion: QuestionType) {
+  //   if (!template || !template.categories) return
 
-  function removeQuestionFromQuestionSet(questionID: number) {
-    if (!template || !template.categories) return
+  //   const updatedCategories = template.categories.map((category) => {
+  //     if (!category.sections) return category
 
-    const updatedCategories = template.categories.map((category) => {
-      if (!category.sections) return category
+  //     const updatedSections = category.sections.map((section) => {
+  //       const updatedQuestionSets = updateQuestionSetsWithNewQuestion(
+  //         section.questionSets || [],
+  //         questionSetID,
+  //         newQuestion
+  //       )
 
-      const updatedSections = category.sections.map((section) => {
-        const updatedQuestionSets = removeQuestionFromQuestionSetsRecursively(
-          section.questionSets || [],
-          questionID
-        )
+  //       return { ...section, questionSets: updatedQuestionSets }
+  //     })
 
-        return { ...section, questionSets: updatedQuestionSets }
-      })
+  //     return { ...category, sections: updatedSections }
+  //   })
 
-      return { ...category, sections: updatedSections }
-    })
+  //   setTemplate({ ...template, categories: updatedCategories })
+  // }
 
-    setTemplate({ ...template, categories: updatedCategories })
-  }
+  // function updateQuestionSetsWithNewQuestion(
+  //   questionSets: TemplateQuestionSetType[],
+  //   questionSetID: number,
+  //   newQuestion: QuestionType
+  // ): TemplateQuestionSetType[] {
+  //   return questionSets.map((questionSet) => {
+  //     // If this is the target question set
+  //     if (questionSet.id === questionSetID) {
+  //       // Adjust positions for existing questions if necessary
+  //       const updatedQuestions = [...(questionSet.questions || []), newQuestion]
+  //         .map((question, index, arr) => {
+  //           // Increment positions of questions that come after the new question's position
+  //           if (question.position >= newQuestion.position && question.id !== newQuestion.id) {
+  //             return { ...question, position: question.position + 1 }
+  //           }
+  //           return question
+  //         })
+  //         .sort((a, b) => a.position - b.position) // Ensure questions are sorted by their position after adjustment
 
-  function removeQuestionFromQuestionSetsRecursively(
-    questionSets: TemplateQuestionSetType[],
-    questionID: number
-  ) {
-    return questionSets.map((questionSet) => {
-      if (questionSet.questions) {
-        let removedQuestionPosition: number | null = null
+  //       // Add the new question in its specified position
+  //       return { ...questionSet, questions: updatedQuestions }
+  //     } else if (questionSet.questionSets && questionSet.questionSets.length > 0) {
+  //       // Recursively search for the target question set in nested question sets
+  //       return {
+  //         ...questionSet,
+  //         questionSets: updateQuestionSetsWithNewQuestion(
+  //           questionSet.questionSets,
+  //           questionSetID,
+  //           newQuestion
+  //         ),
+  //       }
+  //     }
+  //     return questionSet
+  //   })
+  // }
 
-        // Filter out the question to be removed and capture its position
-        const filteredQuestions = questionSet.questions.filter((question) => {
-          if (question.id === questionID) {
-            removedQuestionPosition = question.position
-            return false // Remove this question
-          }
-          return true
-        })
+  // function removeQuestionFromQuestionSet(questionID: number) {
+  //   if (!template || !template.categories) return
 
-        // Adjust positions of remaining questions if necessary
-        const updatedQuestions = filteredQuestions.map((question) => {
-          if (removedQuestionPosition !== null && question.position > removedQuestionPosition) {
-            return { ...question, position: question.position - 1 }
-          }
-          return question
-        })
+  //   const updatedCategories = template.categories.map((category) => {
+  //     if (!category.sections) return category
 
-        questionSet = { ...questionSet, questions: updatedQuestions }
-      }
+  //     const updatedSections = category.sections.map((section) => {
+  //       const updatedQuestionSets = removeQuestionFromQuestionSetsRecursively(
+  //         section.questionSets || [],
+  //         questionID
+  //       )
 
-      // Recursively handle nested question sets
-      if (questionSet.questionSets) {
-        questionSet = {
-          ...questionSet,
-          questionSets: removeQuestionFromQuestionSetsRecursively(
-            questionSet.questionSets,
-            questionID
-          ),
-        }
-      }
+  //       return { ...section, questionSets: updatedQuestionSets }
+  //     })
 
-      return questionSet
-    })
-  }
+  //     return { ...category, sections: updatedSections }
+  //   })
 
-  function updateQuestion(updatedQuestion: QuestionType) {
-    if (!template || !template.categories) return
+  //   setTemplate({ ...template, categories: updatedCategories })
+  // }
 
-    const updatedCategories = template.categories.map((category) => {
-      if (!category.sections) return category
+  // function removeQuestionFromQuestionSetsRecursively(
+  //   questionSets: TemplateQuestionSetType[],
+  //   questionID: number
+  // ) {
+  //   return questionSets.map((questionSet) => {
+  //     if (questionSet.questions) {
+  //       let removedQuestionPosition: number | null = null
 
-      const updatedSections = category.sections.map((section) => {
-        const updatedQuestionSets =
-          section.questionSets?.map((questionSet) => {
-            return updateQuestionInQuestionSet(questionSet, updatedQuestion)
-          }) || []
+  //       // Filter out the question to be removed and capture its position
+  //       const filteredQuestions = questionSet.questions.filter((question) => {
+  //         if (question.id === questionID) {
+  //           removedQuestionPosition = question.position
+  //           return false // Remove this question
+  //         }
+  //         return true
+  //       })
 
-        return { ...section, questionSets: updatedQuestionSets }
-      })
+  //       // Adjust positions of remaining questions if necessary
+  //       const updatedQuestions = filteredQuestions.map((question) => {
+  //         if (removedQuestionPosition !== null && question.position > removedQuestionPosition) {
+  //           return { ...question, position: question.position - 1 }
+  //         }
+  //         return question
+  //       })
 
-      return { ...category, sections: updatedSections }
-    })
+  //       questionSet = { ...questionSet, questions: updatedQuestions }
+  //     }
 
-    setTemplate({ ...template, categories: updatedCategories })
-  }
+  //     // Recursively handle nested question sets
+  //     if (questionSet.questionSets) {
+  //       questionSet = {
+  //         ...questionSet,
+  //         questionSets: removeQuestionFromQuestionSetsRecursively(
+  //           questionSet.questionSets,
+  //           questionID
+  //         ),
+  //       }
+  //     }
 
-  function updateQuestionInQuestionSet(
-    questionSet: TemplateQuestionSetType,
-    updatedQuestion: QuestionType
-  ): TemplateQuestionSetType {
-    // Update questions in the current question set
-    const updatedQuestions =
-      questionSet.questions?.map((question) => {
-        if (question.id === updatedQuestion.id) {
-          // Merge old question data with new updates
-          return { ...question, ...updatedQuestion }
-        }
-        return question
-      }) || []
+  //     return questionSet
+  //   })
+  // }
 
-    // Recursively update nested question sets if any
-    const updatedNestedQuestionSets =
-      questionSet.questionSets?.map((nestedQuestionSet) => {
-        return updateQuestionInQuestionSet(nestedQuestionSet, updatedQuestion)
-      }) || []
+  // function updateQuestion(updatedQuestion: QuestionType) {
+  //   if (!template || !template.categories) return
 
-    return { ...questionSet, questions: updatedQuestions, questionSets: updatedNestedQuestionSets }
-  }
+  //   const updatedCategories = template.categories.map((category) => {
+  //     if (!category.sections) return category
+
+  //     const updatedSections = category.sections.map((section) => {
+  //       const updatedQuestionSets =
+  //         section.questionSets?.map((questionSet) => {
+  //           return updateQuestionInQuestionSet(questionSet, updatedQuestion)
+  //         }) || []
+
+  //       return { ...section, questionSets: updatedQuestionSets }
+  //     })
+
+  //     return { ...category, sections: updatedSections }
+  //   })
+
+  //   setTemplate({ ...template, categories: updatedCategories })
+  // }
+
+  // function updateQuestionInQuestionSet(
+  //   questionSet: TemplateQuestionSetType,
+  //   updatedQuestion: QuestionType
+  // ): TemplateQuestionSetType {
+  //   // Update questions in the current question set
+  //   const updatedQuestions =
+  //     questionSet.questions?.map((question) => {
+  //       if (question.id === updatedQuestion.id) {
+  //         // Merge old question data with new updates
+  //         return { ...question, ...updatedQuestion }
+  //       }
+  //       return question
+  //     }) || []
+
+  //   // Recursively update nested question sets if any
+  //   const updatedNestedQuestionSets =
+  //     questionSet.questionSets?.map((nestedQuestionSet) => {
+  //       return updateQuestionInQuestionSet(nestedQuestionSet, updatedQuestion)
+  //     }) || []
+
+  //   return { ...questionSet, questions: updatedQuestions, questionSets: updatedNestedQuestionSets }
+  // }
 
   return {
-    getTemplateQuestionByID,
-    getQuestionsInQuestionSet,
-    createQuestionInQuestionSet,
-    removeQuestionFromQuestionSet,
-    updateQuestion,
+    createFormQuestion,
+    // getTemplateQuestionByID,
+    // getQuestionsInQuestionSet,
+    // createQuestionInQuestionSet,
+    // removeQuestionFromQuestionSet,
+    // updateQuestion,
   }
 }

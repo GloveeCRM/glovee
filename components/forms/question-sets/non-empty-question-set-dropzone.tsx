@@ -3,7 +3,9 @@
 import { useState } from 'react'
 
 import {
+  FormQuestionSettingsType,
   FormQuestionSetType,
+  FormQuestionType,
   isConditionalQuestionSetType,
   isRepeatableQuestionSetType,
   isStaticQuestionSetType,
@@ -12,6 +14,7 @@ import { QuestionType, QuestionTypes, RadioQuestionType } from '@/lib/types/quse
 import { generateRandomID } from '@/lib/utils/id'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 import useQuestionSetActions from '@/hooks/form-template/use-question-set-actions'
+import useQuestionActions from '@/hooks/form-template/use-question-actions'
 
 interface NonEmptyQuestionSetDropzoneProps {
   questionSet: FormQuestionSetType
@@ -31,6 +34,7 @@ export default function NonEmptyQuestionSetDropzone({
   const [isDraggedOver, setIsDraggedOver] = useState<boolean>(false)
   const { draggedObject, setDraggedObject } = useDragAndDropContext()
   const { createFormQuestionSet } = useQuestionSetActions()
+  const { createFormQuestion } = useQuestionActions()
 
   const isStatic = isStaticQuestionSetType(questionSet)
   const isRepeatable = isRepeatableQuestionSetType(questionSet)
@@ -70,7 +74,13 @@ export default function NonEmptyQuestionSetDropzone({
         const isCheckbox = draggedObject.object.type === QuestionTypes.CHECKBOX
         const isSelect = draggedObject.object.type === QuestionTypes.SELECT
 
-        let newQuestion: QuestionType
+        let newQuestion: Partial<FormQuestionType> = {
+          formQuestionSetID: questionSet.formQuestionSetID,
+          formQuestionPrompt: 'Question',
+          formQuestionType: draggedObject.object.type,
+          formQuestionPosition: 1,
+          questionSettings: {} as FormQuestionSettingsType,
+        }
         if (isRadio) {
           newQuestion = {
             id: generateRandomID(),
@@ -117,20 +127,8 @@ export default function NonEmptyQuestionSetDropzone({
             questionSetID: questionSet.formQuestionSetID,
             isRequired: false,
           }
-        } else {
-          newQuestion = {
-            id: generateRandomID(),
-            type: draggedObject.object.type,
-            prompt: 'An Untitled Question',
-            position: position,
-            settings: {
-              placeholder: 'Placeholder text',
-            },
-            questionSetID: questionSet.formQuestionSetID,
-            isRequired: false,
-          }
         }
-        createQuestionInQuestionSet(questionSet.formQuestionSetID, newQuestion)
+        createFormQuestion({ newFormQuestion: newQuestion })
       } else {
         const newQuestionSet: Partial<FormQuestionSetType> = {
           formQuestionSetType: draggedObject.object.type,

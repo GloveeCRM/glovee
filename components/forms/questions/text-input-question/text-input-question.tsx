@@ -4,16 +4,20 @@ import { useDebouncedCallback } from 'use-debounce'
 import { ImSpinner2 } from 'react-icons/im'
 import { IoMdCheckmarkCircle, IoIosCloseCircle } from 'react-icons/io'
 
+import { FormQuestionType } from '@/lib/types/form'
 import { TextInputQuestionType } from '@/lib/types/qusetion'
 import useAnswer from '@/hooks/form/use-answer'
 
 interface TextInputQuestionProps {
-  question: TextInputQuestionType
+  question: FormQuestionType
   readOnly?: boolean
 }
 
 export default function TextInputQuestion({ question, readOnly = false }: TextInputQuestionProps) {
-  const { answer, message, updateAnswer } = useAnswer(question.id, question.answer || { text: '' })
+  const { answer, message, updateAnswer } = useAnswer(
+    question.formQuestionID,
+    question.answer || { text: '' }
+  )
 
   const handleChange = useDebouncedCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     updateAnswer({ ...answer, text: e.target.value })
@@ -23,7 +27,7 @@ export default function TextInputQuestion({ question, readOnly = false }: TextIn
     <div className="relative">
       <input
         type="text"
-        placeholder={question.settings.placeholder}
+        placeholder={question.questionSettings?.placeholder || 'placeholder'}
         disabled={readOnly}
         defaultValue={answer.text || ''}
         onChange={handleChange}

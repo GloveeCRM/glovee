@@ -12,8 +12,8 @@ interface LoopQuestionSetEditProps {
 }
 
 export default function LoopQuestionSetEdit({ formQuestionSet }: LoopQuestionSetEditProps) {
-  const { getChildFormQuestionSets } = useFormTemplateEditContext()
-  const childQuestionSets = getChildFormQuestionSets(formQuestionSet.formQuestionSetID)
+  const { formQuestionSetChildFormQuestionSets } = useFormTemplateEditContext()
+  const childQuestionSets = formQuestionSetChildFormQuestionSets(formQuestionSet.formQuestionSetID)
 
   return (
     <div className="rounded bg-r-500 p-[8px] pt-[16px]">

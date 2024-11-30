@@ -43,7 +43,10 @@ type FormTemplateEditContextType = {
   selectedFormCategorySections: FormSectionType[] | undefined
   rootSelectedFormSectionQuestionSets: FormQuestionSetType[] | undefined
   selectedFormQuestionSet: FormQuestionSetType | undefined
-  getChildFormQuestionSets: (parentFormQuestionSetID: number) => FormQuestionSetType[] | undefined
+  formQuestionSetChildFormQuestionSets: (
+    parentFormQuestionSetID: number
+  ) => FormQuestionSetType[] | undefined
+  formQuestionSetQuestions: (formQuestionSetID: number) => FormQuestionType[] | undefined
   // formID: number
   // template: FormType | null
   // setTemplate: Dispatch<SetStateAction<FormType | null>>
@@ -84,7 +87,8 @@ const formTemplateEditContextDefaultValues: FormTemplateEditContextType = {
   selectedFormCategorySections: undefined,
   rootSelectedFormSectionQuestionSets: undefined,
   selectedFormQuestionSet: undefined,
-  getChildFormQuestionSets: () => undefined,
+  formQuestionSetChildFormQuestionSets: () => undefined,
+  formQuestionSetQuestions: () => undefined,
   // formID: 0,
   // template: null,
   // setTemplate: () => {},
@@ -135,9 +139,9 @@ export default function FormTemplateEditProvider({
   }, [formSections, selectedFormCategoryID])
 
   const rootSelectedFormSectionQuestionSets = useMemo(() => {
-    return selectedFormSectionQuestionSets?.filter(
-      (questionSet) => !questionSet.parentFormQuestionSetID
-    )
+    return selectedFormSectionQuestionSets
+      ?.filter((questionSet) => !questionSet.parentFormQuestionSetID)
+      .sort((a, b) => a.formQuestionSetPosition - b.formQuestionSetPosition)
   }, [selectedFormSectionQuestionSets])
 
   const selectedFormQuestionSet = useMemo(() => {
@@ -150,10 +154,18 @@ export default function FormTemplateEditProvider({
     return formCategories?.find((category) => category.formCategoryID === formCategoryID)
   }
 
-  const getChildFormQuestionSets = (parentFormQuestionSetID: number) => {
-    return selectedFormSectionQuestionSets?.filter(
-      (formQuestionSet) => formQuestionSet.parentFormQuestionSetID === parentFormQuestionSetID
-    )
+  const formQuestionSetChildFormQuestionSets = (parentFormQuestionSetID: number) => {
+    return selectedFormSectionQuestionSets
+      ?.filter(
+        (formQuestionSet) => formQuestionSet.parentFormQuestionSetID === parentFormQuestionSetID
+      )
+      .sort((a, b) => a.formQuestionSetPosition - b.formQuestionSetPosition)
+  }
+
+  const formQuestionSetQuestions = (formQuestionSetID: number) => {
+    return selectedFormSectionQuestions
+      ?.filter((formQuestion) => formQuestion.formQuestionSetID === formQuestionSetID)
+      .sort((a, b) => a.formQuestionPosition - b.formQuestionPosition)
   }
 
   useEffect(() => {
@@ -206,8 +218,6 @@ export default function FormTemplateEditProvider({
     }
   }, [selectedFormCategorySections])
 
-  console.log('selectedFormSectionQuestionSets', selectedFormSectionQuestionSets)
-  console.log('selectedFormSectionQuestions', selectedFormSectionQuestions)
   // const [formCategories, setFormCategories] = useState<FormCategoryType[] | null>(null)
   // const [savedTemplate, setSavedTemplate] = useState<FormType | null>(null)
   // const [selectedCategoryID, setSelectedCategoryID] = useState<number>(
@@ -319,7 +329,8 @@ export default function FormTemplateEditProvider({
     selectedFormCategorySections,
     rootSelectedFormSectionQuestionSets,
     selectedFormQuestionSet,
-    getChildFormQuestionSets,
+    formQuestionSetChildFormQuestionSets,
+    formQuestionSetQuestions,
     // formID,
     // template,
     // setTemplate,

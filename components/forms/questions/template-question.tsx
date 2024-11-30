@@ -4,18 +4,18 @@ import { useEffect, useRef, useState } from 'react'
 import { BiTrash } from 'react-icons/bi'
 import { FiEdit2, FiMoreHorizontal } from 'react-icons/fi'
 
-import { QuestionType } from '@/lib/types/qusetion'
 import {
+  FormQuestionType,
   isCheckboxQuestionType,
-  isDateInputQuestionType,
-  isDocumentQuestionType,
+  isDateQuestionType,
   isRadioQuestionType,
   isSelectQuestionType,
-  isTextInputQuestionType,
+  isTextQuestionType,
   isTextareaQuestionType,
-} from '@/lib/types/qusetion'
+} from '@/lib/types/form'
 import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
 import useQuestionActions from '@/hooks/form-template/use-question-actions'
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,9 +30,10 @@ import DateInputQuestion from './date-input-question/date-input-question'
 import RadioQuestion from './radio-question/radio-question'
 import CheckboxQuestion from './checkbox-question/checkbox-question'
 import DocumentQuestion from './document-question/document-question'
+import { isDocumentQuestionType } from '@/lib/types/qusetion'
 
 interface TemplateQuestionProps {
-  question: QuestionType
+  question: FormQuestionType
 }
 
 export default function TemplateQuestion({ question }: TemplateQuestionProps) {
@@ -44,11 +45,11 @@ export default function TemplateQuestion({ question }: TemplateQuestionProps) {
   const questionRef = useRef<HTMLDivElement>(null)
   const questionPromptInputRef = useRef<HTMLTextAreaElement>(null)
 
-  const isQuestionSelected = selectedQuestionID === question.id
+  const isQuestionSelected = selectedQuestionID === question.formQuestionID
 
   function handleClickQuestion(e: React.MouseEvent<HTMLDivElement>) {
     e.stopPropagation()
-    setSelectedQuestionID(question.id)
+    setSelectedQuestionID(question.formQuestionID)
   }
 
   function handleClickEditPrompt() {
@@ -72,7 +73,7 @@ export default function TemplateQuestion({ question }: TemplateQuestionProps) {
   }
 
   function handleClickDeleteQuestion() {
-    removeQuestionFromQuestionSet(question.id)
+    removeQuestionFromQuestionSet(question.formQuestionID)
     setSelectedQuestionID(0)
   }
 
@@ -143,13 +144,13 @@ export default function TemplateQuestion({ question }: TemplateQuestionProps) {
           <textarea
             ref={questionPromptInputRef}
             className="mb-[8px] ml-[-3px] mr-[8px] block w-full resize-none overflow-hidden rounded-sm border-[2px] border-dashed border-b-300 bg-n-100 px-[2px] pb-[2px] pt-[1px] focus:border-[1px] focus:border-b-500 focus:outline-none"
-            defaultValue={question.prompt}
+            defaultValue={question.formQuestionPrompt}
             onChange={handlePromptChange}
             onKeyDown={handleKeyDown}
           />
         ) : (
           <div className="group/prompt mb-[10px] mr-[8px] mt-[2px] flex w-full gap-[8px]">
-            <div>{question.prompt}</div>
+            <div>{question.formQuestionPrompt}</div>
             <div
               onClick={handleClickEditPrompt}
               className="cursor-pointer opacity-0 transition duration-75 group-hover/prompt:opacity-100"
@@ -177,13 +178,13 @@ export default function TemplateQuestion({ question }: TemplateQuestionProps) {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      {isTextInputQuestionType(question) ? (
+      {isTextQuestionType(question) ? (
         <TextInputQuestion question={question} readOnly={true} />
       ) : isTextareaQuestionType(question) ? (
         <TextareaQuestion question={question} readOnly={true} />
       ) : isSelectQuestionType(question) ? (
         <SelectQuestion question={question} readOnly={true} />
-      ) : isDateInputQuestionType(question) ? (
+      ) : isDateQuestionType(question) ? (
         <DateInputQuestion question={question} readOnly={true} />
       ) : isRadioQuestionType(question) ? (
         <RadioQuestion question={question} readOnly={true} />

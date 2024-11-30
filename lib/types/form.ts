@@ -93,11 +93,11 @@ export enum FormQuestionTypes {
 export type FormQuestionType = {
   formQuestionID: number
   formQuestionSetID: number
-  questionPrompt: string
-  questionType: FormQuestionTypes
-  questionPosition: number
+  formQuestionPrompt: string
+  formQuestionType: FormQuestionTypes
+  formQuestionPosition: number
   createdAt: string
-  questionSettings?: FormQuestionSettingsType
+  questionSettings: FormQuestionSettingsType
 }
 
 export type FormQuestionSettingsType = {
@@ -106,4 +106,32 @@ export type FormQuestionSettingsType = {
   helperText: string
   isRequired: boolean
   createdAt: string
+}
+
+export function isTextQuestionType(question: FormQuestionType) {
+  return question.formQuestionType === FormQuestionTypes.TEXT
+}
+
+export function isTextareaQuestionType(question: FormQuestionType) {
+  return question.formQuestionType === FormQuestionTypes.TEXTAREA
+}
+
+export function isSelectQuestionType(question: FormQuestionType) {
+  return question.formQuestionType === FormQuestionTypes.SELECT
+}
+
+export function isDateQuestionType(question: FormQuestionType) {
+  return question.formQuestionType === FormQuestionTypes.DATE
+}
+
+export function isRadioQuestionType(question: FormQuestionType) {
+  return question.formQuestionType === FormQuestionTypes.RADIO
+}
+
+export function isCheckboxQuestionType(question: FormQuestionType) {
+  return question.formQuestionType === FormQuestionTypes.CHECKBOX
+}
+
+export function isFileQuestionType(question: FormQuestionType) {
+  return question.formQuestionType === FormQuestionTypes.FILE
 }
