@@ -24,10 +24,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import TextInputQuestion from './text-input-question/text-input-question'
+import TextQuestion from './text-question/text-question'
 import TextareaQuestion from './textarea-question/textarea-question'
 import SelectQuestion from './select-question/select-question'
-import DateInputQuestion from './date-input-question/date-input-question'
+import DateQuestion from './date-question/date-question'
 import RadioQuestion from './radio-question/radio-question'
 import CheckboxQuestion from './checkbox-question/checkbox-question'
 import FileQuestion from './file-question/file-question'
@@ -187,13 +187,13 @@ export default function TemplateQuestion({ formQuestion }: TemplateQuestionProps
         </DropdownMenu>
       </div>
       {isTextQuestionType(formQuestion) ? (
-        <TextInputQuestion formQuestion={formQuestion} readOnly={true} />
+        <TextQuestion formQuestion={formQuestion} readOnly={true} />
       ) : isTextareaQuestionType(formQuestion) ? (
         <TextareaQuestion formQuestion={formQuestion} readOnly={true} />
       ) : isSelectQuestionType(formQuestion) ? (
         <SelectQuestion formQuestion={formQuestion} readOnly={true} />
       ) : isDateQuestionType(formQuestion) ? (
-        <DateInputQuestion formQuestion={formQuestion} readOnly={true} />
+        <DateQuestion formQuestion={formQuestion} readOnly={true} />
       ) : isRadioQuestionType(formQuestion) ? (
         <RadioQuestion formQuestion={formQuestion} readOnly={true} />
       ) : isCheckboxQuestionType(formQuestion) ? (

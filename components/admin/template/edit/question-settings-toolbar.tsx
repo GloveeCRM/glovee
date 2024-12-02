@@ -10,13 +10,13 @@ import {
   isTextareaQuestionType,
 } from '@/lib/types/form'
 import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
-import TextInputQuestionSettings from '@/components/forms/questions/text-input-question/text-input-question-settings'
+import TextQuestionSettings from '@/components/forms/questions/text-question/text-question-settings'
 import TextareaQuestionSettings from '@/components/forms/questions/textarea-question/textarea-question-settings'
 import SelectQuestionSettings from '@/components/forms/questions/select-question/select-question-settings'
 import RadioQuestionSettings from '@/components/forms/questions/radio-question/radio-question-settings'
 import CheckboxQuestionSettings from '@/components/forms/questions/checkbox-question/checkbox-question-settings'
 import FileQuestionSettings from '@/components/forms/questions/file-question/file-question-settings'
-import DateInputQuestionSettings from '@/components/forms/questions/date-input-question/date-input-question-settings'
+import DateQuestionSettings from '@/components/forms/questions/date-question/date-question-settings'
 
 interface QuestionSettingsToolbarProps {
   formQuestionID: number
@@ -36,13 +36,13 @@ export default function QuestionSettingsToolbar({ formQuestionID }: QuestionSett
       {selectedFormQuestion && (
         <div>
           {isTextQuestionType(selectedFormQuestion) ? (
-            <TextInputQuestionSettings formQuestion={selectedFormQuestion} />
+            <TextQuestionSettings formQuestion={selectedFormQuestion} />
           ) : isTextareaQuestionType(selectedFormQuestion) ? (
             <TextareaQuestionSettings formQuestion={selectedFormQuestion} />
           ) : isSelectQuestionType(selectedFormQuestion) ? (
             <SelectQuestionSettings formQuestion={selectedFormQuestion} />
           ) : isDateQuestionType(selectedFormQuestion) ? (
-            <DateInputQuestionSettings formQuestion={selectedFormQuestion} />
+            <DateQuestionSettings formQuestion={selectedFormQuestion} />
           ) : isRadioQuestionType(selectedFormQuestion) ? (
             <RadioQuestionSettings formQuestion={selectedFormQuestion} />
           ) : isCheckboxQuestionType(selectedFormQuestion) ? (

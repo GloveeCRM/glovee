@@ -9,12 +9,12 @@ import { MONTHS } from '@/lib/constants/date'
 import { compareDates, daysInMonth } from '@/lib/functions/date'
 import useAnswer from '@/hooks/form/use-answer'
 
-interface DateInputQuestionProps {
+interface DateQuestionProps {
   formQuestion: FormQuestionType
   readOnly?: boolean
 }
 
-export default function DateInputQuestion({ formQuestion, readOnly }: DateInputQuestionProps) {
+export default function DateQuestion({ formQuestion, readOnly }: DateQuestionProps) {
   const { answer, message, updateAnswer } = useAnswer(
     formQuestion.formQuestionID,
     formQuestion.answer || { date: '' }

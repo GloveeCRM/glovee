@@ -11,13 +11,11 @@ import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 import { Separator } from '@/components/ui/separator'
 
-interface DateInputQuestionSettingsProps {
+interface DateQuestionSettingsProps {
   formQuestion: FormQuestionType
 }
 
-export default function DateInputQuestionSettings({
-  formQuestion,
-}: DateInputQuestionSettingsProps) {
+export default function DateQuestionSettings({ formQuestion }: DateQuestionSettingsProps) {
   const { updateFormQuestionSettings } = useQuestionActions()
 
   function handleChangeIsRequired(isChecked: boolean) {

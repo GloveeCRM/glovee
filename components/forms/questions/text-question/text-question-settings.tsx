@@ -10,13 +10,11 @@ import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 import { Separator } from '@/components/ui/separator'
 
-interface TextInputQuestionSettingsProps {
+interface TextQuestionSettingsProps {
   formQuestion: FormQuestionType
 }
 
-export default function TextInputQuestionSettings({
-  formQuestion,
-}: TextInputQuestionSettingsProps) {
+export default function TextQuestionSettings({ formQuestion }: TextQuestionSettingsProps) {
   const { updateFormQuestionSettings } = useQuestionActions()
 
   function handleChangeIsRequired(isChecked: boolean) {

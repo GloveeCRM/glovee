@@ -6,7 +6,7 @@ import { FormQuestionTypes } from '@/lib/types/form'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 import { Divider } from '@/components/ui/divider'
 
-export default function DateInputQuestionIcon() {
+export default function DateQuestionIcon() {
   const { setDraggedObject } = useDragAndDropContext()
 
   function handleDragStart(e: React.DragEvent<HTMLDivElement>) {

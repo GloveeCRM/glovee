@@ -7,15 +7,12 @@ import { IoMdCheckmarkCircle, IoIosCloseCircle } from 'react-icons/io'
 import { FormQuestionType } from '@/lib/types/form'
 import useAnswer from '@/hooks/form/use-answer'
 
-interface TextInputQuestionProps {
+interface TextQuestionProps {
   formQuestion: FormQuestionType
   readOnly?: boolean
 }
 
-export default function TextInputQuestion({
-  formQuestion,
-  readOnly = false,
-}: TextInputQuestionProps) {
+export default function TextQuestion({ formQuestion, readOnly = false }: TextQuestionProps) {
   const { answer, message, updateAnswer } = useAnswer(
     formQuestion.formQuestionID,
     formQuestion.answer || { text: '' }
