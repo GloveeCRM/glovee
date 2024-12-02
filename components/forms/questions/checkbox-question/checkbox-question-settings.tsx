@@ -86,20 +86,16 @@ interface AddACheckboxOptionButtonProps {
 }
 
 function AddACheckboxOptionButton({ formQuestion }: AddACheckboxOptionButtonProps) {
-  const { updateFormQuestionSettings } = useQuestionActions()
+  const { createFormQuestionOption } = useQuestionActions()
 
   function handleAddOption() {
-    const options = formQuestion.formQuestionOptions ?? []
+    const newFormQuestionOption: Partial<FormQuestionOptionType> = {
+      formQuestionID: formQuestion.formQuestionID,
+      optionText: `Option ${formQuestion.formQuestionOptions.length + 1}`,
+      optionPosition: formQuestion.formQuestionOptions.length + 1,
+    }
 
-    const newOptionID = generateRandomID()
-    const newOption = { id: newOptionID, position: options.length, value: 'Option' }
-
-    updateFormQuestionSettings({
-      updatedFormQuestionSettings: {
-        ...formQuestion.formQuestionSettings,
-        options: [...options, newOption],
-      },
-    })
+    createFormQuestionOption({ newFormQuestionOption })
   }
 
   return (
@@ -120,19 +116,12 @@ interface CheckboxOptionProps {
 
 function CheckboxOption({ formQuestion, formQuestionOption }: CheckboxOptionProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false)
-  const { updateFormQuestionSettings } = useQuestionActions()
+  const { updateFormQuestionOption, deleteFormQuestionOption } = useQuestionActions()
 
   const optionValueInputRef = useRef<HTMLTextAreaElement>(null)
 
-  function handleDeleteOption(optionID: number) {
-    updateFormQuestionSettings({
-      updatedFormQuestionSettings: {
-        ...formQuestion.formQuestionSettings,
-        options: formQuestion.formQuestionOptions?.filter(
-          (option) => option.formQuestionOptionID !== optionID
-        ),
-      },
-    })
+  function handleDeleteOption(formQuestionOptionID: number) {
+    deleteFormQuestionOption({ formQuestionOptionID })
   }
 
   function handleClickEditValue() {
@@ -154,17 +143,12 @@ function CheckboxOption({ formQuestion, formQuestionOption }: CheckboxOptionProp
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === 'Enter') {
       e.preventDefault()
+      const updatedFormQuestionOption: Partial<FormQuestionOptionType> = {
+        ...formQuestionOption,
+        optionText: e.currentTarget.value,
+      }
       setIsEditing(false)
-      updateFormQuestionSettings({
-        updatedFormQuestionSettings: {
-          ...formQuestion.formQuestionSettings,
-          options: formQuestion.formQuestionOptions?.map((o) =>
-            o.formQuestionOptionID === formQuestionOption.formQuestionOptionID
-              ? { ...o, value: e.currentTarget.value }
-              : o
-          ),
-        },
-      })
+      updateFormQuestionOption({ updatedFormQuestionOption })
     } else if (e.key === 'Escape') {
       e.preventDefault()
       setIsEditing(false)
@@ -174,17 +158,12 @@ function CheckboxOption({ formQuestion, formQuestionOption }: CheckboxOptionProp
   useEffect(() => {
     function handleClickOutsideOption(e: MouseEvent) {
       if (optionValueInputRef.current && !optionValueInputRef.current.contains(e.target as Node)) {
+        const updatedFormQuestionOption: Partial<FormQuestionOptionType> = {
+          ...formQuestionOption,
+          optionText: optionValueInputRef.current?.value,
+        }
         setIsEditing(false)
-        updateFormQuestionSettings({
-          updatedFormQuestionSettings: {
-            ...formQuestion.formQuestionSettings,
-            options: formQuestion.formQuestionOptions?.map((o) =>
-              o.formQuestionOptionID === formQuestionOption.formQuestionOptionID
-                ? { ...o, value: optionValueInputRef.current?.value }
-                : o
-            ),
-          },
-        })
+        updateFormQuestionOption({ updatedFormQuestionOption })
       }
     }
 

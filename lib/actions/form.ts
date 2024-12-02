@@ -11,6 +11,7 @@ import {
   FormTemplateType,
   FormQuestionType,
   FormQuestionSettingsType,
+  FormQuestionOptionType,
 } from '../types/form'
 import { GLOVEE_API_URL } from '@/lib/constants/api'
 import { getSession } from '@/lib/auth/session'
@@ -375,6 +376,72 @@ export async function updateFormTemplateQuestionSettings({
   })
 
   return { formQuestionSettings: data?.formQuestionSettings, error }
+}
+
+interface CreateFormTemplateQuestionOptionProps {
+  formQuestionOption: Partial<FormQuestionOptionType>
+}
+
+interface CreateFormTemplateQuestionOptionResponse {
+  formQuestionOptions?: FormQuestionOptionType[]
+  error?: string
+}
+
+export async function createFormTemplateQuestionOption({
+  formQuestionOption,
+}: CreateFormTemplateQuestionOptionProps): Promise<CreateFormTemplateQuestionOptionResponse> {
+  const { data, error } = await apiRequest<{ formQuestionOptions: FormQuestionOptionType[] }>({
+    path: 'rpc/create_form_template_question_option',
+    method: 'POST',
+    data: { formQuestionOption },
+    authRequired: true,
+  })
+
+  return { formQuestionOptions: data?.formQuestionOptions, error }
+}
+
+interface UpdateFormTemplateQuestionOptionProps {
+  updatedFormQuestionOption: Partial<FormQuestionOptionType>
+}
+
+interface UpdateFormTemplateQuestionOptionResponse {
+  formQuestionOptions?: FormQuestionOptionType[]
+  error?: string
+}
+
+export async function updateFormTemplateQuestionOption({
+  updatedFormQuestionOption,
+}: UpdateFormTemplateQuestionOptionProps): Promise<UpdateFormTemplateQuestionOptionResponse> {
+  const { data, error } = await apiRequest<{ formQuestionOptions: FormQuestionOptionType[] }>({
+    path: 'rpc/update_form_template_question_option',
+    method: 'POST',
+    data: { updatedFormQuestionOption },
+    authRequired: true,
+  })
+
+  return { formQuestionOptions: data?.formQuestionOptions, error }
+}
+
+interface DeleteFormTemplateQuestionOptionProps {
+  formQuestionOptionID: number
+}
+
+interface DeleteFormTemplateQuestionOptionResponse {
+  formQuestionOptions?: FormQuestionOptionType[]
+  error?: string
+}
+
+export async function deleteFormTemplateQuestionOption({
+  formQuestionOptionID,
+}: DeleteFormTemplateQuestionOptionProps): Promise<DeleteFormTemplateQuestionOptionResponse> {
+  const { data, error } = await apiRequest<{ formQuestionOptions: FormQuestionOptionType[] }>({
+    path: 'rpc/delete_form_template_question_option',
+    method: 'POST',
+    data: { formQuestionOptionID },
+    authRequired: true,
+  })
+
+  return { formQuestionOptions: data?.formQuestionOptions, error }
 }
 
 interface CreateNewFormProps {
