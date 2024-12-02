@@ -3,18 +3,18 @@
 import { ImSpinner2 } from 'react-icons/im'
 import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
 
-import { CheckboxQuestionType } from '@/lib/types/qusetion'
+import { FormQuestionType } from '@/lib/types/form'
 import useAnswer from '@/hooks/form/use-answer'
 
 interface CheckboxQuestionProps {
-  question: CheckboxQuestionType
+  formQuestion: FormQuestionType
   readOnly?: boolean
 }
 
-export default function CheckboxQuestion({ question, readOnly }: CheckboxQuestionProps) {
+export default function CheckboxQuestion({ formQuestion, readOnly }: CheckboxQuestionProps) {
   const { answer, message, updateAnswer } = useAnswer(
-    question.id,
-    question.answer || { optionIDs: [] }
+    formQuestion.formQuestionID,
+    formQuestion.answer || { optionIDs: [] }
   )
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -27,26 +27,26 @@ export default function CheckboxQuestion({ question, readOnly }: CheckboxQuestio
     updateAnswer({ ...answer, optionIDs: newSelection })
   }
 
-  const inline = question.settings.display === 'inline'
-  const options = question.options || question.settings.options
+  const inline = formQuestion.formQuestionSettings?.display === 'inline'
+  const options = formQuestion.formQuestionOptions
 
   return (
     <div className="relative">
       <div className={`flex ${inline ? 'gap-[18px]' : 'flex-col gap-[6px]'}`}>
-        {options.map((option) => (
-          <div key={option.id} className="flex items-center gap-[6px]">
+        {options?.map((option) => (
+          <div key={option.formQuestionOptionID} className="flex items-center gap-[6px]">
             <input
               type="checkbox"
-              id={String(option.id)}
-              name={String(question.id)}
-              value={option.id}
+              id={String(option.formQuestionOptionID)}
+              name={String(formQuestion.formQuestionID)}
+              value={option.formQuestionOptionID}
               onChange={handleChange}
-              checked={answer.optionIDs?.includes(option.id) ?? false}
+              checked={answer.optionIDs?.includes(option.formQuestionOptionID) ?? false}
               disabled={readOnly}
               className="h-[16px] w-[16px] accent-n-700"
             />
-            <label htmlFor={String(option.id)} className="text-[14px] text-n-500">
-              {option.value}
+            <label htmlFor={String(option.formQuestionOptionID)} className="text-[14px] text-n-500">
+              {option.optionText}
             </label>
           </div>
         ))}

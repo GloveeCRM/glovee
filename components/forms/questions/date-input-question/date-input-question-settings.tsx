@@ -2,81 +2,93 @@
 
 import { useDebouncedCallback } from 'use-debounce'
 
-import { DateInputQuestionType } from '@/lib/types/qusetion'
+import { FormQuestionType } from '@/lib/types/form'
 import { MONTHS } from '@/lib/constants/date'
 import { daysInMonth } from '@/lib/functions/date'
 import useQuestionActions from '@/hooks/form-template/use-question-actions'
+
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 import { Separator } from '@/components/ui/separator'
 
 interface DateInputQuestionSettingsProps {
-  question: DateInputQuestionType
+  formQuestion: FormQuestionType
 }
 
-export default function DateInputQuestionSettings({ question }: DateInputQuestionSettingsProps) {
-  const { updateQuestion } = useQuestionActions()
+export default function DateInputQuestionSettings({
+  formQuestion,
+}: DateInputQuestionSettingsProps) {
+  const { updateFormQuestionSettings } = useQuestionActions()
 
   function handleChangeIsRequired(isChecked: boolean) {
-    updateQuestion({
-      ...question,
-      isRequired: isChecked,
+    updateFormQuestionSettings({
+      updatedFormQuestionSettings: {
+        ...formQuestion.formQuestionSettings,
+        isRequired: isChecked,
+      },
     })
   }
 
   function handleChangeMinimumDate(date: Date | null) {
-    updateQuestion({
-      ...question,
-      settings: { ...question.settings, minimumDate: date?.toISOString() },
+    updateFormQuestionSettings({
+      updatedFormQuestionSettings: {
+        ...formQuestion.formQuestionSettings,
+        minimumDate: date?.toISOString(),
+      },
     })
   }
 
   function handleChangeMaximumDate(date: Date | null) {
-    updateQuestion({
-      ...question,
-      settings: { ...question.settings, maximumDate: date?.toISOString() },
+    updateFormQuestionSettings({
+      updatedFormQuestionSettings: {
+        ...formQuestion.formQuestionSettings,
+        maximumDate: date?.toISOString(),
+      },
     })
   }
 
   function handleChangeIsMinDateRequired(isChecked: boolean) {
-    updateQuestion({
-      ...question,
-      settings: {
-        ...question.settings,
-        minimumDate: isChecked ? new Date().toISOString() : null,
+    updateFormQuestionSettings({
+      updatedFormQuestionSettings: {
+        ...formQuestion.formQuestionSettings,
+        minimumDate: isChecked ? new Date().toISOString() : undefined,
       },
     })
   }
 
   function handleChangeIsMaxDateRequired(isChecked: boolean) {
-    updateQuestion({
-      ...question,
-      settings: {
-        ...question.settings,
-        maximumDate: isChecked ? new Date().toISOString() : null,
+    updateFormQuestionSettings({
+      updatedFormQuestionSettings: {
+        ...formQuestion.formQuestionSettings,
+        maximumDate: isChecked ? new Date().toISOString() : undefined,
       },
     })
   }
 
   const handleChangeGuide = useDebouncedCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value
-    updateQuestion({
-      ...question,
-      helperText: value,
+    updateFormQuestionSettings({
+      updatedFormQuestionSettings: {
+        ...formQuestion.formQuestionSettings,
+        helperText: value,
+      },
     })
   }, 500)
 
-  const selectedMinDate = question.settings.minimumDate
-    ? new Date(question.settings.minimumDate)
+  const selectedMinDate = formQuestion.formQuestionSettings.minimumDate
+    ? new Date(formQuestion.formQuestionSettings.minimumDate)
     : null
-  const selectedMaxDate = question.settings.maximumDate
-    ? new Date(question.settings.maximumDate)
+  const selectedMaxDate = formQuestion.formQuestionSettings.maximumDate
+    ? new Date(formQuestion.formQuestionSettings.maximumDate)
     : null
 
   return (
     <div className="flex flex-col gap-[12px]">
       <div className="flex items-center gap-[6px]">
-        <Switch checked={question.isRequired} onCheckedChange={handleChangeIsRequired} />
+        <Switch
+          checked={formQuestion.formQuestionSettings.isRequired}
+          onCheckedChange={handleChangeIsRequired}
+        />
         <div>isRequired</div>
       </div>
       <Separator className="bg-n-600" />
@@ -118,7 +130,7 @@ export default function DateInputQuestionSettings({ question }: DateInputQuestio
       <div className="flex flex-col gap-[6px]">
         <div>Guide</div>
         <Textarea
-          defaultValue={question.helperText}
+          defaultValue={formQuestion.formQuestionSettings.helperText || ''}
           className="rounded-sm border-0 bg-n-600/80 text-[12px] focus-visible:ring-1 focus-visible:ring-n-500"
           onChange={handleChangeGuide}
         />

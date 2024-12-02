@@ -3,44 +3,44 @@
 import { ImSpinner2 } from 'react-icons/im'
 import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
 
-import { RadioQuestionType } from '@/lib/types/qusetion'
+import { FormQuestionType } from '@/lib/types/form'
 import useAnswer from '@/hooks/form/use-answer'
 
 interface RadioQuestionProps {
-  question: RadioQuestionType
+  formQuestion: FormQuestionType
   readOnly?: boolean
 }
 
-export default function RadioQuestion({ question, readOnly }: RadioQuestionProps) {
+export default function RadioQuestion({ formQuestion, readOnly }: RadioQuestionProps) {
   const { answer, message, updateAnswer } = useAnswer(
-    question.id,
-    question.answer || { optionIDs: [] }
+    formQuestion.formQuestionID,
+    formQuestion.answer || { optionIDs: [] }
   )
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const selectedOptionID = Number(e.target.value) || 0
     updateAnswer({ ...answer, optionIDs: [selectedOptionID] })
   }
 
-  const inline = question.settings.display === 'inline'
-  const options = question.options || question.settings.options
+  const inline = formQuestion.formQuestionSettings?.display === 'inline'
+  const options = formQuestion.formQuestionOptions
 
   return (
     <div className="relative">
       <div className={`flex ${inline ? 'gap-[18px]' : 'flex-col gap-[4px]'}`}>
-        {options.map((option) => (
-          <div key={option.id} className="flex items-center gap-[4px]">
+        {options?.map((option) => (
+          <div key={option.formQuestionOptionID} className="flex items-center gap-[4px]">
             <input
               type="radio"
-              id={String(option.id)}
-              name={String(question.id)}
-              value={option.id}
+              id={String(option.formQuestionOptionID)}
+              name={String(formQuestion.formQuestionID)}
+              value={option.formQuestionOptionID}
               onChange={handleChange}
-              checked={answer.optionIDs?.[0] === option.id}
+              checked={answer.optionIDs?.[0] === option.formQuestionOptionID}
               disabled={readOnly}
               className="h-[16px] w-[16px] accent-n-700"
             />
-            <label htmlFor={String(option.id)} className="text-[14px]">
-              {option.value}
+            <label htmlFor={String(option.formQuestionOptionID)} className="text-[14px]">
+              {option.optionText}
             </label>
           </div>
         ))}

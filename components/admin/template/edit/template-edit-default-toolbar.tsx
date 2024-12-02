@@ -9,7 +9,7 @@ import TextareaQuestionIcon from '@/components/forms/questions/textarea-question
 import SelectQuestionIcon from '@/components/forms/questions/select-question/select-question-icon'
 import DateInputQuestionIcon from '@/components/forms/questions/date-input-question/date-input-question-icon'
 import RadioQuestionIcon from '@/components/forms/questions/radio-question/radio-question-icon'
-import DocumentQuestionIcon from '@/components/forms/questions/document-question/document-question-icon'
+import FileQuestionIcon from '@/components/forms/questions/file-question/file-question-icon'
 
 export default function TemplateEditDefaultToolbar() {
   return (
@@ -36,7 +36,7 @@ export default function TemplateEditDefaultToolbar() {
           <DateInputQuestionIcon />
           <RadioQuestionIcon />
           <CheckboxQuestionIcon />
-          <DocumentQuestionIcon />
+          <FileQuestionIcon />
         </div>
       </div>
     </motion.div>

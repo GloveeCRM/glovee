@@ -4,22 +4,25 @@ import { useState } from 'react'
 import { ImSpinner2 } from 'react-icons/im'
 import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
 
-import { DateInputQuestionType } from '@/lib/types/qusetion'
+import { FormQuestionType } from '@/lib/types/form'
 import { MONTHS } from '@/lib/constants/date'
 import { compareDates, daysInMonth } from '@/lib/functions/date'
 import useAnswer from '@/hooks/form/use-answer'
 
 interface DateInputQuestionProps {
-  question: DateInputQuestionType
+  formQuestion: FormQuestionType
   readOnly?: boolean
 }
 
-export default function DateInputQuestion({ question, readOnly }: DateInputQuestionProps) {
-  const { answer, message, updateAnswer } = useAnswer(question.id, question.answer || { date: '' })
+export default function DateInputQuestion({ formQuestion, readOnly }: DateInputQuestionProps) {
+  const { answer, message, updateAnswer } = useAnswer(
+    formQuestion.formQuestionID,
+    formQuestion.answer || { date: '' }
+  )
 
   const initialDate = answer.date ? new Date(answer.date) : null
-  const minimumDate = new Date(question.settings.minimumDate || '1900-01-01')
-  const maximumDate = new Date(question.settings.maximumDate || '2100-12-31')
+  const minimumDate = new Date(formQuestion.formQuestionSettings?.minimumDate || '1900-01-01')
+  const maximumDate = new Date(formQuestion.formQuestionSettings?.maximumDate || '2100-12-31')
 
   const [selectedDate, setSelectedDate] = useState({
     year: initialDate ? initialDate.getUTCFullYear() : 0,
@@ -90,7 +93,7 @@ export default function DateInputQuestion({ question, readOnly }: DateInputQuest
         <select
           id="day"
           className="w-full rounded-[3px] border border-n-400 bg-transparent px-[6px] py-[8px] text-[14px] focus-visible:outline-none"
-          placeholder={question.type}
+          placeholder={formQuestion.formQuestionType}
           disabled={readOnly}
           value={selectedDate.day}
           onChange={handleDayChange}
@@ -156,7 +159,7 @@ export default function DateInputQuestion({ question, readOnly }: DateInputQuest
         <select
           id="year"
           className="w-full rounded-[3px] border border-n-400 bg-transparent px-[6px] py-[8px] text-[14px] focus-visible:outline-none"
-          placeholder={question.type}
+          placeholder={formQuestion.formQuestionType}
           disabled={readOnly}
           value={selectedDate.year}
           onChange={handleYearChange}

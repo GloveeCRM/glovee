@@ -3,14 +3,16 @@
 import { useState } from 'react'
 
 import {
+  FormQuestionOptionType,
   FormQuestionSettingsType,
   FormQuestionSetType,
+  FormQuestionTypes,
   FormQuestionType,
   isConditionalQuestionSetType,
   isRepeatableQuestionSetType,
   isStaticQuestionSetType,
 } from '@/lib/types/form'
-import { QuestionType, QuestionTypes, RadioQuestionType } from '@/lib/types/qusetion'
+import { RadioQuestionType } from '@/lib/types/qusetion'
 import { generateRandomID } from '@/lib/utils/id'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 import useQuestionSetActions from '@/hooks/form-template/use-question-set-actions'
@@ -70,63 +72,26 @@ export default function NonEmptyQuestionSetDropzone({
     setIsDraggedOver(false)
     if (isDropAllowed) {
       if (isQuestionOverStatic) {
-        const isRadio = draggedObject.object.type === QuestionTypes.RADIO
-        const isCheckbox = draggedObject.object.type === QuestionTypes.CHECKBOX
-        const isSelect = draggedObject.object.type === QuestionTypes.SELECT
+        const isRadio = draggedObject.object.type === FormQuestionTypes.RADIO
+        const isCheckbox = draggedObject.object.type === FormQuestionTypes.CHECKBOX
+        const isSelect = draggedObject.object.type === FormQuestionTypes.SELECT
 
         let newQuestion: Partial<FormQuestionType> = {
           formQuestionSetID: questionSet.formQuestionSetID,
           formQuestionPrompt: 'Question',
           formQuestionType: draggedObject.object.type,
-          formQuestionPosition: 1,
-          formQuestionSettings: {} as FormQuestionSettingsType,
+          formQuestionPosition: position,
+          formQuestionSettings: {
+            isRequired: false,
+          } as FormQuestionSettingsType,
         }
-        if (isRadio) {
-          newQuestion = {
-            id: generateRandomID(),
-            type: QuestionTypes.RADIO,
-            prompt: 'An Untitled Question',
-            position: position,
-            settings: {
-              display: 'block',
-              options: [
-                { id: generateRandomID(), position: 0, value: 'Option 1' },
-                { id: generateRandomID(), position: 1, value: 'Option 2' },
-              ],
-              defaultOptionID: 0,
+        if (isSelect || isCheckbox || isRadio) {
+          newQuestion.formQuestionOptions = [
+            {
+              optionText: 'Option 1',
+              optionPosition: 1,
             },
-            questionSetID: questionSet.formQuestionSetID,
-            isRequired: false,
-          }
-        } else if (isCheckbox) {
-          newQuestion = {
-            id: generateRandomID(),
-            type: QuestionTypes.CHECKBOX,
-            prompt: 'An Untitled Question',
-            position: position,
-            settings: {
-              display: 'block',
-              options: [{ id: generateRandomID(), position: 0, value: 'Option 1' }],
-            },
-            questionSetID: questionSet.formQuestionSetID,
-            isRequired: false,
-          }
-        } else if (isSelect) {
-          newQuestion = {
-            id: generateRandomID(),
-            type: QuestionTypes.SELECT,
-            prompt: 'An Untitled Question',
-            position: position,
-            settings: {
-              options: [
-                { id: generateRandomID(), position: 0, value: 'Option 1' },
-                { id: generateRandomID(), position: 1, value: 'Option 2' },
-              ],
-              defaultOptionID: 0,
-            },
-            questionSetID: questionSet.formQuestionSetID,
-            isRequired: false,
-          }
+          ] as FormQuestionOptionType[]
         }
         createFormQuestion({ newFormQuestion: newQuestion })
       } else {

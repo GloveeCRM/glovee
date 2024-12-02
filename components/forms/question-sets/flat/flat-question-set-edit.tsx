@@ -30,7 +30,7 @@ export default function FlatQuestionSetEdit({ questionSet }: FlatQuestionSetEdit
               <NonEmptyQuestionSetDropzone
                 position={question.formQuestionPosition + 1}
                 questionSet={questionSet}
-                isLastDropzone={qusetionSetQuestions.length === question.formQuestionPosition + 1}
+                isLastDropzone={qusetionSetQuestions.length === question.formQuestionPosition}
               />
             </div>
           ))}

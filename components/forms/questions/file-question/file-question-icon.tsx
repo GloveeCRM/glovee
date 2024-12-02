@@ -1,10 +1,11 @@
 'use client'
 
-import { QuestionTypes } from '@/lib/types/qusetion'
+import { FormQuestionTypes } from '@/lib/types/form'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
+
 import { Divider } from '@/components/ui/divider'
 
-export default function DocumentQuestionIcon() {
+export default function FileQuestionIcon() {
   const { setDraggedObject } = useDragAndDropContext()
 
   function handleDragStart(e: React.DragEvent<HTMLDivElement>) {
@@ -12,7 +13,7 @@ export default function DocumentQuestionIcon() {
     setDraggedObject({
       type: 'question',
       object: {
-        type: QuestionTypes.DOCUMENT,
+        type: FormQuestionTypes.FILE,
       },
     })
   }
@@ -23,7 +24,7 @@ export default function DocumentQuestionIcon() {
       draggable
       onDragStart={handleDragStart}
     >
-      <span className="text-[12px]">Document</span>
+      <span className="text-[12px]">File</span>
       <div className="mb-[2px] mt-[4px] flex flex-col gap-[2px]">
         <div className="flex w-[35px] items-center">
           <Divider className="mb-[2px] border-n-500" size={2} />

@@ -3,11 +3,12 @@
 import { TemplateQuestionSetType } from '@/lib/types/template'
 import { QuestionType } from '@/lib/types/qusetion'
 import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
-import { FormQuestionType } from '@/lib/types/form'
+import { FormQuestionSettingsType, FormQuestionType } from '@/lib/types/form'
 import {
   createFormTemplateQuestion,
   deleteFormTemplateQuestion,
   updateFormTemplateQuestion,
+  updateFormTemplateQuestionSettings,
 } from '@/lib/actions/form'
 
 interface CreateFormQuestionProps {
@@ -34,8 +35,17 @@ interface DeleteFormQuestionResponse {
   error?: string
 }
 
+interface UpdateFormQuestionSettingsProps {
+  updatedFormQuestionSettings: Partial<FormQuestionSettingsType>
+}
+
+interface UpdateFormQuestionSettingsResponse {
+  error?: string
+}
+
 export default function useQuestionActions() {
-  const { setSelectedFormSectionQuestions } = useFormTemplateEditContext()
+  const { selectedFormSectionQuestions, setSelectedFormSectionQuestions } =
+    useFormTemplateEditContext()
 
   async function createFormQuestion({
     newFormQuestion,
@@ -69,6 +79,24 @@ export default function useQuestionActions() {
     })
     if (!error) {
       setSelectedFormSectionQuestions(formQuestions || [])
+    }
+    return { error }
+  }
+
+  async function updateFormQuestionSettings({
+    updatedFormQuestionSettings,
+  }: UpdateFormQuestionSettingsProps): Promise<UpdateFormQuestionSettingsResponse> {
+    const { formQuestionSettings, error } = await updateFormTemplateQuestionSettings({
+      updatedFormQuestionSettings,
+    })
+    if (formQuestionSettings) {
+      const updatedFormQuestions = selectedFormSectionQuestions?.map((question) => {
+        if (question.formQuestionID === updatedFormQuestionSettings.formQuestionID) {
+          return { ...question, formQuestionSettings }
+        }
+        return question
+      })
+      setSelectedFormSectionQuestions(updatedFormQuestions || [])
     }
     return { error }
   }
@@ -309,6 +337,7 @@ export default function useQuestionActions() {
     createFormQuestion,
     deleteFormQuestion,
     updateFormQuestion,
+    updateFormQuestionSettings,
     // getTemplateQuestionByID,
     // getQuestionsInQuestionSet,
     // createQuestionInQuestionSet,

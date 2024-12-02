@@ -1,6 +1,6 @@
 'use client'
 
-import { QuestionTypes } from '@/lib/types/qusetion'
+import { FormQuestionTypes } from '@/lib/types/form'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 import { Divider } from '@/components/ui/divider'
 
@@ -12,7 +12,7 @@ export default function TextareaQuestionIcon() {
     setDraggedObject({
       type: 'question',
       object: {
-        type: QuestionTypes.TEXTAREA,
+        type: FormQuestionTypes.TEXTAREA,
       },
     })
   }

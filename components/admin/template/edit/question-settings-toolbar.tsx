@@ -1,30 +1,29 @@
 import { motion } from 'framer-motion'
 
-import useQuestionActions from '@/hooks/form-template/use-question-actions'
 import {
   isCheckboxQuestionType,
-  isDateInputQuestionType,
-  isDocumentQuestionType,
+  isDateQuestionType,
+  isFileQuestionType,
   isRadioQuestionType,
   isSelectQuestionType,
-  isTextInputQuestionType,
+  isTextQuestionType,
   isTextareaQuestionType,
-} from '@/lib/types/qusetion'
+} from '@/lib/types/form'
+import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
 import TextInputQuestionSettings from '@/components/forms/questions/text-input-question/text-input-question-settings'
 import TextareaQuestionSettings from '@/components/forms/questions/textarea-question/textarea-question-settings'
 import SelectQuestionSettings from '@/components/forms/questions/select-question/select-question-settings'
 import RadioQuestionSettings from '@/components/forms/questions/radio-question/radio-question-settings'
 import CheckboxQuestionSettings from '@/components/forms/questions/checkbox-question/checkbox-question-settings'
-import DocumentQuestionSettings from '@/components/forms/questions/document-question/document-question-settings'
+import FileQuestionSettings from '@/components/forms/questions/file-question/file-question-settings'
 import DateInputQuestionSettings from '@/components/forms/questions/date-input-question/date-input-question-settings'
 
 interface QuestionSettingsToolbarProps {
-  questionID: number
+  formQuestionID: number
 }
 
-export default function QuestionSettingsToolbar({ questionID }: QuestionSettingsToolbarProps) {
-  const { getTemplateQuestionByID } = useQuestionActions()
-  const question = getTemplateQuestionByID(questionID)
+export default function QuestionSettingsToolbar({ formQuestionID }: QuestionSettingsToolbarProps) {
+  const { selectedFormQuestion } = useFormTemplateEditContext()
 
   return (
     <motion.div
@@ -34,22 +33,22 @@ export default function QuestionSettingsToolbar({ questionID }: QuestionSettings
       className="py-[6px] text-[14px]"
     >
       <div className="mb-[12px]">Question Settings</div>
-      {question && (
+      {selectedFormQuestion && (
         <div>
-          {isTextInputQuestionType(question) ? (
-            <TextInputQuestionSettings question={question} />
-          ) : isTextareaQuestionType(question) ? (
-            <TextareaQuestionSettings question={question} />
-          ) : isSelectQuestionType(question) ? (
-            <SelectQuestionSettings question={question} />
-          ) : isDateInputQuestionType(question) ? (
-            <DateInputQuestionSettings question={question} />
-          ) : isRadioQuestionType(question) ? (
-            <RadioQuestionSettings question={question} />
-          ) : isCheckboxQuestionType(question) ? (
-            <CheckboxQuestionSettings question={question} />
-          ) : isDocumentQuestionType(question) ? (
-            <DocumentQuestionSettings question={question} />
+          {isTextQuestionType(selectedFormQuestion) ? (
+            <TextInputQuestionSettings formQuestion={selectedFormQuestion} />
+          ) : isTextareaQuestionType(selectedFormQuestion) ? (
+            <TextareaQuestionSettings formQuestion={selectedFormQuestion} />
+          ) : isSelectQuestionType(selectedFormQuestion) ? (
+            <SelectQuestionSettings formQuestion={selectedFormQuestion} />
+          ) : isDateQuestionType(selectedFormQuestion) ? (
+            <DateInputQuestionSettings formQuestion={selectedFormQuestion} />
+          ) : isRadioQuestionType(selectedFormQuestion) ? (
+            <RadioQuestionSettings formQuestion={selectedFormQuestion} />
+          ) : isCheckboxQuestionType(selectedFormQuestion) ? (
+            <CheckboxQuestionSettings formQuestion={selectedFormQuestion} />
+          ) : isFileQuestionType(selectedFormQuestion) ? (
+            <FileQuestionSettings formQuestion={selectedFormQuestion} />
           ) : (
             <div>Settings for this question type are not available</div>
           )}

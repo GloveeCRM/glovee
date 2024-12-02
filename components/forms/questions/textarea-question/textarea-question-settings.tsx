@@ -2,76 +2,85 @@
 
 import { useDebouncedCallback } from 'use-debounce'
 
-import { TextareaQuestionType } from '@/lib/types/qusetion'
+import { FormQuestionType } from '@/lib/types/form'
 import useQuestionActions from '@/hooks/form-template/use-question-actions'
+
 import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 import { Separator } from '@/components/ui/separator'
 
 interface TextareaQuestionSettingsProps {
-  question: TextareaQuestionType
+  formQuestion: FormQuestionType
 }
 
-export default function TextareaQuestionSettings({ question }: TextareaQuestionSettingsProps) {
-  const { updateQuestion } = useQuestionActions()
+export default function TextareaQuestionSettings({ formQuestion }: TextareaQuestionSettingsProps) {
+  const { updateFormQuestionSettings } = useQuestionActions()
 
   function handleChangeIsRequired(isChecked: boolean) {
-    updateQuestion({
-      ...question,
-      isRequired: isChecked,
+    updateFormQuestionSettings({
+      updatedFormQuestionSettings: {
+        ...formQuestion.formQuestionSettings,
+        isRequired: isChecked,
+      },
     })
   }
 
   const handleChangePlaceholder = useDebouncedCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
-    updateQuestion({
-      ...question,
-      settings: { ...question.settings, placeholder: value },
+    updateFormQuestionSettings({
+      updatedFormQuestionSettings: {
+        ...formQuestion.formQuestionSettings,
+        placeholderText: value,
+      },
     })
   }, 500)
 
   function handleChangeIsMinLengthRequired(isChecked: boolean) {
-    updateQuestion({
-      ...question,
-      settings: {
-        ...question.settings,
-        minimumLength: isChecked ? 0 : null,
+    updateFormQuestionSettings({
+      updatedFormQuestionSettings: {
+        ...formQuestion.formQuestionSettings,
+        minimumLength: isChecked ? 0 : undefined,
       },
     })
   }
 
   function handleChangeIsMaxLengthRequired(isChecked: boolean) {
-    updateQuestion({
-      ...question,
-      settings: {
-        ...question.settings,
-        maximumLength: isChecked ? 0 : null,
+    updateFormQuestionSettings({
+      updatedFormQuestionSettings: {
+        ...formQuestion.formQuestionSettings,
+        maximumLength: isChecked ? 0 : undefined,
       },
     })
   }
 
   function handleChangeMinimumLength(e: React.ChangeEvent<HTMLInputElement>) {
     const value = Number(e.target.value) || 0
-    updateQuestion({
-      ...question,
-      settings: { ...question.settings, minimumLength: value },
+    updateFormQuestionSettings({
+      updatedFormQuestionSettings: {
+        ...formQuestion.formQuestionSettings,
+        minimumLength: value,
+      },
     })
   }
 
   function handleChangeMaximumLength(e: React.ChangeEvent<HTMLInputElement>) {
     const value = Number(e.target.value) || 0
-    updateQuestion({
-      ...question,
-      settings: { ...question.settings, maximumLength: value },
+    updateFormQuestionSettings({
+      updatedFormQuestionSettings: {
+        ...formQuestion.formQuestionSettings,
+        maximumLength: value,
+      },
     })
   }
 
   const handleChangeGuide = useDebouncedCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value
-    updateQuestion({
-      ...question,
-      helperText: value,
+    updateFormQuestionSettings({
+      updatedFormQuestionSettings: {
+        ...formQuestion.formQuestionSettings,
+        helperText: value,
+      },
     })
   }, 500)
 
@@ -79,7 +88,10 @@ export default function TextareaQuestionSettings({ question }: TextareaQuestionS
     <div className="flex flex-col gap-[12px]">
       <div>
         <div className="flex items-center gap-[6px]">
-          <Switch checked={question.isRequired} onCheckedChange={handleChangeIsRequired} />
+          <Switch
+            checked={formQuestion.formQuestionSettings.isRequired}
+            onCheckedChange={handleChangeIsRequired}
+          />
           <div>isRequired</div>
         </div>
       </div>
@@ -88,7 +100,7 @@ export default function TextareaQuestionSettings({ question }: TextareaQuestionS
         <div className="flex flex-col gap-[6px]">
           <div>Placeholder</div>
           <Input
-            defaultValue={question.settings.placeholder}
+            defaultValue={formQuestion.formQuestionSettings.placeholderText || ''}
             className="h-[30px] rounded-sm border-0 bg-n-600/80 px-[8px] text-[12px] focus-visible:ring-1 focus-visible:ring-n-500"
             onChange={handleChangePlaceholder}
           />
@@ -96,15 +108,15 @@ export default function TextareaQuestionSettings({ question }: TextareaQuestionS
         <div className="flex flex-col gap-[6px]">
           <div className="flex items-center gap-[6px]">
             <Switch
-              checked={question.settings.minimumLength !== null}
+              checked={formQuestion.formQuestionSettings.minimumLength !== null}
               onCheckedChange={handleChangeIsMinLengthRequired}
             />
             <div>Minimum Length</div>
           </div>
-          {question.settings.minimumLength !== null && (
+          {formQuestion.formQuestionSettings.minimumLength !== null && (
             <Input
               type="number"
-              defaultValue={question.settings.minimumLength?.toString() || '0'}
+              defaultValue={formQuestion.formQuestionSettings.minimumLength?.toString() || '0'}
               className="h-[30px] rounded-sm border-0 bg-n-600/80 px-[8px] text-[12px] focus-visible:ring-1 focus-visible:ring-n-500"
               onChange={handleChangeMinimumLength}
             />
@@ -113,15 +125,15 @@ export default function TextareaQuestionSettings({ question }: TextareaQuestionS
         <div className="flex flex-col gap-[6px]">
           <div className="flex items-center gap-[6px]">
             <Switch
-              checked={question.settings.maximumLength !== null}
+              checked={formQuestion.formQuestionSettings.maximumLength !== null}
               onCheckedChange={handleChangeIsMaxLengthRequired}
             />
             <div>Maximum Length</div>
           </div>
-          {question.settings.maximumLength !== null && (
+          {formQuestion.formQuestionSettings.maximumLength !== null && (
             <Input
               type="number"
-              defaultValue={question.settings.maximumLength?.toString() || '0'}
+              defaultValue={formQuestion.formQuestionSettings.maximumLength?.toString() || '0'}
               className="h-[30px] rounded-sm border-0 bg-n-600/80 px-[8px] text-[12px] focus-visible:ring-1 focus-visible:ring-n-500"
               onChange={handleChangeMaximumLength}
             />
@@ -132,7 +144,7 @@ export default function TextareaQuestionSettings({ question }: TextareaQuestionS
       <div className="flex flex-col gap-[6px]">
         <div>Guide</div>
         <Textarea
-          defaultValue={question.helperText}
+          defaultValue={formQuestion.formQuestionSettings.helperText || ''}
           className="rounded-sm border-0 bg-n-600/80 px-[8px] text-[12px] focus-visible:ring-1 focus-visible:ring-n-500"
           onChange={handleChangeGuide}
         />

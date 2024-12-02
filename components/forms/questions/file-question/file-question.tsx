@@ -8,18 +8,18 @@ import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
 import { FiUpload } from 'react-icons/fi'
 import { LuDownload, LuFileText } from 'react-icons/lu'
 
-import { DocumentQuestionType } from '@/lib/types/qusetion'
+import { FormQuestionType } from '@/lib/types/form'
 import useAnswer from '@/hooks/form/use-answer'
 
-interface DocumentQuestionProps {
-  question: DocumentQuestionType
+interface FileQuestionProps {
+  formQuestion: FormQuestionType
   readOnly?: boolean
 }
 
-export default function DocumentQuestion({ question, readOnly }: DocumentQuestionProps) {
+export default function FileQuestion({ formQuestion, readOnly }: FileQuestionProps) {
   const { answer, message, updateAnswer, uploadAnswerFile } = useAnswer(
-    question.id,
-    question.answer || { optionIDs: [] }
+    formQuestion.formQuestionID,
+    formQuestion.answer || { optionIDs: [] }
   )
 
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -99,7 +99,7 @@ export default function DocumentQuestion({ question, readOnly }: DocumentQuestio
             type="file"
             ref={fileInputRef}
             onChange={handleFileChange}
-            placeholder={question.type}
+            placeholder={formQuestion.formQuestionType}
             disabled={readOnly}
             className="hidden"
           />

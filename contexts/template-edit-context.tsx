@@ -45,6 +45,7 @@ type FormTemplateEditContextType = {
   selectedFormCategorySections: FormSectionType[] | undefined
   rootSelectedFormSectionQuestionSets: FormQuestionSetType[] | undefined
   selectedFormQuestionSet: FormQuestionSetType | undefined
+  selectedFormQuestion: FormQuestionType | undefined
   formQuestionSetChildFormQuestionSets: (
     parentFormQuestionSetID: number
   ) => FormQuestionSetType[] | undefined
@@ -91,6 +92,7 @@ const formTemplateEditContextDefaultValues: FormTemplateEditContextType = {
   selectedFormCategorySections: undefined,
   rootSelectedFormSectionQuestionSets: undefined,
   selectedFormQuestionSet: undefined,
+  selectedFormQuestion: undefined,
   formQuestionSetChildFormQuestionSets: () => undefined,
   formQuestionSetQuestions: () => undefined,
   // formID: 0,
@@ -154,6 +156,12 @@ export default function FormTemplateEditProvider({
       (questionSet) => questionSet.formQuestionSetID === selectedFormQuestionSetID
     )
   }, [selectedFormSectionQuestionSets, selectedFormQuestionSetID])
+
+  const selectedFormQuestion = useMemo(() => {
+    return selectedFormSectionQuestions?.find(
+      (question) => question.formQuestionID === selectedFormQuestionID
+    )
+  }, [selectedFormSectionQuestions, selectedFormQuestionID])
 
   const formCategoryExists = (formCategoryID: number) => {
     return formCategories?.find((category) => category.formCategoryID === formCategoryID)
@@ -336,6 +344,7 @@ export default function FormTemplateEditProvider({
     selectedFormCategorySections,
     rootSelectedFormSectionQuestionSets,
     selectedFormQuestionSet,
+    selectedFormQuestion,
     formQuestionSetChildFormQuestionSets,
     formQuestionSetQuestions,
     // formID,

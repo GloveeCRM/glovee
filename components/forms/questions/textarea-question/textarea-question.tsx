@@ -4,16 +4,22 @@ import { useDebouncedCallback } from 'use-debounce'
 import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
 import { ImSpinner2 } from 'react-icons/im'
 
-import { TextareaQuestionType } from '@/lib/types/qusetion'
+import { FormQuestionType } from '@/lib/types/form'
 import useAnswer from '@/hooks/form/use-answer'
 
 interface TextareaQuestionProps {
-  question: TextareaQuestionType
+  formQuestion: FormQuestionType
   readOnly?: boolean
 }
 
-export default function TextareaQuestion({ question, readOnly = false }: TextareaQuestionProps) {
-  const { answer, message, updateAnswer } = useAnswer(question.id, question.answer || { text: '' })
+export default function TextareaQuestion({
+  formQuestion,
+  readOnly = false,
+}: TextareaQuestionProps) {
+  const { answer, message, updateAnswer } = useAnswer(
+    formQuestion.formQuestionID,
+    formQuestion.answer || { text: '' }
+  )
 
   const handleChange = useDebouncedCallback(async (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     updateAnswer({ ...answer, text: e.target.value })
@@ -23,7 +29,7 @@ export default function TextareaQuestion({ question, readOnly = false }: Textare
     <div>
       <div className="relative">
         <textarea
-          placeholder={question.settings.placeholder}
+          placeholder={formQuestion.formQuestionSettings.placeholderText || ''}
           disabled={readOnly}
           rows={3}
           defaultValue={answer.text || ''}
@@ -49,13 +55,13 @@ export default function TextareaQuestion({ question, readOnly = false }: Textare
       </div>
       <div className="text-right text-[12px] text-n-500">
         {answer.text?.length || 0}
-        {(question.settings.minimumLength !== null || question.settings.maximumLength !== null) &&
+        {(formQuestion.formQuestionSettings.minimumLength !== null ||
+          formQuestion.formQuestionSettings.maximumLength !== null) &&
           ' / '}
-        {question.settings.minimumLength && question.settings.minimumLength}
-        {question.settings.minimumLength !== null &&
-          question.settings.maximumLength !== null &&
-          '-'}
-        {question.settings.maximumLength && question.settings.maximumLength}
+        {formQuestion.formQuestionSettings.minimumLength &&
+          formQuestion.formQuestionSettings.minimumLength}
+        {formQuestion.formQuestionSettings.maximumLength &&
+          formQuestion.formQuestionSettings.maximumLength}
       </div>
     </div>
   )

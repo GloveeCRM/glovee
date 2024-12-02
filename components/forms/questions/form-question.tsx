@@ -14,7 +14,7 @@ import {
 import TextInputQuestion from './text-input-question/text-input-question'
 import TextareaQuestion from './textarea-question/textarea-question'
 import CheckboxQuestion from './checkbox-question/checkbox-question'
-import DocumentQuestion from './document-question/document-question'
+import FileQuestion from './file-question/file-question'
 import RadioQuestion from './radio-question/radio-question'
 import DateInputQuestion from './date-input-question/date-input-question'
 import SelectQuestion from './select-question/select-question'
@@ -67,7 +67,7 @@ export default function FormQuestion({ question, viewOnly = false }: FormQuestio
         ) : isCheckboxQuestionType(question) ? (
           <CheckboxQuestion question={question} />
         ) : isDocumentQuestionType(question) ? (
-          <DocumentQuestion question={question} />
+          <FileQuestion question={question} />
         ) : null}
       </div>
     </div>

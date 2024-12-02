@@ -3,18 +3,18 @@
 import { ImSpinner2 } from 'react-icons/im'
 import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
 
-import { SelectQuestionType } from '@/lib/types/qusetion'
+import { FormQuestionType } from '@/lib/types/form'
 import useAnswer from '@/hooks/form/use-answer'
 
 interface SelectQuestionProps {
-  question: SelectQuestionType
+  formQuestion: FormQuestionType
   readOnly?: boolean
 }
 
-export default function SelectQuestion({ question, readOnly }: SelectQuestionProps) {
+export default function SelectQuestion({ formQuestion, readOnly }: SelectQuestionProps) {
   const { answer, message, updateAnswer } = useAnswer(
-    question.id,
-    question.answer || { optionIDs: [] }
+    formQuestion.formQuestionID,
+    formQuestion.answer || { optionIDs: [] }
   )
 
   function handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
@@ -23,14 +23,15 @@ export default function SelectQuestion({ question, readOnly }: SelectQuestionPro
   }
 
   const showPlaceholder =
-    !question.settings.defaultOptionID || question.settings.defaultOptionID === 0
-  const options = question.options || question.settings.options
+    !formQuestion.formQuestionSettings.defaultOptionID ||
+    formQuestion.formQuestionSettings.defaultOptionID === 0
+  const options = formQuestion.formQuestionOptions
 
   return (
     <div className="relative">
       <select
         className="w-full rounded-[3px] border border-n-400 bg-transparent px-[6px] py-[8px] text-[14px] focus-visible:outline-none"
-        defaultValue={answer.optionIDs?.[0] || question.settings.defaultOptionID}
+        defaultValue={answer.optionIDs?.[0] || formQuestion.formQuestionSettings.defaultOptionID}
         disabled={readOnly}
         onChange={handleChange}
       >
@@ -39,9 +40,9 @@ export default function SelectQuestion({ question, readOnly }: SelectQuestionPro
             --Select an option--
           </option>
         )}
-        {options.map((option) => (
-          <option key={option.id} value={option.id}>
-            {option.value}
+        {options?.map((option) => (
+          <option key={option.formQuestionOptionID} value={option.formQuestionOptionID}>
+            {option.optionText}
           </option>
         ))}
       </select>

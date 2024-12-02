@@ -7,7 +7,7 @@ import QuestionSetSettingsToolbar from './question-set-settings-toolbar'
 import QuestionSettingsToolbar from './question-settings-toolbar'
 
 export default function TemplateEditToolbar() {
-  const { selectedFormQuestionSet } = useFormTemplateEditContext()
+  const { selectedFormQuestionSet, selectedFormQuestionID } = useFormTemplateEditContext()
 
   return (
     <div
@@ -17,16 +17,13 @@ export default function TemplateEditToolbar() {
       <div className="sticky top-0 z-10 bg-n-700 py-[6px]">
         <SaveTemplateButton />
       </div>
-      {
-        // selectedFormQuestionID ? (
-        //   <QuestionSettingsToolbar questionID={selectedFormQuestionID} />
-        // ) :
-        selectedFormQuestionSet ? (
-          <QuestionSetSettingsToolbar formQuestionSet={selectedFormQuestionSet} />
-        ) : (
-          <TemplateEditDefaultToolbar />
-        )
-      }
+      {selectedFormQuestionID ? (
+        <QuestionSettingsToolbar questionID={selectedFormQuestionID} />
+      ) : selectedFormQuestionSet ? (
+        <QuestionSetSettingsToolbar formQuestionSet={selectedFormQuestionSet} />
+      ) : (
+        <TemplateEditDefaultToolbar />
+      )}
     </div>
   )
 }

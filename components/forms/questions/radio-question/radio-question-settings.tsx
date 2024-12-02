@@ -5,40 +5,47 @@ import { useDebouncedCallback } from 'use-debounce'
 import { BiTrash } from 'react-icons/bi'
 import { FiEdit2, FiPlus } from 'react-icons/fi'
 
-import { RadioQuestionType, RadioQuestionOptionType } from '@/lib/types/qusetion'
+import { FormQuestionOptionType, FormQuestionType } from '@/lib/types/form'
 import { generateRandomID } from '@/lib/utils/id'
 import useQuestionActions from '@/hooks/form-template/use-question-actions'
+
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 import { Separator } from '@/components/ui/separator'
 
 interface RadioQuestionSettingsProps {
-  question: RadioQuestionType
+  formQuestion: FormQuestionType
 }
 
-export default function RadioQuestionSettings({ question }: RadioQuestionSettingsProps) {
-  const { updateQuestion } = useQuestionActions()
+export default function RadioQuestionSettings({ formQuestion }: RadioQuestionSettingsProps) {
+  const { updateFormQuestionSettings } = useQuestionActions()
 
   function handleChangeIsRequired(isChecked: boolean) {
-    updateQuestion({
-      ...question,
-      isRequired: isChecked,
+    updateFormQuestionSettings({
+      updatedFormQuestionSettings: {
+        ...formQuestion.formQuestionSettings,
+        isRequired: isChecked,
+      },
     })
   }
 
   function handleChangeDefaultOption(e: React.ChangeEvent<HTMLSelectElement>) {
     const optionID = parseInt(e.target.value)
-    updateQuestion({
-      ...question,
-      settings: { ...question.settings, defaultOptionID: Number(optionID) },
+    updateFormQuestionSettings({
+      updatedFormQuestionSettings: {
+        ...formQuestion.formQuestionSettings,
+        defaultOptionID: Number(optionID),
+      },
     })
   }
 
   const handleChangeGuide = useDebouncedCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value
-    updateQuestion({
-      ...question,
-      helperText: value,
+    updateFormQuestionSettings({
+      updatedFormQuestionSettings: {
+        ...formQuestion.formQuestionSettings,
+        helperText: value,
+      },
     })
   }, 500)
 
@@ -46,7 +53,10 @@ export default function RadioQuestionSettings({ question }: RadioQuestionSetting
     <div className="flex flex-col gap-[12px]">
       <div>
         <div className="flex items-center gap-[6px]">
-          <Switch checked={question.isRequired} onCheckedChange={handleChangeIsRequired} />
+          <Switch
+            checked={formQuestion.formQuestionSettings.isRequired}
+            onCheckedChange={handleChangeIsRequired}
+          />
           <div>isRequired</div>
         </div>
         <Separator className="mt-[12px] bg-n-600" />
@@ -54,14 +64,18 @@ export default function RadioQuestionSettings({ question }: RadioQuestionSetting
       <div className="flex flex-col">
         <div className="flex flex-col gap-[6px]">
           <div>Options</div>
-          {question.settings.options?.length !== 0 && (
+          {formQuestion.formQuestionOptions?.length !== 0 && (
             <div className="flex flex-col gap-[4px]">
-              {question.settings.options.map((option) => (
-                <RadioOption key={option.id} question={question} option={option} />
+              {formQuestion.formQuestionOptions.map((option) => (
+                <RadioOption
+                  key={option.formQuestionOptionID}
+                  formQuestion={formQuestion}
+                  formQuestionOption={option}
+                />
               ))}
             </div>
           )}
-          <AddARadioOptionButton question={question} />
+          <AddARadioOptionButton formQuestion={formQuestion} />
         </div>
         <Separator className="mt-[6px] bg-n-600" />
       </div>
@@ -71,12 +85,12 @@ export default function RadioQuestionSettings({ question }: RadioQuestionSetting
           <select
             className="rounded bg-n-600 px-[4px] py-[6px] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-n-500"
             onChange={handleChangeDefaultOption}
-            defaultValue={String(question.settings.defaultOptionID)}
+            defaultValue={String(formQuestion.formQuestionSettings.defaultOptionID)}
           >
             <option value="0">--Select an option--</option>
-            {question.settings.options?.map((option) => (
-              <option key={option.id} value={option.id}>
-                {option.value}
+            {formQuestion.formQuestionOptions?.map((option) => (
+              <option key={option.formQuestionOptionID} value={option.formQuestionOptionID}>
+                {option.optionText}
               </option>
             ))}
           </select>
@@ -85,7 +99,7 @@ export default function RadioQuestionSettings({ question }: RadioQuestionSetting
       <div className="flex flex-col gap-[6px]">
         <div>Guide</div>
         <Textarea
-          defaultValue={question.helperText}
+          defaultValue={formQuestion.formQuestionSettings.helperText || ''}
           className="rounded-sm border-0 bg-n-600/80 text-[12px] focus-visible:ring-1 focus-visible:ring-n-500"
           onChange={handleChangeGuide}
         />
@@ -95,22 +109,21 @@ export default function RadioQuestionSettings({ question }: RadioQuestionSetting
 }
 
 interface AddARadioOptionButtonProps {
-  question: RadioQuestionType
+  formQuestion: FormQuestionType
 }
 
-function AddARadioOptionButton({ question }: AddARadioOptionButtonProps) {
-  const { updateQuestion } = useQuestionActions()
+function AddARadioOptionButton({ formQuestion }: AddARadioOptionButtonProps) {
+  const { updateFormQuestionSettings } = useQuestionActions()
 
   function handleAddOption() {
-    const options = question.settings.options ?? []
+    const options = formQuestion.formQuestionOptions ?? []
 
     const newOptionID = generateRandomID()
     const newOption = { id: newOptionID, position: options.length, value: 'Option' }
 
-    updateQuestion({
-      ...question,
-      settings: {
-        ...question.settings,
+    updateFormQuestionSettings({
+      updatedFormQuestionSettings: {
+        ...formQuestion.formQuestionSettings,
         options: [...options, newOption],
       },
     })
@@ -128,22 +141,23 @@ function AddARadioOptionButton({ question }: AddARadioOptionButtonProps) {
 }
 
 interface RadioOptionProps {
-  question: RadioQuestionType
-  option: RadioQuestionOptionType
+  formQuestion: FormQuestionType
+  formQuestionOption: FormQuestionOptionType
 }
 
-function RadioOption({ question, option }: RadioOptionProps) {
+function RadioOption({ formQuestion, formQuestionOption }: RadioOptionProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false)
-  const { updateQuestion } = useQuestionActions()
+  const { updateFormQuestionSettings } = useQuestionActions()
 
   const optionValueInputRef = useRef<HTMLTextAreaElement>(null)
 
   function handleDeleteOption(optionID: number) {
-    updateQuestion({
-      ...question,
-      settings: {
-        ...question.settings,
-        options: question.settings.options?.filter((option) => option.id !== optionID),
+    updateFormQuestionSettings({
+      updatedFormQuestionSettings: {
+        ...formQuestion.formQuestionSettings,
+        options: formQuestion.formQuestionOptions?.filter(
+          (option) => option.formQuestionOptionID !== optionID
+        ),
       },
     })
   }
@@ -168,12 +182,13 @@ function RadioOption({ question, option }: RadioOptionProps) {
     if (e.key === 'Enter') {
       e.preventDefault()
       setIsEditing(false)
-      updateQuestion({
-        ...question,
-        settings: {
-          ...question.settings,
-          options: question.settings.options?.map((o) =>
-            o.id === option.id ? { ...o, value: e.currentTarget.value } : o
+      updateFormQuestionSettings({
+        updatedFormQuestionSettings: {
+          ...formQuestion.formQuestionSettings,
+          options: formQuestion.formQuestionOptions?.map((o) =>
+            o.formQuestionOptionID === formQuestionOption.formQuestionOptionID
+              ? { ...o, value: e.currentTarget.value }
+              : o
           ),
         },
       })
@@ -187,12 +202,13 @@ function RadioOption({ question, option }: RadioOptionProps) {
     function handleClickOutsideOption(e: MouseEvent) {
       if (optionValueInputRef.current && !optionValueInputRef.current.contains(e.target as Node)) {
         setIsEditing(false)
-        updateQuestion({
-          ...question,
-          settings: {
-            ...question.settings,
-            options: question.settings.options?.map((o) =>
-              o.id === option.id ? { ...o, value: optionValueInputRef.current?.value } : o
+        updateFormQuestionSettings({
+          updatedFormQuestionSettings: {
+            ...formQuestion.formQuestionSettings,
+            options: formQuestion.formQuestionOptions?.map((o) =>
+              o.formQuestionOptionID === formQuestionOption.formQuestionOptionID
+                ? { ...o, value: optionValueInputRef.current?.value }
+                : o
             ),
           },
         })
@@ -214,7 +230,7 @@ function RadioOption({ question, option }: RadioOptionProps) {
 
     document.addEventListener('mousedown', handleClickOutsideOption)
     return () => document.removeEventListener('mousedown', handleClickOutsideOption)
-  }, [question, option, isEditing])
+  }, [formQuestion, formQuestionOption, isEditing])
 
   return (
     <div className="flex justify-between rounded bg-n-600 text-[12px]">
@@ -224,14 +240,14 @@ function RadioOption({ question, option }: RadioOptionProps) {
             <textarea
               ref={optionValueInputRef}
               className="block w-full resize-none overflow-hidden rounded-sm border-[1px] border-dashed border-b-300 bg-n-600 px-[3px] pb-[2px] pt-[2px] focus:border-[1px] focus:border-b-500 focus:outline-none"
-              defaultValue={option.value}
+              defaultValue={formQuestionOption.optionText}
               onChange={handleValueChange}
               onKeyDown={handleKeyDown}
             />
           </div>
         ) : (
           <div className="group/value relative flex justify-between p-[6px]">
-            <span>{option.value}</span>
+            <span>{formQuestionOption.optionText}</span>
             <div
               onClick={handleClickEditValue}
               className="absolute right-[30px] top-[6px] cursor-pointer bg-n-600 p-[2px] opacity-0 transition duration-75 group-hover/value:opacity-100"
@@ -239,7 +255,7 @@ function RadioOption({ question, option }: RadioOptionProps) {
               <FiEdit2 className="h-[14px] w-[14px]" />
             </div>
             <span
-              onClick={() => handleDeleteOption(option.id)}
+              onClick={() => handleDeleteOption(formQuestionOption.formQuestionOptionID)}
               className="cursor-pointer text-red-500/75 transition-colors duration-150 hover:text-red-500"
             >
               <BiTrash className="h-[18px] w-[18px]" />

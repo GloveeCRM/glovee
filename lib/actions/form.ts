@@ -10,6 +10,7 @@ import {
   FormSectionType,
   FormTemplateType,
   FormQuestionType,
+  FormQuestionSettingsType,
 } from '../types/form'
 import { GLOVEE_API_URL } from '@/lib/constants/api'
 import { getSession } from '@/lib/auth/session'
@@ -300,6 +301,7 @@ export async function createFormTemplateQuestion({
       formQuestionType: formQuestion.formQuestionType,
       formQuestionPosition: formQuestion.formQuestionPosition,
       formQuestionSettings: formQuestion.formQuestionSettings,
+      formQuestionOptions: formQuestion.formQuestionOptions,
     },
     authRequired: true,
   })
@@ -349,6 +351,30 @@ export async function updateFormTemplateQuestion({
   })
 
   return { formQuestions: data?.formQuestions, error }
+}
+
+interface UpdateFormTemplateQuestionSettingsProps {
+  updatedFormQuestionSettings: Partial<FormQuestionSettingsType>
+}
+
+interface UpdateFormTemplateQuestionSettingsResponse {
+  formQuestionSettings?: FormQuestionSettingsType
+  error?: string
+}
+
+export async function updateFormTemplateQuestionSettings({
+  updatedFormQuestionSettings,
+}: UpdateFormTemplateQuestionSettingsProps): Promise<UpdateFormTemplateQuestionSettingsResponse> {
+  const { data, error } = await apiRequest<{
+    formQuestionSettings: FormQuestionSettingsType
+  }>({
+    path: 'rpc/update_form_template_question_settings',
+    method: 'POST',
+    data: { updatedFormQuestionSettings },
+    authRequired: true,
+  })
+
+  return { formQuestionSettings: data?.formQuestionSettings, error }
 }
 
 interface CreateNewFormProps {

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 
 import {
+  FormQuestionOptionType,
   FormQuestionSettingsType,
   FormQuestionSetType,
   FormQuestionSetTypes,
@@ -66,55 +67,65 @@ export default function EmptyQuestionSetDropzone({
           formQuestionPrompt: 'Question',
           formQuestionType: draggedObject.object.type,
           formQuestionPosition: 1,
-          formQuestionSettings: {} as FormQuestionSettingsType,
+          formQuestionSettings: {
+            isRequired: false,
+          } as FormQuestionSettingsType,
         }
-        if (isRadio) {
-          newQuestion = {
-            id: generateRandomID(),
-            type: QuestionTypes.RADIO,
-            prompt: 'An Untitled Question',
-            position: 0,
-            settings: {
-              display: 'block',
-              options: [
-                { id: generateRandomID(), position: 0, value: 'Option 1' },
-                { id: generateRandomID(), position: 1, value: 'Option 2' },
-              ],
-              defaultOptionID: 0,
+        if (isSelect || isCheckbox || isRadio) {
+          newQuestion.formQuestionOptions = [
+            {
+              optionText: 'Option 1',
+              optionPosition: 1,
             },
-            questionSetID: questionSet.formQuestionSetID,
-            isRequired: false,
-          }
-        } else if (isCheckbox) {
-          newQuestion = {
-            id: generateRandomID(),
-            type: QuestionTypes.CHECKBOX,
-            prompt: 'An Untitled Question',
-            position: 0,
-            settings: {
-              display: 'block',
-              options: [{ id: generateRandomID(), position: 0, value: 'Option 1' }],
-            },
-            questionSetID: questionSet.formQuestionSetID,
-            isRequired: false,
-          }
-        } else if (isSelect) {
-          newQuestion = {
-            id: generateRandomID(),
-            type: QuestionTypes.SELECT,
-            prompt: 'An Untitled Question',
-            position: 0,
-            settings: {
-              options: [
-                { id: generateRandomID(), position: 0, value: 'Option 1' },
-                { id: generateRandomID(), position: 1, value: 'Option 2' },
-              ],
-              defaultOptionID: 0,
-            },
-            questionSetID: questionSet.formQuestionSetID,
-            isRequired: false,
-          }
+          ] as FormQuestionOptionType[]
         }
+        // if (isRadio) {
+        //   newQuestion = {
+        //     id: generateRandomID(),
+        //     type: QuestionTypes.RADIO,
+        //     prompt: 'An Untitled Question',
+        //     position: 0,
+        //     settings: {
+        //       display: 'block',
+        //       options: [
+        //         { id: generateRandomID(), position: 0, value: 'Option 1' },
+        //         { id: generateRandomID(), position: 1, value: 'Option 2' },
+        //       ],
+        //       defaultOptionID: 0,
+        //     },
+        //     questionSetID: questionSet.formQuestionSetID,
+        //     isRequired: false,
+        //   }
+        // } else if (isCheckbox) {
+        //   newQuestion = {
+        //     id: generateRandomID(),
+        //     type: QuestionTypes.CHECKBOX,
+        //     prompt: 'An Untitled Question',
+        //     position: 0,
+        //     settings: {
+        //       display: 'block',
+        //       options: [{ id: generateRandomID(), position: 0, value: 'Option 1' }],
+        //     },
+        //     questionSetID: questionSet.formQuestionSetID,
+        //     isRequired: false,
+        //   }
+        // } else if (isSelect) {
+        //   newQuestion = {
+        //     id: generateRandomID(),
+        //     type: QuestionTypes.SELECT,
+        //     prompt: 'An Untitled Question',
+        //     position: 0,
+        //     settings: {
+        //       options: [
+        //         { id: generateRandomID(), position: 0, value: 'Option 1' },
+        //         { id: generateRandomID(), position: 1, value: 'Option 2' },
+        //       ],
+        //       defaultOptionID: 0,
+        //     },
+        //     questionSetID: questionSet.formQuestionSetID,
+        //     isRequired: false,
+        //   }
+        // }
         createFormQuestion({ newFormQuestion: newQuestion })
       } else {
         const newQuestionSet: Partial<FormQuestionSetType> = {

@@ -12,6 +12,7 @@ import {
   isSelectQuestionType,
   isTextQuestionType,
   isTextareaQuestionType,
+  isFileQuestionType,
 } from '@/lib/types/form'
 import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
 import useQuestionActions from '@/hooks/form-template/use-question-actions'
@@ -29,15 +30,13 @@ import SelectQuestion from './select-question/select-question'
 import DateInputQuestion from './date-input-question/date-input-question'
 import RadioQuestion from './radio-question/radio-question'
 import CheckboxQuestion from './checkbox-question/checkbox-question'
-import DocumentQuestion from './document-question/document-question'
-import { isDocumentQuestionType } from '@/lib/types/qusetion'
+import FileQuestion from './file-question/file-question'
 
 interface TemplateQuestionProps {
   formQuestion: FormQuestionType
 }
 
 export default function TemplateQuestion({ formQuestion }: TemplateQuestionProps) {
-  console.log('formQuestion', formQuestion)
   const [isEditing, setIsEditing] = useState<boolean>(false)
   const [isOptionsMenuOpen, setIsOptionsMenuOpen] = useState<boolean>(false)
   const { selectedFormQuestionID, setSelectedFormQuestionID } = useFormTemplateEditContext()
@@ -188,19 +187,19 @@ export default function TemplateQuestion({ formQuestion }: TemplateQuestionProps
         </DropdownMenu>
       </div>
       {isTextQuestionType(formQuestion) ? (
-        <TextInputQuestion question={formQuestion} readOnly={true} />
+        <TextInputQuestion formQuestion={formQuestion} readOnly={true} />
       ) : isTextareaQuestionType(formQuestion) ? (
-        <TextareaQuestion question={formQuestion} readOnly={true} />
+        <TextareaQuestion formQuestion={formQuestion} readOnly={true} />
       ) : isSelectQuestionType(formQuestion) ? (
-        <SelectQuestion question={formQuestion} readOnly={true} />
-      ) : isDateQuestionType(question) ? (
-        <DateInputQuestion question={formQuestion} readOnly={true} />
+        <SelectQuestion formQuestion={formQuestion} readOnly={true} />
+      ) : isDateQuestionType(formQuestion) ? (
+        <DateInputQuestion formQuestion={formQuestion} readOnly={true} />
       ) : isRadioQuestionType(formQuestion) ? (
-        <RadioQuestion question={formQuestion} readOnly={true} />
+        <RadioQuestion formQuestion={formQuestion} readOnly={true} />
       ) : isCheckboxQuestionType(formQuestion) ? (
-        <CheckboxQuestion question={formQuestion} readOnly={true} />
-      ) : isDocumentQuestionType(question) ? (
-        <DocumentQuestion question={formQuestion} readOnly={true} />
+        <CheckboxQuestion formQuestion={formQuestion} readOnly={true} />
+      ) : isFileQuestionType(formQuestion) ? (
+        <FileQuestion formQuestion={formQuestion} readOnly={true} />
       ) : null}
     </div>
   )

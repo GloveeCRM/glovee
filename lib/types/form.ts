@@ -98,6 +98,8 @@ export type FormQuestionType = {
   formQuestionPosition: number
   createdAt: string
   formQuestionSettings: FormQuestionSettingsType
+  formQuestionOptions: FormQuestionOptionType[]
+  answer?: FormQuestionAnswerType
 }
 
 export type FormQuestionSettingsType = {
@@ -105,6 +107,19 @@ export type FormQuestionSettingsType = {
   formQuestionID: number
   helperText: string
   isRequired: boolean
+  placeholderText: string
+  minimumLength: number
+  maximumLength: number
+  minimumDate: string
+  maximumDate: string
+  createdAt: string
+}
+
+export type FormQuestionOptionType = {
+  formQuestionOptionID: number
+  formQuestionID: number
+  optionText: string
+  optionPosition: number
   createdAt: string
 }
 
@@ -134,4 +149,11 @@ export function isCheckboxQuestionType(question: FormQuestionType) {
 
 export function isFileQuestionType(question: FormQuestionType) {
   return question.formQuestionType === FormQuestionTypes.FILE
+}
+
+export type FormQuestionAnswerType = {
+  formQuestionAnswerID: number
+  formQuestionID: number
+  text: string
+  createdAt: string
 }
