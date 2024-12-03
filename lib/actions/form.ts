@@ -238,13 +238,17 @@ interface CreateFormTemplateQuestionSetProps {
 
 interface CreateFormTemplateQuestionSetResponse {
   formQuestionSets?: FormQuestionSetType[]
+  formQuestions?: FormQuestionType[]
   error?: string
 }
 
 export async function createFormTemplateQuestionSet({
   formQuestionSet,
 }: CreateFormTemplateQuestionSetProps): Promise<CreateFormTemplateQuestionSetResponse> {
-  const { data, error } = await apiRequest<{ formQuestionSets: FormQuestionSetType[] }>({
+  const { data, error } = await apiRequest<{
+    formQuestionSets: FormQuestionSetType[]
+    formQuestions: FormQuestionType[]
+  }>({
     path: 'rpc/create_form_template_question_set',
     method: 'POST',
     data: {

@@ -110,7 +110,7 @@ export default function TemplateQuestionSet({ formQuestionSet }: TemplateQuestio
         ) : isRepeatable ? (
           <LoopQuestionSetEdit formQuestionSet={formQuestionSet} />
         ) : isConditional ? (
-          <DependsOnQuestionSetEdit questionSet={formQuestionSet} />
+          <DependsOnQuestionSetEdit formQuestionSet={formQuestionSet} />
         ) : null}
       </div>
     </div>

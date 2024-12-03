@@ -21,7 +21,7 @@ import useQuestionActions from '@/hooks/form-template/use-question-actions'
 interface NonEmptyQuestionSetDropzoneProps {
   questionSet: FormQuestionSetType
   position: number
-  dependsOn?: number
+  dependsOnOptionID?: number
   isFirstDropzone?: boolean
   isLastDropzone?: boolean
 }
@@ -29,7 +29,7 @@ interface NonEmptyQuestionSetDropzoneProps {
 export default function NonEmptyQuestionSetDropzone({
   questionSet,
   position,
-  dependsOn,
+  dependsOnOptionID,
   isFirstDropzone = false,
   isLastDropzone = false,
 }: NonEmptyQuestionSetDropzoneProps) {
@@ -100,33 +100,9 @@ export default function NonEmptyQuestionSetDropzone({
           formQuestionSetPosition: position,
           formSectionID: questionSet.formSectionID,
           parentFormQuestionSetID: questionSet.formQuestionSetID,
+          dependsOnOptionID,
         }
 
-        if (isConditional) {
-          newQuestionSet.dependsOnOptionID = dependsOn
-        }
-
-        if (isConditional) {
-          const newQuestionID = generateRandomID()
-          const newQuestion: RadioQuestionType = {
-            id: newQuestionID,
-            type: QuestionTypes.RADIO,
-            prompt: 'Question Prompt',
-            position: 0,
-            settings: {
-              display: 'inline',
-              options: [
-                { id: generateRandomID(), position: 0, value: 'Option 1' },
-                { id: generateRandomID(), position: 1, value: 'Option 2' },
-              ],
-              defaultOptionID: 0,
-            },
-            questionSetID: newQuestionSetID,
-            isRequired: false,
-            options: [],
-          }
-          newQuestionSet.questions = [newQuestion]
-        }
         const { error } = await createFormQuestionSet({ newFormQuestionSet: newQuestionSet })
         if (error) {
           console.error(error)

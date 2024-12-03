@@ -41,27 +41,6 @@ export default function EmptySectionDropzone() {
         formQuestionSetPosition: 1,
         formSectionID: selectedFormSectionID,
       }
-      if (newQuestionSet.formQuestionSetType === FormQuestionSetTypes.CONDITIONAL) {
-        const questionID = generateRandomID()
-        const newQuestion: RadioQuestionType = {
-          id: questionID,
-          type: QuestionTypes.RADIO,
-          prompt: 'Question Prompt',
-          position: 0,
-          settings: {
-            display: 'inline',
-            options: [
-              { id: generateRandomID(), position: 0, value: 'Option 1' },
-              { id: generateRandomID(), position: 1, value: 'Option 2' },
-            ],
-            defaultOptionID: 0,
-          },
-          questionSetID: questionSetID,
-          isRequired: false,
-          options: [],
-        }
-        newQuestionSet.questions = [newQuestion]
-      }
       const { error } = await createFormQuestionSet({ newFormQuestionSet: newQuestionSet })
       if (error) {
         console.error(error)

@@ -3,53 +3,43 @@
 import { useEffect, useRef, useState } from 'react'
 import { FiEdit2 } from 'react-icons/fi'
 
-import { FormQuestionSetType } from '@/lib/types/form'
-import { QuestionType, QuestionTypes, RadioQuestionType } from '@/lib/types/qusetion'
-import { generateRandomID } from '@/lib/utils/id'
+import { FormQuestionSetType, FormQuestionType } from '@/lib/types/form'
+import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
 import useQuestionActions from '@/hooks/form-template/use-question-actions'
 import NonEmptyQuestionSetDropzone from '../non-empty-question-set-dropzone'
 import EmptyQuestionSetDropzone from '../empty-question-set-dropzone'
 import TemplateQuestionSet from '../template-question-set'
 
 interface DependsOnQuestionSetEditProps {
-  questionSet: FormQuestionSetType
+  formQuestionSet: FormQuestionSetType
 }
 
-export default function DependsOnQuestionSetEdit({ questionSet }: DependsOnQuestionSetEditProps) {
-  const question = questionSet.questions?.[0] as RadioQuestionType
-  const isInline = question.settings.display === 'inline'
-  const options = question.settings.options || []
+export default function DependsOnQuestionSetEdit({
+  formQuestionSet,
+}: DependsOnQuestionSetEditProps) {
+  const { formQuestionSetQuestions, formQuestionSetChildFormQuestionSets } =
+    useFormTemplateEditContext()
+  const formQuestionSetQuestion = formQuestionSetQuestions(formQuestionSet.formQuestionSetID)?.[0]
+  const isInline = formQuestionSetQuestion?.formQuestionSettings.displayType === 'inline'
+  const defaultOption =
+    formQuestionSetQuestion?.formQuestionDefaultOptions?.[0] ||
+    formQuestionSetQuestion?.formQuestionOptions?.[0]
 
   const [isEditing, setIsEditing] = useState<boolean>(false)
-  const [selectedOption, setSelectedOption] = useState<number>(options[0].id || 0)
-  const { updateQuestion } = useQuestionActions()
+  const [selectedOptionID, setSelectedOptionID] = useState<number>(
+    defaultOption?.formQuestionOptionID || 0
+  )
+  const { updateFormQuestion } = useQuestionActions()
 
   const questionPromptInputRef = useRef<HTMLTextAreaElement>(null)
 
-  const questionSets = questionSet.questionSets
-  const questionSetsToDisplay = questionSets?.filter(
-    (qs) => qs.dependsOnOptionID === selectedOption
+  const childQuestionSets = formQuestionSetChildFormQuestionSets(formQuestionSet.formQuestionSetID)
+  const questionSetsToDisplay = childQuestionSets?.filter(
+    (qs) => qs.dependsOnOptionID === selectedOptionID
   )
 
-  const rawDependsOnQuestion: QuestionType = {
-    id: generateRandomID(),
-    type: QuestionTypes.RADIO,
-    prompt: 'Question Prompt',
-    position: 0,
-    helperText: 'No helper text',
-    settings: {
-      options: [
-        { id: generateRandomID(), position: 0, value: 'Yes' },
-        { id: generateRandomID(), position: 1, value: 'No' },
-      ],
-      display: 'inline',
-    },
-    questionSetID: questionSet.formQuestionSetID,
-    isRequired: false,
-  }
-
   function handleSelectOption(e: React.ChangeEvent<HTMLInputElement>) {
-    setSelectedOption(Number(e.target.value))
+    setSelectedOptionID(Number(e.target.value))
   }
 
   function handleClickEditPrompt() {
@@ -69,13 +59,14 @@ export default function DependsOnQuestionSetEdit({ questionSet }: DependsOnQuest
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && formQuestionSetQuestion) {
       e.preventDefault()
+      const updatedFormQuestion: FormQuestionType = {
+        ...formQuestionSetQuestion,
+        formQuestionPrompt: e.currentTarget.value || '',
+      }
       setIsEditing(false)
-      const updatedQuestion = question
-        ? { ...question, prompt: e.currentTarget.value }
-        : rawDependsOnQuestion
-      updateQuestion(updatedQuestion)
+      updateFormQuestion({ updatedFormQuestion })
     } else if (e.key === 'Escape') {
       e.preventDefault()
       setIsEditing(false)
@@ -86,13 +77,15 @@ export default function DependsOnQuestionSetEdit({ questionSet }: DependsOnQuest
     function handleClickOutsideQuestionPrompt(e: MouseEvent) {
       if (
         questionPromptInputRef.current &&
-        !questionPromptInputRef.current.contains(e.target as Node)
+        !questionPromptInputRef.current.contains(e.target as Node) &&
+        formQuestionSetQuestion
       ) {
         setIsEditing(false)
-        const updatedQuestion = question
-          ? { ...question, prompt: questionPromptInputRef.current.value }
-          : rawDependsOnQuestion
-        updateQuestion(updatedQuestion)
+        const updatedFormQuestion: FormQuestionType = {
+          ...formQuestionSetQuestion,
+          formQuestionPrompt: questionPromptInputRef.current.value || '',
+        }
+        updateFormQuestion({ updatedFormQuestion })
       }
     }
 
@@ -111,7 +104,7 @@ export default function DependsOnQuestionSetEdit({ questionSet }: DependsOnQuest
 
     document.addEventListener('mousedown', handleClickOutsideQuestionPrompt)
     return () => document.removeEventListener('mousedown', handleClickOutsideQuestionPrompt)
-  }, [question, isEditing])
+  }, [formQuestionSetQuestion, isEditing])
 
   return (
     <div className="group/questionSet rounded bg-b-500 p-[8px] pt-[16px] text-[14px]">
@@ -120,13 +113,13 @@ export default function DependsOnQuestionSetEdit({ questionSet }: DependsOnQuest
           <textarea
             ref={questionPromptInputRef}
             className="mb-[8px] ml-[-3px] mr-[8px] block w-full resize-none overflow-hidden rounded-sm border-[2px] border-dashed border-b-300 bg-n-100 px-[2px] pb-[2px] pt-[1px] focus:border-[1px] focus:border-b-500 focus:outline-none"
-            defaultValue={question?.prompt}
+            defaultValue={formQuestionSetQuestion?.formQuestionPrompt || ''}
             onChange={handlePromptChange}
             onKeyDown={handleKeyDown}
           />
         ) : (
           <div className="group/prompt mb-[10px] mr-[8px] mt-[2px] flex w-full gap-[8px]">
-            <div>{question?.prompt}</div>
+            <div>{formQuestionSetQuestion?.formQuestionPrompt}</div>
             <div
               onClick={handleClickEditPrompt}
               className="cursor-pointer opacity-0 transition duration-75 group-hover/prompt:opacity-100"
@@ -136,43 +129,43 @@ export default function DependsOnQuestionSetEdit({ questionSet }: DependsOnQuest
           </div>
         )}
         <div className={`flex ${isInline ? 'gap-[18px]' : 'flex-col gap-[4px]'}`}>
-          {options.map((option) => (
+          {formQuestionSetQuestion?.formQuestionOptions?.map((option) => (
             <div
-              key={option.value}
+              key={option.formQuestionOptionID}
               className="flex items-start gap-[4px]"
               onClick={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
-                setSelectedOption(option.id)
+                setSelectedOptionID(option.formQuestionOptionID)
               }}
             >
               <input
                 type="radio"
-                name={String(question?.id)}
-                value={option.value}
-                checked={selectedOption === option.id}
+                name={String(formQuestionSetQuestion?.formQuestionID)}
+                value={option.formQuestionOptionID}
+                checked={selectedOptionID === option.formQuestionOptionID}
                 className="mt-[2px] h-[14px] w-[14px]"
                 onChange={handleSelectOption}
               />
-              <label className="text-[12px] text-n-500">{option.value}</label>
+              <label className="text-[12px] text-n-500">{option.optionText}</label>
             </div>
           ))}
         </div>
       </div>
       <div className="mt-[4px] flex gap-[4px]">
-        {options.map((option) => (
+        {formQuestionSetQuestion?.formQuestionOptions?.map((option) => (
           <div
-            key={option.value}
+            key={option.formQuestionOptionID}
             className={`flex h-[30px] w-full items-center justify-center rounded ${
-              selectedOption === option.id ? 'bg-n-700 text-n-100' : 'bg-b-300'
+              selectedOptionID === option.formQuestionOptionID ? 'bg-n-700 text-n-100' : 'bg-b-300'
             }`}
             onClick={(e) => {
               e.preventDefault()
               e.stopPropagation()
-              setSelectedOption(option.id)
+              setSelectedOptionID(option.formQuestionOptionID)
             }}
           >
-            {option.value}
+            {option.optionText}
           </div>
         ))}
       </div>
@@ -184,24 +177,27 @@ export default function DependsOnQuestionSetEdit({ questionSet }: DependsOnQuest
               <div key={qs.formQuestionSetID}>
                 {qs.formQuestionSetPosition === 1 && (
                   <NonEmptyQuestionSetDropzone
-                    questionSet={questionSet}
+                    questionSet={formQuestionSet}
                     position={1}
-                    dependsOn={selectedOption}
+                    dependsOnOptionID={selectedOptionID}
                     isFirstDropzone={true}
                   />
                 )}
                 <TemplateQuestionSet formQuestionSet={qs} />
                 <NonEmptyQuestionSetDropzone
-                  questionSet={questionSet}
+                  questionSet={formQuestionSet}
                   position={qs.formQuestionSetPosition + 1}
-                  dependsOn={selectedOption}
+                  dependsOnOptionID={selectedOptionID}
                   isLastDropzone={questionSetsToDisplay.length === qs.formQuestionSetPosition}
                 />
               </div>
             ))}
           </div>
         ) : (
-          <EmptyQuestionSetDropzone questionSet={questionSet} dependsOn={selectedOption} />
+          <EmptyQuestionSetDropzone
+            questionSet={formQuestionSet}
+            dependsOnOptionID={selectedOptionID}
+          />
         )}
       </div>
     </div>

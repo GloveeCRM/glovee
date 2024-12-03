@@ -2,9 +2,7 @@
 
 import { useState } from 'react'
 
-import { FormQuestionSetType, FormQuestionSetTypes } from '@/lib/types/form'
-import { QuestionTypes, RadioQuestionType } from '@/lib/types/qusetion'
-import { generateRandomID } from '@/lib/utils/id'
+import { FormQuestionSetType } from '@/lib/types/form'
 import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 import useQuestionSetActions from '@/hooks/form-template/use-question-set-actions'
@@ -21,7 +19,7 @@ export default function NonEmptySectionDropzone({
   isLastDropzone = false,
 }: NonEmptySectionDropzoneProps) {
   const [isDraggedOver, setIsDraggedOver] = useState<boolean>(false)
-  const { selectedFormSectionQuestionSets, selectedFormSectionID } = useFormTemplateEditContext()
+  const { selectedFormSectionID } = useFormTemplateEditContext()
   const { draggedObject, setDraggedObject } = useDragAndDropContext()
   const { createFormQuestionSet } = useQuestionSetActions()
 
@@ -44,7 +42,7 @@ export default function NonEmptySectionDropzone({
     }
   }
 
-  function handleDrop(e: React.DragEvent<HTMLDivElement>) {
+  async function handleDrop(e: React.DragEvent<HTMLDivElement>) {
     e.preventDefault()
     setIsDraggedOver(false)
     if (isDropAllowed) {
@@ -53,30 +51,12 @@ export default function NonEmptySectionDropzone({
         formQuestionSetType: draggedObject.object.type,
         formQuestionSetPosition: position,
       }
-      if (newQuestionSet.formQuestionSetType === FormQuestionSetTypes.CONDITIONAL) {
-        const questionID = generateRandomID()
-        const newQuestion: RadioQuestionType = {
-          id: questionID,
-          type: QuestionTypes.RADIO,
-          prompt: 'Question Prompt',
-          position: 0,
-          settings: {
-            display: 'inline',
-            options: [
-              { id: generateRandomID(), position: 0, value: 'Option 1' },
-              { id: generateRandomID(), position: 1, value: 'Option 2' },
-            ],
-            defaultOptionID: 0,
-          },
-          questionSetID: questionSetID,
-          isRequired: false,
-          options: [],
-        }
-        newQuestionSet.questions = [newQuestion]
-      }
-      createFormQuestionSet({
+      const { error } = await createFormQuestionSet({
         newFormQuestionSet: newQuestionSet,
       })
+      if (error) {
+        console.error(error)
+      }
     }
     setDraggedObject(null)
   }

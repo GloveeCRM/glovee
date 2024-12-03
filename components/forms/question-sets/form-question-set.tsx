@@ -25,7 +25,7 @@ export default function FormQuestionSet({ questionSet }: FormQuestionSetProps) {
       ) : isRepeatable ? (
         <LoopQuestionSet questionSet={questionSet} />
       ) : isConditional ? (
-        <DependsOnQuestionSet questionSet={questionSet} />
+        <DependsOnQuestionSet formQuestionSet={questionSet} />
       ) : null}
     </div>
   )

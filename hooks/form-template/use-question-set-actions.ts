@@ -21,15 +21,17 @@ interface DeleteFormQuestionSetResponse {
 }
 
 export default function useQuestionSetActions() {
-  const { setSelectedFormSectionQuestionSets } = useFormTemplateEditContext()
+  const { setSelectedFormSectionQuestionSets, setSelectedFormSectionQuestions } =
+    useFormTemplateEditContext()
 
   async function createFormQuestionSet({
     newFormQuestionSet,
   }: CreateFormQuestionSetProps): Promise<CreateFormQuestionSetResponse> {
-    const { formQuestionSets, error } = await createFormTemplateQuestionSet({
+    const { formQuestionSets, formQuestions, error } = await createFormTemplateQuestionSet({
       formQuestionSet: newFormQuestionSet,
     })
     if (!error) {
+      setSelectedFormSectionQuestions(formQuestions || [])
       setSelectedFormSectionQuestionSets(formQuestionSets || [])
     }
     return { error }

@@ -50,23 +50,6 @@ type FormTemplateEditContextType = {
     parentFormQuestionSetID: number
   ) => FormQuestionSetType[] | undefined
   formQuestionSetQuestions: (formQuestionSetID: number) => FormQuestionType[] | undefined
-  // formID: number
-  // template: FormType | null
-  // setTemplate: Dispatch<SetStateAction<FormType | null>>
-  // savedTemplate: FormType | null
-  // setSavedTemplate: Dispatch<SetStateAction<FormType | null>>
-  // isTemplateChanged: boolean
-  // setIsTemplateChanged: Dispatch<SetStateAction<boolean>>
-  // selectedCategoryID: number
-  // setSelectedCategoryID: Dispatch<SetStateAction<number>>
-  // selectedSectionID: number
-  // setSelectedSectionID: Dispatch<SetStateAction<number>>
-  // selectedQuestionSetID: number
-  // setSelectedQuestionSetID: Dispatch<SetStateAction<number>>
-  // selectedQuestionID: number
-  // setSelectedQuestionID: Dispatch<SetStateAction<number>>
-  // formCategories: FormCategoryType[] | null
-  // setFormCategories: Dispatch<SetStateAction<FormCategoryType[] | null>>
 }
 
 const formTemplateEditContextDefaultValues: FormTemplateEditContextType = {
@@ -95,23 +78,6 @@ const formTemplateEditContextDefaultValues: FormTemplateEditContextType = {
   selectedFormQuestion: undefined,
   formQuestionSetChildFormQuestionSets: () => undefined,
   formQuestionSetQuestions: () => undefined,
-  // formID: 0,
-  // template: null,
-  // setTemplate: () => {},
-  // savedTemplate: null,
-  // setSavedTemplate: () => {},
-  // isTemplateChanged: false,
-  // setIsTemplateChanged: () => {},
-  // selectedCategoryID: 0,
-  // setSelectedCategoryID: () => {},
-  // selectedSectionID: 0,
-  // setSelectedSectionID: () => {},
-  // selectedQuestionSetID: 0,
-  // setSelectedQuestionSetID: () => {},
-  // selectedQuestionID: 0,
-  // setSelectedQuestionID: () => {},
-  // formCategories: null,
-  // setFormCategories: () => {},
 }
 
 const FormTemplateEditContext = createContext<FormTemplateEditContextType>(

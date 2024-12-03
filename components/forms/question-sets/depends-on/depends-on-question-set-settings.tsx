@@ -1,11 +1,9 @@
 'use client'
 
-import { TemplateQuestionSetType } from '@/lib/types/template'
+import { FormQuestionSetType, isRadioQuestionType } from '@/lib/types/form'
+import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+
 import RadioQuestionSettings from '../../questions/radio-question/radio-question-settings'
-import { isRadioQuestionType } from '@/lib/types/qusetion'
-import { useEffect } from 'react'
-import useQuestionSetActions from '@/hooks/form-template/use-question-set-actions'
-import { FormQuestionSetType } from '@/lib/types/form'
 
 interface DependsOnQuestionSetSettingsProps {
   formQuestionSet: FormQuestionSetType
@@ -14,28 +12,15 @@ interface DependsOnQuestionSetSettingsProps {
 export default function DependsOnQuestionSetSettings({
   formQuestionSet,
 }: DependsOnQuestionSetSettingsProps) {
-  const { removeQuestionSetFromSection } = useQuestionSetActions()
-  const question = questionSet.questions?.[0]
+  const { formQuestionSetQuestions } = useFormTemplateEditContext()
 
-  useEffect(() => {
-    if (question && isRadioQuestionType(question)) {
-      // If some questionSet.questionSets have a dependsOn value that does not exist in question.setttings.options, remove the questionSet
-      const optionIDs = question.settings.options.map((option) => option.id)
-      const invalidQuestionSets = questionSet.questionSets?.filter(
-        (questionSet) => !optionIDs.includes(questionSet.dependsOn || 0)
-      )
-
-      if (invalidQuestionSets?.length) {
-        invalidQuestionSets.forEach((questionSet) => {
-          removeQuestionSetFromSection(questionSet.id)
-        })
-      }
-    }
-  }, [question])
+  const formQuestionSetQuestion = formQuestionSetQuestions(formQuestionSet.formQuestionSetID)?.[0]
 
   return (
     <div className="">
-      {question && isRadioQuestionType(question) && <RadioQuestionSettings question={question} />}
+      {formQuestionSetQuestion && isRadioQuestionType(formQuestionSetQuestion) && (
+        <RadioQuestionSettings formQuestion={formQuestionSetQuestion} />
+      )}
     </div>
   )
 }

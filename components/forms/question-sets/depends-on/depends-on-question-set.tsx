@@ -5,17 +5,17 @@ import FormQuestionSet from '../form-question-set'
 import { Separator } from '@/components/ui/separator'
 
 interface DependsOnQuestionSetProps {
-  questionSet: FormQuestionSetType
+  formQuestionSet: FormQuestionSetType
   viewOnly?: boolean
 }
 
 export default function DependsOnQuestionSet({
-  questionSet,
+  formQuestionSet,
   viewOnly = false,
 }: DependsOnQuestionSetProps) {
-  const question = questionSet.questions?.[0] as RadioQuestionType
+  const question = formQuestionSet.formQuestionSetQuestions?.[0] as RadioQuestionType
 
-  const questionSets = questionSet.questionSets
+  const questionSets = formQuestionSet.formQuestionSetQuestions
   const questionSetsToDisplay = questionSets?.filter(
     (qs) => qs.dependsOn === question.answer?.optionIDs?.[0]
   )
