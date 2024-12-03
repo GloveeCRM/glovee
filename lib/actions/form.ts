@@ -12,6 +12,7 @@ import {
   FormQuestionType,
   FormQuestionSettingsType,
   FormQuestionOptionType,
+  FormQuestionDefaultOptionType,
 } from '../types/form'
 import { GLOVEE_API_URL } from '@/lib/constants/api'
 import { getSession } from '@/lib/auth/session'
@@ -442,6 +443,32 @@ export async function deleteFormTemplateQuestionOption({
   })
 
   return { formQuestionOptions: data?.formQuestionOptions, error }
+}
+
+interface UpdateFormTemplateQuestionDefaultOptionsProps {
+  formQuestionID: number
+  updatedFormQuestionDefaultOptions: Partial<FormQuestionDefaultOptionType>[]
+}
+
+interface UpdateFormTemplateQuestionDefaultOptionsResponse {
+  formQuestionDefaultOptions?: FormQuestionDefaultOptionType[]
+  error?: string
+}
+
+export async function updateFormTemplateQuestionDefaultOptions({
+  formQuestionID,
+  updatedFormQuestionDefaultOptions,
+}: UpdateFormTemplateQuestionDefaultOptionsProps): Promise<UpdateFormTemplateQuestionDefaultOptionsResponse> {
+  const { data, error } = await apiRequest<{
+    formQuestionDefaultOptions: FormQuestionDefaultOptionType[]
+  }>({
+    path: 'rpc/update_form_template_question_default_options',
+    method: 'POST',
+    data: { formQuestionID, updatedFormQuestionDefaultOptions },
+    authRequired: true,
+  })
+
+  return { formQuestionDefaultOptions: data?.formQuestionDefaultOptions, error }
 }
 
 interface CreateNewFormProps {

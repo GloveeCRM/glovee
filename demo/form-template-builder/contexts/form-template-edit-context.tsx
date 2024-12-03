@@ -107,7 +107,6 @@ export default function FormTemplateEditProvider({
   const [selectedFormQuestionSetID, setSelectedFormQuestionSetID] = useState<number>(0)
   const [selectedFormQuestionID, setSelectedFormQuestionID] = useState<number>(0)
 
-  console.log(formTemplate)
   const selectedFormCategorySections = useMemo(() => {
     return formSections?.filter((section) => section.formCategoryID === selectedFormCategoryID)
   }, [formSections, selectedFormCategoryID])

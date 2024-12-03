@@ -5,7 +5,11 @@ import { useDebouncedCallback } from 'use-debounce'
 import { BiTrash } from 'react-icons/bi'
 import { FiEdit2, FiPlus } from 'react-icons/fi'
 
-import { FormQuestionType, FormQuestionOptionType } from '@/lib/types/form'
+import {
+  FormQuestionType,
+  FormQuestionOptionType,
+  FormQuestionDisplayTypes,
+} from '@/lib/types/form'
 import { generateRandomID } from '@/lib/utils/id'
 import useQuestionActions from '@/hooks/form-template/use-question-actions'
 
@@ -25,6 +29,16 @@ export default function CheckboxQuestionSettings({ formQuestion }: CheckboxQuest
       updatedFormQuestionSettings: {
         ...formQuestion.formQuestionSettings,
         isRequired: isChecked,
+      },
+    })
+  }
+
+  function handleChangeDisplayType(e: React.ChangeEvent<HTMLSelectElement>) {
+    const displayType = e.target.value as FormQuestionDisplayTypes
+    updateFormQuestionSettings({
+      updatedFormQuestionSettings: {
+        ...formQuestion.formQuestionSettings,
+        displayType,
       },
     })
   }
@@ -66,6 +80,21 @@ export default function CheckboxQuestionSettings({ formQuestion }: CheckboxQuest
             </div>
           )}
           <AddACheckboxOptionButton formQuestion={formQuestion} />
+        </div>
+        <Separator className="mt-[6px] bg-n-600" />
+      </div>
+      <div className="flex flex-col gap-[6px]">
+        <div>Display</div>
+        <div className="flex flex-col gap-[4px] text-[12px]">
+          <select
+            className="rounded bg-n-600 px-[4px] py-[6px] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-n-500"
+            onChange={handleChangeDisplayType}
+            value={formQuestion.formQuestionSettings.displayType || ''}
+          >
+            <option value="">--Select display type--</option>
+            <option value={FormQuestionDisplayTypes.INLINE}>Inline</option>
+            <option value={FormQuestionDisplayTypes.BLOCK}>Block</option>
+          </select>
         </div>
         <Separator className="mt-[6px] bg-n-600" />
       </div>

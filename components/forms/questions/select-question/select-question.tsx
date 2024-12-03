@@ -21,17 +21,23 @@ export default function SelectQuestion({ formQuestion, readOnly }: SelectQuestio
     const selectedOptionID = Number(e.target.value) || 0
     updateAnswer({ ...answer, optionIDs: [selectedOptionID] })
   }
-
-  const showPlaceholder =
-    !formQuestion.formQuestionSettings.defaultOptionID ||
-    formQuestion.formQuestionSettings.defaultOptionID === 0
+  const showPlaceholder = formQuestion.formQuestionDefaultOptions?.length === 0
   const options = formQuestion.formQuestionOptions
 
   return (
     <div className="relative">
       <select
         className="w-full rounded-[3px] border border-n-400 bg-transparent px-[6px] py-[8px] text-[14px] focus-visible:outline-none"
-        defaultValue={answer.optionIDs?.[0] || formQuestion.formQuestionSettings.defaultOptionID}
+        defaultValue={
+          answer.optionIDs?.[0] ||
+          formQuestion.formQuestionDefaultOptions?.[0]?.formQuestionOptionID ||
+          0
+        }
+        value={
+          answer.optionIDs?.[0] ||
+          formQuestion.formQuestionDefaultOptions?.[0]?.formQuestionOptionID ||
+          0
+        }
         disabled={readOnly}
         onChange={handleChange}
       >

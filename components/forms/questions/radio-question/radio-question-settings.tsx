@@ -5,8 +5,12 @@ import { useDebouncedCallback } from 'use-debounce'
 import { BiTrash } from 'react-icons/bi'
 import { FiEdit2, FiPlus } from 'react-icons/fi'
 
-import { FormQuestionOptionType, FormQuestionType } from '@/lib/types/form'
-import { generateRandomID } from '@/lib/utils/id'
+import {
+  FormQuestionDefaultOptionType,
+  FormQuestionDisplayTypes,
+  FormQuestionOptionType,
+  FormQuestionType,
+} from '@/lib/types/form'
 import useQuestionActions from '@/hooks/form-template/use-question-actions'
 
 import { Switch } from '@/components/ui/switch'
@@ -18,7 +22,7 @@ interface RadioQuestionSettingsProps {
 }
 
 export default function RadioQuestionSettings({ formQuestion }: RadioQuestionSettingsProps) {
-  const { updateFormQuestionSettings } = useQuestionActions()
+  const { updateFormQuestionSettings, updateFormQuestionDefaultOptions } = useQuestionActions()
 
   function handleChangeIsRequired(isChecked: boolean) {
     updateFormQuestionSettings({
@@ -30,11 +34,26 @@ export default function RadioQuestionSettings({ formQuestion }: RadioQuestionSet
   }
 
   function handleChangeDefaultOption(e: React.ChangeEvent<HTMLSelectElement>) {
-    const optionID = parseInt(e.target.value)
+    const formQuestionOptionID = Number(e.target.value)
+    const updatedFormQuestionDefaultOptions: Partial<FormQuestionDefaultOptionType>[] = []
+    if (formQuestionOptionID !== 0) {
+      updatedFormQuestionDefaultOptions.push({
+        formQuestionID: formQuestion.formQuestionID,
+        formQuestionOptionID,
+      })
+    }
+    updateFormQuestionDefaultOptions({
+      formQuestionID: formQuestion.formQuestionID,
+      updatedFormQuestionDefaultOptions,
+    })
+  }
+
+  function handleChangeDisplayType(e: React.ChangeEvent<HTMLSelectElement>) {
+    const displayType = e.target.value as FormQuestionDisplayTypes
     updateFormQuestionSettings({
       updatedFormQuestionSettings: {
         ...formQuestion.formQuestionSettings,
-        defaultOptionID: Number(optionID),
+        displayType,
       },
     })
   }
@@ -85,7 +104,9 @@ export default function RadioQuestionSettings({ formQuestion }: RadioQuestionSet
           <select
             className="rounded bg-n-600 px-[4px] py-[6px] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-n-500"
             onChange={handleChangeDefaultOption}
-            defaultValue={String(formQuestion.formQuestionSettings.defaultOptionID)}
+            defaultValue={String(
+              formQuestion.formQuestionDefaultOptions?.[0]?.formQuestionOptionID || 0
+            )}
           >
             <option value="0">--Select an option--</option>
             {formQuestion.formQuestionOptions?.map((option) => (
@@ -95,6 +116,22 @@ export default function RadioQuestionSettings({ formQuestion }: RadioQuestionSet
             ))}
           </select>
         </div>
+        <Separator className="mt-[6px] bg-n-600" />
+      </div>
+      <div className="flex flex-col gap-[6px]">
+        <div>Display</div>
+        <div className="flex flex-col gap-[4px] text-[12px]">
+          <select
+            className="rounded bg-n-600 px-[4px] py-[6px] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-n-500"
+            onChange={handleChangeDisplayType}
+            value={formQuestion.formQuestionSettings.displayType || ''}
+          >
+            <option value="">--Select display type--</option>
+            <option value={FormQuestionDisplayTypes.INLINE}>Inline</option>
+            <option value={FormQuestionDisplayTypes.BLOCK}>Block</option>
+          </select>
+        </div>
+        <Separator className="mt-[6px] bg-n-600" />
       </div>
       <div className="flex flex-col gap-[6px]">
         <div>Guide</div>

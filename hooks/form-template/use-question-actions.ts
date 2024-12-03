@@ -1,6 +1,7 @@
 'use client'
 
 import {
+  FormQuestionDefaultOptionType,
   FormQuestionOptionType,
   FormQuestionSettingsType,
   FormQuestionType,
@@ -11,6 +12,7 @@ import {
   deleteFormTemplateQuestion,
   deleteFormTemplateQuestionOption,
   updateFormTemplateQuestion,
+  updateFormTemplateQuestionDefaultOptions,
   updateFormTemplateQuestionOption,
   updateFormTemplateQuestionSettings,
 } from '@/lib/actions/form'
@@ -69,6 +71,15 @@ interface DeleteFormQuestionOptionProps {
 }
 
 interface DeleteFormQuestionOptionResponse {
+  error?: string
+}
+
+interface UpdateFormQuestionDefaultOptionsProps {
+  formQuestionID: number
+  updatedFormQuestionDefaultOptions: Partial<FormQuestionDefaultOptionType>[]
+}
+
+interface UpdateFormQuestionDefaultOptionsResponse {
   error?: string
 }
 
@@ -188,6 +199,26 @@ export default function useQuestionActions() {
     return { error }
   }
 
+  async function updateFormQuestionDefaultOptions({
+    formQuestionID,
+    updatedFormQuestionDefaultOptions,
+  }: UpdateFormQuestionDefaultOptionsProps): Promise<UpdateFormQuestionDefaultOptionsResponse> {
+    const { formQuestionDefaultOptions, error } = await updateFormTemplateQuestionDefaultOptions({
+      formQuestionID,
+      updatedFormQuestionDefaultOptions,
+    })
+    if (!error) {
+      const updatedFormQuestions = selectedFormSectionQuestions?.map((question) => {
+        if (question.formQuestionID === formQuestionID) {
+          return { ...question, formQuestionDefaultOptions: formQuestionDefaultOptions || [] }
+        }
+        return question
+      })
+      setSelectedFormSectionQuestions(updatedFormQuestions || [])
+    }
+    return { error }
+  }
+
   return {
     createFormQuestion,
     deleteFormQuestion,
@@ -196,5 +227,6 @@ export default function useQuestionActions() {
     createFormQuestionOption,
     updateFormQuestionOption,
     deleteFormQuestionOption,
+    updateFormQuestionDefaultOptions,
   }
 }

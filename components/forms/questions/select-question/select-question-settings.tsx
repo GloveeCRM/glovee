@@ -5,8 +5,11 @@ import { useDebouncedCallback } from 'use-debounce'
 import { BiTrash } from 'react-icons/bi'
 import { FiEdit2, FiPlus } from 'react-icons/fi'
 
-import { FormQuestionOptionType, FormQuestionType } from '@/lib/types/form'
-import { generateRandomID } from '@/lib/utils/id'
+import {
+  FormQuestionDefaultOptionType,
+  FormQuestionOptionType,
+  FormQuestionType,
+} from '@/lib/types/form'
 import useQuestionActions from '@/hooks/form-template/use-question-actions'
 
 import { Switch } from '@/components/ui/switch'
@@ -18,7 +21,7 @@ interface SelectQuestionSettingsProps {
 }
 
 export default function SelectQuestionSettings({ formQuestion }: SelectQuestionSettingsProps) {
-  const { updateFormQuestionSettings } = useQuestionActions()
+  const { updateFormQuestionSettings, updateFormQuestionDefaultOptions } = useQuestionActions()
 
   function handleChangeIsRequired(isChecked: boolean) {
     updateFormQuestionSettings({
@@ -30,12 +33,17 @@ export default function SelectQuestionSettings({ formQuestion }: SelectQuestionS
   }
 
   function handleChangeDefaultOption(e: React.ChangeEvent<HTMLSelectElement>) {
-    const optionID = parseInt(e.target.value)
-    updateFormQuestionSettings({
-      updatedFormQuestionSettings: {
-        ...formQuestion.formQuestionSettings,
-        defaultOptionID: Number(optionID),
-      },
+    const formQuestionOptionID = Number(e.target.value)
+    const updatedFormQuestionDefaultOptions: Partial<FormQuestionDefaultOptionType>[] = []
+    if (formQuestionOptionID !== 0) {
+      updatedFormQuestionDefaultOptions.push({
+        formQuestionID: formQuestion.formQuestionID,
+        formQuestionOptionID,
+      })
+    }
+    updateFormQuestionDefaultOptions({
+      formQuestionID: formQuestion.formQuestionID,
+      updatedFormQuestionDefaultOptions,
     })
   }
 
@@ -85,7 +93,9 @@ export default function SelectQuestionSettings({ formQuestion }: SelectQuestionS
           <select
             className="rounded bg-n-600 px-[4px] py-[6px] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-n-500"
             onChange={handleChangeDefaultOption}
-            defaultValue={String(formQuestion.formQuestionSettings.defaultOptionID)}
+            defaultValue={String(
+              formQuestion.formQuestionDefaultOptions?.[0]?.formQuestionOptionID || 0
+            )}
           >
             <option value="0">--Select an option--</option>
             {formQuestion.formQuestionOptions.map((option) => (

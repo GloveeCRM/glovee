@@ -3,7 +3,7 @@
 import { ImSpinner2 } from 'react-icons/im'
 import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
 
-import { FormQuestionType } from '@/lib/types/form'
+import { FormQuestionType, FormQuestionDisplayTypes } from '@/lib/types/form'
 import useAnswer from '@/hooks/form/use-answer'
 
 interface CheckboxQuestionProps {
@@ -27,7 +27,7 @@ export default function CheckboxQuestion({ formQuestion, readOnly }: CheckboxQue
     updateAnswer({ ...answer, optionIDs: newSelection })
   }
 
-  const inline = formQuestion.formQuestionSettings?.display === 'inline'
+  const inline = formQuestion.formQuestionSettings.displayType === FormQuestionDisplayTypes.INLINE
   const options = formQuestion.formQuestionOptions
 
   return (

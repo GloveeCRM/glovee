@@ -90,6 +90,11 @@ export enum FormQuestionTypes {
   FILE = 'file',
 }
 
+export type FormQuestionDefaultOptionType = {
+  formQuestionID: number
+  formQuestionOptionID: number
+}
+
 export type FormQuestionType = {
   formQuestionID: number
   formQuestionSetID: number
@@ -99,7 +104,13 @@ export type FormQuestionType = {
   createdAt: string
   formQuestionSettings: FormQuestionSettingsType
   formQuestionOptions: FormQuestionOptionType[]
+  formQuestionDefaultOptions: FormQuestionDefaultOptionType[]
   answer?: FormQuestionAnswerType
+}
+
+export enum FormQuestionDisplayTypes {
+  BLOCK = 'block',
+  INLINE = 'inline',
 }
 
 export type FormQuestionSettingsType = {
@@ -112,6 +123,7 @@ export type FormQuestionSettingsType = {
   maximumLength: number
   minimumDate: string
   maximumDate: string
+  displayType: FormQuestionDisplayTypes
   createdAt: string
 }
 

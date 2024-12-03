@@ -3,7 +3,7 @@
 import { ImSpinner2 } from 'react-icons/im'
 import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
 
-import { FormQuestionType } from '@/lib/types/form'
+import { FormQuestionDisplayTypes, FormQuestionType } from '@/lib/types/form'
 import useAnswer from '@/hooks/form/use-answer'
 
 interface RadioQuestionProps {
@@ -21,7 +21,7 @@ export default function RadioQuestion({ formQuestion, readOnly }: RadioQuestionP
     updateAnswer({ ...answer, optionIDs: [selectedOptionID] })
   }
 
-  const inline = formQuestion.formQuestionSettings?.display === 'inline'
+  const inline = formQuestion.formQuestionSettings.displayType === FormQuestionDisplayTypes.INLINE
   const options = formQuestion.formQuestionOptions
 
   return (
@@ -35,7 +35,11 @@ export default function RadioQuestion({ formQuestion, readOnly }: RadioQuestionP
               name={String(formQuestion.formQuestionID)}
               value={option.formQuestionOptionID}
               onChange={handleChange}
-              checked={answer.optionIDs?.[0] === option.formQuestionOptionID}
+              checked={
+                answer.optionIDs?.[0] === option.formQuestionOptionID ||
+                formQuestion.formQuestionDefaultOptions?.[0]?.formQuestionOptionID ===
+                  option.formQuestionOptionID
+              }
               disabled={readOnly}
               className="h-[16px] w-[16px] accent-n-700"
             />
