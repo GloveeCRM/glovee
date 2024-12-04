@@ -17,7 +17,9 @@ export default async function ApplicationUpdatesWrapper({
 
   return (
     <div className="flex w-[300px] flex-col gap-[8px] bg-slate-300 p-[8px]">
-      {updates?.map((update) => <ApplicationUpdate update={update} />)}
+      {updates?.map((update) => (
+        <ApplicationUpdate update={update} key={update.applicationUpdateID} />
+      ))}
     </div>
   )
 }

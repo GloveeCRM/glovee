@@ -1,4 +1,4 @@
-import { FormQuestionSetType } from '@/lib/types/form'
+import { FormQuestionSetType, FormQuestionType } from '@/lib/types/form'
 import { RadioQuestionType } from '@/lib/types/qusetion'
 import FormQuestion from '../../questions/form-question'
 import FormQuestionSet from '../form-question-set'
@@ -13,16 +13,16 @@ export default function DependsOnQuestionSet({
   formQuestionSet,
   viewOnly = false,
 }: DependsOnQuestionSetProps) {
-  const question = formQuestionSet.formQuestionSetQuestions?.[0] as RadioQuestionType
+  // const question = formQuestionSet.formQuestions?.[0] as FormQuestionType
 
-  const questionSets = formQuestionSet.formQuestionSetQuestions
-  const questionSetsToDisplay = questionSets?.filter(
-    (qs) => qs.dependsOn === question.answer?.optionIDs?.[0]
-  )
+  // const questionSets = formQuestionSet.formQuestionSetQuestions
+  // const questionSetsToDisplay = questionSets?.filter(
+  //   (qs) => qs.dependsOn === question.answer?.optionIDs?.[0]
+  // )
 
   return (
     <div className="flex flex-col gap-[12px]">
-      <FormQuestion key={question?.id} question={question} viewOnly={viewOnly} />
+      {/* <FormQuestion key={question?.id} question={question} viewOnly={viewOnly} />
       {questionSetsToDisplay && questionSetsToDisplay.length > 0 && (
         <>
           <Separator className="bg-n-400" />
@@ -32,7 +32,7 @@ export default function DependsOnQuestionSet({
             ))}
           </div>
         </>
-      )}
+      )} */}
     </div>
   )
 }

@@ -28,11 +28,11 @@ export default async function SubmissionLayout({
   const form = forms?.[0]
   const categories = form?.categories || []
 
-  if (form?.status === FormStatusTypes.CREATED) {
-    redirect(`/application/${applicationID}/form/${formID}`)
-  } else if (form?.status !== FormStatusTypes.SUBMITTED) {
-    redirect(`/application/${applicationID}/forms`)
-  }
+  // if (form?.status === FormStatusTypes.CREATED) {
+  //   redirect(`/application/${applicationID}/form/${formID}`)
+  // } else if (form?.status !== FormStatusTypes.SUBMITTED) {
+  //   redirect(`/application/${applicationID}/forms`)
+  // }
 
   return (
     <FormContextProvider formID={formID}>

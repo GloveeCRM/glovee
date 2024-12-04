@@ -30,13 +30,13 @@ export default function LoopQuestionSet({ questionSet, viewOnly = false }: LoopQ
         <div className="flex flex-col gap-[12px]">
           <div className="flex flex-col gap-[12px]">
             {questionSets.map((qs) => (
-              <div key={qs.id}>
+              <div key={qs.formQuestionSetID}>
                 <div className="flex gap-[6px]">
-                  <FormQuestionSet key={qs.id} questionSet={qs} />
-                  {qs.position !== 0 && (
+                  <FormQuestionSet key={qs.formQuestionSetID} questionSet={qs} />
+                  {qs.formQuestionSetPosition !== 0 && (
                     <div
                       className="flex cursor-pointer items-center rounded bg-red-500/30 p-[4px] text-red-700 transition duration-150 hover:bg-red-500/50 hover:text-red-900"
-                      onClick={() => handleDeleteQuestionSet(qs.id)}
+                      onClick={() => handleDeleteQuestionSet(qs.formQuestionSetID)}
                     >
                       <BiTrash className="h-[22px] w-[22px]" />
                     </div>
@@ -60,7 +60,10 @@ function RepeatQuestionSet({ questionSet }: { questionSet: FormQuestionSetType }
 
   function handleClick() {
     let questionSetToClone = questionSet.questionSets?.[0] as FormQuestionSetType
-    questionSetToClone = { ...questionSetToClone, position: questionSet.questionSets?.length || 0 }
+    questionSetToClone = {
+      ...questionSetToClone,
+      formQuestionSetPosition: questionSet.questionSets?.length || 0,
+    }
     if (questionSetToClone) {
       createQuestionSetAndQuestions(sessionUserID || 0, questionSetToClone)
     }

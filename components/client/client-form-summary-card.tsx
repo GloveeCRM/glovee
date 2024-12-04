@@ -20,18 +20,18 @@ export default function ClientFormSummaryCard({ form }: ClientFormSummaryCardPro
       <div>
         <div className="flex justify-between">
           <div>
-            <span className="font-semi-bold text-[16px]">{form.formName}</span>
+            <span className="font-semi-bold text-[16px]">{form.formID}</span>
           </div>
           <div className="flex items-center gap-[8px]">
-            <Badge size="lg">{form.status}</Badge>
-            <ProgressIndicatorRing completionRate={form.completionRate} />
+            {/* <Badge size="lg">{form.status}</Badge> */}
+            {/* <ProgressIndicatorRing completionRate={form.completionRate} /> */}
           </div>
         </div>
         {form.categories && (
           <FormCardCategorySummariesWrapper categorySummaries={form.categories} />
         )}
-        <div className="mt-[16px] flex justify-between gap-[8px]">
-          <div className="w-[150px]">
+        {/* <div className="mt-[16px] flex justify-between gap-[8px]"> */}
+        {/* <div className="w-[150px]">
             {form.status === FormStatusTypes.SUBMITTED ? (
               <Link href={`/application/${form.applicationID}/submission/${form.id}`}>
                 <Button size="default">
@@ -53,7 +53,7 @@ export default function ClientFormSummaryCard({ form }: ClientFormSummaryCardPro
             )}
           </div>
           {form.status !== FormStatusTypes.SUBMITTED && <SubmitFormDialog form={form} />}
-        </div>
+        </div> */}
       </div>
     </div>
   )

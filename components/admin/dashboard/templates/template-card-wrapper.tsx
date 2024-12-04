@@ -15,7 +15,7 @@ export default async function TemplateCardWrapper() {
               formTemplateID={formTemplate.formTemplateID}
               formID={formTemplate.form?.formID || 0}
               title={formTemplate.templateName}
-              description={formTemplate.form?.formDescription || ''}
+              description={formTemplate.form?.createdAt || ''}
             />
           ))}
         </div>

@@ -35,10 +35,10 @@ function QuestionSetWrapper({ questionSets }: QuestionSetWrapperProps) {
       {questionSets ? (
         questionSets.map((questionSet) => (
           <div
-            key={questionSet.id}
+            key={questionSet.formQuestionSetID}
             className="flex w-full flex-col gap-[8px] rounded-lg border border-n-400 p-[8px]"
           >
-            <FormQuestionSet key={questionSet.id} questionSet={questionSet} />
+            <FormQuestionSet key={questionSet.formQuestionSetID} questionSet={questionSet} />
           </div>
         ))
       ) : (

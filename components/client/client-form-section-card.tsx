@@ -32,10 +32,10 @@ export default function ClientFormSidebarSectionCard({
 
   return (
     <div
-      className={`cursor-pointer rounded ${parseInt(selectedSectionId) === section.id && 'bg-n-650 text-n-100'} p-[4px] pl-[22px] text-[12px]`}
+      className={`cursor-pointer rounded ${parseInt(selectedSectionId) === section.formSectionID && 'bg-n-650 text-n-100'} p-[4px] pl-[22px] text-[12px]`}
       onClick={(e) => {
         e.stopPropagation()
-        handleClick(section.id)
+        handleClick(section.formSectionID)
       }}
     >
       <div className="flex gap-[4px]">
@@ -48,7 +48,7 @@ export default function ClientFormSidebarSectionCard({
             )}
           </div>
         )}
-        <div>{section.name}</div>
+        <div>{section.sectionName}</div>
       </div>
     </div>
   )

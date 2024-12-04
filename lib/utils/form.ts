@@ -6,7 +6,7 @@ export function nestQuestionSets(questionSets: FormQuestionSetType[]): FormQuest
 
   // Initialize the structure for each question set
   questionSets.forEach((qs) => {
-    questionSetsMap[qs.id] = { ...qs, questionSets: [] } // Copy question set and add empty questionSets field
+    questionSetsMap[qs.formQuestionSetID] = { ...qs, questionSets: [] } // Copy question set and add empty questionSets field
   })
 
   // Define the root node list
@@ -14,12 +14,14 @@ export function nestQuestionSets(questionSets: FormQuestionSetType[]): FormQuest
 
   // Loop through the question sets to arrange parent-child relationships
   questionSets.forEach((qs) => {
-    if (qs.questionSetID === null) {
+    if (qs.formQuestionSetID === null) {
       // If there is no parent, it's a root node
-      rootQuestionSets.push(questionSetsMap[qs.id])
+      rootQuestionSets.push(questionSetsMap[qs.formQuestionSetID])
     } else {
       // Otherwise, add it to the parent's questionSets array
-      questionSetsMap[qs.questionSetID].questionSets?.push(questionSetsMap[qs.id])
+      questionSetsMap[qs.formQuestionSetID].questionSets?.push(
+        questionSetsMap[qs.formQuestionSetID]
+      )
     }
   })
 

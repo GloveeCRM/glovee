@@ -53,9 +53,9 @@ export default function FormQuestion({ question, viewOnly = false }: FormQuestio
           )}
         </div>
         <div className="">
-          <IoCheckmarkCircle
+          {/* <IoCheckmarkCircle
             className={`h-[20px] w-[20px] ${question?.answer?.isAcceptable ? 'text-g-700' : 'text-n-400'}`}
-          />
+          /> */}
         </div>
       </div>
       <div>

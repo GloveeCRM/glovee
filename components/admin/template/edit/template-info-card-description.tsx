@@ -27,7 +27,6 @@ export default function TemplateInfoCardDescription({
   function handleSave() {
     const newDescription = descriptionInputRef.current?.value || ''
     setIsEditing(false)
-    updateTemplateDescription(newDescription)
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {

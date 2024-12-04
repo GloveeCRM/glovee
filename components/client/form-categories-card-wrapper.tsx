@@ -23,13 +23,15 @@ export default function FormCategoriesCardWrapper({
 
   const expandedCategory =
     categories.find((category) =>
-      category.sections?.some((section) => section.id === parseInt(selectedSectionID || ''))
+      category.sections?.some(
+        (section) => section.formSectionID === parseInt(selectedSectionID || '')
+      )
     ) || categories[0]
 
   useEffect(() => {
     if (!selectedSectionID && categories.length > 0) {
       const params = new URLSearchParams(searchParams)
-      const firstSectionId = categories[0].sections?.[0]?.id
+      const firstSectionId = categories[0].sections?.[0]?.formSectionID
       if (firstSectionId) {
         params.set('section', String(firstSectionId))
         replace(`${pathname}?${params.toString()}`)
@@ -38,10 +40,10 @@ export default function FormCategoriesCardWrapper({
   }, [selectedSectionID, categories, pathname, replace, searchParams])
 
   const handleCategoryClick = (categoryId: number) => {
-    if (expandedCategory.id !== categoryId) {
+    if (expandedCategory.formCategoryID !== categoryId) {
       const params = new URLSearchParams(searchParams)
-      const firstSectionId = categories.find((category) => category.id === categoryId)
-        ?.sections?.[0].id
+      const firstSectionId = categories.find((category) => category.formCategoryID === categoryId)
+        ?.sections?.[0].formSectionID
       if (firstSectionId) {
         params.set('section', String(firstSectionId))
         replace(`${pathname}?${params.toString()}`)
@@ -52,10 +54,10 @@ export default function FormCategoriesCardWrapper({
   return (
     <div className="flex h-full flex-col gap-[4px] overflow-y-auto">
       {categories.map((category: FormCategoryType) => (
-        <Fragment key={category.id}>
+        <Fragment key={category.formCategoryID}>
           <ClientFormCategoryCard
             category={category}
-            isExpanded={expandedCategory.id === category.id}
+            isExpanded={expandedCategory.formCategoryID === category.formCategoryID}
             onClick={handleCategoryClick}
             type={type}
           />

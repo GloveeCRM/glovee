@@ -3,7 +3,7 @@ import { BsDot } from 'react-icons/bs'
 import { LuDownload, LuFileText } from 'react-icons/lu'
 
 import { FileType } from '@/lib/types/file'
-import { FormQuestionSetType } from '@/lib/types/form'
+import { FormQuestionSetType, FormQuestionType } from '@/lib/types/form'
 import {
   CheckboxQuestionOptionType,
   isCheckboxQuestionType,
@@ -45,15 +45,15 @@ export default async function ClientSubmissionPage({
       {questions.length > 0 ? (
         <div className="rounded-lg border border-n-400 px-[12px] text-[14px]">
           {questions.map((question, i) => (
-            <div key={question.id}>
-              <div key={question.id} className="grid grid-cols-3 gap-[24px] py-[16px]">
-                <div className="font-light text-black">{question.prompt}</div>
+            <div key={question.formQuestionID}>
+              <div key={question.formQuestionID} className="grid grid-cols-3 gap-[24px] py-[16px]">
+                <div className="font-light text-black">{question.formQuestionPrompt}</div>
                 <div className="col-span-2 font-light text-n-500">
-                  {question.answer?.isAcceptable ? (
+                  {/* {question.answer?.isAcceptable ? (
                     <Answer question={question} />
                   ) : (
                     <div className="text-n-500/70">No answer provided</div>
-                  )}
+                  )} */}
                 </div>
               </div>
               {i < questions.length - 1 && <Separator className="bg-n-300" />}
@@ -148,7 +148,7 @@ function OptionAnswers({
 }
 
 function extractQuestionsFromQuestionSets(questionSets: FormQuestionSetType[]) {
-  const questions: QuestionType[] = []
+  const questions: FormQuestionType[] = []
   questionSets.forEach((qset) => {
     qset.questions?.forEach((q) => {
       questions.push(q)

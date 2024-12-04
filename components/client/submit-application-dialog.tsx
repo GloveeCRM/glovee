@@ -28,7 +28,7 @@ export default function SubmitFormDialog({ form }: SubmitFormDialogProps) {
 
   function handleSubmitForm() {
     setIsSubmitting(true)
-    setFormStatus(form.id, FormStatusTypes.SUBMITTED, sessionUserID || 0)
+    setFormStatus(form.formID, FormStatusTypes.SUBMITTED, sessionUserID || 0)
       .then((response) => {
         if (response.success) {
           submitFormSuccessToast(response.success)
@@ -59,7 +59,7 @@ export default function SubmitFormDialog({ form }: SubmitFormDialogProps) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="default" size="default" disabled={form.completionRate !== 100}>
+        <Button variant="default" size="default" disabled={true /*form.completionRate !== 100}*/}>
           Submit
         </Button>
       </DialogTrigger>

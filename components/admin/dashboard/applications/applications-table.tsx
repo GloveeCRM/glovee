@@ -2,7 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
-import { searchApplications, searchApplicationsOld } from '@/lib/data/application'
+import { searchApplications } from '@/lib/data/application'
 import {
   Table,
   TableBody,

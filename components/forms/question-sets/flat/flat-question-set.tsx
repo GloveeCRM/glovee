@@ -15,7 +15,7 @@ export default function FlatQuestionSetView({
       {questionSet.questions &&
         questionSet.questions.length > 0 &&
         questionSet.questions.map((q) => (
-          <FormQuestion key={q.id} question={q} viewOnly={viewOnly} />
+          <FormQuestion key={q.formQuestionID} question={q} viewOnly={viewOnly} />
         ))}
     </div>
   )

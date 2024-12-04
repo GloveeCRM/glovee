@@ -12,8 +12,8 @@ export default function FormCardCategorySummariesWrapper({
     <div className="flex justify-center">
       {categorySummaries.map((categorySummary, index) => (
         <FormCardCategorySummary
-          key={categorySummary.id}
-          name={categorySummary.name}
+          key={categorySummary.formCategoryID}
+          name={categorySummary.categoryName}
           completionRate={categorySummary.completionRate}
           showLeftDivider={index !== 0}
           showRightDivider={index !== categorySummaries.length - 1}
