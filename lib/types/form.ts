@@ -1,4 +1,3 @@
-import { QuestionType } from './qusetion'
 import { UserType } from './user'
 
 export type FormTemplateType = {
@@ -21,6 +20,15 @@ export enum FormRoleTypes {
   SPOUSE = 'SPOUSE',
   CHILD = 'CHILD',
   OTHER = 'OTHER',
+}
+
+export type ApplicationFormType = {
+  applicationFormID: number
+  organizationID: number
+  formID: number
+  createdBy: UserType
+  createdAt: string
+  form: FormType
 }
 
 export type FormType = {

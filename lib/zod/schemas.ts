@@ -16,6 +16,10 @@ export const CreateApplicationSchema = z.object({
   clientID: z.number().int().positive({ message: 'Client is required' }),
 })
 
+export const CreateApplicationFormSchema = z.object({
+  formTemplateID: z.number().int().positive({ message: 'Template is required' }),
+})
+
 export const CreateFormSchema = z.object({
   clientID: z.number().int().positive({ message: 'Client is required' }),
   role: z.string().min(1, { message: 'Role is required' }),

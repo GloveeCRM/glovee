@@ -31,8 +31,8 @@ export default function useQuestionSetActions() {
       formQuestionSet: newFormQuestionSet,
     })
     if (!error) {
-      setSelectedFormSectionQuestions(formQuestions || [])
       setSelectedFormSectionQuestionSets(formQuestionSets || [])
+      setSelectedFormSectionQuestions(formQuestions || [])
     }
     return { error }
   }

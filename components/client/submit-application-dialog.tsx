@@ -5,7 +5,7 @@ import toast from 'react-hot-toast'
 import { ImSpinner2 } from 'react-icons/im'
 
 import { FormStatusTypes, FormType } from '@/lib/types/form'
-import { setFormStatus } from '@/lib/actions/form'
+// import { setFormStatus } from '@/lib/actions/form'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -28,18 +28,18 @@ export default function SubmitFormDialog({ form }: SubmitFormDialogProps) {
 
   function handleSubmitForm() {
     setIsSubmitting(true)
-    setFormStatus(form.formID, FormStatusTypes.SUBMITTED, sessionUserID || 0)
-      .then((response) => {
-        if (response.success) {
-          submitFormSuccessToast(response.success)
-        } else {
-          submitFormErrorToast(response.error || 'An error occurred while submitting the form')
-        }
-      })
-      .finally(() => {
-        setIsOpen(false)
-        setIsSubmitting(false)
-      })
+    // setFormStatus(form.formID, FormStatusTypes.SUBMITTED, sessionUserID || 0)
+    //   .then((response) => {
+    //     if (response.success) {
+    //       submitFormSuccessToast(response.success)
+    //     } else {
+    //       submitFormErrorToast(response.error || 'An error occurred while submitting the form')
+    //     }
+    //   })
+    //   .finally(() => {
+    //     setIsOpen(false)
+    //     setIsSubmitting(false)
+    //   })
   }
 
   function submitFormSuccessToast(message: string) {
