@@ -493,10 +493,14 @@ export async function createApplicationForm({
   const { data, error } = await apiRequest<{ applicationForm: ApplicationFormType }>({
     path: 'rpc/create_application_form',
     method: 'POST',
-    data: { applicationID, formTemplateID },
+    data: {
+      applicationID,
+      formTemplateID,
+    },
     authRequired: true,
   })
 
+  revalidatePath(`/admin/application/${applicationID}`)
   return { applicationForm: data?.applicationForm, error }
 }
 

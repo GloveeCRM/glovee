@@ -18,7 +18,7 @@ export default async function AdminApplicationFormsPage({
       <div>
         <CreateNewFormButton applicationID={applicationID} />
       </div>
-      <AdminApplicationFormsWrapper applicationID={applicationID} />)
+      <AdminApplicationFormsWrapper applicationID={applicationID} />
     </div>
   )
 }

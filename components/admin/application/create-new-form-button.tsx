@@ -112,23 +112,27 @@ export default function CreateNewFormButton({ applicationID }: CreateNewFormButt
                 return (
                   <FormItem>
                     <FormLabel>Template</FormLabel>
-                    <Select onValueChange={(value) => field.onChange(Number(value))}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a template" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {formTemplates?.map((formTemplate) => (
-                          <SelectItem
-                            key={formTemplate.formTemplateID}
-                            value={String(formTemplate.formTemplateID)}
-                          >
-                            {formTemplate.templateName}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    {formTemplates && formTemplates.length > 0 ? (
+                      <Select onValueChange={(value) => field.onChange(Number(value))}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a template" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {formTemplates.map((formTemplate) => (
+                            <SelectItem
+                              key={formTemplate.formTemplateID}
+                              value={String(formTemplate.formTemplateID)}
+                            >
+                              {formTemplate.templateName}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    ) : (
+                      <div className="p-[4px] text-center text-[14px]">No templates found</div>
+                    )}
                   </FormItem>
                 )
               }}
@@ -139,7 +143,13 @@ export default function CreateNewFormButton({ applicationID }: CreateNewFormButt
                   Cancel
                 </Button>
               </DialogClose>
-              <Button type="submit" variant="default" fullWidth={true} autoFocus>
+              <Button
+                type="submit"
+                variant="default"
+                fullWidth={true}
+                autoFocus
+                disabled={form.watch('formTemplateID') === 0 || form.formState.isSubmitting}
+              >
                 Create
               </Button>
             </div>

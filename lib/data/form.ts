@@ -1,6 +1,7 @@
 'use server'
 
 import {
+  ApplicationFormType,
   FormCategoryType,
   FormQuestionSetType,
   FormQuestionType,
@@ -121,6 +122,31 @@ export async function fetchFormTemplateSectionQuestionSetsAndQuestions({
   })
 
   return { formQuestionSets: data?.formQuestionSets, formQuestions: data?.formQuestions, error }
+}
+
+interface FetchApplicationFormsProps {
+  applicationID: number
+}
+
+interface FetchApplicationFormsResponse {
+  applicationForms?: ApplicationFormType[]
+  error?: string
+}
+
+export async function fetchApplicationForms({
+  applicationID,
+}: FetchApplicationFormsProps): Promise<FetchApplicationFormsResponse> {
+  const queryParams = new URLSearchParams()
+  queryParams.append('application_id', applicationID.toString())
+
+  const { data, error } = await apiRequest<ApplicationFormType[]>({
+    path: `rpc/application_forms?${queryParams.toString()}`,
+    method: 'GET',
+    authRequired: true,
+  })
+  console.log('data', JSON.stringify(data, null, 2))
+
+  return { applicationForms: data, error }
 }
 
 interface SearchFormsInput {
