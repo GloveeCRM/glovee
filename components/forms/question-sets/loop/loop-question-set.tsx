@@ -5,34 +5,37 @@ import { BiTrash } from 'react-icons/bi'
 
 import { FormQuestionSetType } from '@/lib/types/form'
 import { createQuestionSetAndQuestions, deleteQuestionSet } from '@/lib/actions/form'
-import { useOrgContext } from '@/contexts/org-context'
+import { useAuthContext } from '@/contexts/auth-context'
+import { useApplicationFormContext } from '@/contexts/application-form-context'
+
 import { Separator } from '@/components/ui/separator'
 import FormQuestionSet from '../form-question-set'
-import { useAuthContext } from '@/contexts/auth-context'
 
 interface LoopQuestionSetProps {
-  questionSet: FormQuestionSetType
+  formQuestionSet: FormQuestionSetType
   viewOnly?: boolean
 }
 
-export default function LoopQuestionSet({ questionSet, viewOnly = false }: LoopQuestionSetProps) {
-  const { sessionUserID } = useAuthContext()
-
-  const questionSets = questionSet.questionSets
+export default function LoopQuestionSet({
+  formQuestionSet,
+  viewOnly = false,
+}: LoopQuestionSetProps) {
+  const { formQuestionSetChildFormQuestionSets } = useApplicationFormContext()
+  const childQuestionSets = formQuestionSetChildFormQuestionSets(formQuestionSet.formQuestionSetID)
 
   function handleDeleteQuestionSet(questionSetID: number) {
-    deleteQuestionSet(sessionUserID || 0, questionSetID)
+    // deleteQuestionSet(sessionUserID || 0, questionSetID)
   }
 
   return (
     <div>
-      {questionSets && questionSets.length > 0 ? (
+      {childQuestionSets && childQuestionSets.length > 0 ? (
         <div className="flex flex-col gap-[12px]">
           <div className="flex flex-col gap-[12px]">
-            {questionSets.map((qs) => (
+            {childQuestionSets.map((qs) => (
               <div key={qs.formQuestionSetID}>
                 <div className="flex gap-[6px]">
-                  <FormQuestionSet key={qs.formQuestionSetID} questionSet={qs} />
+                  <FormQuestionSet key={qs.formQuestionSetID} formQuestionSet={qs} />
                   {qs.formQuestionSetPosition !== 0 && (
                     <div
                       className="flex cursor-pointer items-center rounded bg-red-500/30 p-[4px] text-red-700 transition duration-150 hover:bg-red-500/50 hover:text-red-900"
@@ -46,7 +49,7 @@ export default function LoopQuestionSet({ questionSet, viewOnly = false }: LoopQ
             ))}
           </div>
           <Separator className="bg-n-400" />
-          <RepeatQuestionSet questionSet={questionSet} />
+          <RepeatQuestionSet formQuestionSet={formQuestionSet} />
         </div>
       ) : (
         <div className="text-[14px] text-r-700">No question sets</div>
@@ -55,14 +58,14 @@ export default function LoopQuestionSet({ questionSet, viewOnly = false }: LoopQ
   )
 }
 
-function RepeatQuestionSet({ questionSet }: { questionSet: FormQuestionSetType }) {
+function RepeatQuestionSet({ formQuestionSet }: { formQuestionSet: FormQuestionSetType }) {
   const { sessionUserID } = useAuthContext()
 
   function handleClick() {
-    let questionSetToClone = questionSet.questionSets?.[0] as FormQuestionSetType
+    let questionSetToClone = formQuestionSet.questionSets?.[0] as FormQuestionSetType
     questionSetToClone = {
       ...questionSetToClone,
-      formQuestionSetPosition: questionSet.questionSets?.length || 0,
+      formQuestionSetPosition: formQuestionSet.questionSets?.length || 0,
     }
     if (questionSetToClone) {
       createQuestionSetAndQuestions(sessionUserID || 0, questionSetToClone)

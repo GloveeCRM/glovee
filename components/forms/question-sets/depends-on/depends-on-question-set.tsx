@@ -3,6 +3,7 @@ import { RadioQuestionType } from '@/lib/types/qusetion'
 import FormQuestion from '../../questions/form-question'
 import FormQuestionSet from '../form-question-set'
 import { Separator } from '@/components/ui/separator'
+import { useApplicationFormContext } from '@/contexts/application-form-context'
 
 interface DependsOnQuestionSetProps {
   formQuestionSet: FormQuestionSetType
@@ -13,26 +14,30 @@ export default function DependsOnQuestionSet({
   formQuestionSet,
   viewOnly = false,
 }: DependsOnQuestionSetProps) {
-  // const question = formQuestionSet.formQuestions?.[0] as FormQuestionType
+  const { formQuestionSetQuestions, formQuestionSetChildFormQuestionSets } =
+    useApplicationFormContext()
+  const questionSetQuestions = formQuestionSetQuestions(formQuestionSet.formQuestionSetID)
+  const childQuestionSets = formQuestionSetChildFormQuestionSets(formQuestionSet.formQuestionSetID)
 
-  // const questionSets = formQuestionSet.formQuestionSetQuestions
-  // const questionSetsToDisplay = questionSets?.filter(
-  //   (qs) => qs.dependsOn === question.answer?.optionIDs?.[0]
-  // )
+  const question = questionSetQuestions?.[0] as FormQuestionType
+
+  const questionSetsToDisplay = childQuestionSets?.filter(
+    (qs) => qs.dependsOnOptionID === question.answer?.optionIDs?.[0]
+  )
 
   return (
     <div className="flex flex-col gap-[12px]">
-      {/* <FormQuestion key={question?.id} question={question} viewOnly={viewOnly} />
+      <FormQuestion key={question?.formQuestionID} question={question} viewOnly={viewOnly} />
       {questionSetsToDisplay && questionSetsToDisplay.length > 0 && (
         <>
           <Separator className="bg-n-400" />
           <div className="flex flex-col gap-[16px]">
             {questionSetsToDisplay.map((qs) => (
-              <FormQuestionSet key={qs.id} questionSet={qs} />
+              <FormQuestionSet key={qs.formQuestionSetID} formQuestionSet={qs} />
             ))}
           </div>
         </>
-      )} */}
+      )}
     </div>
   )
 }

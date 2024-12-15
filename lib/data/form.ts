@@ -144,7 +144,6 @@ export async function fetchApplicationForms({
     method: 'GET',
     authRequired: true,
   })
-  console.log('data', JSON.stringify(data, null, 2))
 
   return { applicationForms: data, error }
 }
@@ -175,6 +174,34 @@ export async function fetchApplicationFormCategoriesAndSections({
   })
 
   return { formCategories: data?.formCategories, formSections: data?.formSections, error }
+}
+
+interface FetchApplicationFormSectionQuestionSetsAndQuestionsProps {
+  formSectionID: number
+}
+
+interface FetchApplicationFormSectionQuestionSetsAndQuestionsResponse {
+  formQuestionSets?: FormQuestionSetType[]
+  formQuestions?: FormQuestionType[]
+  error?: string
+}
+
+export async function fetchApplicationFormSectionQuestionSetsAndQuestions({
+  formSectionID,
+}: FetchApplicationFormSectionQuestionSetsAndQuestionsProps): Promise<FetchApplicationFormSectionQuestionSetsAndQuestionsResponse> {
+  const queryParams = new URLSearchParams()
+  queryParams.append('form_section_id', formSectionID.toString())
+
+  const { data, error } = await apiRequest<{
+    formQuestionSets: FormQuestionSetType[]
+    formQuestions: FormQuestionType[]
+  }>({
+    path: `rpc/application_form_section_question_sets_and_questions?${queryParams.toString()}`,
+    method: 'GET',
+    authRequired: true,
+  })
+
+  return { formQuestionSets: data?.formQuestionSets, formQuestions: data?.formQuestions, error }
 }
 
 interface SearchFormsInput {

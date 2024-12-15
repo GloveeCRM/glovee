@@ -10,22 +10,22 @@ import LoopQuestionSet from './loop/loop-question-set'
 import DependsOnQuestionSet from './depends-on/depends-on-question-set'
 
 interface FormQuestionSetProps {
-  questionSet: FormQuestionSetType
+  formQuestionSet: FormQuestionSetType
 }
 
-export default function FormQuestionSet({ questionSet }: FormQuestionSetProps) {
-  const isStatic = isStaticQuestionSetType(questionSet)
-  const isRepeatable = isRepeatableQuestionSetType(questionSet)
-  const isConditional = isConditionalQuestionSetType(questionSet)
+export default function FormQuestionSet({ formQuestionSet }: FormQuestionSetProps) {
+  const isStatic = isStaticQuestionSetType(formQuestionSet)
+  const isRepeatable = isRepeatableQuestionSetType(formQuestionSet)
+  const isConditional = isConditionalQuestionSetType(formQuestionSet)
 
   return (
     <div className="w-full">
       {isStatic ? (
-        <FlatQuestionSet questionSet={questionSet} />
+        <FlatQuestionSet formQuestionSet={formQuestionSet} />
       ) : isRepeatable ? (
-        <LoopQuestionSet questionSet={questionSet} />
+        <LoopQuestionSet formQuestionSet={formQuestionSet} />
       ) : isConditional ? (
-        <DependsOnQuestionSet formQuestionSet={questionSet} />
+        <DependsOnQuestionSet formQuestionSet={formQuestionSet} />
       ) : null}
     </div>
   )

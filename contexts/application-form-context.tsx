@@ -2,8 +2,16 @@
 
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
-import { FormCategoryType, FormSectionType } from '@/lib/types/form'
-import { fetchApplicationFormCategoriesAndSections } from '@/lib/data/form'
+import {
+  FormCategoryType,
+  FormQuestionSetType,
+  FormQuestionType,
+  FormSectionType,
+} from '@/lib/types/form'
+import {
+  fetchApplicationFormCategoriesAndSections,
+  fetchApplicationFormSectionQuestionSetsAndQuestions,
+} from '@/lib/data/form'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 type ApplicationFormContextType = {
@@ -15,6 +23,9 @@ type ApplicationFormContextType = {
   selectedFormSectionID: number
   setSelectedFormSectionID: (formSectionID: number) => void
   selectedFormCategorySections: FormSectionType[]
+  rootSelectedFormSectionQuestionSets: FormQuestionSetType[]
+  formQuestionSetChildFormQuestionSets: (parentFormQuestionSetID: number) => FormQuestionSetType[]
+  formQuestionSetQuestions: (formQuestionSetID: number) => FormQuestionType[]
 }
 
 const applicationFormContextDefaultValues: ApplicationFormContextType = {
@@ -26,6 +37,9 @@ const applicationFormContextDefaultValues: ApplicationFormContextType = {
   selectedFormSectionID: 0,
   setSelectedFormSectionID: () => {},
   selectedFormCategorySections: [],
+  rootSelectedFormSectionQuestionSets: [],
+  formQuestionSetChildFormQuestionSets: (parentFormQuestionSetID: number) => [],
+  formQuestionSetQuestions: (formQuestionSetID: number) => [],
 }
 
 const ApplicationFormContext = createContext<ApplicationFormContextType>(
@@ -43,6 +57,12 @@ export default function ApplicationFormContextProvider({
 }: ApplicationFormContextProviderProps) {
   const [formCategories, setFormCategories] = useState<FormCategoryType[]>([])
   const [formSections, setFormSections] = useState<FormSectionType[]>([])
+  const [selectedFormSectionQuestionSets, setSelectedFormSectionQuestionSets] = useState<
+    FormQuestionSetType[]
+  >([])
+  const [selectedFormSectionQuestions, setSelectedFormSectionQuestions] = useState<
+    FormQuestionType[]
+  >([])
 
   const searchParams = useSearchParams()
   const pathname = usePathname()
@@ -57,6 +77,26 @@ export default function ApplicationFormContextProvider({
     return formSections.filter((section) => section.formCategoryID === selectedFormCategoryID)
   }, [formSections, selectedFormCategoryID])
 
+  const rootSelectedFormSectionQuestionSets = useMemo(() => {
+    return selectedFormSectionQuestionSets
+      ?.filter((questionSet) => !questionSet.parentFormQuestionSetID)
+      .sort((a, b) => a.formQuestionSetPosition - b.formQuestionSetPosition)
+  }, [selectedFormSectionQuestionSets])
+
+  const formQuestionSetChildFormQuestionSets = (parentFormQuestionSetID: number) => {
+    return selectedFormSectionQuestionSets
+      ?.filter(
+        (formQuestionSet) => formQuestionSet.parentFormQuestionSetID === parentFormQuestionSetID
+      )
+      .sort((a, b) => a.formQuestionSetPosition - b.formQuestionSetPosition)
+  }
+
+  const formQuestionSetQuestions = (formQuestionSetID: number) => {
+    return selectedFormSectionQuestions
+      ?.filter((formQuestion) => formQuestion.formQuestionSetID === formQuestionSetID)
+      .sort((a, b) => a.formQuestionPosition - b.formQuestionPosition)
+  }
+
   useEffect(() => {
     async function fetchAndSetFormCategoriesAndSections() {
       const { formCategories, formSections } = await fetchApplicationFormCategoriesAndSections({
@@ -64,10 +104,29 @@ export default function ApplicationFormContextProvider({
       })
       setFormCategories(formCategories || [])
       setFormSections(formSections || [])
+
+      if (formSections && formSections.length > 0) {
+        setSelectedFormSectionID(formSections[0].formSectionID)
+      }
     }
 
     fetchAndSetFormCategoriesAndSections()
   }, [applicationFormID])
+
+  useEffect(() => {
+    async function fetchAndSetFormSectionQuestionSetsAndQuestions() {
+      const { formQuestionSets, formQuestions } =
+        await fetchApplicationFormSectionQuestionSetsAndQuestions({
+          formSectionID: selectedFormSectionID,
+        })
+      setSelectedFormSectionQuestionSets(formQuestionSets || [])
+      setSelectedFormSectionQuestions(formQuestions || [])
+    }
+
+    if (selectedFormSectionID) {
+      fetchAndSetFormSectionQuestionSetsAndQuestions()
+    }
+  }, [selectedFormSectionID])
 
   function setSelectedFormSectionID(formSectionID: number) {
     const params = new URLSearchParams(searchParams)
@@ -90,6 +149,9 @@ export default function ApplicationFormContextProvider({
     selectedFormSectionID,
     setSelectedFormSectionID,
     selectedFormCategorySections,
+    rootSelectedFormSectionQuestionSets,
+    formQuestionSetChildFormQuestionSets,
+    formQuestionSetQuestions,
   }
 
   return <ApplicationFormContext.Provider value={value}>{children}</ApplicationFormContext.Provider>

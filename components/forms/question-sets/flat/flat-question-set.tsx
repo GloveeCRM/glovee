@@ -1,20 +1,27 @@
+'use client'
+
 import { FormQuestionSetType } from '@/lib/types/form'
+import { useApplicationFormContext } from '@/contexts/application-form-context'
+
 import FormQuestion from '../../questions/form-question'
 
 interface FlatQuestionSetViewProps {
-  questionSet: FormQuestionSetType
+  formQuestionSet: FormQuestionSetType
   viewOnly?: boolean
 }
 
 export default function FlatQuestionSetView({
-  questionSet,
+  formQuestionSet,
   viewOnly = false,
 }: FlatQuestionSetViewProps) {
+  const { formQuestionSetQuestions } = useApplicationFormContext()
+  const questionSetQuestions = formQuestionSetQuestions(formQuestionSet.formQuestionSetID)
+
   return (
     <div className="flex flex-col gap-[12px]">
-      {questionSet.questions &&
-        questionSet.questions.length > 0 &&
-        questionSet.questions.map((q) => (
+      {questionSetQuestions &&
+        questionSetQuestions.length > 0 &&
+        questionSetQuestions.map((q) => (
           <FormQuestion key={q.formQuestionID} question={q} viewOnly={viewOnly} />
         ))}
     </div>
