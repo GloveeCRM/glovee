@@ -2,15 +2,14 @@ import { redirect } from 'next/navigation'
 
 import { FormStatusTypes } from '@/lib/types/form'
 import { searchForms } from '@/lib/data/form'
-import FormContextProvider from '@/contexts/form-context'
+import ApplicationFormContextProvider from '@/contexts/application-form-context'
 import ClientFormSidebar from '@/components/client/client-form-sidebar'
-import { getSessionUserID } from '@/lib/auth/session'
 
 interface ApplicationLayoutProps {
   children: React.ReactNode
   params: {
     applicationID: string
-    formID: string
+    applicationFormID: string
   }
 }
 
@@ -18,15 +17,13 @@ export default async function ApplicationLayout({
   children,
   params,
 }: Readonly<ApplicationLayoutProps>) {
-  const userID = await getSessionUserID()
-  const formID = parseInt(params.formID)
+  const applicationFormID = parseInt(params.applicationFormID)
   const applicationID = parseInt(params.applicationID)
 
-  const { forms } = await searchForms({
-    filters: { userID, formID, includeCategories: true, includeSections: true },
-  })
-  const form = forms?.[0]
-  const categories = form?.categories || []
+  // const { forms } = await searchForms({
+  //   filters: { userID, applicationFormID, includeCategories: true, includeSections: true },
+  // })
+  // const form = forms?.[0]
 
   // if (form?.status === FormStatusTypes.SUBMITTED) {
   //   redirect(`/application/${applicationID}/submission/${formID}`)
@@ -35,15 +32,11 @@ export default async function ApplicationLayout({
   // }
 
   return (
-    <FormContextProvider formID={formID}>
+    <ApplicationFormContextProvider applicationFormID={applicationFormID}>
       <div id="client-form-layout" className="flex overflow-hidden">
-        <ClientFormSidebar
-          applicationID={applicationID}
-          categories={categories}
-          type="inProgress"
-        />
+        <ClientFormSidebar applicationID={applicationID} type="in-progress" />
         <div className="h-screen flex-1">{children}</div>
       </div>
-    </FormContextProvider>
+    </ApplicationFormContextProvider>
   )
 }

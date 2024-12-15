@@ -1,20 +1,14 @@
 import Link from 'next/link'
 import { IoChevronBackOutline } from 'react-icons/io5'
 
-import { FormCategoryType } from '@/lib/types/form'
 import FormCategoriesCardWrapper from './form-categories-card-wrapper'
 
 interface ClientFormSidebarProps {
   applicationID: number
-  categories: FormCategoryType[]
-  type: 'inProgress' | 'submitted'
+  type: 'in-progress' | 'submitted'
 }
 
-export default async function ClientFormSidebar({
-  applicationID,
-  categories,
-  type,
-}: ClientFormSidebarProps) {
+export default async function ClientFormSidebar({ applicationID, type }: ClientFormSidebarProps) {
   return (
     <div
       id="client-form-sidebar"
@@ -29,7 +23,7 @@ export default async function ClientFormSidebar({
           <span className="text-[16px]">Back</span>
         </Link>
       </div>
-      <FormCategoriesCardWrapper categories={categories} type={type} />
+      <FormCategoriesCardWrapper type={type} />
     </div>
   )
 }

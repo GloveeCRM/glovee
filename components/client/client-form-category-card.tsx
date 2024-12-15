@@ -3,12 +3,14 @@
 import { IoChevronDown, IoChevronForward } from 'react-icons/io5'
 
 import { FormCategoryType, FormSectionType } from '@/lib/types/form'
+import { useApplicationFormContext } from '@/contexts/application-form-context'
+
 import ProgressIndicatorRing from '@/components/ui/progress-indicator-ring'
 import ClientFormSidebarSectionCard from './client-form-section-card'
 
 interface ClientFormCategoryCardProps {
   category: FormCategoryType
-  type: 'inProgress' | 'submitted'
+  type: 'in-progress' | 'submitted'
   isExpanded: boolean
   onClick: (categoryId: number) => void
 }
@@ -19,13 +21,15 @@ export default function ClientFormCategoryCard({
   isExpanded,
   onClick,
 }: ClientFormCategoryCardProps) {
+  const { selectedFormCategorySections } = useApplicationFormContext()
+
   return (
     <div
       className={`cursor-pointer text-wrap rounded px-[4px] pb-[4px] text-[12px] text-n-400`}
       onClick={() => onClick(category.formCategoryID)}
     >
       <div className="flex gap-[4px]">
-        {type === 'inProgress' && (
+        {type === 'in-progress' && (
           <ProgressIndicatorRing
             completionRate={category.completionRate}
             baseCircleColor="text-n-500"
@@ -46,7 +50,7 @@ export default function ClientFormCategoryCard({
         </div>
       </div>
       {isExpanded &&
-        category.sections?.map((section: FormSectionType) => (
+        selectedFormCategorySections.map((section: FormSectionType) => (
           <ClientFormSidebarSectionCard key={section.formSectionID} section={section} type={type} />
         ))}
     </div>

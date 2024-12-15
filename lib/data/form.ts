@@ -149,6 +149,34 @@ export async function fetchApplicationForms({
   return { applicationForms: data, error }
 }
 
+interface FetchApplicationFormCategoriesAndSectionsProps {
+  applicationFormID: number
+}
+
+interface FetchApplicationFormCategoriesAndSectionsResponse {
+  formCategories?: FormCategoryType[]
+  formSections?: FormSectionType[]
+  error?: string
+}
+
+export async function fetchApplicationFormCategoriesAndSections({
+  applicationFormID,
+}: FetchApplicationFormCategoriesAndSectionsProps): Promise<FetchApplicationFormCategoriesAndSectionsResponse> {
+  const queryParams = new URLSearchParams()
+  queryParams.append('application_form_id', applicationFormID.toString())
+
+  const { data, error } = await apiRequest<{
+    formCategories: FormCategoryType[]
+    formSections: FormSectionType[]
+  }>({
+    path: `rpc/application_form_categories_and_sections?${queryParams.toString()}`,
+    method: 'GET',
+    authRequired: true,
+  })
+
+  return { formCategories: data?.formCategories, formSections: data?.formSections, error }
+}
+
 interface SearchFormsInput {
   filters?: {
     formID?: number

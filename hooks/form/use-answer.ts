@@ -7,7 +7,7 @@ import { uploadFileToS3 } from '@/lib/utils/s3'
 import { fetchFormAnswerFileUploadIntent } from '@/lib/data/form'
 import { saveAnswer } from '@/lib/actions/form'
 import { useAuthContext } from '@/contexts/auth-context'
-import { useFormContext } from '@/contexts/form-context'
+import { useApplicationFormContext } from '@/contexts/application-form-context'
 
 interface Answer {
   text?: string
@@ -18,7 +18,7 @@ interface Answer {
 
 export default function useAnswer(questionID: number, initialAnswer: Answer) {
   const { sessionUserID } = useAuthContext()
-  const { formID } = useFormContext()
+  const { applicationFormID: formID } = useApplicationFormContext()
   const [answer, setAnswer] = useState<Answer>(initialAnswer)
   const [message, setMessage] = useState<string>('')
 

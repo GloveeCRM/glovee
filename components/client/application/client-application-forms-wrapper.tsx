@@ -18,9 +18,9 @@ export default async function ClientApplicationFormsWrapper({
     </div>
   ) : (
     <div className="mt-[16px] flex flex-col gap-[16px]">
-      {applicationForms.map((form) => (
-        <div className="px-[8px]" key={form.formID}>
-          <ClientFormSummaryCard form={form} />
+      {applicationForms.map((applicationForm) => (
+        <div className="px-[8px]" key={applicationForm.formID}>
+          <ClientFormSummaryCard applicationForm={applicationForm} />
         </div>
       ))}
     </div>

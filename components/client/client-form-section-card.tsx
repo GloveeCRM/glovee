@@ -1,45 +1,38 @@
 'use client'
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FaRegCircleCheck } from 'react-icons/fa6'
 import { FaRegCircle } from 'react-icons/fa6'
 
 import { FormSectionType } from '@/lib/types/form'
+import { useApplicationFormContext } from '@/contexts/application-form-context'
 
 interface ClientFormSidebarSectionCardProps {
   section: FormSectionType
-  type: 'inProgress' | 'submitted'
+  type: 'in-progress' | 'submitted'
 }
 
 export default function ClientFormSidebarSectionCard({
   section,
   type,
 }: ClientFormSidebarSectionCardProps) {
-  const searchParams = useSearchParams()
-  const selectedSectionId = searchParams.get('section') || '0'
-  const pathname = usePathname()
-  const { replace } = useRouter()
+  const { selectedFormSectionID, setSelectedFormSectionID } = useApplicationFormContext()
 
-  const handleClick = (sectionId: number) => {
-    const params = new URLSearchParams(searchParams)
-    if (sectionId) {
-      params.set('section', String(sectionId))
-    } else {
-      params.delete('section')
+  const handleClick = (sectionID: number) => {
+    if (selectedFormSectionID !== sectionID) {
+      setSelectedFormSectionID(sectionID)
     }
-    replace(`${pathname}?${params.toString()}`)
   }
 
   return (
     <div
-      className={`cursor-pointer rounded ${parseInt(selectedSectionId) === section.formSectionID && 'bg-n-650 text-n-100'} p-[4px] pl-[22px] text-[12px]`}
+      className={`cursor-pointer rounded ${selectedFormSectionID === section.formSectionID && 'bg-n-650 text-n-100'} p-[4px] pl-[22px] text-[12px]`}
       onClick={(e) => {
         e.stopPropagation()
         handleClick(section.formSectionID)
       }}
     >
       <div className="flex gap-[4px]">
-        {type === 'inProgress' && (
+        {type === 'in-progress' && (
           <div className="mt-[2px]">
             {section.completionRate === 100 ? (
               <FaRegCircleCheck className="h-[13px] w-[13px] text-green-500" />
