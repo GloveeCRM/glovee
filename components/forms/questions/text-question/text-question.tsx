@@ -4,7 +4,7 @@ import { useDebouncedCallback } from 'use-debounce'
 import { ImSpinner2 } from 'react-icons/im'
 import { IoMdCheckmarkCircle, IoIosCloseCircle } from 'react-icons/io'
 
-import { FormQuestionType } from '@/lib/types/form'
+import { FormAnswerType, FormQuestionType } from '@/lib/types/form'
 import useAnswer from '@/hooks/form/use-answer'
 
 interface TextQuestionProps {
@@ -15,11 +15,15 @@ interface TextQuestionProps {
 export default function TextQuestion({ formQuestion, readOnly = false }: TextQuestionProps) {
   const { answer, message, updateAnswer } = useAnswer(
     formQuestion.formQuestionID,
-    formQuestion.answer || { text: '' }
+    formQuestion.answer ||
+      ({
+        formQuestionID: formQuestion.formQuestionID,
+        answerText: '',
+      } as FormAnswerType)
   )
 
   const handleChange = useDebouncedCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
-    updateAnswer({ ...answer, text: e.target.value })
+    updateAnswer({ ...answer, answerText: e.target.value })
   }, 500)
 
   return (
@@ -28,7 +32,7 @@ export default function TextQuestion({ formQuestion, readOnly = false }: TextQue
         type="text"
         placeholder={formQuestion.formQuestionSettings.placeholderText || ''}
         disabled={readOnly}
-        defaultValue={answer.text || ''}
+        defaultValue={answer.answerText || ''}
         onChange={handleChange}
         className={`w-full rounded-[3px] border border-n-400 px-[8px] py-[7px] text-[14px] placeholder:font-light placeholder:text-n-450 focus-visible:border-n-600 focus-visible:outline-none disabled:bg-transparent`}
       />

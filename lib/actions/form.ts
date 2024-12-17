@@ -14,6 +14,7 @@ import {
   FormQuestionOptionType,
   FormQuestionDefaultOptionType,
   ApplicationFormType,
+  FormAnswerType,
 } from '../types/form'
 import { GLOVEE_API_URL } from '@/lib/constants/api'
 import { getSession } from '@/lib/auth/session'
@@ -502,6 +503,32 @@ export async function createApplicationForm({
 
   revalidatePath(`/admin/application/${applicationID}`)
   return { applicationForm: data?.applicationForm, error }
+}
+
+interface UpsertFormAnswerProps {
+  formAnswer: Partial<FormAnswerType>
+}
+
+interface UpsertFormAnswerResponse {
+  formAnswer?: FormAnswerType
+  error?: string
+}
+
+export async function upsertFormAnswer({
+  formAnswer,
+}: UpsertFormAnswerProps): Promise<UpsertFormAnswerResponse> {
+  const { data, error } = await apiRequest<FormAnswerType>({
+    path: 'rpc/upsert_form_answer',
+    method: 'POST',
+    data: {
+      formQuestionID: formAnswer.formQuestionID,
+      answerText: formAnswer.answerText,
+      answerDate: formAnswer.answerDate,
+    },
+    authRequired: true,
+  })
+
+  return { formAnswer: data, error }
 }
 
 // interface CreateNewFormProps {

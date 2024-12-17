@@ -114,7 +114,7 @@ export type FormQuestionType = {
   formQuestionSettings: FormQuestionSettingsType
   formQuestionOptions: FormQuestionOptionType[]
   formQuestionDefaultOptions: FormQuestionDefaultOptionType[]
-  answer?: FormQuestionAnswerType
+  answer?: FormAnswerType
 }
 
 export enum FormQuestionDisplayTypes {
@@ -172,9 +172,25 @@ export function isFileQuestionType(question: FormQuestionType) {
   return question.formQuestionType === FormQuestionTypes.FILE
 }
 
-export type FormQuestionAnswerType = {
-  formQuestionAnswerID: number
+export type FormAnswerType = {
+  formAnswerID: number
   formQuestionID: number
-  text: string
+  answerText: string
+  answerDate: string
+  createdAt: string
+  updatedAt: string
+  answerFiles: FormAnswerFileType[]
+  answerOptions: FormAnswerOptionType[]
+}
+
+export type FormAnswerOptionType = {
+  formAnswerID: number
+  formQuestionOptionID: number
+  createdAt: string
+}
+
+export type FormAnswerFileType = {
+  formAnswerID: number
+  fileID: number
   createdAt: string
 }

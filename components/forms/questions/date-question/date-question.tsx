@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { ImSpinner2 } from 'react-icons/im'
 import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
 
-import { FormQuestionType } from '@/lib/types/form'
+import { FormAnswerType, FormQuestionType } from '@/lib/types/form'
 import { MONTHS } from '@/lib/constants/date'
 import { compareDates, daysInMonth } from '@/lib/functions/date'
 import useAnswer from '@/hooks/form/use-answer'
@@ -17,10 +17,14 @@ interface DateQuestionProps {
 export default function DateQuestion({ formQuestion, readOnly }: DateQuestionProps) {
   const { answer, message, updateAnswer } = useAnswer(
     formQuestion.formQuestionID,
-    formQuestion.answer || { date: '' }
+    formQuestion.answer ||
+      ({
+        formQuestionID: formQuestion.formQuestionID,
+        answerDate: '',
+      } as FormAnswerType)
   )
 
-  const initialDate = answer.date ? new Date(answer.date) : null
+  const initialDate = answer.answerDate ? new Date(answer.answerDate) : null
   const minimumDate = new Date(formQuestion.formQuestionSettings?.minimumDate || '1900-01-01')
   const maximumDate = new Date(formQuestion.formQuestionSettings?.maximumDate || '2100-12-31')
 
@@ -76,7 +80,7 @@ export default function DateQuestion({ formQuestion, readOnly }: DateQuestionPro
 
   function saveDate(date: { year: number; month: number; day: number }) {
     const newDate = new Date(Date.UTC(date.year, date.month - 1, date.day)).toISOString()
-    updateAnswer({ ...answer, date: newDate })
+    updateAnswer({ ...answer, answerDate: newDate })
   }
 
   const numDaysInMonth = daysInMonth(

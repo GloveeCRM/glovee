@@ -5,32 +5,27 @@ import { useState } from 'react'
 import { FileType } from '@/lib/types/file'
 import { uploadFileToS3 } from '@/lib/utils/s3'
 import { fetchFormAnswerFileUploadIntent } from '@/lib/data/form'
-import { saveAnswer } from '@/lib/actions/form'
+import { upsertFormAnswer } from '@/lib/actions/form'
 import { useAuthContext } from '@/contexts/auth-context'
 import { useApplicationFormContext } from '@/contexts/application-form-context'
+import { FormAnswerType } from '@/lib/types/form'
 
-interface Answer {
-  text?: string
-  optionIDs?: number[]
-  date?: string
-  files?: FileType[]
-}
-
-export default function useAnswer(questionID: number, initialAnswer: Answer) {
+export default function useAnswer(formQuestionID: number, initialAnswer: FormAnswerType) {
   const { sessionUserID } = useAuthContext()
   const { applicationFormID: formID } = useApplicationFormContext()
-  const [answer, setAnswer] = useState<Answer>(initialAnswer)
+  const [answer, setAnswer] = useState<Partial<FormAnswerType>>(initialAnswer)
   const [message, setMessage] = useState<string>('')
 
-  async function updateAnswer(newAnswer: Answer) {
+  async function updateAnswer(newAnswer: Partial<FormAnswerType>) {
     setMessage('Saving')
     setAnswer(newAnswer)
 
-    saveAnswer({ userID: sessionUserID || 0, questionID, ...newAnswer }).then((data) => {
-      setMessage(data.success ? 'Saved!' : 'Failed to save changes!')
+    upsertFormAnswer({ formAnswer: newAnswer }).then((data) => {
+      const { formAnswer, error } = data
+      setMessage(!error ? 'Saved!' : 'Failed to save changes!')
 
-      if (data.data.answer.files.length > 0) {
-        setAnswer({ ...newAnswer, files: data.data.answer.files })
+      if (formAnswer?.answerFiles && formAnswer.answerFiles.length > 0) {
+        setAnswer({ ...newAnswer, answerFiles: formAnswer.answerFiles })
       }
 
       setTimeout(() => {
@@ -51,7 +46,7 @@ export default function useAnswer(questionID: number, initialAnswer: Answer) {
     const uploadIntent = await fetchFormAnswerFileUploadIntent(
       sessionUserID || 0,
       formID,
-      questionID,
+      formQuestionID,
       fileToUpload
     )
     if (!uploadIntent) {
