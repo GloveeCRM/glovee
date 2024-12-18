@@ -8,7 +8,7 @@ import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
 import { FiUpload } from 'react-icons/fi'
 import { LuDownload, LuFileText } from 'react-icons/lu'
 
-import { FormQuestionType } from '@/lib/types/form'
+import { FormAnswerFileType, FormAnswerType, FormQuestionType } from '@/lib/types/form'
 import useAnswer from '@/hooks/form/use-answer'
 
 interface FileQuestionProps {
@@ -19,7 +19,11 @@ interface FileQuestionProps {
 export default function FileQuestion({ formQuestion, readOnly }: FileQuestionProps) {
   const { answer, message, updateAnswer, uploadAnswerFile } = useAnswer(
     formQuestion.formQuestionID,
-    formQuestion.answer || { optionIDs: [] }
+    formQuestion.answer ||
+      ({
+        formQuestionID: formQuestion.formQuestionID,
+        answerFiles: [] as FormAnswerFileType[],
+      } as FormAnswerType)
   )
 
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -35,8 +39,14 @@ export default function FileQuestion({ formQuestion, readOnly }: FileQuestionPro
       return
     }
 
-    const newFiles = [...(answer.files || []), newFile]
-    updateAnswer({ ...answer, files: newFiles })
+    const newAnswerFiles = [
+      ...(answer.answerFiles || []),
+      {
+        file: newFile,
+      } as FormAnswerFileType,
+    ]
+
+    updateAnswer({ ...answer, answerFiles: newAnswerFiles })
 
     if (fileInputRef.current) {
       fileInputRef.current.value = ''

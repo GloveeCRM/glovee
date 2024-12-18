@@ -4,7 +4,7 @@ import { useState } from 'react'
 
 import { FileType } from '@/lib/types/file'
 import { uploadFileToS3 } from '@/lib/utils/s3'
-import { fetchFormAnswerFileUploadIntent } from '@/lib/data/form'
+import { fetchFormAnswerFileUploadIntent, fetchFormAnswerFileUploadURL } from '@/lib/data/form'
 import { upsertFormAnswer } from '@/lib/actions/form'
 import { useAuthContext } from '@/contexts/auth-context'
 import { useApplicationFormContext } from '@/contexts/application-form-context'
@@ -37,19 +37,12 @@ export default function useAnswer(formQuestionID: number, initialAnswer: FormAns
   async function uploadAnswerFile(file: globalThis.File) {
     setMessage('Uploading')
 
-    const fileToUpload = {
-      name: file.name,
-      mimeType: file.type,
-      size: file.size,
-    } as FileType
-
-    const uploadIntent = await fetchFormAnswerFileUploadIntent(
-      sessionUserID || 0,
-      formID,
+    const { url, objectKey, error } = await fetchFormAnswerFileUploadURL({
       formQuestionID,
-      fileToUpload
-    )
-    if (!uploadIntent) {
+      fileName: file.name,
+      mimeType: file.type,
+    })
+    if (!url) {
       setMessage('Failed to upload file!')
       setTimeout(() => {
         setMessage('')
@@ -57,7 +50,7 @@ export default function useAnswer(formQuestionID: number, initialAnswer: FormAns
       return
     }
 
-    const uploadRes = await uploadFileToS3(uploadIntent.uploadURL, file)
+    const uploadRes = await uploadFileToS3(url, file)
     if (!uploadRes.success) {
       setMessage('Failed to upload file!')
       setTimeout(() => {
@@ -70,7 +63,15 @@ export default function useAnswer(formQuestionID: number, initialAnswer: FormAns
     setTimeout(() => {
       setMessage('')
     }, 1000)
-    return uploadIntent.file
+
+    const uploadedFile = {
+      name: file.name,
+      mimeType: file.type,
+      size: file.size,
+      objectKey,
+    } as FileType
+
+    return uploadedFile
   }
 
   return { answer, message, updateAnswer, uploadAnswerFile }

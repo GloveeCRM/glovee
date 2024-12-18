@@ -1,16 +1,17 @@
 export type FileType = {
   fileID: number
   name: string
-  mimeType: FileMimeType
-  path: string
-  size: number
-  bucket: string
   objectKey: string
+  bucket: string
+  region: string
+  mimeType: FileMimeType
+  size: number
+  isPublic: boolean
   metadata: FileMetadataType
-  url: string
   createdAt: string
   updatedAt: string
   createdBy: string
+  url: string
 }
 
 export type FileMetadataType = {

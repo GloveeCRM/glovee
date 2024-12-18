@@ -204,6 +204,37 @@ export async function fetchApplicationFormSectionQuestionSetsAndQuestions({
   return { formQuestionSets: data?.formQuestionSets, formQuestions: data?.formQuestions, error }
 }
 
+interface FetchFormAnswerFileUploadURLProps {
+  formQuestionID: number
+  fileName: string
+  mimeType: string
+}
+
+interface FetchFormAnswerFileUploadURLResponse {
+  url?: string
+  objectKey?: string
+  error?: string
+}
+
+export async function fetchFormAnswerFileUploadURL({
+  formQuestionID,
+  fileName,
+  mimeType,
+}: FetchFormAnswerFileUploadURLProps): Promise<FetchFormAnswerFileUploadURLResponse> {
+  const queryParams = new URLSearchParams()
+  queryParams.append('form_question_id', formQuestionID.toString())
+  queryParams.append('file_name', fileName)
+  queryParams.append('mime_type', mimeType)
+
+  const { data, error } = await apiRequest<FetchFormAnswerFileUploadURLResponse>({
+    path: `rpc/form_answer_file_upload_url?${queryParams.toString()}`,
+    method: 'GET',
+    authRequired: true,
+  })
+
+  return { url: data?.url, objectKey: data?.objectKey, error }
+}
+
 interface SearchFormsInput {
   filters?: {
     formID?: number

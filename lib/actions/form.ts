@@ -524,6 +524,7 @@ export async function upsertFormAnswer({
       formQuestionID: formAnswer.formQuestionID,
       answerText: formAnswer.answerText,
       answerDate: formAnswer.answerDate,
+      answerFiles: formAnswer.answerFiles,
     },
     authRequired: true,
   })

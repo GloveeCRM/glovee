@@ -1,3 +1,4 @@
+import { FileType } from './file'
 import { UserType } from './user'
 
 export type FormTemplateType = {
@@ -193,4 +194,5 @@ export type FormAnswerFileType = {
   formAnswerID: number
   fileID: number
   createdAt: string
+  file: FileType
 }
