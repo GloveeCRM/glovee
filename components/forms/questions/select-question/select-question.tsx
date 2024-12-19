@@ -12,14 +12,14 @@ interface SelectQuestionProps {
 }
 
 export default function SelectQuestion({ formQuestion, readOnly }: SelectQuestionProps) {
-  const { answer, message, updateAnswer } = useAnswer(
-    formQuestion.formQuestionID,
-    formQuestion.answer || { optionIDs: [] }
-  )
+  const { message, updateAnswer } = useAnswer(formQuestion.formQuestionID)
 
   function handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
     const selectedOptionID = Number(e.target.value) || 0
-    updateAnswer({ ...answer, optionIDs: [selectedOptionID] })
+    updateAnswer({
+      ...formQuestion.answer,
+      answerOptions: [{ formQuestionOptionID: selectedOptionID }],
+    })
   }
   const showPlaceholder = formQuestion.formQuestionDefaultOptions?.length === 0
   const options = formQuestion.formQuestionOptions
@@ -29,12 +29,12 @@ export default function SelectQuestion({ formQuestion, readOnly }: SelectQuestio
       <select
         className="w-full rounded-[3px] border border-n-400 bg-transparent px-[6px] py-[8px] text-[14px] focus-visible:outline-none"
         defaultValue={
-          answer.optionIDs?.[0] ||
+          formQuestion.answer?.answerOptions?.[0]?.formQuestionOptionID ||
           formQuestion.formQuestionDefaultOptions?.[0]?.formQuestionOptionID ||
           0
         }
         value={
-          answer.optionIDs?.[0] ||
+          formQuestion.answer?.answerOptions?.[0]?.formQuestionOptionID ||
           formQuestion.formQuestionDefaultOptions?.[0]?.formQuestionOptionID ||
           0
         }

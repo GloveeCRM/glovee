@@ -517,7 +517,8 @@ interface UpsertFormAnswerResponse {
 export async function upsertFormAnswer({
   formAnswer,
 }: UpsertFormAnswerProps): Promise<UpsertFormAnswerResponse> {
-  const { data, error } = await apiRequest<FormAnswerType>({
+  console.log('formAnswer', JSON.stringify(formAnswer, null, 2))
+  const { data, error } = await apiRequest<{ formAnswer: FormAnswerType }>({
     path: 'rpc/upsert_form_answer',
     method: 'POST',
     data: {
@@ -525,11 +526,12 @@ export async function upsertFormAnswer({
       answerText: formAnswer.answerText,
       answerDate: formAnswer.answerDate,
       answerFiles: formAnswer.answerFiles,
+      answerOptions: formAnswer.answerOptions,
     },
     authRequired: true,
   })
 
-  return { formAnswer: data, error }
+  return { formAnswer: data?.formAnswer, error }
 }
 
 // interface CreateNewFormProps {

@@ -180,8 +180,8 @@ export type FormAnswerType = {
   answerDate: string
   createdAt: string
   updatedAt: string
-  answerFiles: FormAnswerFileType[]
-  answerOptions: FormAnswerOptionType[]
+  answerFiles: Partial<FormAnswerFileType>[]
+  answerOptions: Partial<FormAnswerOptionType>[]
 }
 
 export type FormAnswerOptionType = {

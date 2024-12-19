@@ -8,7 +8,7 @@ import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
 import { FiUpload } from 'react-icons/fi'
 import { LuDownload, LuFileText } from 'react-icons/lu'
 
-import { FormAnswerFileType, FormAnswerType, FormQuestionType } from '@/lib/types/form'
+import { FormAnswerFileType, FormQuestionType } from '@/lib/types/form'
 import useAnswer from '@/hooks/form/use-answer'
 
 interface FileQuestionProps {
@@ -17,14 +17,7 @@ interface FileQuestionProps {
 }
 
 export default function FileQuestion({ formQuestion, readOnly }: FileQuestionProps) {
-  const { answer, message, updateAnswer, uploadAnswerFile } = useAnswer(
-    formQuestion.formQuestionID,
-    formQuestion.answer ||
-      ({
-        formQuestionID: formQuestion.formQuestionID,
-        answerFiles: [] as FormAnswerFileType[],
-      } as FormAnswerType)
-  )
+  const { message, updateAnswer, uploadAnswerFile } = useAnswer(formQuestion.formQuestionID)
 
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -40,13 +33,13 @@ export default function FileQuestion({ formQuestion, readOnly }: FileQuestionPro
     }
 
     const newAnswerFiles = [
-      ...(answer.answerFiles || []),
+      ...(formQuestion.answer?.answerFiles || []),
       {
         file: newFile,
       } as FormAnswerFileType,
     ]
 
-    updateAnswer({ ...answer, answerFiles: newAnswerFiles })
+    updateAnswer({ ...formQuestion.answer, answerFiles: newAnswerFiles })
 
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
@@ -54,10 +47,10 @@ export default function FileQuestion({ formQuestion, readOnly }: FileQuestionPro
   }
 
   async function handleFileDelete(fileID: number) {
-    const currentFiles = answer.files || []
+    const currentFiles = formQuestion.answer?.answerFiles || []
     const newFiles = currentFiles.filter((f) => f.fileID !== fileID)
 
-    updateAnswer({ ...answer, files: newFiles })
+    updateAnswer({ ...formQuestion.answer, answerFiles: newFiles })
   }
 
   function handleClickUploadFile() {
@@ -68,8 +61,8 @@ export default function FileQuestion({ formQuestion, readOnly }: FileQuestionPro
 
   return (
     <div className="relative">
-      {answer.files && answer.files.length > 0 ? (
-        answer.files.map((file) => (
+      {formQuestion.answer?.answerFiles && formQuestion.answer?.answerFiles.length > 0 ? (
+        formQuestion.answer?.answerFiles.map((file) => (
           <div
             key={file.fileID}
             className="flex w-full items-center justify-between gap-[2px] rounded-[3px] border border-n-400 px-[8px] py-[10px]"
@@ -78,11 +71,11 @@ export default function FileQuestion({ formQuestion, readOnly }: FileQuestionPro
               <div className="w-fit rounded-full bg-n-300/70 p-[8px]">
                 <LuFileText className="h-[26px] w-[26px]" />
               </div>
-              <span className="line-clamp-1">{file.name}</span>
+              <span className="line-clamp-1">{file.file?.name}</span>
             </div>
             <div className="flex items-center gap-[6px]">
               <div>
-                <Link href={file.url} target="_blank">
+                <Link href={file.file?.url || ''} target="_blank">
                   <span className="flex items-center gap-[4px] rounded-full bg-n-200 px-[8px] py-[2px] text-n-600 transition duration-75 hover:bg-n-300 hover:text-n-800">
                     <LuDownload className="h-[16px] w-[16px]" />
                     <span>Download</span>
@@ -91,7 +84,7 @@ export default function FileQuestion({ formQuestion, readOnly }: FileQuestionPro
               </div>
               <div
                 className="cursor-pointer rounded-full p-[6px] transition duration-75 hover:bg-red-100"
-                onClick={() => handleFileDelete(file.fileID)}
+                onClick={() => handleFileDelete(file.fileID || 0)}
               >
                 <BiTrash className="h-[22px] w-[22px] text-red-500" />
               </div>

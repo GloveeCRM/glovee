@@ -1,8 +1,10 @@
 'use client'
 
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 import {
+  FormAnswerType,
   FormCategoryType,
   FormQuestionSetType,
   FormQuestionType,
@@ -12,7 +14,6 @@ import {
   fetchApplicationFormCategoriesAndSections,
   fetchApplicationFormSectionQuestionSetsAndQuestions,
 } from '@/lib/data/form'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 type ApplicationFormContextType = {
   applicationFormID: number
@@ -26,6 +27,7 @@ type ApplicationFormContextType = {
   rootSelectedFormSectionQuestionSets: FormQuestionSetType[]
   formQuestionSetChildFormQuestionSets: (parentFormQuestionSetID: number) => FormQuestionSetType[]
   formQuestionSetQuestions: (formQuestionSetID: number) => FormQuestionType[]
+  setFormQuestionAnswer: (formQuestionID: number, answer: FormAnswerType | undefined) => void
 }
 
 const applicationFormContextDefaultValues: ApplicationFormContextType = {
@@ -40,6 +42,7 @@ const applicationFormContextDefaultValues: ApplicationFormContextType = {
   rootSelectedFormSectionQuestionSets: [],
   formQuestionSetChildFormQuestionSets: (parentFormQuestionSetID: number) => [],
   formQuestionSetQuestions: (formQuestionSetID: number) => [],
+  setFormQuestionAnswer: (formQuestionID: number, answer: FormAnswerType | undefined) => {},
 }
 
 const ApplicationFormContext = createContext<ApplicationFormContextType>(
@@ -140,6 +143,16 @@ export default function ApplicationFormContextProvider({
     setSelectedFormSectionID(firstSectionID)
   }
 
+  function setFormQuestionAnswer(formQuestionID: number, answer: FormAnswerType | undefined) {
+    const updatedFormQuestions = selectedFormSectionQuestions?.map((formQuestion) => {
+      if (formQuestion.formQuestionID === formQuestionID) {
+        return { ...formQuestion, answer }
+      }
+      return formQuestion
+    })
+    setSelectedFormSectionQuestions(updatedFormQuestions || [])
+  }
+
   const value = {
     applicationFormID,
     formCategories,
@@ -152,6 +165,7 @@ export default function ApplicationFormContextProvider({
     rootSelectedFormSectionQuestionSets,
     formQuestionSetChildFormQuestionSets,
     formQuestionSetQuestions,
+    setFormQuestionAnswer,
   }
 
   return <ApplicationFormContext.Provider value={value}>{children}</ApplicationFormContext.Provider>

@@ -12,13 +12,13 @@ interface RadioQuestionProps {
 }
 
 export default function RadioQuestion({ formQuestion, readOnly }: RadioQuestionProps) {
-  const { answer, message, updateAnswer } = useAnswer(
-    formQuestion.formQuestionID,
-    formQuestion.answer || { optionIDs: [] }
-  )
+  const { message, updateAnswer } = useAnswer(formQuestion.formQuestionID)
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const selectedOptionID = Number(e.target.value) || 0
-    updateAnswer({ ...answer, optionIDs: [selectedOptionID] })
+    updateAnswer({
+      ...formQuestion.answer,
+      answerOptions: [{ formQuestionOptionID: selectedOptionID }],
+    })
   }
 
   const inline = formQuestion.formQuestionSettings.displayType === FormQuestionDisplayTypes.INLINE
@@ -36,7 +36,8 @@ export default function RadioQuestion({ formQuestion, readOnly }: RadioQuestionP
               value={option.formQuestionOptionID}
               onChange={handleChange}
               checked={
-                answer.optionIDs?.[0] === option.formQuestionOptionID ||
+                formQuestion.answer?.answerOptions?.[0]?.formQuestionOptionID ===
+                  option.formQuestionOptionID ||
                 formQuestion.formQuestionDefaultOptions?.[0]?.formQuestionOptionID ===
                   option.formQuestionOptionID
               }

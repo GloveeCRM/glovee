@@ -3,35 +3,28 @@
 import { useState } from 'react'
 
 import { FileType } from '@/lib/types/file'
-import { uploadFileToS3 } from '@/lib/utils/s3'
-import { fetchFormAnswerFileUploadIntent, fetchFormAnswerFileUploadURL } from '@/lib/data/form'
-import { upsertFormAnswer } from '@/lib/actions/form'
-import { useAuthContext } from '@/contexts/auth-context'
-import { useApplicationFormContext } from '@/contexts/application-form-context'
 import { FormAnswerType } from '@/lib/types/form'
+import { uploadFileToS3 } from '@/lib/utils/s3'
+import { fetchFormAnswerFileUploadURL } from '@/lib/data/form'
+import { upsertFormAnswer } from '@/lib/actions/form'
+import { useApplicationFormContext } from '@/contexts/application-form-context'
 
-export default function useAnswer(formQuestionID: number, initialAnswer: FormAnswerType) {
-  const { sessionUserID } = useAuthContext()
-  const { applicationFormID: formID } = useApplicationFormContext()
-  const [answer, setAnswer] = useState<Partial<FormAnswerType>>(initialAnswer)
+export default function useAnswer(formQuestionID: number) {
+  const { setFormQuestionAnswer } = useApplicationFormContext()
   const [message, setMessage] = useState<string>('')
 
   async function updateAnswer(newAnswer: Partial<FormAnswerType>) {
     setMessage('Saving')
-    setAnswer(newAnswer)
+    newAnswer.formQuestionID = formQuestionID
 
-    upsertFormAnswer({ formAnswer: newAnswer }).then((data) => {
-      const { formAnswer, error } = data
-      setMessage(!error ? 'Saved!' : 'Failed to save changes!')
+    const { formAnswer, error } = await upsertFormAnswer({ formAnswer: newAnswer })
+    setMessage(!error ? 'Saved!' : 'Failed to save changes!')
 
-      if (formAnswer?.answerFiles && formAnswer.answerFiles.length > 0) {
-        setAnswer({ ...newAnswer, answerFiles: formAnswer.answerFiles })
-      }
+    setFormQuestionAnswer(formQuestionID, formAnswer)
 
-      setTimeout(() => {
-        setMessage('')
-      }, 1000)
-    })
+    setTimeout(() => {
+      setMessage('')
+    }, 1000)
   }
 
   async function uploadAnswerFile(file: globalThis.File) {
@@ -74,5 +67,5 @@ export default function useAnswer(formQuestionID: number, initialAnswer: FormAns
     return uploadedFile
   }
 
-  return { answer, message, updateAnswer, uploadAnswerFile }
+  return { message, updateAnswer, uploadAnswerFile }
 }

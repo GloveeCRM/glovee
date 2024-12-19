@@ -13,17 +13,9 @@ interface TextQuestionProps {
 }
 
 export default function TextQuestion({ formQuestion, readOnly = false }: TextQuestionProps) {
-  const { answer, message, updateAnswer } = useAnswer(
-    formQuestion.formQuestionID,
-    formQuestion.answer ||
-      ({
-        formQuestionID: formQuestion.formQuestionID,
-        answerText: '',
-      } as FormAnswerType)
-  )
-
+  const { message, updateAnswer } = useAnswer(formQuestion.formQuestionID)
   const handleChange = useDebouncedCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
-    updateAnswer({ ...answer, answerText: e.target.value })
+    updateAnswer({ ...formQuestion.answer, answerText: e.target.value })
   }, 500)
 
   return (
@@ -32,7 +24,7 @@ export default function TextQuestion({ formQuestion, readOnly = false }: TextQue
         type="text"
         placeholder={formQuestion.formQuestionSettings.placeholderText || ''}
         disabled={readOnly}
-        defaultValue={answer.answerText || ''}
+        defaultValue={formQuestion.answer?.answerText || ''}
         onChange={handleChange}
         className={`w-full rounded-[3px] border border-n-400 px-[8px] py-[7px] text-[14px] placeholder:font-light placeholder:text-n-450 focus-visible:border-n-600 focus-visible:outline-none disabled:bg-transparent`}
       />

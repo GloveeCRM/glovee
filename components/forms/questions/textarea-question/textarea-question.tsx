@@ -16,17 +16,10 @@ export default function TextareaQuestion({
   formQuestion,
   readOnly = false,
 }: TextareaQuestionProps) {
-  const { answer, message, updateAnswer } = useAnswer(
-    formQuestion.formQuestionID,
-    formQuestion.answer ||
-      ({
-        formQuestionID: formQuestion.formQuestionID,
-        answerText: '',
-      } as FormAnswerType)
-  )
+  const { message, updateAnswer } = useAnswer(formQuestion.formQuestionID)
 
   const handleChange = useDebouncedCallback(async (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    updateAnswer({ ...answer, answerText: e.target.value })
+    updateAnswer({ ...formQuestion.answer, answerText: e.target.value })
   }, 500)
 
   return (
@@ -36,7 +29,7 @@ export default function TextareaQuestion({
           placeholder={formQuestion.formQuestionSettings.placeholderText || ''}
           disabled={readOnly}
           rows={3}
-          defaultValue={answer.answerText || ''}
+          defaultValue={formQuestion.answer?.answerText || ''}
           onChange={handleChange}
           className="w-full rounded-[3px] border border-n-400 px-[8px] py-[4px] text-[14px] placeholder:font-light placeholder:text-n-450 focus-visible:border-n-600 focus-visible:outline-none disabled:bg-transparent"
         />
@@ -58,7 +51,7 @@ export default function TextareaQuestion({
         )}
       </div>
       <div className="text-right text-[12px] text-n-500">
-        {answer.answerText?.length || 0}
+        {formQuestion.answer?.answerText?.length || 0}
         {(formQuestion.formQuestionSettings.minimumLength !== null ||
           formQuestion.formQuestionSettings.maximumLength !== null) &&
           ' / '}

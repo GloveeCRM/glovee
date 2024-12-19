@@ -12,19 +12,16 @@ interface CheckboxQuestionProps {
 }
 
 export default function CheckboxQuestion({ formQuestion, readOnly }: CheckboxQuestionProps) {
-  const { answer, message, updateAnswer } = useAnswer(
-    formQuestion.formQuestionID,
-    formQuestion.answer || { optionIDs: [] }
-  )
+  const { message, updateAnswer } = useAnswer(formQuestion.formQuestionID)
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const selectedOptionID = Number(e.target.value)
-    const currentlySelected = answer.optionIDs ?? []
+    const currentlySelected = formQuestion.answer?.answerOptions ?? []
     const newSelection = e.target.checked
-      ? [...currentlySelected, selectedOptionID]
-      : currentlySelected.filter((id) => id !== selectedOptionID)
+      ? [...currentlySelected, { formQuestionOptionID: selectedOptionID }]
+      : currentlySelected.filter((option) => option.formQuestionOptionID !== selectedOptionID)
 
-    updateAnswer({ ...answer, optionIDs: newSelection })
+    updateAnswer({ ...formQuestion.answer, answerOptions: newSelection })
   }
 
   const inline = formQuestion.formQuestionSettings.displayType === FormQuestionDisplayTypes.INLINE
@@ -41,7 +38,12 @@ export default function CheckboxQuestion({ formQuestion, readOnly }: CheckboxQue
               name={String(formQuestion.formQuestionID)}
               value={option.formQuestionOptionID}
               onChange={handleChange}
-              checked={answer.optionIDs?.includes(option.formQuestionOptionID) ?? false}
+              checked={
+                formQuestion.answer?.answerOptions?.some(
+                  (answerOption) =>
+                    answerOption.formQuestionOptionID === option.formQuestionOptionID
+                ) ?? false
+              }
               disabled={readOnly}
               className="h-[16px] w-[16px] accent-n-700"
             />

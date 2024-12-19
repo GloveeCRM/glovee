@@ -15,16 +15,11 @@ interface DateQuestionProps {
 }
 
 export default function DateQuestion({ formQuestion, readOnly }: DateQuestionProps) {
-  const { answer, message, updateAnswer } = useAnswer(
-    formQuestion.formQuestionID,
-    formQuestion.answer ||
-      ({
-        formQuestionID: formQuestion.formQuestionID,
-        answerDate: '',
-      } as FormAnswerType)
-  )
+  const { message, updateAnswer } = useAnswer(formQuestion.formQuestionID)
 
-  const initialDate = answer.answerDate ? new Date(answer.answerDate) : null
+  const initialDate = formQuestion.answer?.answerDate
+    ? new Date(formQuestion.answer.answerDate)
+    : null
   const minimumDate = new Date(formQuestion.formQuestionSettings?.minimumDate || '1900-01-01')
   const maximumDate = new Date(formQuestion.formQuestionSettings?.maximumDate || '2100-12-31')
 
@@ -80,7 +75,7 @@ export default function DateQuestion({ formQuestion, readOnly }: DateQuestionPro
 
   function saveDate(date: { year: number; month: number; day: number }) {
     const newDate = new Date(Date.UTC(date.year, date.month - 1, date.day)).toISOString()
-    updateAnswer({ ...answer, answerDate: newDate })
+    updateAnswer({ ...formQuestion.answer, answerDate: newDate })
   }
 
   const numDaysInMonth = daysInMonth(

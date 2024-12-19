@@ -191,6 +191,7 @@ export async function fetchApplicationFormSectionQuestionSetsAndQuestions({
 }: FetchApplicationFormSectionQuestionSetsAndQuestionsProps): Promise<FetchApplicationFormSectionQuestionSetsAndQuestionsResponse> {
   const queryParams = new URLSearchParams()
   queryParams.append('form_section_id', formSectionID.toString())
+  queryParams.append('include_answers', 'true')
 
   const { data, error } = await apiRequest<{
     formQuestionSets: FormQuestionSetType[]
