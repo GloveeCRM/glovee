@@ -4,9 +4,8 @@ import { FiPlus } from 'react-icons/fi'
 import { BiTrash } from 'react-icons/bi'
 
 import { FormQuestionSetType } from '@/lib/types/form'
-import { createQuestionSetAndQuestions, deleteQuestionSet } from '@/lib/actions/form'
-import { useAuthContext } from '@/contexts/auth-context'
 import { useApplicationFormContext } from '@/contexts/application-form-context'
+import useFormActions from '@/hooks/form/use-form-actions'
 
 import { Separator } from '@/components/ui/separator'
 import FormQuestionSet from '../form-question-set'
@@ -49,7 +48,7 @@ export default function LoopQuestionSet({
             ))}
           </div>
           <Separator className="bg-n-400" />
-          <RepeatQuestionSet formQuestionSet={formQuestionSet} />
+          <RepeatQuestionSet formQuestionSetID={childQuestionSets[0].formQuestionSetID || 0} />
         </div>
       ) : (
         <div className="text-[14px] text-r-700">No question sets</div>
@@ -58,18 +57,15 @@ export default function LoopQuestionSet({
   )
 }
 
-function RepeatQuestionSet({ formQuestionSet }: { formQuestionSet: FormQuestionSetType }) {
-  const { sessionUserID } = useAuthContext()
+interface RepeatQuestionSetProps {
+  formQuestionSetID: number
+}
+
+function RepeatQuestionSet({ formQuestionSetID }: RepeatQuestionSetProps) {
+  const { repeatFormQuestionSet } = useFormActions()
 
   function handleClick() {
-    let questionSetToClone = formQuestionSet.questionSets?.[0] as FormQuestionSetType
-    questionSetToClone = {
-      ...questionSetToClone,
-      formQuestionSetPosition: formQuestionSet.questionSets?.length || 0,
-    }
-    if (questionSetToClone) {
-      createQuestionSetAndQuestions(sessionUserID || 0, questionSetToClone)
-    }
+    repeatFormQuestionSet({ formQuestionSetID })
   }
 
   return (

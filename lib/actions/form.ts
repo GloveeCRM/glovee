@@ -517,7 +517,6 @@ interface UpsertFormAnswerResponse {
 export async function upsertFormAnswer({
   formAnswer,
 }: UpsertFormAnswerProps): Promise<UpsertFormAnswerResponse> {
-  console.log('formAnswer', JSON.stringify(formAnswer, null, 2))
   const { data, error } = await apiRequest<{ formAnswer: FormAnswerType }>({
     path: 'rpc/upsert_form_answer',
     method: 'POST',
@@ -532,6 +531,32 @@ export async function upsertFormAnswer({
   })
 
   return { formAnswer: data?.formAnswer, error }
+}
+
+interface RepeatApplicationFormQuestionSetProps {
+  formQuestionSetID: number
+}
+
+interface RepeatApplicationFormQuestionSetResponse {
+  formQuestionSets?: FormQuestionSetType[]
+  formQuestions?: FormQuestionType[]
+  error?: string
+}
+
+export async function repeatApplicationFormQuestionSet({
+  formQuestionSetID,
+}: RepeatApplicationFormQuestionSetProps): Promise<RepeatApplicationFormQuestionSetResponse> {
+  const { data, error } = await apiRequest<{
+    formQuestionSets: FormQuestionSetType[]
+    formQuestions: FormQuestionType[]
+  }>({
+    path: 'rpc/repeat_application_form_question_set',
+    method: 'POST',
+    data: { formQuestionSetID },
+    authRequired: true,
+  })
+
+  return { formQuestionSets: data?.formQuestionSets, formQuestions: data?.formQuestions, error }
 }
 
 // interface CreateNewFormProps {
@@ -882,8 +907,6 @@ export async function updateFormSections({
 
     const data = await response.json()
     const camelData = keysSnakeCaseToCamelCase(data)
-    console.log('body', JSON.stringify(bodySnakeCase, null, 2))
-    console.log('camelData', JSON.stringify(camelData, null, 2))
     if (data.status === 'error') {
       return { error: camelData.error }
     } else {

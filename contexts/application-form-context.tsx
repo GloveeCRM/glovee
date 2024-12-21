@@ -24,8 +24,12 @@ type ApplicationFormContextType = {
   selectedFormSectionID: number
   setSelectedFormSectionID: (formSectionID: number) => void
   selectedFormCategorySections: FormSectionType[]
+  selectedFormSectionQuestionSets: FormQuestionSetType[]
+  setSelectedFormSectionQuestionSets: (formQuestionSets: FormQuestionSetType[]) => void
   rootSelectedFormSectionQuestionSets: FormQuestionSetType[]
   formQuestionSetChildFormQuestionSets: (parentFormQuestionSetID: number) => FormQuestionSetType[]
+  selectedFormSectionQuestions: FormQuestionType[]
+  setSelectedFormSectionQuestions: (formQuestions: FormQuestionType[]) => void
   formQuestionSetQuestions: (formQuestionSetID: number) => FormQuestionType[]
   setFormQuestionAnswer: (formQuestionID: number, answer: FormAnswerType | undefined) => void
 }
@@ -39,8 +43,12 @@ const applicationFormContextDefaultValues: ApplicationFormContextType = {
   selectedFormSectionID: 0,
   setSelectedFormSectionID: () => {},
   selectedFormCategorySections: [],
+  selectedFormSectionQuestionSets: [],
+  setSelectedFormSectionQuestionSets: () => {},
   rootSelectedFormSectionQuestionSets: [],
   formQuestionSetChildFormQuestionSets: (parentFormQuestionSetID: number) => [],
+  selectedFormSectionQuestions: [],
+  setSelectedFormSectionQuestions: () => {},
   formQuestionSetQuestions: (formQuestionSetID: number) => [],
   setFormQuestionAnswer: (formQuestionID: number, answer: FormAnswerType | undefined) => {},
 }
@@ -162,8 +170,12 @@ export default function ApplicationFormContextProvider({
     selectedFormSectionID,
     setSelectedFormSectionID,
     selectedFormCategorySections,
+    selectedFormSectionQuestionSets,
+    setSelectedFormSectionQuestionSets,
     rootSelectedFormSectionQuestionSets,
     formQuestionSetChildFormQuestionSets,
+    selectedFormSectionQuestions,
+    setSelectedFormSectionQuestions,
     formQuestionSetQuestions,
     setFormQuestionAnswer,
   }

@@ -28,11 +28,6 @@ export default function SelectQuestion({ formQuestion, readOnly }: SelectQuestio
     <div className="relative">
       <select
         className="w-full rounded-[3px] border border-n-400 bg-transparent px-[6px] py-[8px] text-[14px] focus-visible:outline-none"
-        defaultValue={
-          formQuestion.answer?.answerOptions?.[0]?.formQuestionOptionID ||
-          formQuestion.formQuestionDefaultOptions?.[0]?.formQuestionOptionID ||
-          0
-        }
         value={
           formQuestion.answer?.answerOptions?.[0]?.formQuestionOptionID ||
           formQuestion.formQuestionDefaultOptions?.[0]?.formQuestionOptionID ||
