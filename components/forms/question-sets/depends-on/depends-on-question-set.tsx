@@ -22,7 +22,7 @@ export default function DependsOnQuestionSet({
   const question = questionSetQuestions?.[0] as FormQuestionType
 
   const questionSetsToDisplay = childQuestionSets?.filter(
-    (qs) => qs.dependsOnOptionID === question.answer?.optionIDs?.[0]
+    (qs) => qs.dependsOnOptionID === question.answer?.answerOptions?.[0]?.formQuestionOptionID
   )
 
   return (

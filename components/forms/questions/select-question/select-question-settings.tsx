@@ -93,9 +93,7 @@ export default function SelectQuestionSettings({ formQuestion }: SelectQuestionS
           <select
             className="rounded bg-n-600 px-[4px] py-[6px] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-n-500"
             onChange={handleChangeDefaultOption}
-            defaultValue={String(
-              formQuestion.formQuestionDefaultOptions?.[0]?.formQuestionOptionID || 0
-            )}
+            value={String(formQuestion.formQuestionDefaultOptions?.[0]?.formQuestionOptionID || 0)}
           >
             <option value="0">--Select an option--</option>
             {formQuestion.formQuestionOptions.map((option) => (
