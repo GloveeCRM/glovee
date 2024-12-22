@@ -1,6 +1,9 @@
 'use client'
 
-import { repeatApplicationFormQuestionSet } from '@/lib/actions/form'
+import {
+  deleteApplicationFormQuestionSet,
+  repeatApplicationFormQuestionSet,
+} from '@/lib/actions/form'
 import { useApplicationFormContext } from '@/contexts/application-form-context'
 
 interface RepeatFormQuestionSetProps {
@@ -8,6 +11,14 @@ interface RepeatFormQuestionSetProps {
 }
 
 interface RepeatFormQuestionSetResponse {
+  error?: string
+}
+
+interface DeleteFormQuestionSetProps {
+  formQuestionSetID: number
+}
+
+interface DeleteFormQuestionSetResponse {
   error?: string
 }
 
@@ -21,6 +32,19 @@ export default function useFormActions() {
     const { formQuestionSets, formQuestions, error } = await repeatApplicationFormQuestionSet({
       formQuestionSetID,
     })
+    if (!error) {
+      setSelectedFormSectionQuestionSets(formQuestionSets || [])
+      setSelectedFormSectionQuestions(formQuestions || [])
+    }
+    return { error }
+  }
+
+  async function deleteFormQuestionSet({
+    formQuestionSetID,
+  }: DeleteFormQuestionSetProps): Promise<DeleteFormQuestionSetResponse> {
+    const { formQuestionSets, formQuestions, error } = await deleteApplicationFormQuestionSet({
+      formQuestionSetID,
+    })
     console.log('formQuestionSets', formQuestionSets)
     console.log('formQuestions', formQuestions)
     console.log('error', error)
@@ -31,5 +55,8 @@ export default function useFormActions() {
     return { error }
   }
 
-  return { repeatFormQuestionSet }
+  return {
+    repeatFormQuestionSet,
+    deleteFormQuestionSet,
+  }
 }

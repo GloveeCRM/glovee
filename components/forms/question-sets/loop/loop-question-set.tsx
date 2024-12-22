@@ -21,9 +21,10 @@ export default function LoopQuestionSet({
 }: LoopQuestionSetProps) {
   const { formQuestionSetChildFormQuestionSets } = useApplicationFormContext()
   const childQuestionSets = formQuestionSetChildFormQuestionSets(formQuestionSet.formQuestionSetID)
+  const { deleteFormQuestionSet } = useFormActions()
 
-  function handleDeleteQuestionSet(questionSetID: number) {
-    // deleteQuestionSet(sessionUserID || 0, questionSetID)
+  function handleDeleteQuestionSet(formQuestionSetID: number) {
+    deleteFormQuestionSet({ formQuestionSetID })
   }
 
   return (
@@ -35,7 +36,7 @@ export default function LoopQuestionSet({
               <div key={qs.formQuestionSetID}>
                 <div className="flex gap-[6px]">
                   <FormQuestionSet key={qs.formQuestionSetID} formQuestionSet={qs} />
-                  {qs.formQuestionSetPosition !== 0 && (
+                  {qs.formQuestionSetPosition !== 1 && (
                     <div
                       className="flex cursor-pointer items-center rounded bg-red-500/30 p-[4px] text-red-700 transition duration-150 hover:bg-red-500/50 hover:text-red-900"
                       onClick={() => handleDeleteQuestionSet(qs.formQuestionSetID)}

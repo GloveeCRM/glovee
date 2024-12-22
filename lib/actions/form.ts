@@ -559,6 +559,32 @@ export async function repeatApplicationFormQuestionSet({
   return { formQuestionSets: data?.formQuestionSets, formQuestions: data?.formQuestions, error }
 }
 
+interface DeleteApplicationFormQuestionSetProps {
+  formQuestionSetID: number
+}
+
+interface DeleteApplicationFormQuestionSetResponse {
+  formQuestionSets?: FormQuestionSetType[]
+  formQuestions?: FormQuestionType[]
+  error?: string
+}
+
+export async function deleteApplicationFormQuestionSet({
+  formQuestionSetID,
+}: DeleteApplicationFormQuestionSetProps): Promise<DeleteApplicationFormQuestionSetResponse> {
+  const { data, error } = await apiRequest<{
+    formQuestionSets: FormQuestionSetType[]
+    formQuestions: FormQuestionType[]
+  }>({
+    path: 'rpc/delete_application_form_question_set',
+    method: 'POST',
+    data: { formQuestionSetID },
+    authRequired: true,
+  })
+
+  return { formQuestionSets: data?.formQuestionSets, formQuestions: data?.formQuestions, error }
+}
+
 // interface CreateNewFormProps {
 //   ownerID: number
 //   role: string
