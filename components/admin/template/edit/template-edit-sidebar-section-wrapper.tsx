@@ -20,7 +20,7 @@ export default function TemplateEditSidebarSectionWrapper({
         selectedFormCategorySections.map((section) => (
           <TemplateEditSidebarSection
             key={section.formSectionID}
-            section={section}
+            formSection={section}
             active={section.formSectionID === selectedFormSectionID}
           />
         ))

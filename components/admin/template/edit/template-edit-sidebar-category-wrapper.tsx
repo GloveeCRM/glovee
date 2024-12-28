@@ -23,7 +23,7 @@ export default function TemplateEditSidebarCategoryWrapper() {
         {formCategories?.map((category: FormCategoryType) => (
           <Fragment key={category.formCategoryID}>
             <TemplateEditSidebarCategory
-              category={category}
+              formCategory={category}
               isExpanded={selectedFormCategoryID === category.formCategoryID}
             />
             <Separator className="bg-n-600" />

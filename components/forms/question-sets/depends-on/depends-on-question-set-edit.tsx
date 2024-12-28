@@ -104,7 +104,7 @@ export default function DependsOnQuestionSetEdit({
 
     document.addEventListener('mousedown', handleClickOutsideQuestionPrompt)
     return () => document.removeEventListener('mousedown', handleClickOutsideQuestionPrompt)
-  }, [formQuestionSetQuestion, isEditing])
+  }, [formQuestionSetQuestion, isEditing, updateFormQuestion])
 
   return (
     <div className="group/questionSet rounded bg-b-500 p-[8px] pt-[16px] text-[14px]">

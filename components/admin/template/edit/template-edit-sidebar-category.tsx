@@ -18,12 +18,12 @@ import {
 import TemplateEditSidebarSectionWrapper from './template-edit-sidebar-section-wrapper'
 
 interface TemplateEditSidebarCategoryProps {
-  category: FormCategoryType
+  formCategory: FormCategoryType
   isExpanded: boolean
 }
 
 export default function TemplateEditSidebarCategory({
-  category,
+  formCategory,
   isExpanded,
 }: TemplateEditSidebarCategoryProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false)
@@ -41,10 +41,10 @@ export default function TemplateEditSidebarCategory({
   const { updateFormCategories, deleteFormCategory } = useFormCategoryActions()
 
   function handleClickCategory() {
-    if (selectedFormCategoryID !== category.formCategoryID) {
-      setSelectedFormCategoryID(category.formCategoryID)
+    if (selectedFormCategoryID !== formCategory.formCategoryID) {
+      setSelectedFormCategoryID(formCategory.formCategoryID)
       const categorySections = formSections?.filter(
-        (section) => section.formCategoryID === category.formCategoryID
+        (formSection) => formSection.formCategoryID === formCategory.formCategoryID
       )
       setSelectedFormSectionID(categorySections?.[0]?.formSectionID || 0)
     }
@@ -56,15 +56,15 @@ export default function TemplateEditSidebarCategory({
 
   async function handleClickDeleteCategory() {
     const { error } = await deleteFormCategory({
-      formCategoryID: category.formCategoryID,
+      formCategoryID: formCategory.formCategoryID,
     })
     if (error) {
       console.error(error)
     }
-    if (selectedFormCategoryID === category.formCategoryID) {
+    if (selectedFormCategoryID === formCategory.formCategoryID) {
       setSelectedFormCategoryID(formCategories?.[0]?.formCategoryID || 0)
       const categorySections = formSections?.filter(
-        (section) => section.formCategoryID === category.formCategoryID
+        (section) => section.formCategoryID === formCategory.formCategoryID
       )
       setSelectedFormSectionID(categorySections?.[0]?.formSectionID || 0)
     }
@@ -81,7 +81,7 @@ export default function TemplateEditSidebarCategory({
       if (categoryTitleInputRef.current?.value) {
         const formCategoriesToUpdate = [
           {
-            ...category,
+            ...formCategory,
             categoryName: categoryTitleInputRef.current?.value || '',
           },
         ]
@@ -121,7 +121,7 @@ export default function TemplateEditSidebarCategory({
         setIsEditing(false)
         const formCategoriesToUpdate = [
           {
-            ...category,
+            ...formCategory,
             categoryName: categoryTitleInputRef.current?.value || '',
           },
         ]
@@ -151,7 +151,7 @@ export default function TemplateEditSidebarCategory({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [isEditing, categoryTitleInputRef, formCategories, updateFormCategories])
+  }, [isEditing, categoryTitleInputRef, formCategories, updateFormCategories, formCategory])
 
   return (
     <div className="text-[14px] text-n-400">
@@ -159,7 +159,7 @@ export default function TemplateEditSidebarCategory({
         <textarea
           ref={categoryTitleInputRef}
           className="mb-[7px] ml-[1px] mt-[4px] block w-[221px] resize-none overflow-hidden rounded border-[1px] border-n-500 bg-n-700/70 px-[4px] pb-[2px] pt-[1px] text-n-100 focus:border-[1px] focus:border-n-500 focus:outline-none"
-          defaultValue={category.categoryName}
+          defaultValue={formCategory.categoryName}
           onChange={handleTitleChange}
           onKeyDown={handleKeyDown}
         />
@@ -171,7 +171,7 @@ export default function TemplateEditSidebarCategory({
           <div
             className={`${!isExpanded && 'truncate text-n-400 group-hover/category:w-[calc(100%-28px)] group-hover/category:truncate'} text-n-100`}
           >
-            {category.categoryName}
+            {formCategory.categoryName}
           </div>
           <DropdownMenu open={isOptionsMenuOpen} onOpenChange={handleOptionsDropdownMenuOpenChange}>
             <DropdownMenuTrigger
@@ -197,7 +197,7 @@ export default function TemplateEditSidebarCategory({
           </DropdownMenu>
         </div>
       )}
-      {isExpanded && <TemplateEditSidebarSectionWrapper categoryID={category.formCategoryID} />}
+      {isExpanded && <TemplateEditSidebarSectionWrapper categoryID={formCategory.formCategoryID} />}
     </div>
   )
 }

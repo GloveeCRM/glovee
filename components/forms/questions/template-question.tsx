@@ -139,7 +139,7 @@ export default function TemplateQuestion({ formQuestion }: TemplateQuestionProps
 
     document.addEventListener('mousedown', handleClickOutsideQuestionPrompt)
     return () => document.removeEventListener('mousedown', handleClickOutsideQuestionPrompt)
-  }, [formQuestion, isEditing])
+  }, [formQuestion, isEditing, updateFormQuestion])
 
   return (
     <div

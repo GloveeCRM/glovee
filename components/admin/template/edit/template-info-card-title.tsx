@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { MdOutlineModeEdit } from 'react-icons/md'
 import { toast } from 'react-hot-toast'
 
@@ -27,7 +27,7 @@ export default function TemplateInfoCardTitle({
     setIsEditing(true)
   }
 
-  async function handleSave() {
+  const handleSave = useCallback(async () => {
     const newTitle = titleInputRef.current?.value || 'Untitled Template'
     setIsEditing(false)
     const { error } = await updateFormTemplate({
@@ -36,7 +36,7 @@ export default function TemplateInfoCardTitle({
     if (error) {
       console.error(error)
     }
-  }
+  }, [updateFormTemplate])
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === 'Enter') {
@@ -75,7 +75,7 @@ export default function TemplateInfoCardTitle({
     return () => {
       document.removeEventListener('mousedown', handleClickOutsideTitle)
     }
-  }, [isEditing, title])
+  }, [isEditing, titleInputRef, handleSave])
 
   return (
     <div className="group relative text-[14px] text-n-100">

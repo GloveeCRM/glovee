@@ -17,12 +17,12 @@ import {
 } from '@/components/ui/dropdown-menu'
 
 interface TemplateEditSidebarSectionProps {
-  section: FormSectionType
+  formSection: FormSectionType
   active: boolean
 }
 
 export default function TemplateEditSidebarSection({
-  section,
+  formSection,
   active,
 }: TemplateEditSidebarSectionProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false)
@@ -35,7 +35,7 @@ export default function TemplateEditSidebarSection({
 
   function handleClickSection(e: React.MouseEvent<HTMLDivElement>) {
     e.stopPropagation()
-    setSelectedFormSectionID(section.formSectionID)
+    setSelectedFormSectionID(formSection.formSectionID)
   }
 
   function handleClickRenameSection() {
@@ -43,7 +43,7 @@ export default function TemplateEditSidebarSection({
   }
 
   async function handleClickDeleteSection() {
-    const { error } = await deleteFormSection({ formSectionID: section.formSectionID })
+    const { error } = await deleteFormSection({ formSectionID: formSection.formSectionID })
     if (error) {
       console.error(error)
     }
@@ -60,7 +60,7 @@ export default function TemplateEditSidebarSection({
       if (sectionInputRef.current?.value) {
         const formSectionsToUpdate = [
           {
-            ...section,
+            ...formSection,
             sectionName: sectionInputRef.current?.value || '',
           },
         ]
@@ -98,7 +98,7 @@ export default function TemplateEditSidebarSection({
         if (sectionInputRef.current?.value) {
           const formSectionsToUpdate = [
             {
-              ...section,
+              ...formSection,
               sectionName: sectionInputRef.current?.value || '',
             },
           ]
@@ -129,7 +129,7 @@ export default function TemplateEditSidebarSection({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [isEditing, sectionInputRef, section.formSectionID, updateFormSections])
+  }, [isEditing, sectionInputRef, formSection, updateFormSections])
 
   return (
     <div
@@ -140,14 +140,14 @@ export default function TemplateEditSidebarSection({
         <textarea
           ref={sectionInputRef}
           className="ml-[15px] block w-[206px] resize-none overflow-hidden rounded border-[1px] border-n-500 bg-n-700/70 px-[4px] pb-[2px] text-n-100 focus:border-[1px] focus:border-n-500 focus:outline-none"
-          defaultValue={section.sectionName}
+          defaultValue={formSection.sectionName}
           onChange={handleTitleChange}
           onKeyDown={handleKeyDown}
         />
       ) : (
         <div className="pl-[20px] pr-[6px]">
           <div>
-            <div>{section.sectionName}</div>
+            <div>{formSection.sectionName}</div>
             <DropdownMenu
               open={isOptionsMenuOpen}
               onOpenChange={handleOptionsDropdownMenuOpenChange}

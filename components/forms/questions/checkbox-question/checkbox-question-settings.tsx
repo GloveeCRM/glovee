@@ -211,7 +211,7 @@ function CheckboxOption({ formQuestion, formQuestionOption }: CheckboxOptionProp
 
     document.addEventListener('mousedown', handleClickOutsideOption)
     return () => document.removeEventListener('mousedown', handleClickOutsideOption)
-  }, [formQuestion, formQuestionOption, isEditing])
+  }, [formQuestion, formQuestionOption, isEditing, updateFormQuestionOption])
 
   return (
     <div className="flex justify-between rounded bg-n-600 text-[12px]">
