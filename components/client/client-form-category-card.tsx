@@ -51,7 +51,11 @@ export default function ClientFormCategoryCard({
       </div>
       {isExpanded &&
         selectedFormCategorySections.map((section: FormSectionType) => (
-          <ClientFormSidebarSectionCard key={section.formSectionID} section={section} type={type} />
+          <ClientFormSidebarSectionCard
+            key={section.formSectionID}
+            formSection={section}
+            type={type}
+          />
         ))}
     </div>
   )

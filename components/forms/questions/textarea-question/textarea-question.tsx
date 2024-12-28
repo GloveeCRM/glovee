@@ -4,7 +4,7 @@ import { useDebouncedCallback } from 'use-debounce'
 import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
 import { ImSpinner2 } from 'react-icons/im'
 
-import { FormAnswerType, FormQuestionType } from '@/lib/types/form'
+import { FormQuestionType } from '@/lib/types/form'
 import useAnswer from '@/hooks/form/use-answer'
 
 interface TextareaQuestionProps {

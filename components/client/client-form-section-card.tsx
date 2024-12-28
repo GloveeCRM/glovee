@@ -7,41 +7,41 @@ import { FormSectionType } from '@/lib/types/form'
 import { useApplicationFormContext } from '@/contexts/application-form-context'
 
 interface ClientFormSidebarSectionCardProps {
-  section: FormSectionType
+  formSection: FormSectionType
   type: 'in-progress' | 'submitted'
 }
 
 export default function ClientFormSidebarSectionCard({
-  section,
+  formSection,
   type,
 }: ClientFormSidebarSectionCardProps) {
   const { selectedFormSectionID, setSelectedFormSectionID } = useApplicationFormContext()
 
-  const handleClick = (sectionID: number) => {
-    if (selectedFormSectionID !== sectionID) {
-      setSelectedFormSectionID(sectionID)
+  const handleClick = (formSectionID: number) => {
+    if (selectedFormSectionID !== formSectionID) {
+      setSelectedFormSectionID(formSectionID)
     }
   }
 
   return (
     <div
-      className={`cursor-pointer rounded ${selectedFormSectionID === section.formSectionID && 'bg-n-650 text-n-100'} p-[4px] pl-[22px] text-[12px]`}
+      className={`cursor-pointer rounded ${selectedFormSectionID === formSection.formSectionID && 'bg-n-650 text-n-100'} p-[4px] pl-[22px] text-[12px]`}
       onClick={(e) => {
         e.stopPropagation()
-        handleClick(section.formSectionID)
+        handleClick(formSection.formSectionID)
       }}
     >
       <div className="flex gap-[4px]">
         {type === 'in-progress' && (
           <div className="mt-[2px]">
-            {section.completionRate === 100 ? (
+            {formSection.completionRate === 1 ? (
               <FaRegCircleCheck className="h-[13px] w-[13px] text-green-500" />
             ) : (
               <FaRegCircle className="h-[13px] w-[13px]" />
             )}
           </div>
         )}
-        <div>{section.sectionName}</div>
+        <div>{formSection.sectionName}</div>
       </div>
     </div>
   )

@@ -5,21 +5,19 @@ import { searchForms } from '@/lib/data/form'
 import ApplicationFormContextProvider from '@/contexts/application-form-context'
 import ClientFormSidebar from '@/components/client/client-form-sidebar'
 
+interface ApplicationLayoutParams {
+  applicationID: number
+  applicationFormID: number
+}
 interface ApplicationLayoutProps {
   children: React.ReactNode
-  params: {
-    applicationID: string
-    applicationFormID: string
-  }
+  params: ApplicationLayoutParams
 }
 
 export default async function ApplicationLayout({
   children,
-  params,
+  params: { applicationFormID, applicationID },
 }: Readonly<ApplicationLayoutProps>) {
-  const applicationFormID = parseInt(params.applicationFormID)
-  const applicationID = parseInt(params.applicationID)
-
   // const { forms } = await searchForms({
   //   filters: { userID, applicationFormID, includeCategories: true, includeSections: true },
   // })

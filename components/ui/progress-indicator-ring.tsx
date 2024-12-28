@@ -21,7 +21,7 @@ export default function ProgressIndicatorRing({
 
   // Calculate the dash array and dash offset based on the completion rate
   const dashArray = circumference
-  const dashOffset = circumference * (1 - completionRate / 100)
+  const dashOffset = circumference * (1 - completionRate)
 
   return (
     <div className="relative h-[42px] w-[42px]">
@@ -35,7 +35,7 @@ export default function ProgressIndicatorRing({
           strokeLinecap="round"
         />
         <circle
-          className={`stroke-current ${completeGreen && completionRate === 100 ? 'text-green-600' : progressCircleColor}`}
+          className={`stroke-current ${completeGreen && completionRate === 1 ? 'text-green-600' : progressCircleColor}`}
           cx="12"
           cy="12"
           r="10"
@@ -47,12 +47,12 @@ export default function ProgressIndicatorRing({
         />
       </svg>
       <div
-        className={`absolute inset-0 flex items-center justify-center text-[9px] font-bold ${completeGreen && completionRate === 100 && 'text-green-600'}`}
+        className={`absolute inset-0 flex items-center justify-center text-[9px] font-bold ${completeGreen && completionRate === 1 && 'text-green-600'}`}
       >
-        {completeCheck && completionRate === 100 ? (
+        {completeCheck && completionRate === 1 ? (
           <BiCheck className="h-[28px] w-[28px]" />
         ) : (
-          `${completionRate}%`
+          `${completionRate * 100}%`
         )}
       </div>
     </div>

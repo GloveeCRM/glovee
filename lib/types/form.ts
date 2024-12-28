@@ -35,6 +35,7 @@ export type ApplicationFormType = {
 
 export type FormType = {
   formID: number
+  completionRate: number
   createdBy: UserType
   createdAt: string
   categories?: FormCategoryType[]
@@ -178,6 +179,7 @@ export type FormAnswerType = {
   formQuestionID: number
   answerText: string
   answerDate: string
+  isAcceptable: boolean
   createdAt: string
   updatedAt: string
   answerFiles: Partial<FormAnswerFileType>[]

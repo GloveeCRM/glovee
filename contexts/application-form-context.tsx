@@ -124,6 +124,20 @@ export default function ApplicationFormContextProvider({
     fetchAndSetFormCategoriesAndSections()
   }, [applicationFormID])
 
+  // TODO: Everytime an answer changes, we are re-fetching
+  // Optimize this!
+  useEffect(() => {
+    async function fetchAndSetFormCategoriesAndSections() {
+      const { formCategories, formSections } = await fetchApplicationFormCategoriesAndSections({
+        applicationFormID,
+      })
+      setFormCategories(formCategories || [])
+      setFormSections(formSections || [])
+    }
+
+    fetchAndSetFormCategoriesAndSections()
+  }, [selectedFormSectionQuestions])
+
   useEffect(() => {
     async function fetchAndSetFormSectionQuestionSetsAndQuestions() {
       const { formQuestionSets, formQuestions } =
