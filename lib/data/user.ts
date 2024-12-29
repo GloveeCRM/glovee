@@ -109,3 +109,18 @@ export async function fetchProfilePictureUploadURL({
 
   return { url: data?.url, objectKey: data?.objectKey, error }
 }
+
+interface FetchCurrentUserProfileResponse {
+  user?: UserType
+  error?: string
+}
+
+export async function fetchCurrentUserProfile(): Promise<FetchCurrentUserProfileResponse> {
+  const { data, error } = await apiRequest<{ user: UserType }>({
+    path: 'rpc/auth_user_profile',
+    method: 'GET',
+    authRequired: true,
+  })
+
+  return { user: data?.user, error }
+}

@@ -1,10 +1,11 @@
 import { Suspense } from 'react'
 
-import OrgInfoCardSkeleton from '@/components/skeleton/org-info-card-skeleton'
 import { Separator } from '@/components/ui/separator'
+import OrgInfoCardSkeleton from '@/components/skeleton/org-info-card-skeleton'
+import LoggedInUserCardSkeleton from '@/components/skeleton/logged-in-user-card-skeleton'
 import NavLinks from './nav-links'
 import OrgInfoCard from './org-info-card'
-import LogoutButton from './logout-button'
+import LoggedInUserCard from './logged-in-user-card'
 
 interface AdminDashboardSidebarProps {
   orgName: string
@@ -23,9 +24,10 @@ export default function AdminDashboardSidebar({ orgName }: AdminDashboardSidebar
       </div>
       <Separator className="bg-sand-500" />
       <NavLinks className="flex-1" />
-      <div id="sidebar-footer" className="flex h-[60px] justify-center">
-        <LogoutButton className="bg-n-600" />
-      </div>
+      <Separator className="bg-sand-500" />
+      <Suspense fallback={<LoggedInUserCardSkeleton />}>
+        <LoggedInUserCard />
+      </Suspense>
     </div>
   )
 }

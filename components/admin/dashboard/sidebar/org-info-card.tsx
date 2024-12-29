@@ -10,8 +10,6 @@ interface OrgInfoCardProps {
 export default async function OrgInfoCard({ orgName }: OrgInfoCardProps) {
   const { organization } = await fetchOrganizationProfile({ orgName })
 
-  await new Promise((resolve) => setTimeout(resolve, 3000))
-
   return (
     <div
       id="org-info"

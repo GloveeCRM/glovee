@@ -24,7 +24,7 @@ interface RootLayoutProps {
 export default async function RootLayout({ params, children }: RootLayoutProps) {
   const session = await getSession()
   const sessionUserID = await getSessionUserID()
-  const orgName = params.orgName
+  const { orgName } = params
 
   return (
     <AuthProvider accessToken={session} sessionUserID={sessionUserID}>
