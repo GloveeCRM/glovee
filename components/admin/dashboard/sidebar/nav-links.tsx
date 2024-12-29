@@ -12,8 +12,8 @@ const links = [
   { name: 'Templates', path: '/admin/templates', icon: LuLayoutTemplate },
   { name: 'Applications', path: '/admin/applications', icon: IoFolderOutline },
   { name: 'Clients', path: '/admin/clients', icon: FaUsers },
-  { name: 'Tickets', path: '/admin/tickets', icon: GoCommentDiscussion },
-  { name: 'Settings', path: '/admin/settings', icon: IoSettingsOutline },
+  // { name: 'Tickets', path: '/admin/tickets', icon: GoCommentDiscussion },
+  // { name: 'Settings', path: '/admin/settings', icon: IoSettingsOutline },
 ]
 
 interface NavLinksProps {

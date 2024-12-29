@@ -20,18 +20,18 @@ export default function SearchByParams({ placeholder = 'Search' }: SearchByParam
 
   return (
     <div
-      className={`${isSearching && 'ring-1 ring-n-500'} border-n-2300 flex items-center gap-[4px] rounded border px-[6px]`}
+      className={`${isSearching && 'ring-1 ring-zinc-500'} flex items-center gap-[4px] rounded-md border border-zinc-300 px-[6px]`}
     >
       <div>
-        <IoSearch className="h-[18px] w-[18px] text-n-500 peer-focus:text-n-700" />
+        <IoSearch className="h-[18px] w-[18px] text-zinc-500 peer-focus:text-zinc-700" />
       </div>
-      <Input
+      <input
         onChange={handleChange}
         placeholder={placeholder}
         defaultValue={initialValue}
         onFocus={() => setIsSearching(true)}
         onBlur={() => setIsSearching(false)}
-        className="border-none p-0 text-[16px] placeholder:text-[14px] focus-visible:ring-0"
+        className="h-[34px] border-none bg-transparent p-0 text-[14px] placeholder:text-[14px] focus-visible:outline-none focus-visible:ring-0"
       />
     </div>
   )

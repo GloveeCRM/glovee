@@ -13,7 +13,7 @@ export default async function OrgInfoCard({ orgName }: OrgInfoCardProps) {
   return (
     <div
       id="org-info"
-      className="border-sand-500 bg-coral-400 flex items-center gap-[8px] rounded-md p-[6px] text-[14px] font-semibold"
+      className="bg-coral-400 flex items-center gap-[8px] rounded-md p-[6px] text-[14px] font-semibold"
     >
       <Image
         src={organization?.logoURL || DEFAULT_ORG_LOGO_URL}
