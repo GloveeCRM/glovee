@@ -14,7 +14,7 @@ export function NavLinkItem({ name, href, active, icon }: NavLinkItemProps) {
   return (
     <Link
       href={href}
-      className={`${active && 'bg-n-600'} flex items-center gap-[10px] rounded p-[8px] text-n-100`}
+      className={`${active && 'bg-teal-500 text-white'} text-bunker flex items-center gap-[10px] rounded-md p-[8px]`}
     >
       <Icon className="h-[20px] w-[20px]" />
       <p>{name}</p>

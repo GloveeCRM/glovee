@@ -1,6 +1,6 @@
 import NavLinks from './client-nav-links'
-import OrgInfoCard from '../admin/dashboard/nav/org-info-card'
-import LogoutButton from '../admin/dashboard/nav/logout-button'
+import OrgInfoCard from '../admin/dashboard/sidebar/org-info-card'
+import LogoutButton from '../admin/dashboard/sidebar/logout-button'
 
 interface DashboardSidebarProps {
   orgName: string

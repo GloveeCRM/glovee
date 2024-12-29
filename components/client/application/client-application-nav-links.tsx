@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation'
 import { IoFolderOutline, IoCloudUploadOutline, IoFileTrayOutline } from 'react-icons/io5'
 
-import { NavLinkItem } from '@/components/admin/dashboard/nav/nav-link-item'
+import { NavLinkItem } from '@/components/admin/dashboard/sidebar/nav-link-item'
 
 interface ClientApplicationNavLinksProps {
   applicationID: number

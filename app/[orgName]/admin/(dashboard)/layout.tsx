@@ -1,4 +1,4 @@
-import DashboardSidebar from '@/components/admin/dashboard/nav/dashboard-sidebar'
+import AdminDashboardSidebar from '@/components/admin/dashboard/sidebar/admin-dashboard-sidebar'
 
 interface AdminLayoutProps {
   params: { orgName: string }
@@ -10,7 +10,7 @@ export default function AdminLayout({ children, params }: AdminLayoutProps) {
 
   return (
     <div id="dashboard" className="flex h-screen overflow-hidden">
-      <DashboardSidebar orgName={orgName} />
+      <AdminDashboardSidebar orgName={orgName} />
       <div className="flex-1 overflow-auto p-[8px]">{children}</div>
     </div>
   )

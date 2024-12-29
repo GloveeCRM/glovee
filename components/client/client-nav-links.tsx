@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation'
 import { GoCommentDiscussion } from 'react-icons/go'
 import { IoFolderOutline, IoSettingsOutline } from 'react-icons/io5'
 
-import { NavLinkItem } from '../admin/dashboard/nav/nav-link-item'
+import { NavLinkItem } from '../admin/dashboard/sidebar/nav-link-item'
 
 const links = [
   { name: 'Applications', path: '/applications', icon: IoFolderOutline },

@@ -10,10 +10,12 @@ interface OrgInfoCardProps {
 export default async function OrgInfoCard({ orgName }: OrgInfoCardProps) {
   const { organization } = await fetchOrganizationProfile({ orgName })
 
+  await new Promise((resolve) => setTimeout(resolve, 3000))
+
   return (
     <div
       id="org-info"
-      className="flex items-center gap-[8px] rounded-md bg-n-600 p-[6px] text-[14px] font-semibold text-n-100"
+      className="border-sand-500 bg-coral-400 flex items-center gap-[8px] rounded-md p-[6px] text-[14px] font-semibold"
     >
       <Image
         src={organization?.logoURL || DEFAULT_ORG_LOGO_URL}
@@ -22,7 +24,7 @@ export default async function OrgInfoCard({ orgName }: OrgInfoCardProps) {
         height={65}
         className="rounded-full"
       />
-      <h1>{organization?.name || 'Untitled Organization'}</h1>
+      <h1>{organization?.name}</h1>
     </div>
   )
 }
