@@ -5,7 +5,6 @@ import { ChevronLeftIcon, ChevronRightIcon, DotsHorizontalIcon } from '@radix-ui
 
 import { cn } from '@/lib/utils/tailwind'
 import { ButtonProps, buttonVariants } from '@/components/ui/button'
-import { Button } from './buttons'
 import usePagination from '@/hooks/use-pagination'
 
 const PaginationContainer = ({ className, ...props }: React.ComponentProps<'nav'>) => (

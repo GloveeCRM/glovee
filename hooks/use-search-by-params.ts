@@ -4,7 +4,15 @@ import { useEffect } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useDebouncedCallback } from 'use-debounce'
 
-export default function useSearchByParams(initialQuery = '') {
+interface UseSearchByParamsProps {
+  initialQuery?: string
+  debounceTime?: number
+}
+
+export default function useSearchByParams({
+  initialQuery = '',
+  debounceTime = 500,
+}: UseSearchByParamsProps = {}) {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const { replace } = useRouter()
@@ -17,7 +25,7 @@ export default function useSearchByParams(initialQuery = '') {
       params.delete('query')
     }
     replace(`${pathname}?${params.toString()}`)
-  }, 1000)
+  }, debounceTime)
 
   useEffect(() => {
     updateSearchParams(initialQuery)

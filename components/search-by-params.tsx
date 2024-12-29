@@ -1,17 +1,16 @@
 'use client'
 
+import { useState } from 'react'
 import { IoSearch } from 'react-icons/io5'
 
 import useSearchByParams from '@/hooks/use-search-by-params'
-import { Input } from '@/components/ui/input'
-import { useEffect, useState } from 'react'
 
 interface SearchByParamsProps {
   placeholder: string
 }
 
 export default function SearchByParams({ placeholder = 'Search' }: SearchByParamsProps) {
-  const { updateSearchParams, initialValue } = useSearchByParams()
+  const { updateSearchParams, initialValue } = useSearchByParams({ debounceTime: 0 })
   const [isSearching, setIsSearching] = useState<boolean>(false)
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {

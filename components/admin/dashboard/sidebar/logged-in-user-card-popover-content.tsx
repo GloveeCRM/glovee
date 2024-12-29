@@ -40,7 +40,7 @@ function PopoverItem({
 }) {
   return (
     <div
-      className="flex cursor-pointer items-center gap-[8px] rounded px-[6px] py-[6px] text-zinc-300 hover:bg-zinc-700/75 hover:text-zinc-100"
+      className="flex cursor-pointer items-center gap-[8px] rounded px-[6px] py-[6px] text-zinc-200 hover:bg-zinc-700/75 hover:text-zinc-100"
       onClick={onClick}
     >
       {icon}

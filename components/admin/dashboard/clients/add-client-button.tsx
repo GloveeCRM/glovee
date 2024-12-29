@@ -12,7 +12,7 @@ export default function AddClientButton() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <button className="flex items-center gap-[4px] rounded bg-teal-500 py-[6px] pl-[8px] pr-[12px] text-white">
+        <button className="flex flex-shrink-0 items-center gap-[4px] rounded bg-teal-500 py-[6px] pl-[8px] pr-[12px] text-white">
           <GoPlus className="h-[20px] w-[20px]" />
           <span>Add client</span>
         </button>
