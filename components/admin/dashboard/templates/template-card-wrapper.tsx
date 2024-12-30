@@ -2,8 +2,12 @@ import { searchFormTemplates } from '@/lib/data/form'
 
 import TemplateCard from './template-card'
 
-export default async function TemplateCardWrapper() {
-  const { formTemplates } = await searchFormTemplates({})
+interface TemplateCardWrapperProps {
+  searchQuery: string
+}
+
+export default async function TemplateCardWrapper({ searchQuery }: TemplateCardWrapperProps) {
+  const { formTemplates } = await searchFormTemplates({ searchQuery })
 
   return (
     <>

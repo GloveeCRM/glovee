@@ -35,12 +35,26 @@ interface SearchFormTemplatesResponse {
 
 export async function searchFormTemplates({
   filters,
+  searchQuery,
   limit,
   offset,
 }: SearchFormTemplatesProps): Promise<SearchFormTemplatesResponse> {
   const queryParams = new URLSearchParams()
   if (filters?.formTemplateID) {
     queryParams.append('form_template_id', `eq.${filters?.formTemplateID}`)
+  }
+
+  if (searchQuery) {
+    const numericTerm = searchQuery.replace(/\D/g, '')
+
+    const searchConditions = []
+    searchConditions.push(`template_name.ilike.*${searchQuery}*`)
+    // TODO: Add description search
+    // searchConditions.push(`description.ilike.*${searchQuery}*`)
+    if (numericTerm && !filters?.formTemplateID) {
+      searchConditions.push(`form_template_id.eq.${numericTerm}`)
+    }
+    queryParams.append('or', `(${searchConditions.join(',')})`)
   }
 
   if (limit) {

@@ -9,9 +9,9 @@ import { FaUsers } from 'react-icons/fa'
 import { NavLinkItem } from './nav-link-item'
 
 const links = [
-  { name: 'Templates', path: '/admin/templates', icon: RiLayout5Fill },
   { name: 'Applications', path: '/admin/applications', icon: IoFolder },
   { name: 'Clients', path: '/admin/clients', icon: FaUsers },
+  { name: 'Form Templates', path: '/admin/form-templates', icon: RiLayout5Fill },
   // { name: 'Tickets', path: '/admin/tickets', icon: GoCommentDiscussion },
   // { name: 'Settings', path: '/admin/settings', icon: IoSettingsOutline },
 ]
