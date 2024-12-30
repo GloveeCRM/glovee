@@ -8,8 +8,8 @@ export type UserType = {
   status: UserStatusTypes
   profilePictureFileID?: string
   profilePictureURL?: string
-  createdAt?: string
-  updatedAt?: string
+  createdAt: string
+  updatedAt: string
 }
 
 export enum UserRoleTypes {

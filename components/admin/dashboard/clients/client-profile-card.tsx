@@ -22,7 +22,7 @@ export default function ClientProfileCard({ client }: ClientProfileCardProps) {
   }
 
   return (
-    <div className="flex items-end justify-between rounded-md border border-n-700 bg-n-700 px-[14px] py-[18px] text-n-100">
+    <div className="flex items-end justify-between rounded-md bg-zinc-800 px-[14px] py-[18px] text-n-100">
       <div className="flex gap-[8px]">
         <ClientProfilePicture
           url={client.profilePictureURL || DEFAULT_MALE_CLIENT_LOGO_URL}

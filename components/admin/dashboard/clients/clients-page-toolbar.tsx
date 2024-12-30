@@ -3,10 +3,10 @@ import AddClientButton from './add-client-button'
 
 export default async function ClinetPageToolbar() {
   return (
-    <div className="mt-[8px] flex items-end justify-end">
-      <div className="mr-[6px] flex gap-[12px]">
+    <div className="mt-[8px] flex justify-end">
+      <div className="flex gap-[12px]">
         <div className="w-[300px]">
-          <SearchByParams placeholder="Search" />
+          <SearchByParams placeholder="Search clients" />
         </div>
         <AddClientButton />
       </div>

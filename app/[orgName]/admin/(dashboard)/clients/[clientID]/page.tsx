@@ -3,24 +3,18 @@ import { notFound } from 'next/navigation'
 import { searchClients } from '@/lib/data/user'
 import ClientProfileCard from '@/components/admin/dashboard/clients/client-profile-card'
 import ClientApplicationsTable from '@/components/admin/dashboard/clients/client-applications-table'
-import CreateNewApplicationButton from '@/components/admin/dashboard/applications/create-new-application-button'
+import AddApplicationButton from '@/components/admin/dashboard/applications/add-application-button'
 
 interface ClientPageParams {
   clientID: number
 }
 
-interface ClientPageSearchParams {
-  page?: number
-}
-
 interface ClientPageProps {
   params: ClientPageParams
-  searchParams: ClientPageSearchParams
 }
 
-export default async function ClientPage({ params, searchParams }: ClientPageProps) {
-  const clientID = params.clientID
-  const currentPage = searchParams.page || 1
+export default async function ClientPage({ params }: ClientPageProps) {
+  const { clientID } = params
 
   const { clients } = await searchClients({
     filters: { userID: clientID },
@@ -37,9 +31,9 @@ export default async function ClientPage({ params, searchParams }: ClientPagePro
     <div className="flex h-[calc(100svh-16px)] flex-col gap-[8px] overflow-hidden">
       <ClientProfileCard client={client} />
       <div className="mt-[20px] flex items-end justify-end">
-        <CreateNewApplicationButton client={client} />
+        <AddApplicationButton client={client} />
       </div>
-      <ClientApplicationsTable clientID={clientID} currentPage={currentPage} />
+      <ClientApplicationsTable clientID={clientID} />
     </div>
   )
 }

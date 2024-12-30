@@ -1,6 +1,6 @@
 import NavLinks from './client-nav-links'
 import OrgInfoCard from '../admin/dashboard/sidebar/org-info-card'
-import LogoutButton from '../admin/dashboard/sidebar/logout-button'
+import LoggedInUserCard from './dashboard/sidebar/logged-in-user-card'
 
 interface DashboardSidebarProps {
   orgName: string
@@ -17,7 +17,7 @@ export default function ClientSidebar({ orgName }: DashboardSidebarProps) {
       </div>
       <NavLinks className="flex-1" />
       <div id="sidebar-footer" className="flex h-[60px] justify-center">
-        <LogoutButton className="bg-n-600" />
+        <LoggedInUserCard />
       </div>
     </div>
   )

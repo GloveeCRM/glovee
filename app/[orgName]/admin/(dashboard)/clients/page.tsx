@@ -2,7 +2,7 @@ import { Suspense } from 'react'
 
 import ClinetPageToolbar from '@/components/admin/dashboard/clients/clients-page-toolbar'
 import ClientsTable from '@/components/admin/dashboard/clients/clients-table'
-import ClientsTableSkeleton from '@/components/skeleton/clients-table-skeleton'
+import ClientsTableSkeleton from '@/components/skeleton/admin/clients-table-skeleton'
 
 interface ClientsPageSearchParams {
   query?: string
@@ -23,7 +23,7 @@ export default async function ClientsPage({ searchParams }: ClientsPageProps) {
     <div className="flex h-[calc(100svh-16px)] flex-col gap-[18px] overflow-hidden">
       <ClinetPageToolbar />
       <Suspense key={searchKey} fallback={<ClientsTableSkeleton />}>
-        <ClientsTable query={query} currentPage={currentPage} />
+        <ClientsTable searchQuery={query} currentPage={currentPage} />
       </Suspense>
     </div>
   )

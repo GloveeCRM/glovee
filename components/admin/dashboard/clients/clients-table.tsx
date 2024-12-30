@@ -4,32 +4,35 @@ import Image from 'next/image'
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
 import { UserStatusTypes } from '@/lib/types/user'
 import { searchClients } from '@/lib/data/user'
+import { formatDateToShortMonthDayYearTime } from '@/lib/utils/date'
 
 import { Pagination } from '@/components/ui/pagination'
 
 interface ClientsTableProps {
-  query: string
+  searchQuery: string
   currentPage: number
 }
 
-export default async function ClientsTable({ query, currentPage }: ClientsTableProps) {
+export default async function ClientsTable({ searchQuery, currentPage = 1 }: ClientsTableProps) {
   const totalRowsPerPage = 14
   const offset = currentPage * totalRowsPerPage - totalRowsPerPage
   const { clients, totalCount } = await searchClients({
     filters: {},
-    searchQuery: query,
+    searchQuery,
     limit: totalRowsPerPage,
     offset,
   })
 
   const totalPages = Math.ceil(totalCount / totalRowsPerPage)
 
+  await new Promise((resolve) => setTimeout(resolve, 2000))
+
   return (
     <div className="border-sand-500 flex h-fit flex-col overflow-auto rounded-md border bg-white px-[12px]">
       <table className="w-full border-collapse text-[14px]">
         <thead className="sticky top-0 bg-white">
           <tr className="text-left text-[14px]">
-            <th className="min-w-[208px] py-[12px] pl-[57px] font-medium">Client</th>
+            <th className="min-w-[208px] py-[12px] pl-[53px] font-medium">Client</th>
             <th className="min-w-[100px] py-[12px] font-medium">ID</th>
             <th className="min-w-[71px] py-[12px] font-medium">Status</th>
             <th className="min-w-[140px] py-[12px] font-medium">Date added</th>
@@ -37,31 +40,37 @@ export default async function ClientsTable({ query, currentPage }: ClientsTableP
         </thead>
         <tbody>
           {clients && clients.length > 0 ? (
-            clients.map((client) => (
-              <tr key={client.userID} className="hover:bg-sand-200 border-b text-left">
+            clients.map((client, index) => (
+              <tr
+                key={client.userID}
+                className={`hover:bg-sand-200 text-left ${clients.length !== index + 1 && 'border-b'}`}
+              >
                 <td className="py-[6px]">
                   <div className="flex items-center gap-[12px]">
                     <Image
                       src={client.profilePictureURL || DEFAULT_MALE_CLIENT_LOGO_URL}
                       alt=""
-                      width={45}
-                      height={45}
+                      width={40}
+                      height={40}
                       className="rounded-full"
+                      draggable={false}
                     />
                     <div className="flex min-w-0 flex-col">
-                      <Link href={`/admin/clients/${client.userID}`}>
-                        <div className="text-[14px] font-semibold">
-                          {client.firstName} {client.lastName}
-                        </div>
+                      <Link
+                        href={`/admin/clients/${client.userID}`}
+                        className="truncate text-[14px] font-semibold hover:underline"
+                        draggable={false}
+                      >
+                        {client.firstName} {client.lastName}
                       </Link>
-                      <div className="truncate text-[12px] text-n-500">{client.email}</div>
+                      <div className="truncate text-[12px] text-zinc-500">{client.email}</div>
                     </div>
                   </div>
                 </td>
                 <td className="py-[6px] text-zinc-600">{client.userID}</td>
                 <td className="py-[6px] text-[12px] font-medium">
                   <div
-                    className={`w-fit rounded-full px-[12px] py-[2px] ${
+                    className={`w-fit rounded-full px-[12px] py-[1px] ${
                       client.status === UserStatusTypes.ACTIVE ? 'bg-teal-100' : 'bg-coral-200'
                     }`}
                   >
@@ -69,19 +78,18 @@ export default async function ClientsTable({ query, currentPage }: ClientsTableP
                   </div>
                 </td>
                 <td className="py-[6px] text-zinc-600">
-                  {client.createdAt
-                    ? new Date(client.createdAt).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                      })
-                    : ''}
+                  {client.createdAt &&
+                    formatDateToShortMonthDayYearTime({
+                      date: client.createdAt,
+                      format: 'long',
+                      includeTime: false,
+                    })}
                 </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan={3} className="py-[24px] text-center text-zinc-600">
+              <td colSpan={4} className="py-[24px] text-center text-zinc-600">
                 No clients found
               </td>
             </tr>

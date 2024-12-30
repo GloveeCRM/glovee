@@ -1,16 +1,16 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-import { LuLayoutTemplate } from 'react-icons/lu'
-import { IoFolderOutline, IoSettingsOutline } from 'react-icons/io5'
+import { RiLayout5Fill } from 'react-icons/ri'
+import { IoFolder, IoSettingsOutline } from 'react-icons/io5'
 import { GoCommentDiscussion } from 'react-icons/go'
 import { FaUsers } from 'react-icons/fa'
 
 import { NavLinkItem } from './nav-link-item'
 
 const links = [
-  { name: 'Templates', path: '/admin/templates', icon: LuLayoutTemplate },
-  { name: 'Applications', path: '/admin/applications', icon: IoFolderOutline },
+  { name: 'Templates', path: '/admin/templates', icon: RiLayout5Fill },
+  { name: 'Applications', path: '/admin/applications', icon: IoFolder },
   { name: 'Clients', path: '/admin/clients', icon: FaUsers },
   // { name: 'Tickets', path: '/admin/tickets', icon: GoCommentDiscussion },
   // { name: 'Settings', path: '/admin/settings', icon: IoSettingsOutline },

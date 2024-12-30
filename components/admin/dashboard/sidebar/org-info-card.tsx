@@ -21,6 +21,7 @@ export default async function OrgInfoCard({ orgName }: OrgInfoCardProps) {
         width={65}
         height={65}
         className="rounded-full"
+        draggable={false}
       />
       <h1>{organization?.name}</h1>
     </div>

@@ -1,8 +1,8 @@
 import { Suspense } from 'react'
 
 import { Separator } from '@/components/ui/separator'
-import OrgInfoCardSkeleton from '@/components/skeleton/org-info-card-skeleton'
-import LoggedInUserCardSkeleton from '@/components/skeleton/logged-in-user-card-skeleton'
+import OrgInfoCardSkeleton from '@/components/skeleton/admin/org-info-card-skeleton'
+import LoggedInUserCardSkeleton from '@/components/skeleton/admin/logged-in-user-card-skeleton'
 import NavLinks from './nav-links'
 import OrgInfoCard from './org-info-card'
 import LoggedInUserCard from './logged-in-user-card'

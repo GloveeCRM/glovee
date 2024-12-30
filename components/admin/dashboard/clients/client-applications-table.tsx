@@ -11,25 +11,16 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { Pagination } from '@/components/ui/pagination'
 
 interface ClientApplicationsTableProps {
   clientID: number
-  currentPage?: number
 }
 
-export default async function ClientApplicationsTable({
-  clientID,
-  currentPage = 1,
-}: ClientApplicationsTableProps) {
-  const totalRowsPerPage = 12
-  const offset = currentPage * totalRowsPerPage - totalRowsPerPage
-  const { applications, totalCount } = await searchApplications({
+export default async function ClientApplicationsTable({ clientID }: ClientApplicationsTableProps) {
+  const { applications } = await searchApplications({
     filters: { userID: clientID },
-    limit: totalRowsPerPage,
-    offset: offset,
+    limit: 100,
   })
-  const totalPages = Math.ceil(totalCount / totalRowsPerPage)
 
   const hasApplications = applications && applications.length > 0
 
@@ -71,9 +62,6 @@ export default async function ClientApplicationsTable({
           )}
         </TableBody>
       </Table>
-      {applications && applications.length < totalCount && (
-        <Pagination currentPage={currentPage} totalPages={totalPages} />
-      )}
     </div>
   )
 }

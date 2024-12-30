@@ -72,11 +72,13 @@ export default function AddClientDialogContent({ isOpen, setIsOpen }: AddClientD
     }
   }
 
+  const resetForm = form.reset
+
   useEffect(() => {
     if (!isOpen) {
-      form.reset()
+      resetForm()
     }
-  }, [isOpen])
+  }, [isOpen, resetForm])
 
   return (
     <DialogContent>
@@ -158,7 +160,7 @@ export default function AddClientDialogContent({ isOpen, setIsOpen }: AddClientD
               </button>
             </DialogClose>
             <button className="w-full rounded bg-zinc-800 p-[8px] text-white hover:bg-zinc-900">
-              Create
+              Create client
             </button>
           </div>
         </form>

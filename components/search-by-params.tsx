@@ -6,11 +6,15 @@ import { IoSearch } from 'react-icons/io5'
 import useSearchByParams from '@/hooks/use-search-by-params'
 
 interface SearchByParamsProps {
-  placeholder: string
+  placeholder?: string
+  debounceTime?: number
 }
 
-export default function SearchByParams({ placeholder = 'Search' }: SearchByParamsProps) {
-  const { updateSearchParams, initialValue } = useSearchByParams({ debounceTime: 0 })
+export default function SearchByParams({
+  placeholder = 'Search',
+  debounceTime = 500,
+}: SearchByParamsProps) {
+  const { updateSearchParams, initialValue } = useSearchByParams({ debounceTime })
   const [isSearching, setIsSearching] = useState<boolean>(false)
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {

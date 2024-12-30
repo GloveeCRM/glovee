@@ -69,6 +69,9 @@ export async function searchApplications({
   const { data, error, headers } = await apiRequest<ApplicationType[]>({
     path: `applications?${queryParams.toString()}`,
     method: 'GET',
+    headers: {
+      Prefer: 'count=exact',
+    },
     authRequired: true,
   })
 
