@@ -1,5 +1,8 @@
-import TemplateCardWrapper from '@/components/admin/dashboard/form-templates/template-card-wrapper'
+import { Suspense } from 'react'
+
+import FormTemplatesContainer from '@/components/admin/dashboard/form-templates/form-templates-container'
 import TemplatePageToolbar from '@/components/admin/dashboard/form-templates/template-page-toolbar'
+import FormTemplatesContainerSkeleton from '@/components/skeleton/admin/form-templates-container-skeleton'
 
 interface FormTemplatesPageSearchParams {
   query?: string
@@ -12,10 +15,14 @@ interface FormTemplatesPageProps {
 export default async function TemplatesPage({ searchParams }: FormTemplatesPageProps) {
   const query = searchParams.query?.trim() || ''
 
+  const searchKey = `form-templates-${query}`
+
   return (
     <div className="flex h-full flex-col gap-[20px] overflow-hidden">
       <TemplatePageToolbar />
-      <TemplateCardWrapper searchQuery={query} />
+      <Suspense key={searchKey} fallback={<FormTemplatesContainerSkeleton />}>
+        <FormTemplatesContainer searchQuery={query} />
+      </Suspense>
     </div>
   )
 }

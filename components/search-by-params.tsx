@@ -34,7 +34,7 @@ export default function SearchByParams({
         defaultValue={initialValue}
         onFocus={() => setIsSearching(true)}
         onBlur={() => setIsSearching(false)}
-        className="h-[34px] border-none bg-transparent p-0 text-[14px] placeholder:text-[14px] focus-visible:outline-none focus-visible:ring-0"
+        className="h-[34px] border-none bg-transparent p-0 text-[14px] placeholder:text-[14px] placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-0"
       />
     </div>
   )

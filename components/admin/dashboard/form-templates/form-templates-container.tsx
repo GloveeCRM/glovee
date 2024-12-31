@@ -1,13 +1,14 @@
+import { RiLayout5Fill } from 'react-icons/ri'
+
 import { searchFormTemplates } from '@/lib/data/form'
 
 import FormTemplateCard from './form-template-card'
-import { RiLayout5Fill } from 'react-icons/ri'
 
-interface TemplateCardWrapperProps {
+interface FormTemplatesContainerProps {
   searchQuery: string
 }
 
-export default async function TemplateCardWrapper({ searchQuery }: TemplateCardWrapperProps) {
+export default async function FormTemplatesContainer({ searchQuery }: FormTemplatesContainerProps) {
   const { formTemplates } = await searchFormTemplates({ searchQuery })
 
   return (

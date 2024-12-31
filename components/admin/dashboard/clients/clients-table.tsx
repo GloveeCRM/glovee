@@ -25,8 +25,6 @@ export default async function ClientsTable({ searchQuery, currentPage = 1 }: Cli
 
   const totalPages = Math.ceil(totalCount / totalRowsPerPage)
 
-  await new Promise((resolve) => setTimeout(resolve, 2000))
-
   return (
     <div className="border-sand-500 flex h-fit flex-col overflow-auto rounded-md border bg-white px-[12px]">
       <table className="w-full border-collapse text-[14px]">
