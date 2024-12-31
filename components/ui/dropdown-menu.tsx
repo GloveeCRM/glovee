@@ -73,7 +73,7 @@ const DropdownMenuContent = React.forwardRef<
       ref={ref}
       sideOffset={sideOffset}
       className={cn(
-        'z-50 min-w-[120px] overflow-hidden rounded bg-n-700 px-[4px] py-[6px] text-n-100 shadow',
+        'border-sand-300 z-50 min-w-[120px] overflow-hidden rounded border bg-white px-[4px] py-[6px] text-zinc-600 shadow-md',
         'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
         className
       )}
@@ -92,7 +92,7 @@ const DropdownMenuItem = React.forwardRef<
   <DropdownMenuPrimitive.Item
     ref={ref}
     className={cn(
-      'relative flex cursor-pointer select-none items-center rounded-sm px-[6px] py-[4px] text-sm outline-none transition-colors focus:bg-n-650 focus:text-n-100 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      'focus:bg-sand-200 relative flex cursor-pointer select-none items-center rounded-sm px-[6px] py-[4px] text-[12px] outline-none focus:text-zinc-800 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
       inset && 'pl-8',
       className
     )}

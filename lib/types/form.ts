@@ -6,6 +6,7 @@ export type FormTemplateType = {
   organizationID: number
   formID: number
   templateName: string
+  templateDescription: string
   createdBy: UserType
   createdAt: string
   form: FormType

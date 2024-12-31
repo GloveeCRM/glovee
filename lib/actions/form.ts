@@ -87,7 +87,7 @@ export async function deleteFormTemplate({
     authRequired: true,
   })
 
-  revalidatePath('/admin/templates')
+  revalidatePath('/admin/form-templates')
   return { error }
 }
 

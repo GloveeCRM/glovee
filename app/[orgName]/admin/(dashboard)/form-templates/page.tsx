@@ -1,5 +1,5 @@
-import TemplateCardWrapper from '@/components/admin/dashboard/templates/template-card-wrapper'
-import TemplatePageToolbar from '@/components/admin/dashboard/templates/template-page-toolbar'
+import TemplateCardWrapper from '@/components/admin/dashboard/form-templates/template-card-wrapper'
+import TemplatePageToolbar from '@/components/admin/dashboard/form-templates/template-page-toolbar'
 
 interface FormTemplatesPageSearchParams {
   query?: string

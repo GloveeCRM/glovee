@@ -107,7 +107,11 @@ export default function AddApplicationDialogContent({
   }, [isOpen, client, resetForm])
 
   return (
-    <DialogContent>
+    <DialogContent
+      onOpenAutoFocus={(e) => {
+        e.preventDefault()
+      }}
+    >
       <DialogHeader>
         <DialogTitle>Create a new application</DialogTitle>
       </DialogHeader>

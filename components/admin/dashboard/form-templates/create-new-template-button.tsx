@@ -8,7 +8,8 @@ import { useForm } from 'react-hook-form'
 import { GoPlus } from 'react-icons/go'
 
 import { CreateFormTemplateSchema } from '@/lib/zod/schemas'
-import { useOrgContext } from '@/contexts/org-context'
+import { createFormTemplate } from '@/lib/actions/form'
+
 import {
   Dialog,
   DialogClose,
@@ -27,7 +28,6 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { createFormTemplate } from '@/lib/actions/form'
 
 export default function CreateNewTemplateButton() {
   const [isOpen, setIsOpen] = useState<boolean>(false)

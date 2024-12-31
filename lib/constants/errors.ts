@@ -22,6 +22,7 @@ const errors = {
   missing_category_position: 'Category position is required',
   category_position_already_exists: 'Category position is taken',
   missing_form_question_set_position: 'Form question set position is required',
+  form_template_not_found: 'Form template not found',
 }
 
 export const errorMessages = (error_code: string) => {
