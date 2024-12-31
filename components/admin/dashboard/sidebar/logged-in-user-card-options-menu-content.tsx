@@ -27,21 +27,19 @@ export default function LoggedInUserCardOptionsMenuContent() {
   ]
 
   return (
-    <div className="flex flex-col gap-[4px]">
-      <DropdownMenuContent side="right" sideOffset={12} align="end" className="w-[180px] p-[4px]">
-        <DropdownMenuGroup>
-          {items.map((item) => (
-            <DropdownMenuItem
-              key={item.label}
-              onClick={item.onClick}
-              className="flex gap-[6px] text-[14px]"
-            >
-              {item.icon}
-              <span>{item.label}</span>
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuGroup>
-      </DropdownMenuContent>
-    </div>
+    <DropdownMenuContent side="right" sideOffset={12} align="end" className="w-[180px] p-[4px]">
+      <DropdownMenuGroup>
+        {items.map((item) => (
+          <DropdownMenuItem
+            key={item.label}
+            onClick={item.onClick}
+            className="flex gap-[6px] text-[14px]"
+          >
+            {item.icon}
+            <span>{item.label}</span>
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuGroup>
+    </DropdownMenuContent>
   )
 }
