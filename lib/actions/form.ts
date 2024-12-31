@@ -2,10 +2,8 @@
 
 import { revalidatePath } from 'next/cache'
 
-import { FileType } from '../types/file'
 import {
   FormQuestionSetType,
-  FormStatusTypes,
   FormCategoryType,
   FormSectionType,
   FormTemplateType,
@@ -15,33 +13,36 @@ import {
   FormQuestionDefaultOptionType,
   ApplicationFormType,
   FormAnswerType,
-} from '../types/form'
+} from '@/lib/types/form'
 import { GLOVEE_API_URL } from '@/lib/constants/api'
 import { getSession } from '@/lib/auth/session'
-import { getCurrentOrgName } from '../utils/server'
-import { apiRequest } from '../utils/http'
-import { keysCamelCaseToSnakeCase, keysSnakeCaseToCamelCase } from '../utils/json'
+import { getCurrentOrgName } from '@/lib/utils/server'
+import { apiRequest } from '@/lib/utils/http'
+import { keysCamelCaseToSnakeCase, keysSnakeCaseToCamelCase } from '@/lib/utils/json'
 
 interface CreateFormTemplateProps {
   templateName: string
+  templateDescription?: string
 }
 
 interface CreateFormTemplateResponse {
+  formTemplate?: FormTemplateType
   error?: string
 }
 
 export async function createFormTemplate({
   templateName,
+  templateDescription,
 }: CreateFormTemplateProps): Promise<CreateFormTemplateResponse> {
-  const { error } = await apiRequest<{ formTemplate: FormTemplateType }>({
+  const { data, error } = await apiRequest<{ formTemplate: FormTemplateType }>({
     path: 'rpc/create_form_template',
     method: 'POST',
-    data: { templateName },
+    data: { templateName, templateDescription },
     authRequired: true,
   })
 
-  revalidatePath('/admin/templates')
-  return { error }
+  revalidatePath('/admin/form-templates')
+  return { formTemplate: data?.formTemplate, error }
 }
 
 interface UpdateFormTemplateProps {

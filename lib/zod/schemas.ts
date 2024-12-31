@@ -37,6 +37,7 @@ export const CreateFormTemplateSchema = z.object({
     .min(3, {
       message: 'Minimum 3 characters required',
     }),
+  templateDescription: z.string().optional(),
 })
 
 export const NewPasswordSchema = z.object({

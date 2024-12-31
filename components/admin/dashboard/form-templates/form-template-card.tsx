@@ -11,8 +11,8 @@ interface FormTemplateCardProps {
 
 export default function FormTemplateCard({ formTemplate }: FormTemplateCardProps) {
   return (
-    <div className="group/form-template-card flex flex-col justify-between gap-[18px] rounded-lg bg-white p-[12px] shadow-sm">
-      <div className="flex flex-col gap-[12px]">
+    <div className="group/form-template-card flex flex-col justify-between gap-[20px] rounded-lg bg-white p-[12px] shadow-sm">
+      <div className="flex flex-col gap-[4px]">
         <div className="flex items-center justify-between">
           <div className="flex-1 text-[14px] font-medium">{formTemplate.templateName}</div>
           <FormTemplateCardOptionsMenuButton formTemplateID={formTemplate.formTemplateID} />

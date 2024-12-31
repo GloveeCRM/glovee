@@ -69,7 +69,9 @@ export default async function ClientsTable({ searchQuery, currentPage = 1 }: Cli
                 <td className="py-[6px] text-[12px] font-medium">
                   <div
                     className={`w-fit rounded-full px-[12px] py-[1px] ${
-                      client.status === UserStatusTypes.ACTIVE ? 'bg-teal-100' : 'bg-coral-200'
+                      client.status === UserStatusTypes.ACTIVE
+                        ? 'bg-teal-100 text-teal-900'
+                        : 'bg-coral-100 text-coral-900'
                     }`}
                   >
                     {client.status.charAt(0).toUpperCase() + client.status.slice(1).toLowerCase()}
