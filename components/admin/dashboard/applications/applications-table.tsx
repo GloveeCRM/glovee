@@ -25,6 +25,8 @@ export default async function ApplicationsTable({
   })
   const totalPages = Math.ceil(totalCount / totalRowsPerPage)
 
+  const applicationsFound = applications && applications.length > 0
+
   return (
     <div className="border-sand-500 flex h-fit flex-col overflow-auto rounded-md border bg-white px-[12px]">
       <table className="w-full border-collapse text-[14px]">
@@ -36,7 +38,7 @@ export default async function ApplicationsTable({
           </tr>
         </thead>
         <tbody>
-          {applications && applications.length > 0 ? (
+          {applicationsFound ? (
             applications.map((application, index) => (
               <tr
                 key={application.applicationID}
@@ -85,7 +87,7 @@ export default async function ApplicationsTable({
           ) : (
             <tr>
               <td colSpan={3} className="py-[24px] text-center text-zinc-600">
-                No clients found
+                No applications found
               </td>
             </tr>
           )}

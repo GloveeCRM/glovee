@@ -3,15 +3,6 @@ import Link from 'next/link'
 import { searchApplications } from '@/lib/data/application'
 import { formatDateToShortMonthDayYearTime } from '@/lib/utils/date'
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
-
 interface ClientApplicationsTableProps {
   clientID: number
 }
@@ -25,43 +16,58 @@ export default async function ClientApplicationsTable({ clientID }: ClientApplic
   const hasApplications = applications && applications.length > 0
 
   return (
-    <div className="flex h-full flex-col overflow-auto">
-      <Table>
-        <TableHeader className="sticky top-0 bg-white shadow-sm">
-          <TableRow>
-            <TableHead>Application ID</TableHead>
-            <TableHead>Created At</TableHead>
-            <TableHead>Updated At</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
+    <div className="border-sand-500 flex h-fit flex-col overflow-auto rounded-md border bg-white px-[12px]">
+      <table className="w-full border-collapse text-[14px]">
+        <thead className="sticky top-0 bg-white">
+          <tr className="text-left text-[14px]">
+            <th className="min-w-[120px] py-[12px] font-medium">Application ID</th>
+            <th className="min-w-[208px] py-[12px] pl-[43px] font-medium">Created At</th>
+            <th className="min-w-[140px] py-[12px] font-medium">Updated At</th>
+          </tr>
+        </thead>
+        <tbody>
           {hasApplications ? (
-            applications.map((application) => (
-              <TableRow key={application.applicationID} className="h-[42px]">
-                <TableCell>
-                  <Link href={`/admin/application/${application.applicationID}`}>
-                    <span className="cursor-pointer hover:text-blue-500">
-                      {application.applicationID}
-                    </span>
+            applications.map((application, index) => (
+              <tr
+                key={application.applicationID}
+                className={`hover:bg-sand-200 text-left ${applications.length !== index + 1 && 'border-b'}`}
+              >
+                <td className="py-[8px] text-zinc-600">
+                  <Link
+                    href={`/admin/application/${application.applicationID}/forms`}
+                    className="hover:text-zinc-900 hover:underline"
+                    draggable={false}
+                  >
+                    {application.applicationID}
                   </Link>
-                </TableCell>
-                <TableCell>
-                  <span>{formatDateToShortMonthDayYearTime({ date: application.createdAt })}</span>
-                </TableCell>
-                <TableCell>
-                  <span>{formatDateToShortMonthDayYearTime({ date: application.updatedAt })}</span>
-                </TableCell>
-              </TableRow>
+                </td>
+                <td className="py-[8px] text-zinc-600">
+                  {application.createdAt &&
+                    formatDateToShortMonthDayYearTime({
+                      date: application.createdAt,
+                      format: 'long',
+                      includeTime: false,
+                    })}
+                </td>
+                <td className="py-[8px] text-zinc-600">
+                  {application.updatedAt &&
+                    formatDateToShortMonthDayYearTime({
+                      date: application.updatedAt,
+                      format: 'long',
+                      includeTime: false,
+                    })}
+                </td>
+              </tr>
             ))
           ) : (
-            <TableRow>
-              <TableCell colSpan={3} className="py-[12px] text-center text-n-500">
+            <tr>
+              <td colSpan={3} className="py-[24px] text-center text-zinc-600">
                 No applications found
-              </TableCell>
-            </TableRow>
+              </td>
+            </tr>
           )}
-        </TableBody>
-      </Table>
+        </tbody>
+      </table>
     </div>
   )
 }
