@@ -23,6 +23,7 @@ const errors = {
   category_position_already_exists: 'Category position is taken',
   missing_form_question_set_position: 'Form question set position is required',
   form_template_not_found: 'Form template not found',
+  email_already_in_use: 'This email is already taken',
 }
 
 export const errorMessages = (error_code: string) => {

@@ -1,9 +1,12 @@
+import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
 
 import { searchClients } from '@/lib/data/user'
+
 import ClientProfileCard from '@/components/admin/dashboard/clients/client-profile-card'
 import ClientApplicationsTable from '@/components/admin/dashboard/clients/client-applications-table'
 import AddApplicationButton from '@/components/admin/dashboard/applications/add-application-button'
+import ClientApplicationsTableSkeleton from '@/components/skeleton/admin/client-applications-table-skeleton'
 
 interface ClientPageParams {
   clientID: number
@@ -33,7 +36,9 @@ export default async function ClientPage({ params }: ClientPageProps) {
       <div className="mt-[20px] flex items-end justify-end">
         <AddApplicationButton client={client} />
       </div>
-      <ClientApplicationsTable clientID={clientID} />
+      <Suspense fallback={<ClientApplicationsTableSkeleton />}>
+        <ClientApplicationsTable clientID={clientID} />
+      </Suspense>
     </div>
   )
 }

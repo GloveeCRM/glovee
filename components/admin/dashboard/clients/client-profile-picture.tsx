@@ -1,22 +1,26 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import Image from 'next/image'
-import { HiOutlinePencilSquare } from 'react-icons/hi2'
-import { BiTrash } from 'react-icons/bi'
 
-import { UserType } from '@/lib/types/user'
 import { uploadFileToS3 } from '@/lib/utils/s3'
 import { fetchProfilePictureUploadURL } from '@/lib/data/user'
-import { updateUserProfile, updateUserProfilePicture } from '@/lib/actions/user'
+import { updateUserProfilePicture } from '@/lib/actions/user'
+import { BsFillCameraFill } from 'react-icons/bs'
+import { ImSpinner2 } from 'react-icons/im'
 
 interface ClientProfilePictureProps {
   url: string
-  client: UserType
+  clientID: number
   editable: boolean
 }
 
-export default function ClientProfilePicture({ url, client, editable }: ClientProfilePictureProps) {
+export default function ClientProfilePicture({
+  url,
+  clientID,
+  editable,
+}: ClientProfilePictureProps) {
+  const [isUploading, setIsUploading] = useState<boolean>(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -25,12 +29,14 @@ export default function ClientProfilePicture({ url, client, editable }: ClientPr
       return
     }
 
+    setIsUploading(true)
+
     const {
       url,
       objectKey,
       error: uploadURLDataError,
     } = await fetchProfilePictureUploadURL({
-      userID: client.userID,
+      userID: clientID,
       fileName: file.name,
       mimeType: file.type,
     })
@@ -52,7 +58,7 @@ export default function ClientProfilePicture({ url, client, editable }: ClientPr
     }
 
     const { error: updateProfilePictureError } = await updateUserProfilePicture({
-      userID: client.userID,
+      userID: clientID,
       objectKey: objectKey || '',
       fileName: file.name,
       mimeType: file.type,
@@ -66,43 +72,48 @@ export default function ClientProfilePicture({ url, client, editable }: ClientPr
     if (inputRef.current) {
       inputRef.current.value = ''
     }
+
+    setIsUploading(false)
   }
 
-  function handleDelete() {
-    updateUserProfile({ userID: client.userID, profilePictureFileID: 0 })
-  }
+  // TODO: Implement delete functionality
+  // function handleDelete() {
+  //   updateUserProfile({ userID: clientID, profilePictureFileID: 0 })
+  // }
 
   return (
-    <div>
+    <div className="flex-shrink-0">
       {editable ? (
-        <div className="flex flex-col gap-[4px]">
+        <div className="group/client-profile-picture relative flex w-fit flex-col gap-[4px] overflow-hidden rounded-full border border-zinc-200 shadow-sm">
           <Image
             src={url}
             alt="CLient Logo"
             width={75}
             height={75}
             className="block h-[100px] w-[100px] rounded-full object-cover"
+            draggable={false}
           />
-          <div className="flex justify-around">
-            <div onClick={handleDelete}>
-              <BiTrash className="h-[24px] w-[24px] cursor-pointer text-red-500" />
-            </div>
-            <div>
-              <label htmlFor="file-upload" className="cursor-pointer">
-                <div className="">
-                  <HiOutlinePencilSquare className="h-[24px] w-[24px] text-n-100" />
-                </div>
-              </label>
-              <input
-                id="file-upload"
-                className="hidden"
-                type="file"
-                accept=".jpg, .jpeg, .png"
-                onChange={handleFileChange}
-                ref={inputRef}
-              />
-            </div>
-          </div>
+          <label
+            htmlFor="file-upload"
+            className={`duration-125 absolute bottom-0 left-1/2 flex h-[30px] w-full -translate-x-1/2 cursor-pointer items-center justify-center bg-zinc-800 transition-all group-hover/client-profile-picture:opacity-100 ${
+              isUploading ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            {isUploading ? (
+              <ImSpinner2 className="h-[20px] w-[20px] animate-spin text-zinc-200" />
+            ) : (
+              <BsFillCameraFill className="h-[20px] w-[20px] text-zinc-200" />
+            )}
+          </label>
+          <input
+            id="file-upload"
+            className="hidden"
+            type="file"
+            accept=".jpg, .jpeg, .png"
+            onChange={handleFileChange}
+            ref={inputRef}
+            disabled={isUploading}
+          />
         </div>
       ) : (
         <Image
@@ -110,7 +121,8 @@ export default function ClientProfilePicture({ url, client, editable }: ClientPr
           alt="CLient Logo"
           width={75}
           height={75}
-          className="block h-[100px] w-[100px] rounded-full object-cover"
+          className="block h-[100px] w-[100px] rounded-full border border-zinc-200 object-cover shadow-sm"
+          draggable={false}
         />
       )}
     </div>

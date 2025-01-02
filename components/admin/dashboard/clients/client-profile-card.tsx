@@ -1,14 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { HiOutlinePencilSquare } from 'react-icons/hi2'
 
 import { UserType, UserStatusTypes } from '@/lib/types/user'
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
-import { Badge } from '@/components/ui/badge'
-import ClientProfileEditForm from './client-profile-edit-form'
-import SetUserStatusButton from './set-user-status-button'
 import ClientProfilePicture from './client-profile-picture'
+import EditClientProfileButton from './edit-client-profile-button'
 
 interface ClientProfileCardProps {
   client: UserType
@@ -22,52 +19,35 @@ export default function ClientProfileCard({ client }: ClientProfileCardProps) {
   }
 
   return (
-    <div className="flex items-end justify-between rounded-md bg-zinc-800 px-[14px] py-[18px] text-n-100">
-      <div className="flex gap-[8px]">
+    <div className="group/client-profile-card flex justify-between rounded-md bg-zinc-800 p-[14px] text-white">
+      <div className="flex w-full gap-[16px]">
         <ClientProfilePicture
           url={client.profilePictureURL || DEFAULT_MALE_CLIENT_LOGO_URL}
-          client={client}
+          clientID={client.userID}
           editable={isEditing}
         />
-        {isEditing ? (
-          <ClientProfileEditForm onClose={onCloseEditForm} client={client} />
-        ) : (
-          <div className="flex gap-[16px]">
-            <div className="flex flex-col gap-[10px]">
-              <div className="flex items-center gap-[4px]">
-                <span className="text-[16px] font-semibold">
-                  {client.firstName} {client.lastName}
-                </span>
-                {client.status === UserStatusTypes.INACTIVE && (
-                  <Badge variant="destructive">Not Active</Badge>
-                )}
+        <div className="flex w-full flex-col gap-[12px]">
+          <div className="flex items-center gap-[8px]">
+            <span className="flex-shrink-0 truncate text-[16px] font-medium">
+              {client.firstName} {client.lastName}
+            </span>
+            {client.status == UserStatusTypes.INACTIVE ? (
+              <div className="bg-coral-900 w-fit flex-shrink-0 rounded-full px-[8px] py-[1px] text-[10px]">
+                Not Active
               </div>
-              <div className="flex flex-col gap-[6px]">
-                <span className="text-[12px]">{client.email}</span>
-                <Badge variant="default" size="md" className="bg-n-500 text-n-100">
-                  {client.userID}
-                </Badge>
+            ) : (
+              <div className="w-fit flex-shrink-0 rounded-full bg-teal-800 px-[8px] py-[1px] text-[10px]">
+                Active
               </div>
-            </div>
-            <div>
-              <HiOutlinePencilSquare
-                className="h-[20px] w-[20px] cursor-pointer transition-all duration-75 hover:ml-[-1px] hover:mt-[-1px] hover:h-[22px] hover:w-[22px]"
-                onClick={() => setIsEditing(!isEditing)}
-              />
-            </div>
+            )}
           </div>
-        )}
+          <span className="text-[14px] text-zinc-200">{client.email}</span>
+          <div className="w-fit rounded-full bg-zinc-700 px-[8px] py-[1px] text-[12px]">
+            {client.userID}
+          </div>
+        </div>
       </div>
-      <div>
-        <SetUserStatusButton
-          userID={client.userID}
-          newStatus={
-            client.status === UserStatusTypes.ACTIVE
-              ? UserStatusTypes.INACTIVE
-              : UserStatusTypes.ACTIVE
-          }
-        />
-      </div>
+      <EditClientProfileButton client={client} />
     </div>
   )
 }

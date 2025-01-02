@@ -21,7 +21,7 @@ export default async function ClientApplicationsTable({ clientID }: ClientApplic
         <thead className="sticky top-0 bg-white">
           <tr className="text-left text-[14px]">
             <th className="min-w-[120px] py-[12px] font-medium">Application ID</th>
-            <th className="min-w-[208px] py-[12px] pl-[43px] font-medium">Created At</th>
+            <th className="min-w-[140px] py-[12px] font-medium">Created At</th>
             <th className="min-w-[140px] py-[12px] font-medium">Updated At</th>
           </tr>
         </thead>
