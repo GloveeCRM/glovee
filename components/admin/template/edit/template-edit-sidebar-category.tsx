@@ -154,28 +154,28 @@ export default function TemplateEditSidebarCategory({
   }, [isEditing, categoryTitleInputRef, formCategories, updateFormCategories, formCategory])
 
   return (
-    <div className="text-[14px] text-n-400">
+    <div className="text-zinc-350 text-[14px]">
       {isEditing ? (
         <textarea
           ref={categoryTitleInputRef}
-          className="mb-[7px] ml-[1px] mt-[4px] block w-[221px] resize-none overflow-hidden rounded border-[1px] border-n-500 bg-n-700/70 px-[4px] pb-[2px] pt-[1px] text-n-100 focus:border-[1px] focus:border-n-500 focus:outline-none"
+          className="mb-[7px] ml-[1px] mt-[4px] block w-[221px] resize-none overflow-hidden rounded border border-zinc-600 bg-zinc-800 px-[4px] pb-[2px] pt-[1px] text-white focus:border-zinc-500 focus:outline-none"
           defaultValue={formCategory.categoryName}
           onChange={handleTitleChange}
           onKeyDown={handleKeyDown}
         />
       ) : (
         <div
-          className="group/category relative cursor-pointer rounded px-[6px] py-[6px] transition duration-75 hover:bg-n-650"
+          className="group/category hover:bg-zinc-750 relative cursor-pointer rounded px-[6px] py-[6px] transition duration-75"
           onClick={handleClickCategory}
         >
           <div
-            className={`${!isExpanded && 'truncate text-n-400 group-hover/category:w-[calc(100%-28px)] group-hover/category:truncate'} text-n-100`}
+            className={`${!isExpanded && 'text-zinc-350 truncate group-hover/category:w-[calc(100%-28px)] group-hover/category:truncate'} text-white`}
           >
             {formCategory.categoryName}
           </div>
           <DropdownMenu open={isOptionsMenuOpen} onOpenChange={handleOptionsDropdownMenuOpenChange}>
             <DropdownMenuTrigger
-              className={`absolute right-0 top-0 rounded bg-n-700 p-[6px] opacity-0 transition duration-75 focus:outline-none group-hover/category:bg-n-650 group-hover/category:opacity-100 ${isOptionsMenuOpen && 'opacity-100'}`}
+              className={`bg-zinc-750 group-hover/category:bg-zinc-750 absolute right-0 top-0 rounded p-[6px] opacity-0 transition duration-75 focus:outline-none group-hover/category:opacity-100 ${isOptionsMenuOpen && 'opacity-100'}`}
             >
               <FiMoreHorizontal className="h-[20px] w-[20px]" />
             </DropdownMenuTrigger>
@@ -187,7 +187,7 @@ export default function TemplateEditSidebarCategory({
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={handleClickDeleteCategory}
-                  className="flex gap-[6px] focus:text-red-500"
+                  className="flex gap-[6px] focus:bg-red-100 focus:text-red-500"
                 >
                   <BiTrash className="h-[18px] w-[18px]" />
                   <span>Delete</span>

@@ -8,7 +8,7 @@ import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
 import { Separator } from '@/components/ui/separator'
 import { TemplateEditSidebarCategoryWrapperSkeleton } from '@/components/skeletons'
 import TemplateEditSidebarCategory from './template-edit-sidebar-category'
-import CreateCategoryButton from './create-category-button'
+import AddCategoryButton from './add-category-button'
 
 export default function TemplateEditSidebarCategoryWrapper() {
   const { formCategories, selectedFormCategoryID } = useFormTemplateEditContext()
@@ -26,11 +26,11 @@ export default function TemplateEditSidebarCategoryWrapper() {
               formCategory={category}
               isExpanded={selectedFormCategoryID === category.formCategoryID}
             />
-            <Separator className="bg-n-600" />
+            <Separator className="bg-zinc-700" />
           </Fragment>
         ))}
       </div>
-      <CreateCategoryButton type={formCategories.length === 0 ? 'create' : 'add'} />
+      <AddCategoryButton />
     </div>
   )
 }

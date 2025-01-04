@@ -133,13 +133,13 @@ export default function TemplateEditSidebarSection({
 
   return (
     <div
-      className={`group/section relative cursor-pointer rounded text-[12px] transition duration-75 hover:bg-n-650 ${active && 'bg-n-650 text-n-100'} ${isEditing ? 'py-[5px]' : 'py-[6px]'}`}
+      className={`group/section hover:bg-zinc-750 relative cursor-pointer rounded text-[12px] transition duration-75 ${active && 'bg-zinc-750 text-white'} ${isEditing ? 'py-[5px]' : 'py-[6px]'}`}
       onClick={handleClickSection}
     >
       {isEditing ? (
         <textarea
           ref={sectionInputRef}
-          className="ml-[15px] block w-[206px] resize-none overflow-hidden rounded border-[1px] border-n-500 bg-n-700/70 px-[4px] pb-[2px] text-n-100 focus:border-[1px] focus:border-n-500 focus:outline-none"
+          className="ml-[15px] block w-[206px] resize-none overflow-hidden rounded border border-zinc-600 bg-zinc-800 px-[4px] pb-[2px] text-white focus:border-zinc-500 focus:outline-none"
           defaultValue={formSection.sectionName}
           onChange={handleTitleChange}
           onKeyDown={handleKeyDown}
@@ -153,7 +153,7 @@ export default function TemplateEditSidebarSection({
               onOpenChange={handleOptionsDropdownMenuOpenChange}
             >
               <DropdownMenuTrigger
-                className={`absolute right-0 top-0 rounded p-[5px] opacity-0 transition duration-75 group-hover/section:bg-n-650 group-hover/section:opacity-100 ${isOptionsMenuOpen && 'opacity-100'} ${active && 'bg-n-650'}`}
+                className={`group-hover/section:bg-zinc-750 absolute right-0 top-0 rounded p-[5px] opacity-0 transition duration-75 group-hover/section:opacity-100 ${isOptionsMenuOpen && 'bg-zinc-750 opacity-100'} ${active && 'bg-zinc-750'}`}
               >
                 <FiMoreHorizontal className="h-[20px] w-[20px]" />
               </DropdownMenuTrigger>
@@ -165,7 +165,7 @@ export default function TemplateEditSidebarSection({
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={handleClickDeleteSection}
-                    className="flex gap-[6px] focus:text-red-500"
+                    className="flex gap-[6px] focus:bg-red-100 focus:text-red-500"
                   >
                     <BiTrash className="h-[18px] w-[18px]" />
                     <span>Delete</span>

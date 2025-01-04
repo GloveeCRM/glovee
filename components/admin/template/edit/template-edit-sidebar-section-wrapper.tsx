@@ -3,7 +3,7 @@
 import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
 
 import TemplateEditSidebarSection from './template-edit-sidebar-section'
-import CreateSectionButton from './create-section-button'
+import AddSectionButton from './add-section-button'
 
 interface TemplateEditSidebarSectionWrapperProps {
   categoryID: number
@@ -25,14 +25,9 @@ export default function TemplateEditSidebarSectionWrapper({
           />
         ))
       ) : (
-        <div className="py-[4px] pl-[24px] text-[12px] text-n-400">No sections</div>
+        <div className="text-zinc-350 py-[4px] pl-[24px] text-[12px]">No sections</div>
       )}
-      <CreateSectionButton
-        type={
-          selectedFormCategorySections && selectedFormCategorySections.length > 0 ? 'add' : 'create'
-        }
-        formCategoryID={categoryID}
-      />
+      <AddSectionButton formCategoryID={categoryID} />
     </div>
   )
 }

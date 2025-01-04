@@ -11,7 +11,7 @@ export default function TemplateEditToolbar() {
   return (
     <div
       id="templateEditToolbar"
-      className="flex h-svh w-[240px] flex-shrink-0 flex-col overflow-y-scroll bg-n-700 px-[8px] text-n-100"
+      className="flex h-svh w-[240px] flex-shrink-0 flex-col overflow-y-scroll bg-zinc-800 px-[8px] text-white"
     >
       {selectedFormQuestionID ? (
         <QuestionSettingsToolbar formQuestionID={selectedFormQuestionID} />

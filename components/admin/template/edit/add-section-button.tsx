@@ -5,12 +5,11 @@ import { FiPlus } from 'react-icons/fi'
 import useFormSectionActions from '@/hooks/form-template/use-section-actions'
 import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
 
-interface CreateSectionButtonProps {
-  type: 'add' | 'create'
+interface AddSectionButtonProps {
   formCategoryID: number
 }
 
-export default function CreateSectionButton({ type, formCategoryID }: CreateSectionButtonProps) {
+export default function AddSectionButton({ formCategoryID }: AddSectionButtonProps) {
   const { selectedFormCategorySections } = useFormTemplateEditContext()
   const { createFormSection } = useFormSectionActions()
 
@@ -27,11 +26,11 @@ export default function CreateSectionButton({ type, formCategoryID }: CreateSect
 
   return (
     <div
-      className="mx-auto my-[6px] flex w-fit cursor-pointer items-center gap-[4px] rounded-full bg-n-500/60 px-[6px] py-[1px] text-[12px]"
+      className="mx-auto my-[6px] flex w-fit cursor-pointer items-center gap-[4px] rounded-full bg-zinc-700 px-[8px] py-[1px] text-[12px] text-zinc-200"
       onClick={handleClick}
     >
       <FiPlus className="h-[16px] w-[16px]" />
-      <span>{type === 'add' ? 'Add another section' : 'Create a section'}</span>
+      <span>Add section</span>
     </div>
   )
 }

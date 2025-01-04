@@ -50,15 +50,21 @@ export default function TextareaQuestion({
           </div>
         )}
       </div>
-      <div className="text-right text-[12px] text-n-500">
+      <div className="flex items-center justify-end gap-[4px] text-[12px] text-n-500">
         {formQuestion.answer?.answerText?.length || 0}
-        {(formQuestion.formQuestionSettings.minimumLength !== null ||
-          formQuestion.formQuestionSettings.maximumLength !== null) &&
-          ' / '}
-        {formQuestion.formQuestionSettings.minimumLength &&
-          formQuestion.formQuestionSettings.minimumLength}
-        {formQuestion.formQuestionSettings.maximumLength &&
-          formQuestion.formQuestionSettings.maximumLength}
+        {formQuestion.formQuestionSettings.minimumLength ||
+        formQuestion.formQuestionSettings.maximumLength ? (
+          <>
+            <span>/</span>
+            <div className="flex items-center gap-[4px]">
+              <span>{formQuestion.formQuestionSettings.minimumLength || 0}</span>
+              <span>-</span>
+              <span>{formQuestion.formQuestionSettings.maximumLength || 'No limit'}</span>
+            </div>
+          </>
+        ) : (
+          ''
+        )}
       </div>
     </div>
   )
