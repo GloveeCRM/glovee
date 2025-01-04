@@ -485,7 +485,7 @@ interface CreateApplicationFormProps {
 }
 
 interface CreateApplicationFormResponse {
-  applicationForm?: ApplicationFormType
+  applicationFormID?: number
   error?: string
 }
 
@@ -493,7 +493,7 @@ export async function createApplicationForm({
   applicationID,
   formTemplateID,
 }: CreateApplicationFormProps): Promise<CreateApplicationFormResponse> {
-  const { data, error } = await apiRequest<{ applicationForm: ApplicationFormType }>({
+  const { data, error } = await apiRequest<{ applicationFormID: number }>({
     path: 'rpc/create_application_form',
     method: 'POST',
     data: {
@@ -504,7 +504,7 @@ export async function createApplicationForm({
   })
 
   revalidatePath(`/admin/application/${applicationID}`)
-  return { applicationForm: data?.applicationForm, error }
+  return { applicationFormID: data?.applicationFormID, error }
 }
 
 interface UpsertFormAnswerProps {

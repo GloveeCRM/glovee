@@ -88,8 +88,8 @@ export default function ClientProfilePicture({
           <Image
             src={url}
             alt="CLient Logo"
-            width={75}
-            height={75}
+            width={100}
+            height={100}
             className="block h-[100px] w-[100px] rounded-full object-cover"
             draggable={false}
           />
@@ -119,8 +119,8 @@ export default function ClientProfilePicture({
         <Image
           src={url}
           alt="CLient Logo"
-          width={75}
-          height={75}
+          width={100}
+          height={100}
           className="block h-[100px] w-[100px] rounded-full border border-zinc-200 object-cover shadow-sm"
           draggable={false}
         />

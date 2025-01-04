@@ -28,7 +28,7 @@ export default async function ApplicationsTable({
   const applicationsFound = applications && applications.length > 0
 
   return (
-    <div className="border-sand-500 flex h-fit flex-col overflow-auto rounded-md border bg-white px-[12px]">
+    <div className="flex h-fit flex-col overflow-auto rounded-md border border-sand-500 bg-white px-[12px]">
       <table className="w-full border-collapse text-[14px]">
         <thead className="sticky top-0 bg-white">
           <tr className="text-left text-[14px]">
@@ -42,7 +42,7 @@ export default async function ApplicationsTable({
             applications.map((application, index) => (
               <tr
                 key={application.applicationID}
-                className={`hover:bg-sand-200 text-left ${applications.length !== index + 1 && 'border-b'}`}
+                className={`text-left hover:bg-sand-200 ${applications.length !== index + 1 && 'border-b'}`}
               >
                 <td className="py-[8px] text-zinc-600">
                   <Link
@@ -60,7 +60,7 @@ export default async function ApplicationsTable({
                       alt=""
                       width={30}
                       height={30}
-                      className="rounded-full"
+                      className="h-[30px] w-[30px] rounded-full"
                       draggable={false}
                     />
                     <div className="flex min-w-0 flex-col">

@@ -26,7 +26,7 @@ export default async function ClientsTable({ searchQuery, currentPage = 1 }: Cli
   const totalPages = Math.ceil(totalCount / totalRowsPerPage)
 
   return (
-    <div className="border-sand-500 flex h-fit flex-col overflow-auto rounded-md border bg-white px-[12px]">
+    <div className="flex h-fit flex-col overflow-auto rounded-md border border-sand-500 bg-white px-[12px]">
       <table className="w-full border-collapse text-[14px]">
         <thead className="sticky top-0 bg-white">
           <tr className="text-left text-[14px]">
@@ -41,7 +41,7 @@ export default async function ClientsTable({ searchQuery, currentPage = 1 }: Cli
             clients.map((client, index) => (
               <tr
                 key={client.userID}
-                className={`hover:bg-sand-200 text-left ${clients.length !== index + 1 && 'border-b'}`}
+                className={`text-left hover:bg-sand-200 ${clients.length !== index + 1 && 'border-b'}`}
               >
                 <td className="py-[6px]">
                   <div className="flex items-center gap-[12px]">
@@ -50,7 +50,7 @@ export default async function ClientsTable({ searchQuery, currentPage = 1 }: Cli
                       alt=""
                       width={40}
                       height={40}
-                      className="rounded-full"
+                      className="h-[40px] w-[40px] rounded-full"
                       draggable={false}
                     />
                     <div className="flex min-w-0 flex-col">

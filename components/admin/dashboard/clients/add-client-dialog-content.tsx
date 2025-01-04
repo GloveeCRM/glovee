@@ -87,7 +87,10 @@ export default function AddClientDialogContent({ isOpen, setIsOpen }: AddClientD
         <DialogTitle>Create a new client</DialogTitle>
       </DialogHeader>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleCreateClient)} className="flex flex-col gap-[6px]">
+        <form
+          onSubmit={form.handleSubmit(handleCreateClient)}
+          className="flex flex-col gap-[6px] text-[14px]"
+        >
           <div className="flex gap-[12px]">
             <FormField
               control={form.control}

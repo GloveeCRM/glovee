@@ -31,7 +31,7 @@ export default async function AdminApplicationClientCard({
             alt="User Profile Picture"
             width={30}
             height={30}
-            className="rounded-full"
+            className="h-[30px] w-[30px] rounded-full"
             draggable={false}
           />
         </div>

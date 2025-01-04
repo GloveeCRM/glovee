@@ -1,5 +1,5 @@
+import AddApplicationFormButton from '@/components/admin/application/add-application-form-button'
 import AdminApplicationFormsContainer from '@/components/admin/application/admin-application-forms-container'
-import CreateNewFormButton from '@/components/admin/application/create-new-form-button'
 
 interface AdminApplicationFormsPageParams {
   applicationID: number
@@ -17,7 +17,7 @@ export default async function AdminApplicationFormsPage({
   return (
     <div className="flex h-full flex-col gap-[20px]">
       <div className="flex justify-end">
-        <CreateNewFormButton applicationID={applicationID} />
+        <AddApplicationFormButton applicationID={applicationID} />
       </div>
       <AdminApplicationFormsContainer applicationID={applicationID} />
     </div>

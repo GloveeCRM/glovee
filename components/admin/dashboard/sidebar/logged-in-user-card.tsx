@@ -24,7 +24,7 @@ export default async function LoggedInUserCard({ collapsed }: Readonly<LoggedInU
               alt="User Profile Picture"
               width={40}
               height={40}
-              className="rounded-full"
+              className="h-[40px] w-[40px] rounded-full"
               draggable={false}
             />
             {!collapsed && (

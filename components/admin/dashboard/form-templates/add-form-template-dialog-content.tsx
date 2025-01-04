@@ -90,7 +90,7 @@ export default function AddFormTemplateDialogContent({
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleCreateFormTemplate)}
-          className="flex flex-col gap-[6px]"
+          className="flex flex-col gap-[6px] text-[14px]"
         >
           <FormField
             control={form.control}

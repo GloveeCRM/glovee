@@ -1,8 +1,9 @@
 import Image from 'next/image'
 import { FaChevronRight } from 'react-icons/fa'
 
-import { fetchCurrentUserProfile } from '@/lib/data/user'
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
+import { fetchCurrentUserProfile } from '@/lib/data/user'
+
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import LoggedInUserCardPopoverContent from './logged-in-user-card-popover-content'
 
@@ -19,7 +20,7 @@ export default async function LoggedInUserCard() {
               alt="User Profile Picture"
               width={40}
               height={40}
-              className="rounded-full"
+              className="h-[40px] w-[40px] rounded-full"
               draggable={false}
             />
             <div className="truncate text-[14px]">

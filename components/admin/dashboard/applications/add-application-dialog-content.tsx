@@ -116,7 +116,10 @@ export default function AddApplicationDialogContent({
         <DialogTitle>Create a new application</DialogTitle>
       </DialogHeader>
       <Form {...form}>
-        <form className="mt-[12px] w-full" onSubmit={form.handleSubmit(handleCreateApplication)}>
+        <form
+          className="mt-[12px] w-full text-[14px]"
+          onSubmit={form.handleSubmit(handleCreateApplication)}
+        >
           {client ? (
             <FormField
               control={form.control}
@@ -128,10 +131,10 @@ export default function AddApplicationDialogContent({
                     <div className="flex items-center gap-[8px] p-[4px] text-[14px] text-gray-700">
                       <Image
                         src={client?.profilePictureURL || DEFAULT_MALE_CLIENT_LOGO_URL}
-                        alt="CLient Logo"
+                        alt=""
                         width={30}
                         height={30}
-                        className="rounded-full"
+                        className="h-[30px] w-[30px] rounded-full"
                       />
                       <span className="font-medium">
                         {client.firstName} {client.lastName}
@@ -159,7 +162,7 @@ export default function AddApplicationDialogContent({
                                 DEFAULT_MALE_CLIENT_LOGO_URL
                               }
                               alt=""
-                              className="rounded-full"
+                              className="h-[29px] w-[29px] rounded-full"
                               width={29}
                               height={29}
                             />
@@ -207,7 +210,7 @@ export default function AddApplicationDialogContent({
                                           client.profilePictureURL || DEFAULT_MALE_CLIENT_LOGO_URL
                                         }
                                         alt=""
-                                        className="rounded-full"
+                                        className="h-[25px] w-[25px] rounded-full"
                                         width={25}
                                         height={25}
                                       />
@@ -228,6 +231,7 @@ export default function AddApplicationDialogContent({
               }}
             />
           )}
+
           <div className="mt-[52px] flex gap-[8px]">
             <DialogClose asChild>
               <button className="w-full rounded bg-zinc-400 p-[8px] text-white hover:bg-zinc-500">
