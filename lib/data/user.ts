@@ -124,3 +124,24 @@ export async function fetchCurrentUserProfile(): Promise<FetchCurrentUserProfile
 
   return { user: data?.user, error }
 }
+
+interface FetchApplicationOwnerProfileProps {
+  applicationID: number
+}
+
+interface FetchApplicationOwnerProfileResponse {
+  user?: UserType
+  error?: string
+}
+
+export async function fetchApplicationOwnerProfile({
+  applicationID,
+}: FetchApplicationOwnerProfileProps): Promise<FetchApplicationOwnerProfileResponse> {
+  const { data, error } = await apiRequest<{ user: UserType }>({
+    path: `rpc/application_owner_profile?application_id=${applicationID}`,
+    method: 'GET',
+    authRequired: true,
+  })
+
+  return { user: data?.user, error }
+}

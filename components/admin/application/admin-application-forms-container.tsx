@@ -1,20 +1,24 @@
 import { fetchApplicationForms } from '@/lib/data/form'
 import AdminFormSummaryCard from './admin-form-summary-card'
+import { FaClipboardList } from 'react-icons/fa6'
 
-interface AdminApplicationFormsWrapperProps {
+interface AdminApplicationFormsContainerProps {
   applicationID: number
 }
 
-export default async function AdminApplicationFormsWrapper({
+export default async function AdminApplicationFormsContainer({
   applicationID,
-}: AdminApplicationFormsWrapperProps) {
+}: AdminApplicationFormsContainerProps) {
   const { applicationForms } = await fetchApplicationForms({ applicationID })
 
   const hasForms = applicationForms && applicationForms?.length > 0
 
   return !hasForms ? (
-    <div className="flex h-full flex-1 flex-col items-center justify-center text-[20px] text-n-500">
-      No forms are assigned to you yet
+    <div className="flex flex-1 flex-col items-center justify-center gap-[24px]">
+      <span className="text-center text-[18px] text-zinc-500">
+        No forms are assigned to this application yet
+      </span>
+      <FaClipboardList className="h-[300px] w-[300px] text-zinc-700/10" />
     </div>
   ) : (
     <div className="mt-[16px] flex flex-col gap-[16px]">

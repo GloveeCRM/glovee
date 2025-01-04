@@ -10,7 +10,7 @@ export default function AdminLayout({ children, params }: AdminLayoutProps) {
 
   return (
     <div id="dashboard" className="flex h-screen overflow-hidden">
-      <AdminDashboardSidebar orgName={orgName} />
+      <AdminDashboardSidebar orgName={orgName} collapsed={false} />
       <div className="flex-1 overflow-auto p-[8px]">{children}</div>
     </div>
   )

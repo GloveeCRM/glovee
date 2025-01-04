@@ -7,7 +7,11 @@ import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
 import { DropdownMenu, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import LoggedInUserCardOptionsMenuContent from './logged-in-user-card-options-menu-content'
 
-export default async function LoggedInUserCard() {
+interface LoggedInUserCardProps {
+  collapsed?: boolean
+}
+
+export default async function LoggedInUserCard({ collapsed }: Readonly<LoggedInUserCardProps>) {
   const { user } = await fetchCurrentUserProfile()
 
   return (
@@ -23,11 +27,13 @@ export default async function LoggedInUserCard() {
               className="rounded-full"
               draggable={false}
             />
-            <div className="truncate text-[14px]">
-              {user?.firstName} {user?.lastName}
-            </div>
+            {!collapsed && (
+              <div className="truncate text-[14px]">
+                {user?.firstName} {user?.lastName}
+              </div>
+            )}
           </div>
-          <div>
+          <div className={`${collapsed && 'text-zinc-500'}`}>
             <FaChevronRight className="h-[16px] w-[16px]" />
           </div>
         </div>

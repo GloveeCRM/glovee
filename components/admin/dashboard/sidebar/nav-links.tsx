@@ -18,9 +18,10 @@ const links = [
 
 interface NavLinksProps {
   className?: string
+  collapsed?: boolean
 }
 
-export default function NavLinks({ className }: NavLinksProps) {
+export default function NavLinks({ className, collapsed }: NavLinksProps) {
   const pathname = usePathname()
 
   return (
@@ -32,6 +33,7 @@ export default function NavLinks({ className }: NavLinksProps) {
           href={link.path}
           icon={link.icon}
           active={pathname === link.path}
+          collapsed={collapsed}
         />
       ))}
     </div>

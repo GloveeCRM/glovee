@@ -33,7 +33,7 @@ export default async function RootLayout({ params, children }: RootLayoutProps) 
           <html lang="en">
             <body
               id="glovee-crm"
-              className="bg-sand-400 h-svh cursor-default overflow-hidden text-zinc-900"
+              className="h-svh cursor-default overflow-hidden bg-sand-400 text-zinc-900"
             >
               {children}
               <Toaster

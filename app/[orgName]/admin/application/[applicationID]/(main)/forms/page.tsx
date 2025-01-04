@@ -1,8 +1,8 @@
-import AdminApplicationFormsWrapper from '@/components/admin/application/admin-application-form-wrapper'
+import AdminApplicationFormsContainer from '@/components/admin/application/admin-application-forms-container'
 import CreateNewFormButton from '@/components/admin/application/create-new-form-button'
 
 interface AdminApplicationFormsPageParams {
-  applicationID: string
+  applicationID: number
 }
 
 interface AdminApplicationFormsPageProps {
@@ -12,13 +12,14 @@ interface AdminApplicationFormsPageProps {
 export default async function AdminApplicationFormsPage({
   params,
 }: AdminApplicationFormsPageProps) {
-  const applicationID = parseInt(params.applicationID)
+  const { applicationID } = params
+
   return (
-    <div>
-      <div>
+    <div className="flex h-full flex-col gap-[20px]">
+      <div className="flex justify-end">
         <CreateNewFormButton applicationID={applicationID} />
       </div>
-      <AdminApplicationFormsWrapper applicationID={applicationID} />
+      <AdminApplicationFormsContainer applicationID={applicationID} />
     </div>
   )
 }

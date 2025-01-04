@@ -9,24 +9,30 @@ import LoggedInUserCard from './logged-in-user-card'
 
 interface AdminDashboardSidebarProps {
   orgName: string
+  collapsed: boolean
 }
 
-export default function AdminDashboardSidebar({ orgName }: AdminDashboardSidebarProps) {
+export default function AdminDashboardSidebar({
+  orgName,
+  collapsed,
+}: Readonly<AdminDashboardSidebarProps>) {
   return (
     <div
       id="admin-dashboard-sidebar"
-      className="bg-sand-400 border-sand-500 sticky top-0 flex h-screen w-[230px] flex-shrink-0 flex-col gap-[8px] border-r p-[8px]"
+      className={`sticky top-0 flex h-screen flex-shrink-0 flex-col gap-[8px] border-r border-sand-500 bg-sand-400 p-[8px] ${
+        collapsed ? 'w-[80px]' : 'w-[230px]'
+      }`}
     >
       <div id="sidebar-header" className="flex-shrink-0">
-        <Suspense fallback={<OrgInfoCardSkeleton />}>
-          <OrgInfoCard orgName={orgName} />
+        <Suspense fallback={<OrgInfoCardSkeleton collapsed={collapsed} />}>
+          <OrgInfoCard orgName={orgName} collapsed={collapsed} />
         </Suspense>
       </div>
       <Separator className="bg-sand-500" />
-      <NavLinks className="flex-1" />
+      <NavLinks className="flex-1" collapsed={collapsed} />
       <Separator className="bg-sand-500" />
-      <Suspense fallback={<LoggedInUserCardSkeleton />}>
-        <LoggedInUserCard />
+      <Suspense fallback={<LoggedInUserCardSkeleton collapsed={collapsed} />}>
+        <LoggedInUserCard collapsed={collapsed} />
       </Suspense>
     </div>
   )

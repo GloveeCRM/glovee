@@ -1,7 +1,7 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-import { IoFolderOutline, IoCloudUploadOutline, IoFileTrayOutline } from 'react-icons/io5'
+import { FaClipboardList, FaCloudArrowUp, FaInbox } from 'react-icons/fa6'
 
 import { NavLinkItem } from '@/components/admin/dashboard/sidebar/nav-link-item'
 
@@ -13,21 +13,21 @@ export default function AdminApplicationNavLinks({ applicationID }: AdminApplica
   const pathname = usePathname()
 
   const links = [
-    { name: 'Forms', path: `/admin/application/${applicationID}/forms`, icon: IoFolderOutline },
+    { name: 'Forms', path: `/admin/application/${applicationID}/forms`, icon: FaClipboardList },
     {
       name: 'Shared By Client',
       path: `/admin/application/${applicationID}/shared-by-client`,
-      icon: IoFileTrayOutline,
+      icon: FaInbox,
     },
     {
       name: 'Shared By Admin',
       path: `/admin/application/${applicationID}/shared-by-admin`,
-      icon: IoCloudUploadOutline,
+      icon: FaCloudArrowUp,
     },
   ]
 
   return (
-    <div id="nav-links">
+    <>
       {links.map((link) => (
         <NavLinkItem
           key={link.path}
@@ -37,6 +37,6 @@ export default function AdminApplicationNavLinks({ applicationID }: AdminApplica
           active={pathname === link.path}
         />
       ))}
-    </div>
+    </>
   )
 }
