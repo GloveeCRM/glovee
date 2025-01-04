@@ -223,23 +223,6 @@ export default function FormTemplateEditProvider({
     selectedFormQuestion,
     formQuestionSetChildFormQuestionSets,
     formQuestionSetQuestions,
-    // formID,
-    // template,
-    // setTemplate,
-    // savedTemplate,
-    // setSavedTemplate,
-    // isTemplateChanged,
-    // setIsTemplateChanged,
-    // selectedCategoryID,
-    // setSelectedCategoryID,
-    // selectedSectionID,
-    // setSelectedSectionID,
-    // selectedQuestionSetID,
-    // setSelectedQuestionSetID,
-    // selectedQuestionID,
-    // setSelectedQuestionID,
-    // formCategories,
-    // setFormCategories,
   }
 
   return (

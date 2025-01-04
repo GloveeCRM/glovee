@@ -2,18 +2,15 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { MdOutlineModeEdit } from 'react-icons/md'
-import { toast } from 'react-hot-toast'
 
 import useTemplateActions from '@/hooks/form-template/use-template-actions'
 
 interface TemplateInfoCardTitleProps {
-  formTemplateID: number
   title: string
   editable?: boolean
 }
 
 export default function TemplateInfoCardTitle({
-  formTemplateID,
   title,
   editable = false,
 }: TemplateInfoCardTitleProps) {
@@ -78,11 +75,11 @@ export default function TemplateInfoCardTitle({
   }, [isEditing, titleInputRef, handleSave])
 
   return (
-    <div className="group relative text-[14px] text-n-100">
+    <div className="group relative text-[14px] text-white">
       {isEditing ? (
         <textarea
           defaultValue={title}
-          className="ml-[4px] mt-[5px] block w-[calc(100%-8px)] resize-none overflow-hidden rounded border-[1px] border-n-500 bg-n-700/70 px-[3px] pb-[2px] text-n-100 focus:border-[1px] focus:border-n-500 focus:outline-none"
+          className="ml-[4px] mt-[5px] block w-[calc(100%-8px)] resize-none overflow-hidden rounded border border-zinc-600 bg-zinc-800/70 px-[3px] pb-[2px] text-white focus:border-zinc-500 focus:outline-none"
           ref={titleInputRef}
           onChange={adjustTextareaHeight}
           onKeyDown={handleKeyDown}
@@ -96,7 +93,7 @@ export default function TemplateInfoCardTitle({
       {editable && !isEditing && (
         <MdOutlineModeEdit
           onClick={handleClickEdit}
-          className="absolute right-0 top-0 h-[22px] w-[22px] cursor-pointer rounded bg-n-600/90 p-[2px] text-n-300 opacity-0 transition-opacity duration-100 hover:text-n-100 group-hover:opacity-100"
+          className="absolute right-0 top-0 h-[22px] w-[22px] cursor-pointer rounded bg-zinc-700 p-[2px] text-zinc-200 opacity-0 transition-opacity duration-100 hover:text-white group-hover:opacity-100"
         />
       )}
     </div>

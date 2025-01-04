@@ -63,6 +63,7 @@ export async function updateFormTemplate({
     data: {
       formTemplateID: formTemplate.formTemplateID,
       templateName: formTemplate.templateName,
+      templateDescription: formTemplate.templateDescription,
     },
     authRequired: true,
   })

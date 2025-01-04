@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { MdOutlineModeEdit } from 'react-icons/md'
 
 import useTemplateActions from '@/hooks/form-template/use-template-actions'
@@ -24,10 +24,16 @@ export default function TemplateInfoCardDescription({
     setIsEditing(true)
   }
 
-  function handleSave() {
+  const handleSave = useCallback(async () => {
     const newDescription = descriptionInputRef.current?.value || ''
     setIsEditing(false)
-  }
+    const { error } = await updateFormTemplate({
+      formTemplateToUpdate: { templateDescription: newDescription },
+    })
+    if (error) {
+      console.error(error)
+    }
+  }, [updateFormTemplate])
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === 'Enter') {
@@ -69,7 +75,7 @@ export default function TemplateInfoCardDescription({
   }, [isEditing, description])
 
   return (
-    <div className="group relative text-[11px] text-n-300">
+    <div className="group relative text-[11px] text-zinc-200">
       {isEditing ? (
         <textarea
           ref={descriptionInputRef}
@@ -81,13 +87,13 @@ export default function TemplateInfoCardDescription({
       ) : (
         <>
           <p
-            className={`mb-[7px] ml-[8px] mt-[4px] w-[calc(100%-14px)] text-n-300 ${description.length <= 129 && 'mb-[6px]'} ${!isExpanded ? 'line-clamp-3' : ''}`}
+            className={`mb-[7px] ml-[8px] mt-[4px] w-[calc(100%-14px)] ${description.length <= 129 && 'mb-[6px]'} ${!isExpanded ? 'line-clamp-3' : ''}`}
           >
             {description || 'No description'}
           </p>
           {description.length > 129 && (
             <button
-              className="mb-[6px] ml-[7px] text-[11px] text-n-100 underline"
+              className="mb-[6px] ml-[7px] text-[11px] text-white underline"
               onClick={() => setIsExpanded(!isExpanded)}
             >
               {isExpanded ? 'Show less' : 'Show more'}
@@ -99,7 +105,7 @@ export default function TemplateInfoCardDescription({
       {editable && !isEditing && (
         <MdOutlineModeEdit
           onClick={handleClickEdit}
-          className="absolute right-0 top-0 h-[22px] w-[22px] cursor-pointer rounded bg-n-600/90 p-[2px] text-n-300 opacity-0 transition-opacity duration-100 hover:text-n-100 group-hover:opacity-100"
+          className="absolute right-0 top-0 h-[22px] w-[22px] cursor-pointer rounded bg-zinc-700 p-[2px] text-zinc-200 opacity-0 transition-opacity duration-100 hover:text-white group-hover:opacity-100"
         />
       )}
     </div>

@@ -12,7 +12,7 @@ export default function QuestionsEditBoard() {
   return (
     <>
       {selectedFormSectionID ? (
-        <div id="questions-edit-board" className="rounded-lg bg-white p-[4px]">
+        <div id="questions-edit-board" className="rounded-lg bg-white p-[4px] shadow-sm">
           {rootSelectedFormSectionQuestionSets && rootSelectedFormSectionQuestionSets.length > 0 ? (
             rootSelectedFormSectionQuestionSets.map((formQuestionSet) => (
               <div key={formQuestionSet.formQuestionSetID}>

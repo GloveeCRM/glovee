@@ -12,13 +12,13 @@ interface TemplateEditLayoutProps {
 }
 
 export default function TemplateEditLayout({ params, children }: TemplateEditLayoutProps) {
-  const formTemplateID = Number(params.formTemplateID)
+  const { formTemplateID } = params
 
   return (
     <div id="template-edit-layout" className="flex">
       <FormTemplateEditProvider formTemplateID={formTemplateID}>
         <TemplateEditSidebar />
-        <div className="h-svh w-full min-w-0 overflow-y-scroll bg-n-400">{children}</div>
+        <div className="h-svh w-full min-w-0 overflow-y-scroll bg-zinc-200">{children}</div>
         <TemplateEditToolbar />
       </FormTemplateEditProvider>
     </div>
