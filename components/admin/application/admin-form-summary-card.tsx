@@ -15,7 +15,7 @@ export default function AdminFormSummaryCard({ applicationForm }: AdminFormSumma
     <div className="flex flex-col gap-[24px] rounded-md border border-sand-500 bg-white p-[10px] text-[14px] shadow-sm">
       <div className="flex items-center justify-between">
         <span>{applicationForm.form.formName}</span>
-        <span className="rounded-full bg-coral-200 px-[8px] py-[1px] text-[12px]">
+        <span className="flex-shrink-0 rounded-full bg-coral-100 px-[10px] py-[1px] text-[12px]">
           {dictionary(applicationForm.status)}
         </span>
       </div>
