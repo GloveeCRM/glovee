@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { MdOutlineModeEdit } from 'react-icons/md'
 
 import useTemplateActions from '@/hooks/form-template/use-template-actions'
+import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
 
 interface TemplateInfoCardTitleProps {
   title: string
@@ -18,6 +19,7 @@ export default function TemplateInfoCardTitle({
 
   const titleInputRef = useRef<HTMLTextAreaElement>(null)
 
+  const { formTemplate } = useFormTemplateEditContext()
   const { updateFormTemplate } = useTemplateActions()
 
   function handleClickEdit() {
@@ -27,8 +29,9 @@ export default function TemplateInfoCardTitle({
   const handleSave = useCallback(async () => {
     const newTitle = titleInputRef.current?.value || 'Untitled Template'
     setIsEditing(false)
+    if (!formTemplate) return
     const { error } = await updateFormTemplate({
-      formTemplateToUpdate: { templateName: newTitle },
+      formTemplateToUpdate: { form: { ...formTemplate.form, formName: newTitle } },
     })
     if (error) {
       console.error(error)

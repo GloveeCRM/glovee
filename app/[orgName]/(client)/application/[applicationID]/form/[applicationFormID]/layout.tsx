@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 
-import { FormStatusTypes } from '@/lib/types/form'
+import { ApplicationFormStatusTypes } from '@/lib/types/form'
 import { searchForms } from '@/lib/data/form'
 import ApplicationFormContextProvider from '@/contexts/application-form-context'
 import ClientFormSidebar from '@/components/client/client-form-sidebar'

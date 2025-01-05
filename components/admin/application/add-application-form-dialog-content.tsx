@@ -23,7 +23,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import SearchClientsCommandItemSkeleton from '@/components/skeleton/admin/search-clients-command-item-skeleton'
 import {
   Command,
   CommandGroup,
@@ -33,6 +32,7 @@ import {
   CommandItem,
   CommandSeparator,
 } from '@/components/ui/command'
+import SearchClientsCommandItemSkeleton from '@/components/skeleton/admin/search-clients-command-item-skeleton'
 
 interface AddApplicationFormDialogContentProps {
   applicationID: number
@@ -51,6 +51,7 @@ export default function AddApplicationFormDialogContent({
 
   const defaultFormValues = {
     formTemplateID: 0,
+    formName: '',
   }
 
   const form = useForm<z.infer<typeof CreateApplicationFormSchema>>({
@@ -73,10 +74,11 @@ export default function AddApplicationFormDialogContent({
   }
 
   async function handleCreateApplicationForm(values: z.infer<typeof CreateApplicationFormSchema>) {
-    const { formTemplateID } = values
+    const { formTemplateID, formName } = values
     const { applicationFormID, error } = await createApplicationForm({
       applicationID,
       formTemplateID,
+      formName,
     })
     if (applicationFormID) {
       createApplicationFormSuccessToast('Application form created!')
@@ -111,85 +113,111 @@ export default function AddApplicationFormDialogContent({
       </DialogHeader>
       <Form {...form}>
         <form
-          className="mt-[12px] w-full text-[14px]"
+          className="flex flex-col gap-[12px] text-[14px]"
           onSubmit={form.handleSubmit(handleCreateApplicationForm)}
         >
-          <FormField
-            control={form.control}
-            name="formTemplateID"
-            render={({ field }) => {
-              return (
-                <FormItem>
-                  <FormLabel>Form template</FormLabel>
-                  {field.value !== 0 ? (
-                    <FormControl>
-                      <div className="flex items-center justify-between rounded bg-zinc-100 px-[8px] py-[4px]">
-                        <div className="flex items-center gap-[8px]">
-                          <div className="rounded-full bg-zinc-400 p-[7px] text-white">
-                            <FaClipboardList className="h-[18px] w-[18px]" />
+          <div className="flex flex-col gap-[6px]">
+            <FormField
+              control={form.control}
+              name="formTemplateID"
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>Form template</FormLabel>
+                    {field.value !== 0 ? (
+                      <FormControl>
+                        <div className="flex items-center justify-between rounded bg-zinc-100 px-[8px] py-[4px]">
+                          <div className="flex items-center gap-[8px]">
+                            <div className="rounded-full bg-zinc-400 p-[7px] text-white">
+                              <FaClipboardList className="h-[18px] w-[18px]" />
+                            </div>
+                            {
+                              formTemplates?.find((ft) => ft.formTemplateID === field.value)?.form
+                                .formName
+                            }
                           </div>
-                          {
-                            formTemplates?.find((ft) => ft.formTemplateID === field.value)
-                              ?.templateName
+                          <div className="cursor-pointer" onClick={() => field.onChange(0)}>
+                            <IoClose className="h-[20px] w-[20px]" />
+                          </div>
+                        </div>
+                      </FormControl>
+                    ) : (
+                      <Command className="relative overflow-visible">
+                        <CommandInput
+                          className={`rounded border border-zinc-200 ${isSearchingFormTemplates && 'ring-1 ring-zinc-500'}`}
+                          placeholder="Search for a form template"
+                          onFocus={() => setIsSearchingFormTemplates(true)}
+                          onBlur={() =>
+                            setTimeout(() => {
+                              setIsSearchingFormTemplates(false)
+                            }, 200)
                           }
-                        </div>
-                        <div className="cursor-pointer" onClick={() => field.onChange(0)}>
-                          <IoClose className="h-[20px] w-[20px]" />
-                        </div>
-                      </div>
-                    </FormControl>
-                  ) : (
-                    <Command className="relative overflow-visible">
-                      <CommandInput
-                        className={`rounded border border-zinc-200 ${isSearchingFormTemplates && 'ring-1 ring-zinc-500'}`}
-                        placeholder="Search for a form template"
-                        onFocus={() => setIsSearchingFormTemplates(true)}
-                        onBlur={() =>
-                          setTimeout(() => {
-                            setIsSearchingFormTemplates(false)
-                          }, 200)
-                        }
-                      />
+                        />
 
-                      {isSearchingFormTemplates && (
-                        <CommandList className="absolute top-[43px] z-50 max-h-[126px] w-full border">
-                          {isFetchingFormTemplates ? (
-                            <SearchClientsCommandItemSkeleton />
-                          ) : (
-                            <CommandEmpty className="py-[8px] text-center text-[14px] text-zinc-500">
-                              No Clients Found
-                            </CommandEmpty>
-                          )}
-                          <CommandGroup>
-                            {formTemplates?.map((formTemplate) => (
-                              <>
-                                <CommandItem
-                                  key={formTemplate.formTemplateID}
-                                  value={formTemplate.templateName}
-                                  onSelect={() => field.onChange(formTemplate.formTemplateID)}
-                                >
-                                  <div className="flex items-center gap-[8px]">
-                                    <div className="rounded-full bg-zinc-400 p-[7px] text-white">
-                                      <FaClipboardList className="h-[18px] w-[18px]" />
+                        {isSearchingFormTemplates && (
+                          <CommandList className="absolute top-[43px] z-50 max-h-[126px] w-full border">
+                            {isFetchingFormTemplates ? (
+                              <SearchClientsCommandItemSkeleton />
+                            ) : (
+                              <CommandEmpty className="py-[8px] text-center text-[14px] text-zinc-500">
+                                No form templates found
+                              </CommandEmpty>
+                            )}
+                            <CommandGroup>
+                              {formTemplates?.map((formTemplate) => (
+                                <>
+                                  <CommandItem
+                                    key={formTemplate.formTemplateID}
+                                    value={formTemplate.form.formName}
+                                    onSelect={() => {
+                                      field.onChange(formTemplate.formTemplateID)
+                                      form.setValue('formName', formTemplate.form.formName)
+                                    }}
+                                  >
+                                    <div className="flex items-center gap-[8px]">
+                                      <div className="rounded-full bg-zinc-400 p-[7px] text-white">
+                                        <FaClipboardList className="h-[18px] w-[18px]" />
+                                      </div>
+                                      {formTemplate.form.formName}
                                     </div>
-                                    {formTemplate.templateName}
-                                  </div>
-                                </CommandItem>
-                                <CommandSeparator />
-                              </>
-                            ))}
-                          </CommandGroup>
-                        </CommandList>
-                      )}
-                    </Command>
-                  )}
-                  <FormMessage />
-                </FormItem>
-              )
-            }}
-          />
+                                  </CommandItem>
+                                  <CommandSeparator />
+                                </>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        )}
+                      </Command>
+                    )}
+                    <FormMessage />
+                  </FormItem>
+                )
+              }}
+            />
 
-          <div className="mt-[52px] flex gap-[8px]">
+            {form.watch('formTemplateID') !== 0 && (
+              <FormField
+                control={form.control}
+                name="formName"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Form name</FormLabel>
+                    <FormControl>
+                      <input
+                        type="text"
+                        placeholder="e.g. Personal Information"
+                        className="w-full rounded border border-zinc-200 p-[8px] text-[14px] placeholder:text-zinc-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-500"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+          </div>
+
+          <div className="flex gap-[8px]">
             <DialogClose asChild>
               <button className="w-full rounded bg-zinc-400 p-[8px] text-white hover:bg-zinc-500">
                 Cancel

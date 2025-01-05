@@ -5,23 +5,17 @@ export type FormTemplateType = {
   formTemplateID: number
   organizationID: number
   formID: number
-  templateName: string
-  templateDescription: string
   createdBy: UserType
   createdAt: string
   form: FormType
 }
 
-export enum FormStatusTypes {
-  CREATED = 'CREATED',
-  SUBMITTED = 'SUBMITTED',
-}
-
-export enum FormRoleTypes {
-  MAIN = 'MAIN',
-  SPOUSE = 'SPOUSE',
-  CHILD = 'CHILD',
-  OTHER = 'OTHER',
+export enum ApplicationFormStatusTypes {
+  PENDING_CLIENT_SUBMISSION = 'pending_client_submission',
+  CLIENT_SUBMITTED = 'client_submitted',
+  PENDING_ORGANIZATION_REVIEW = 'pending_organization_review',
+  ORGANIZATION_APPROVED = 'organization_approved',
+  PENDING_CLIENT_REVISION = 'pending_client_revision',
 }
 
 export type ApplicationFormType = {
@@ -29,6 +23,7 @@ export type ApplicationFormType = {
   applicationID: number
   organizationID: number
   formID: number
+  status: ApplicationFormStatusTypes
   createdBy: UserType
   createdAt: string
   form: FormType
@@ -36,6 +31,8 @@ export type ApplicationFormType = {
 
 export type FormType = {
   formID: number
+  formName: string
+  formDescription: string
   completionRate: number
   createdBy: UserType
   createdAt: string

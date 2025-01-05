@@ -117,7 +117,7 @@ export default function AddApplicationDialogContent({
       </DialogHeader>
       <Form {...form}>
         <form
-          className="mt-[12px] w-full text-[14px]"
+          className="flex flex-col gap-[12px] text-[14px]"
           onSubmit={form.handleSubmit(handleCreateApplication)}
         >
           {client ? (
@@ -232,7 +232,7 @@ export default function AddApplicationDialogContent({
             />
           )}
 
-          <div className="mt-[52px] flex gap-[8px]">
+          <div className="flex gap-[8px]">
             <DialogClose asChild>
               <button className="w-full rounded bg-zinc-400 p-[8px] text-white hover:bg-zinc-500">
                 Cancel

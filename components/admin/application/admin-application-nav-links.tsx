@@ -9,7 +9,9 @@ interface AdminApplicationNavLinksProps {
   applicationID: number
 }
 
-export default function AdminApplicationNavLinks({ applicationID }: AdminApplicationNavLinksProps) {
+export default function AdminApplicationNavLinks({
+  applicationID,
+}: Readonly<AdminApplicationNavLinksProps>) {
   const pathname = usePathname()
 
   const links = [

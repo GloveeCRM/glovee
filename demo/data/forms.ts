@@ -1,6 +1,6 @@
 import {
   FormQuestionSetType,
-  FormStatusTypes,
+  ApplicationFormStatusTypes,
   FormCategoryType,
   FormSectionType,
   FormTemplateType,
@@ -8,7 +8,6 @@ import {
   FormQuestionSettingsType,
   FormType,
 } from '@/lib/types/form'
-import { UserStatusTypes } from '@/lib/types/user'
 
 // Helper functions to work with localStorage
 const getStorageItem = <T>(key: string): T[] => {

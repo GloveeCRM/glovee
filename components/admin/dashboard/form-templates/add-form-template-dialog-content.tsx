@@ -32,7 +32,8 @@ export default function AddFormTemplateDialogContent({
   setIsOpen,
 }: AddFormTemplateDialogContentProps) {
   const defaultFormValues = {
-    templateName: '',
+    formName: '',
+    formDescription: '',
   }
 
   const form = useForm<z.infer<typeof CreateFormTemplateSchema>>({
@@ -55,15 +56,15 @@ export default function AddFormTemplateDialogContent({
   }
 
   async function handleCreateFormTemplate(values: z.infer<typeof CreateFormTemplateSchema>) {
-    const { templateName, templateDescription } = values
+    const { formName, formDescription } = values
 
     const { formTemplate, error } = await createFormTemplate({
-      templateName,
-      templateDescription,
+      formName,
+      formDescription,
     })
 
     if (formTemplate) {
-      formTemplateCreationSuccessToast(`${formTemplate.templateName} created!`)
+      formTemplateCreationSuccessToast(`${formTemplate.form.formName} created!`)
       setIsOpen(false)
     } else if (error) {
       form.setError('root.error', {
@@ -94,10 +95,10 @@ export default function AddFormTemplateDialogContent({
         >
           <FormField
             control={form.control}
-            name="templateName"
+            name="formName"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>Template name</FormLabel>
+                <FormLabel>Form name</FormLabel>
                 <FormControl>
                   <input
                     type="text"
@@ -112,10 +113,10 @@ export default function AddFormTemplateDialogContent({
           />
           <FormField
             control={form.control}
-            name="templateDescription"
+            name="formDescription"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>Template description</FormLabel>
+                <FormLabel>Form description</FormLabel>
                 <FormControl>
                   <textarea
                     rows={3}
@@ -145,7 +146,7 @@ export default function AddFormTemplateDialogContent({
               </button>
             </DialogClose>
             <button className="w-full rounded bg-zinc-800 p-[8px] text-white hover:bg-zinc-900">
-              Create client
+              Create form template
             </button>
           </div>
         </form>

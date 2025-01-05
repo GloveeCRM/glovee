@@ -14,10 +14,10 @@ export default function FormTemplateCard({ formTemplate }: FormTemplateCardProps
     <div className="group/form-template-card flex flex-col justify-between gap-[20px] rounded-lg bg-white p-[12px] shadow-sm">
       <div className="flex flex-col gap-[4px]">
         <div className="flex items-center justify-between">
-          <div className="flex-1 text-[14px] font-medium">{formTemplate.templateName}</div>
+          <div className="flex-1 text-[14px] font-medium">{formTemplate.form.formName}</div>
           <FormTemplateCardOptionsMenuButton formTemplateID={formTemplate.formTemplateID} />
         </div>
-        <div className="text-[12px] text-n-500">{formTemplate.templateDescription}</div>
+        <div className="text-[12px] text-n-500">{formTemplate.form.formDescription}</div>
       </div>
       <div className="flex justify-end gap-[8px]">
         <Link
@@ -29,7 +29,7 @@ export default function FormTemplateCard({ formTemplate }: FormTemplateCardProps
         </Link>
         <Link
           href={`/admin/form-template/${formTemplate.formTemplateID}/edit`}
-          className="bg-coral-100 text-coral-900 hover:bg-coral-200 flex items-center gap-[4px] rounded-md px-[8px] py-[2px]"
+          className="flex items-center gap-[4px] rounded-md bg-coral-100 px-[8px] py-[2px] text-coral-900 hover:bg-coral-200"
         >
           <HiOutlinePencilSquare className="h-[18px] w-[18px]" />
           <span className="text-[12px]">Edit</span>

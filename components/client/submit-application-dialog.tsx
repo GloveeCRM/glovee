@@ -4,7 +4,7 @@ import { useState } from 'react'
 import toast from 'react-hot-toast'
 import { ImSpinner2 } from 'react-icons/im'
 
-import { FormStatusTypes, FormType } from '@/lib/types/form'
+import { ApplicationFormStatusTypes, FormType } from '@/lib/types/form'
 // import { setFormStatus } from '@/lib/actions/form'
 import { Button } from '@/components/ui/button'
 import {

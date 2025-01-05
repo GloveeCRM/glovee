@@ -15,7 +15,7 @@ export default function AdminApplicationTopbar({
       id="admin-application-topbar"
       className="sticky top-0 flex h-[60px] items-center justify-between gap-[16px] border-b border-sand-500 px-[8px]"
     >
-      <div className="flex gap-[16px]">
+      <div className="flex gap-[8px]">
         <AdminApplicationNavLinks applicationID={applicationID} />
       </div>
       <div>

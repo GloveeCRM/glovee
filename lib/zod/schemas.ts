@@ -18,6 +18,7 @@ export const CreateApplicationSchema = z.object({
 
 export const CreateApplicationFormSchema = z.object({
   formTemplateID: z.number().int().positive({ message: 'Template is required' }),
+  formName: z.string().min(1, { message: 'Form name is required' }),
 })
 
 export const CreateFormSchema = z.object({
@@ -29,15 +30,15 @@ export const CreateFormSchema = z.object({
 })
 
 export const CreateFormTemplateSchema = z.object({
-  templateName: z
+  formName: z
     .string({
-      required_error: 'Title is required',
-      invalid_type_error: 'Title is not valid',
+      required_error: 'Form name is required',
+      invalid_type_error: 'Form name is not valid',
     })
     .min(3, {
       message: 'Minimum 3 characters required',
     }),
-  templateDescription: z.string().optional(),
+  formDescription: z.string().optional(),
 })
 
 export const NewPasswordSchema = z.object({

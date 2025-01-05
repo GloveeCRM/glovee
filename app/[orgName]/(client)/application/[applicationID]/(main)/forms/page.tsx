@@ -1,7 +1,7 @@
 import ClientApplicationFormsWrapper from '@/components/client/application/client-application-forms-wrapper'
 
 interface ClientApplicationFormsPageParams {
-  applicationID: string
+  applicationID: number
 }
 
 interface ClientApplicationFormsPageProps {
@@ -9,6 +9,7 @@ interface ClientApplicationFormsPageProps {
 }
 
 export default async function ClientApplicationPage({ params }: ClientApplicationFormsPageProps) {
-  const applicationID = parseInt(params.applicationID)
+  const { applicationID } = params
+
   return <ClientApplicationFormsWrapper applicationID={applicationID} />
 }

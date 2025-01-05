@@ -1,4 +1,4 @@
-import ApplicationUpdatesContainer from '@/components/application/application-updates-wrapper'
+import ApplicationUpdatesContainer from '@/components/application/application-updates-container'
 import ClientApplicationSidebar from '@/components/client/application/client-application-sidebar'
 
 interface ApplicationLayoutParams {

@@ -21,8 +21,8 @@ import { apiRequest } from '@/lib/utils/http'
 import { keysCamelCaseToSnakeCase, keysSnakeCaseToCamelCase } from '@/lib/utils/json'
 
 interface CreateFormTemplateProps {
-  templateName: string
-  templateDescription?: string
+  formName: string
+  formDescription?: string
 }
 
 interface CreateFormTemplateResponse {
@@ -31,13 +31,13 @@ interface CreateFormTemplateResponse {
 }
 
 export async function createFormTemplate({
-  templateName,
-  templateDescription,
+  formName,
+  formDescription,
 }: CreateFormTemplateProps): Promise<CreateFormTemplateResponse> {
   const { data, error } = await apiRequest<{ formTemplate: FormTemplateType }>({
     path: 'rpc/create_form_template',
     method: 'POST',
-    data: { templateName, templateDescription },
+    data: { formName, formDescription },
     authRequired: true,
   })
 
@@ -62,8 +62,8 @@ export async function updateFormTemplate({
     method: 'POST',
     data: {
       formTemplateID: formTemplate.formTemplateID,
-      templateName: formTemplate.templateName,
-      templateDescription: formTemplate.templateDescription,
+      formName: formTemplate.form?.formName,
+      formDescription: formTemplate.form?.formDescription,
     },
     authRequired: true,
   })
@@ -482,6 +482,7 @@ export async function updateFormTemplateQuestionDefaultOptions({
 interface CreateApplicationFormProps {
   applicationID: number
   formTemplateID: number
+  formName: string
 }
 
 interface CreateApplicationFormResponse {
@@ -492,6 +493,7 @@ interface CreateApplicationFormResponse {
 export async function createApplicationForm({
   applicationID,
   formTemplateID,
+  formName,
 }: CreateApplicationFormProps): Promise<CreateApplicationFormResponse> {
   const { data, error } = await apiRequest<{ applicationFormID: number }>({
     path: 'rpc/create_application_form',
@@ -499,6 +501,7 @@ export async function createApplicationForm({
     data: {
       applicationID,
       formTemplateID,
+      formName,
     },
     authRequired: true,
   })

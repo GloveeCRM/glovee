@@ -25,7 +25,7 @@ export default function NavLinks({ className, collapsed }: NavLinksProps) {
   const pathname = usePathname()
 
   return (
-    <div id="nav-links" className={className}>
+    <div id="nav-links" className={`flex flex-col gap-[8px] ${className}`}>
       {links.map((link) => (
         <NavLinkItem
           key={link.path}

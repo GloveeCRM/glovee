@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { MdOutlineModeEdit } from 'react-icons/md'
 
 import useTemplateActions from '@/hooks/form-template/use-template-actions'
+import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
 
 interface TemplateInfoCardDescriptionProps {
   description: string
@@ -16,6 +17,7 @@ export default function TemplateInfoCardDescription({
 }: TemplateInfoCardDescriptionProps) {
   const [isExpanded, setIsExpanded] = useState<boolean>(false)
   const [isEditing, setIsEditing] = useState<boolean>(false)
+  const { formTemplate } = useFormTemplateEditContext()
   const { updateFormTemplate } = useTemplateActions()
 
   const descriptionInputRef = useRef<HTMLTextAreaElement>(null)
@@ -27,8 +29,11 @@ export default function TemplateInfoCardDescription({
   const handleSave = useCallback(async () => {
     const newDescription = descriptionInputRef.current?.value || ''
     setIsEditing(false)
+    if (!formTemplate?.form) return
     const { error } = await updateFormTemplate({
-      formTemplateToUpdate: { templateDescription: newDescription },
+      formTemplateToUpdate: {
+        form: { ...formTemplate.form, formDescription: newDescription },
+      },
     })
     if (error) {
       console.error(error)

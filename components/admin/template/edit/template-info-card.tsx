@@ -20,11 +20,11 @@ export default function TemplateInfoCard({ editable = false }: TemplateInfoCardP
   return (
     <div className="rounded bg-zinc-700 shadow-sm">
       <TemplateInfoCardTitle
-        title={formTemplate.templateName || 'Untitled Template'}
+        title={formTemplate.form.formName || 'Untitled Template'}
         editable={editable}
       />
       <TemplateInfoCardDescription
-        description={formTemplate.templateDescription}
+        description={formTemplate.form.formDescription}
         editable={editable}
       />
     </div>
