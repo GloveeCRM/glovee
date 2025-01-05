@@ -21,7 +21,7 @@ export default async function AdminApplicationFormsContainer({
       <FaClipboardList className="h-[300px] w-[300px] text-zinc-700/10" />
     </div>
   ) : (
-    <div className="mt-[16px] flex flex-col gap-[16px] px-[8px]">
+    <div className="flex flex-col gap-[16px] px-[8px]">
       {applicationForms.map((applicationForm) => (
         <AdminFormSummaryCard key={applicationForm.formID} applicationForm={applicationForm} />
       ))}

@@ -1,5 +1,7 @@
 import AddApplicationFormButton from '@/components/admin/application/add-application-form-button'
 import AdminApplicationFormsContainer from '@/components/admin/application/admin-application-forms-container'
+import AdminApplicationFormsContainerSkeleton from '@/components/skeleton/admin/admin-application-forms-container-skeleton'
+import { Suspense } from 'react'
 
 interface AdminApplicationFormsPageParams {
   applicationID: number
@@ -19,7 +21,9 @@ export default async function AdminApplicationFormsPage({
       <div className="flex justify-end">
         <AddApplicationFormButton applicationID={applicationID} />
       </div>
-      <AdminApplicationFormsContainer applicationID={applicationID} />
+      <Suspense fallback={<AdminApplicationFormsContainerSkeleton />}>
+        <AdminApplicationFormsContainer applicationID={applicationID} />
+      </Suspense>
     </div>
   )
 }
