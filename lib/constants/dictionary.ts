@@ -5,6 +5,7 @@ const translations = {
   pending_organization_review: 'Pending Organization Review',
   organization_approved: 'Organization Approved',
   pending_client_revision: 'Pending Client Revision',
+  new_form_added: 'added a new form',
 }
 
 export const dictionary = (translation_code: string) => {

@@ -1,6 +1,7 @@
-import { fetchApplicationFilesByClient } from '@/lib/data/application'
+import { Suspense } from 'react'
 
-import ApplicationFilesWrapper from '@/components/application/application-files-wrapper'
+import ApplicationClientFilesContainer from '@/components/application/application-client-files-container'
+import ApplicationFilesContainerSkeleton from '@/components/skeleton/admin/application-files-container-skeleton'
 
 interface SharedByClientPageParams {
   applicationID: number
@@ -13,10 +14,11 @@ interface SharedByClientPageProps {
 export default async function SharedByClientPage({ params }: SharedByClientPageProps) {
   const { applicationID } = params
 
-  const { files, error } = await fetchApplicationFilesByClient({ applicationID })
-  if (error) {
-    console.error(error)
-  }
-
-  return <ApplicationFilesWrapper files={files || []} />
+  return (
+    <div className="flex-1">
+      <Suspense fallback={<ApplicationFilesContainerSkeleton />}>
+        <ApplicationClientFilesContainer applicationID={applicationID} />
+      </Suspense>
+    </div>
+  )
 }

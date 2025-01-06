@@ -16,7 +16,7 @@ function AdminApplicationFormCardSkeleton() {
         <div className="h-[10px] w-[130px] rounded-lg bg-sand-500" />
         <div className="h-[12px] w-[100px] rounded-full bg-sand-400" />
       </div>
-      <div className="mt-[34px] flex w-full justify-between">
+      <div className="mt-[34px] flex w-full justify-between px-[16px]">
         <div className="flex w-full items-center">
           <div className="h-[10px] w-[80px] flex-shrink-0 rounded-lg bg-sand-500" />
           <Separator className="mx-[8px] h-[2px] min-w-[20px] flex-grow bg-sand-400" />

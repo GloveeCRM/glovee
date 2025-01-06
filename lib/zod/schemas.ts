@@ -112,3 +112,10 @@ export const SignupSchema = z.object({
       message: 'Password must contain at least one special character',
     }),
 })
+
+export const SendFileToClientSchema = z.object({
+  fileName: z.string().min(1, { message: 'File name is required' }),
+  file: z.custom<File>((val) => val instanceof File, {
+    message: 'Please select a file',
+  }),
+})

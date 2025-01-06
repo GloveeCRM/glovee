@@ -24,6 +24,7 @@ const errors = {
   missing_form_question_set_position: 'Form question set position is required',
   form_template_not_found: 'Form template not found',
   email_already_in_use: 'This email is already taken',
+  application_not_found: 'Application not found',
 }
 
 export const errorMessages = (error_code: string) => {

@@ -1,78 +1,31 @@
 'use client'
 
-import { useRef } from 'react'
+import { useState } from 'react'
+import { GoPlus } from 'react-icons/go'
 
-import { uploadFileToS3 } from '@/lib/utils/s3'
-import { createApplicationFile } from '@/lib/actions/application'
-import { fetchApplicationFileUploadURL } from '@/lib/data/application'
-
-import { Button } from '@/components/ui/button'
+import { Dialog, DialogTrigger } from '@/components/ui/dialog'
+import SendFileToClientDialogContent from './send-file-to-client-dialog-content'
 
 interface SendFileToClientButtonProps {
   applicationID: number
 }
 
 export default function SendFileToClientButton({ applicationID }: SendFileToClientButtonProps) {
-  const fileInputRef = useRef<HTMLInputElement>(null)
-
-  async function handleSendFileToClient(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0]
-    if (!file) {
-      return
-    }
-
-    const {
-      url,
-      objectKey,
-      error: uploadURLDataError,
-    } = await fetchApplicationFileUploadURL({
-      applicationID,
-      fileName: file.name,
-      mimeType: file.type,
-    })
-
-    if (uploadURLDataError) {
-      console.error(uploadURLDataError)
-      return
-    }
-
-    if (!url) {
-      console.error('No upload URL received')
-      return
-    }
-
-    const uploadRes = await uploadFileToS3(url, file)
-    if (!uploadRes.success) {
-      console.error('Failed to upload file to S3')
-      return
-    }
-
-    const { error: createApplicationFileError } = await createApplicationFile({
-      applicationID,
-      objectKey: objectKey || '',
-      fileName: file.name,
-      mimeType: file.type,
-      size: file.size,
-    })
-    if (createApplicationFileError) {
-      console.error(createApplicationFileError)
-      return
-    }
-
-    if (fileInputRef.current) {
-      fileInputRef.current.value = ''
-    }
-  }
+  const [isOpen, setIsOpen] = useState<boolean>(false)
 
   return (
-    <>
-      <input
-        type="file"
-        ref={fileInputRef}
-        style={{ display: 'none' }}
-        onChange={handleSendFileToClient}
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <button className="flex flex-shrink-0 items-center gap-[4px] rounded bg-teal-500 py-[6px] pl-[8px] pr-[12px] text-[14px] text-white hover:bg-teal-600">
+          <GoPlus className="h-[18px] w-[18px]" />
+          <span>Send file to client</span>
+        </button>
+      </DialogTrigger>
+      <SendFileToClientDialogContent
+        applicationID={applicationID}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
       />
-      <Button onClick={() => fileInputRef.current?.click()}>Send File to Client</Button>
-    </>
+    </Dialog>
   )
 }

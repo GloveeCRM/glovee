@@ -1,7 +1,8 @@
-import { fetchApplicationFilesByAdmin } from '@/lib/data/application'
+import { Suspense } from 'react'
 
 import SendFileToClientButton from '@/components/admin/application/send-file-to-client-button'
-import ApplicationFilesWrapper from '@/components/application/application-files-wrapper'
+import ApplicationAdminFilesContainer from '@/components/application/application-admin-files-container'
+import ApplicationFilesContainerSkeleton from '@/components/skeleton/admin/application-files-container-skeleton'
 
 interface SharedByAdminPageParams {
   applicationID: number
@@ -14,17 +15,14 @@ interface SharedByAdminPageProps {
 export default async function SharedByAdminPage({ params }: SharedByAdminPageProps) {
   const { applicationID } = params
 
-  const { files, error } = await fetchApplicationFilesByAdmin({ applicationID })
-  if (error) {
-    console.error(error)
-  }
-
   return (
-    <div className="flex flex-col gap-[12px]">
+    <div className="flex flex-1 flex-col gap-[12px]">
       <div className="flex justify-end">
         <SendFileToClientButton applicationID={applicationID} />
       </div>
-      <ApplicationFilesWrapper files={files || []} />
+      <Suspense fallback={<ApplicationFilesContainerSkeleton />}>
+        <ApplicationAdminFilesContainer applicationID={applicationID} />
+      </Suspense>
     </div>
   )
 }

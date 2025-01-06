@@ -45,7 +45,7 @@ function AdminFormSummaryCardCategoriesContainer({
   categories,
 }: AdminFormSummaryCardCategoriesContainerProps) {
   return (
-    <div className="flex w-full items-center justify-around">
+    <div className="mx-[16px] flex w-full items-center justify-around">
       {categories.map((category, index) => (
         <AdminFormSummaryCardCategory
           key={category.formCategoryID}
