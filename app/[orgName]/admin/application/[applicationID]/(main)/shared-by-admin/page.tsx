@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 
-import SendFileToClientButton from '@/components/admin/application/send-file-to-client-button'
+import SendApplicationFileButton from '@/components/application/send-application-file-button'
 import ApplicationAdminFilesContainer from '@/components/application/application-admin-files-container'
 import ApplicationFilesContainerSkeleton from '@/components/skeleton/admin/application-files-container-skeleton'
 
@@ -18,7 +18,7 @@ export default async function SharedByAdminPage({ params }: SharedByAdminPagePro
   return (
     <div className="flex flex-1 flex-col gap-[12px]">
       <div className="flex justify-end">
-        <SendFileToClientButton applicationID={applicationID} />
+        <SendApplicationFileButton applicationID={applicationID} />
       </div>
       <Suspense fallback={<ApplicationFilesContainerSkeleton />}>
         <ApplicationAdminFilesContainer applicationID={applicationID} />

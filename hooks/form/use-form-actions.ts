@@ -45,9 +45,6 @@ export default function useFormActions() {
     const { formQuestionSets, formQuestions, error } = await deleteApplicationFormQuestionSet({
       formQuestionSetID,
     })
-    console.log('formQuestionSets', formQuestionSets)
-    console.log('formQuestions', formQuestions)
-    console.log('error', error)
     if (!error) {
       setSelectedFormSectionQuestionSets(formQuestionSets || [])
       setSelectedFormSectionQuestions(formQuestions || [])

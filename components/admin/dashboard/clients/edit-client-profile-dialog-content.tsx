@@ -59,7 +59,6 @@ export default function EditClientProfileDialogContent({
   }
 
   async function handleUpdateClientInformation(formValues: z.infer<typeof UpdateClientSchema>) {
-    console.log(formValues)
     const { firstName, lastName, email } = formValues
 
     const { user, error } = await updateUserProfile({

@@ -32,8 +32,6 @@ export default async function ApplicationUpdate({ update }: ApplicationUpdatePro
       : updateUserFormattedName
     : formattedOrganizationName
 
-  console.log(update.title)
-
   return (
     <div className="flex gap-[8px] rounded-md border border-sand-500 bg-white p-[8px] shadow-sm">
       <Image

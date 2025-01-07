@@ -12,7 +12,7 @@ export default async function ApplicationUpdatesContainer({
   const { updates, error } = await fetchApplicationUpdates({ applicationID })
 
   if (error) {
-    console.log(error)
+    console.error(error)
   }
 
   return (

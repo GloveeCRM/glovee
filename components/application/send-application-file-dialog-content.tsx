@@ -8,7 +8,7 @@ import toast from 'react-hot-toast'
 import { BiMessageSquareError, BiSolidTrash } from 'react-icons/bi'
 import { FaFile, FaFileArrowUp } from 'react-icons/fa6'
 
-import { SendFileToClientSchema } from '@/lib/zod/schemas'
+import { SendApplicationFileSchema } from '@/lib/zod/schemas'
 import { uploadFileToS3 } from '@/lib/utils/s3'
 import { extractFileNameParts } from '@/lib/utils/file'
 import { fetchApplicationFileUploadURL } from '@/lib/data/application'
@@ -25,26 +25,26 @@ import {
 } from '@/components/ui/form'
 import { Callout } from '@/components/ui/callout'
 
-interface SendFileToClientDialogContentProps {
+interface SendApplicationFileDialogContentProps {
   applicationID: number
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
 }
 
-export default function SendFileToClientDialogContent({
+const defaultFormValues = {
+  fileName: '',
+  file: undefined,
+}
+
+export default function SendApplicationFileDialogContent({
   applicationID,
   isOpen,
   setIsOpen,
-}: SendFileToClientDialogContentProps) {
+}: SendApplicationFileDialogContentProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const defaultFormValues = {
-    fileName: '',
-    file: undefined,
-  }
-
-  const form = useForm<z.infer<typeof SendFileToClientSchema>>({
-    resolver: zodResolver(SendFileToClientSchema),
+  const form = useForm<z.infer<typeof SendApplicationFileSchema>>({
+    resolver: zodResolver(SendApplicationFileSchema),
     defaultValues: defaultFormValues,
   })
 
@@ -86,21 +86,21 @@ export default function SendFileToClientDialogContent({
     form.reset(defaultFormValues)
   }
 
-  function sendFileToClientSuccessToast(message: string) {
+  function sendApplicationFileSuccessToast(message: string) {
     toast.success((t) => message, {
       duration: 3000,
       position: 'bottom-right',
     })
   }
 
-  function sendFileToClientErrorToast(message: string) {
+  function sendApplicationFileErrorToast(message: string) {
     toast.error((t) => message, {
       duration: 3000,
       position: 'bottom-right',
     })
   }
 
-  async function handleSendFileToClient(values: z.infer<typeof SendFileToClientSchema>) {
+  async function handleSendApplicationFile(values: z.infer<typeof SendApplicationFileSchema>) {
     const { file, fileName } = values
 
     const {
@@ -114,13 +114,13 @@ export default function SendFileToClientDialogContent({
     })
 
     if (uploadURLDataError) {
-      sendFileToClientErrorToast('Failed to upload file')
+      sendApplicationFileErrorToast('Failed to upload file')
       console.error(uploadURLDataError)
       return
     }
 
     if (!url) {
-      sendFileToClientErrorToast('Failed to upload file')
+      sendApplicationFileErrorToast('Failed to upload file')
       console.error('No upload URL received')
       return
     }
@@ -128,7 +128,7 @@ export default function SendFileToClientDialogContent({
     const uploadRes = await uploadFileToS3(url, file)
 
     if (!uploadRes.success) {
-      sendFileToClientErrorToast('Failed to upload file to S3')
+      sendApplicationFileErrorToast('Failed to upload file to S3')
       console.error(uploadRes.message || 'Failed to upload file to S3')
       return
     }
@@ -142,7 +142,7 @@ export default function SendFileToClientDialogContent({
     })
 
     if (createApplicationFileError) {
-      console.log(createApplicationFileError)
+      console.error(createApplicationFileError)
       form.setError('root.error', {
         message: createApplicationFileError || 'Failed to create application file',
       })
@@ -150,7 +150,7 @@ export default function SendFileToClientDialogContent({
       return
     }
 
-    sendFileToClientSuccessToast('File sent to client')
+    sendApplicationFileSuccessToast('File sent successfully!')
     setIsOpen(false)
   }
 
@@ -167,11 +167,11 @@ export default function SendFileToClientDialogContent({
   return (
     <DialogContent onOpenAutoFocus={(e) => e.preventDefault()}>
       <DialogHeader>
-        <DialogTitle>Send file to client</DialogTitle>
+        <DialogTitle>Send application file</DialogTitle>
       </DialogHeader>
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(handleSendFileToClient)}
+          onSubmit={form.handleSubmit(handleSendApplicationFile)}
           className="flex flex-col gap-[12px] text-[14px]"
         >
           <FormField

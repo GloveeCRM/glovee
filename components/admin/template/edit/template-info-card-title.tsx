@@ -36,7 +36,7 @@ export default function TemplateInfoCardTitle({
     if (error) {
       console.error(error)
     }
-  }, [updateFormTemplate])
+  }, [updateFormTemplate, formTemplate])
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === 'Enter') {

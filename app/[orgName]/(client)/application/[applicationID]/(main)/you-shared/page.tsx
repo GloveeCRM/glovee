@@ -1,7 +1,8 @@
-import { fetchApplicationFilesByClient } from '@/lib/data/application'
+import { Suspense } from 'react'
 
-import ApplicationFilesWrapper from '@/components/application/application-files-wrapper'
-import ShareFileButton from '@/components/client/application/share-file-button'
+import ApplicationClientFilesContainer from '@/components/application/application-client-files-container'
+import ApplicationFilesContainerSkeleton from '@/components/skeleton/admin/application-files-container-skeleton'
+import SendApplicationFileButton from '@/components/application/send-application-file-button'
 
 interface YouSharedPageParams {
   applicationID: number
@@ -13,16 +14,15 @@ interface YouSharedPageProps {
 
 export default async function YouSharedPage({ params }: YouSharedPageProps) {
   const { applicationID } = params
-  const { files, error } = await fetchApplicationFilesByClient({ applicationID })
-  if (error) {
-    console.error(error)
-  }
+
   return (
     <div>
       <div className="flex justify-end">
-        <ShareFileButton applicationID={applicationID} />
+        <SendApplicationFileButton applicationID={applicationID} />
       </div>
-      <ApplicationFilesWrapper files={files || []} />
+      <Suspense fallback={<ApplicationFilesContainerSkeleton />}>
+        <ApplicationClientFilesContainer applicationID={applicationID} />
+      </Suspense>
     </div>
   )
 }

@@ -113,7 +113,7 @@ export const SignupSchema = z.object({
     }),
 })
 
-export const SendFileToClientSchema = z.object({
+export const SendApplicationFileSchema = z.object({
   fileName: z.string().min(1, { message: 'File name is required' }),
   file: z.custom<File>((val) => val instanceof File, {
     message: 'Please select a file',

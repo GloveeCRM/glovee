@@ -968,8 +968,6 @@ export async function deleteFormSections({
     return { error: 'Unauthorized' }
   }
 
-  console.log('formSectionIDs', formSectionIDs)
-
   const orgName = await getCurrentOrgName()
 
   const queryParams = new URLSearchParams()
@@ -978,7 +976,6 @@ export async function deleteFormSections({
   const body = {
     formSectionIDs,
   }
-  console.log('body', JSON.stringify(body, null, 2))
   const bodySnakeCase = keysCamelCaseToSnakeCase(body)
 
   try {
@@ -996,8 +993,7 @@ export async function deleteFormSections({
 
     const data = await response.json()
     const camelData = keysSnakeCaseToCamelCase(data)
-    console.log('body', JSON.stringify(bodySnakeCase, null, 2))
-    console.log('camelData', JSON.stringify(camelData, null, 2))
+
     if (data.status === 'error') {
       return { error: camelData.error }
     } else {

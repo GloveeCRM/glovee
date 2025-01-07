@@ -38,7 +38,7 @@ export default function TemplateInfoCardDescription({
     if (error) {
       console.error(error)
     }
-  }, [updateFormTemplate])
+  }, [updateFormTemplate, formTemplate?.form])
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === 'Enter') {
@@ -77,7 +77,7 @@ export default function TemplateInfoCardDescription({
     return () => {
       document.removeEventListener('mousedown', handleClickOutsideDescription)
     }
-  }, [isEditing, description])
+  }, [isEditing, description, handleSave])
 
   return (
     <div className="group relative text-[11px] text-zinc-200">
