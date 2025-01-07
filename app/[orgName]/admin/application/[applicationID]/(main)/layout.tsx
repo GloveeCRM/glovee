@@ -1,7 +1,9 @@
-import AdminApplicationClientCard from '@/components/admin/application/admin-application-client-card'
+import { Suspense } from 'react'
+
 import AdminApplicationTopbar from '@/components/admin/application/admin-application-topbar'
 import AdminDashboardSidebar from '@/components/admin/dashboard/sidebar/admin-dashboard-sidebar'
 import ApplicationUpdatesContainer from '@/components/application/application-updates-container'
+import ApplicationUpdatesContainerSkeleton from '@/components/skeleton/admin/application-updates-container-skeleton'
 
 interface ApplicationLayoutParams {
   applicationID: number
@@ -23,7 +25,9 @@ export default function ApplicationLayout({ children, params }: Readonly<Applica
         <AdminApplicationTopbar applicationID={applicationID} />
         <div className="flex h-[calc(100vh-60px)] overflow-hidden">
           <div className="flex-1 overflow-y-auto p-[8px]">{children}</div>
-          <ApplicationUpdatesContainer applicationID={applicationID} />
+          <Suspense fallback={<ApplicationUpdatesContainerSkeleton />}>
+            <ApplicationUpdatesContainer applicationID={applicationID} />
+          </Suspense>
         </div>
       </div>
     </div>

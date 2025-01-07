@@ -1,6 +1,6 @@
 export default function ApplicationFilesContainerSkeleton() {
   return (
-    <div className="grid grid-cols-1 gap-[38px] overflow-y-auto">
+    <div className="flex animate-pulse flex-col gap-[38px] overflow-y-auto">
       <ApplicationFileDaySkeleton countFiles={1} />
       <ApplicationFileDaySkeleton countFiles={3} />
     </div>

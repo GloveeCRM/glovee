@@ -1,13 +1,20 @@
 'use client'
 
-import { createContext, useContext } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
+
+import { OrganizationType } from '@/lib/types/organization'
+import { fetchOrganizationProfile } from '@/lib/data/organization'
 
 type OrgContextType = {
   orgName: string
+  organization: OrganizationType | null
+  setOrganization: (organization: OrganizationType | null) => void
 }
 
 const orgContextDefaultValues: OrgContextType = {
   orgName: '',
+  organization: null,
+  setOrganization: () => {},
 }
 
 const OrgContext = createContext<OrgContextType>(orgContextDefaultValues)
@@ -18,10 +25,24 @@ interface OrgProviderProps {
 }
 
 export default function OrgProvider({ orgName, children }: OrgProviderProps) {
+  const [organization, setOrganization] = useState<OrganizationType | null>(null)
+
+  useEffect(() => {
+    async function fetchAndSetOrganization() {
+      const { organization } = await fetchOrganizationProfile({ orgName })
+      if (organization) {
+        setOrganization(organization)
+      }
+    }
+
+    fetchAndSetOrganization()
+  }, [orgName])
+
   const value = {
     orgName,
+    organization,
+    setOrganization,
   }
-
   return <OrgContext.Provider value={value}>{children}</OrgContext.Provider>
 }
 

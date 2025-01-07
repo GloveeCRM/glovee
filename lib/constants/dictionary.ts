@@ -6,6 +6,7 @@ const translations = {
   organization_approved: 'Organization Approved',
   pending_client_revision: 'Pending Client Revision',
   new_form_added: 'added a new form',
+  new_file_added: 'added a new file',
 }
 
 export const dictionary = (translation_code: string) => {

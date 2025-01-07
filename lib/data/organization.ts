@@ -1,6 +1,4 @@
 import { OrganizationType } from '@/lib/types/organization'
-import { GLOVEE_API_URL } from '@/lib/constants/api'
-import { keysSnakeCaseToCamelCase } from '../utils/json'
 import { apiRequest } from '../utils/http'
 import { errorMessages } from '../constants/errors'
 
@@ -22,13 +20,5 @@ export async function fetchOrganizationProfile({
     authRequired: false,
   })
 
-  if (error) {
-    return { error: errorMessages(error) }
-  }
-
-  if (organizations && organizations.length > 0) {
-    return { organization: organizations[0] }
-  } else {
-    return { error: errorMessages('organization_not_found') }
-  }
+  return { organization: organizations?.[0], error }
 }
