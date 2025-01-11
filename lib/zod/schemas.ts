@@ -14,6 +14,7 @@ export const CreateClientSchema = z.object({
 
 export const CreateApplicationSchema = z.object({
   clientID: z.number().int().positive({ message: 'Client is required' }),
+  applicationName: z.string().trim().min(1, { message: 'Application name is required' }),
 })
 
 export const CreateApplicationFormSchema = z.object({

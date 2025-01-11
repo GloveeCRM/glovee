@@ -25,6 +25,7 @@ const errors = {
   form_template_not_found: 'Form template not found',
   email_already_in_use: 'This email is already taken',
   application_not_found: 'Application not found',
+  missing_application_name: 'Application name is required',
 }
 
 export const errorMessages = (error_code: string) => {

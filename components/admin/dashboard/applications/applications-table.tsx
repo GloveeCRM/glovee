@@ -32,9 +32,10 @@ export default async function ApplicationsTable({
       <table className="w-full border-collapse text-[14px]">
         <thead className="sticky top-0 bg-white">
           <tr className="text-left text-[14px]">
-            <th className="min-w-[120px] py-[12px] font-medium">Application ID</th>
-            <th className="min-w-[208px] py-[12px] pl-[43px] font-medium">Client</th>
-            <th className="min-w-[140px] py-[12px] font-medium">Date added</th>
+            <th className="w-[25%] min-w-[120px] py-[12px] font-medium">Application ID</th>
+            <th className="w-[25%] min-w-[208px] py-[12px] pl-[43px] font-medium">Client</th>
+            <th className="w-[25%] min-w-[240px] py-[12px] font-medium">Application name</th>
+            <th className="w-[25%] min-w-[140px] py-[12px] font-medium">Date added</th>
           </tr>
         </thead>
         <tbody>
@@ -73,6 +74,15 @@ export default async function ApplicationsTable({
                       </Link>
                     </div>
                   </div>
+                </td>
+                <td className="py-[8px] text-zinc-600">
+                  <Link
+                    href={`/admin/application/${application.applicationID}/forms`}
+                    className="hover:text-zinc-900 hover:underline"
+                    draggable={false}
+                  >
+                    {application.applicationName}
+                  </Link>
                 </td>
                 <td className="py-[8px] text-zinc-600">
                   {application.createdAt &&

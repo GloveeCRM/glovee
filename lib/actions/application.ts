@@ -6,6 +6,7 @@ import { revalidatePath } from 'next/cache'
 
 interface CreateApplicationProps {
   userID: number
+  applicationName: string
 }
 
 interface CreateApplicationResponse {
@@ -15,11 +16,12 @@ interface CreateApplicationResponse {
 
 export async function createApplication({
   userID,
+  applicationName,
 }: CreateApplicationProps): Promise<CreateApplicationResponse> {
   const { data, error } = await apiRequest<{ application: ApplicationType }>({
     path: 'rpc/create_application',
     method: 'POST',
-    data: { userID },
+    data: { userID, applicationName },
     authRequired: true,
   })
 

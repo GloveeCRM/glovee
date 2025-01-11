@@ -1,24 +1,18 @@
 import Image from 'next/image'
 
-import { fetchApplicationOwnerProfile, searchClients } from '@/lib/data/user'
 import { DEFAULT_MALE_CLIENT_LOGO_URL } from '@/lib/constants/images'
+import { UserType } from '@/lib/types/user'
 
 import { DropdownMenu, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import AdminApplicationClientCardOptionsContent from './admin-application-client-card-options-content'
 
 interface AdminApplicationClientCardProps {
-  applicationID: number
+  client: UserType
 }
 
 export default async function AdminApplicationClientCard({
-  applicationID,
+  client,
 }: AdminApplicationClientCardProps) {
-  const { user: client } = await fetchApplicationOwnerProfile({
-    applicationID,
-  })
-
-  if (!client) return null
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

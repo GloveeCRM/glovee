@@ -52,6 +52,7 @@ export default function AddApplicationDialogContent({
 
   const defaultFormValues = {
     clientID: client?.userID || 0,
+    applicationName: '',
   }
 
   const form = useForm<z.infer<typeof CreateApplicationSchema>>({
@@ -74,14 +75,15 @@ export default function AddApplicationDialogContent({
   }
 
   async function handleCreateApplication(values: z.infer<typeof CreateApplicationSchema>) {
-    const { clientID } = values
+    const { clientID, applicationName } = values
     const { application, error } = await createApplication({
       userID: clientID,
+      applicationName,
     })
     if (application) {
       applicationCreationSuccessToast('Application created!')
     } else {
-      applicationCreationErrorToast(errorMessages(error || 'something_went_wrong'))
+      applicationCreationErrorToast(error || 'something_went_wrong')
     }
     setIsOpen(false)
   }
@@ -231,6 +233,25 @@ export default function AddApplicationDialogContent({
               }}
             />
           )}
+
+          <FormField
+            control={form.control}
+            name="applicationName"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>Application name</FormLabel>
+                <FormControl>
+                  <input
+                    type="text"
+                    placeholder="New Application"
+                    className="w-full rounded border border-zinc-200 p-[8px] text-[14px] placeholder:text-zinc-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-500"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           <div className="flex gap-[8px]">
             <DialogClose asChild>

@@ -16,13 +16,14 @@ export default async function ClientApplicationsTable({ clientID }: ClientApplic
   const hasApplications = applications && applications.length > 0
 
   return (
-    <div className="border-sand-500 flex h-fit flex-col overflow-auto rounded-md border bg-white px-[12px]">
+    <div className="flex h-fit flex-col overflow-auto rounded-md border border-sand-500 bg-white px-[12px]">
       <table className="w-full border-collapse text-[14px]">
         <thead className="sticky top-0 bg-white">
           <tr className="text-left text-[14px]">
-            <th className="min-w-[120px] py-[12px] font-medium">Application ID</th>
-            <th className="min-w-[140px] py-[12px] font-medium">Created At</th>
-            <th className="min-w-[140px] py-[12px] font-medium">Updated At</th>
+            <th className="w-[25%] min-w-[120px] py-[12px] font-medium">Application ID</th>
+            <th className="w-[25%] min-w-[240px] py-[12px] font-medium">Application name</th>
+            <th className="w-[25%] min-w-[140px] py-[12px] font-medium">Created At</th>
+            <th className="w-[25%] min-w-[140px] py-[12px] font-medium">Updated At</th>
           </tr>
         </thead>
         <tbody>
@@ -30,7 +31,7 @@ export default async function ClientApplicationsTable({ clientID }: ClientApplic
             applications.map((application, index) => (
               <tr
                 key={application.applicationID}
-                className={`hover:bg-sand-200 text-left ${applications.length !== index + 1 && 'border-b'}`}
+                className={`text-left hover:bg-sand-200 ${applications.length !== index + 1 && 'border-b'}`}
               >
                 <td className="py-[8px] text-zinc-600">
                   <Link
@@ -41,6 +42,7 @@ export default async function ClientApplicationsTable({ clientID }: ClientApplic
                     {application.applicationID}
                   </Link>
                 </td>
+                <td className="py-[8px] text-zinc-600">{application.applicationName}</td>
                 <td className="py-[8px] text-zinc-600">
                   {application.createdAt &&
                     formatDateToShortMonthDayYearTime({

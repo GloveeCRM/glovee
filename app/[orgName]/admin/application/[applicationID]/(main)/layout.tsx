@@ -23,7 +23,7 @@ export default function ApplicationLayout({ children, params }: Readonly<Applica
       <AdminDashboardSidebar orgName={orgName} collapsed={true} />
       <div className="flex flex-1 flex-col">
         <AdminApplicationTopbar applicationID={applicationID} />
-        <div className="flex h-[calc(100vh-60px)] overflow-hidden">
+        <div className="flex h-[calc(100vh-100px)] overflow-hidden">
           <div className="flex-1 overflow-y-auto p-[8px]">{children}</div>
           <Suspense fallback={<ApplicationUpdatesContainerSkeleton />}>
             <ApplicationUpdatesContainer applicationID={applicationID} />
