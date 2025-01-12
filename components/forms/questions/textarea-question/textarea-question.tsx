@@ -9,11 +9,13 @@ import useAnswer from '@/hooks/form/use-answer'
 
 interface TextareaQuestionProps {
   formQuestion: FormQuestionType
+  mode: 'edit' | 'view'
   readOnly?: boolean
 }
 
 export default function TextareaQuestion({
   formQuestion,
+  mode,
   readOnly = false,
 }: TextareaQuestionProps) {
   const { message, updateAnswer } = useAnswer(formQuestion.formQuestionID)
@@ -22,7 +24,7 @@ export default function TextareaQuestion({
     updateAnswer({ ...formQuestion.answer, answerText: e.target.value })
   }, 500)
 
-  return (
+  return mode === 'edit' ? (
     <div>
       <div className="relative">
         <textarea
@@ -66,6 +68,10 @@ export default function TextareaQuestion({
           ''
         )}
       </div>
+    </div>
+  ) : (
+    <div className="text-[14px] text-zinc-500">
+      {formQuestion.answer?.answerText || 'No answer provided'}
     </div>
   )
 }

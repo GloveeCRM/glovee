@@ -9,16 +9,17 @@ import useAnswer from '@/hooks/form/use-answer'
 
 interface TextQuestionProps {
   formQuestion: FormQuestionType
+  mode: 'edit' | 'view'
   readOnly?: boolean
 }
 
-export default function TextQuestion({ formQuestion, readOnly = false }: TextQuestionProps) {
+export default function TextQuestion({ formQuestion, mode, readOnly = false }: TextQuestionProps) {
   const { message, updateAnswer } = useAnswer(formQuestion.formQuestionID)
   const handleChange = useDebouncedCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     updateAnswer({ ...formQuestion.answer, answerText: e.target.value })
   }, 500)
 
-  return (
+  return mode === 'edit' ? (
     <div className="relative">
       <input
         type="text"
@@ -44,6 +45,10 @@ export default function TextQuestion({ formQuestion, readOnly = false }: TextQue
           <span>{message}</span>
         </div>
       )}
+    </div>
+  ) : (
+    <div className="text-[14px] text-zinc-500">
+      {formQuestion.answer?.answerText || 'No answer provided'}
     </div>
   )
 }

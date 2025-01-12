@@ -1,14 +1,9 @@
-'use client'
-
-import { useApplicationFormContext } from '@/contexts/application-form-context'
+import ApplicationFormQuestionSetsContainer from '@/components/application/application-form-question-sets-container'
 
 export default function AdminApplicationFormPage() {
-  const { rootSelectedFormSectionQuestionSets } = useApplicationFormContext()
-
   return (
-    <div className="h-full p-[16px]">
-      tets
-      <pre>{JSON.stringify(rootSelectedFormSectionQuestionSets, null, 2)}</pre>
+    <div className="h-full p-[8px]">
+      <ApplicationFormQuestionSetsContainer />
     </div>
   )
 }

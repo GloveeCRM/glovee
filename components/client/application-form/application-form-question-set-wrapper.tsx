@@ -18,6 +18,7 @@ export default function ApplicationFormQuestionSetWrapper() {
             <FormQuestionSet
               key={formQuestionSet.formQuestionSetID}
               formQuestionSet={formQuestionSet}
+              mode="edit"
             />
           </div>
         ))

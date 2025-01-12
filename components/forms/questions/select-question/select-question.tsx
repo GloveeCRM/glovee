@@ -8,10 +8,11 @@ import useAnswer from '@/hooks/form/use-answer'
 
 interface SelectQuestionProps {
   formQuestion: FormQuestionType
+  mode: 'edit' | 'view'
   readOnly?: boolean
 }
 
-export default function SelectQuestion({ formQuestion, readOnly }: SelectQuestionProps) {
+export default function SelectQuestion({ formQuestion, mode, readOnly }: SelectQuestionProps) {
   const { message, updateAnswer } = useAnswer(formQuestion.formQuestionID)
 
   function handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
@@ -23,8 +24,13 @@ export default function SelectQuestion({ formQuestion, readOnly }: SelectQuestio
   }
   const showPlaceholder = formQuestion.formQuestionDefaultOptions?.length === 0
   const options = formQuestion.formQuestionOptions
+  const selectedOptions = options?.filter((option) =>
+    formQuestion.answer?.answerOptions?.some(
+      (answerOption) => answerOption.formQuestionOptionID === option.formQuestionOptionID
+    )
+  )
 
-  return (
+  return mode === 'edit' ? (
     <div className="relative">
       <select
         className="w-full rounded-[3px] border border-n-400 bg-transparent px-[6px] py-[8px] text-[14px] focus-visible:outline-none"
@@ -62,6 +68,18 @@ export default function SelectQuestion({ formQuestion, readOnly }: SelectQuestio
           )}
           <span>{message}</span>
         </div>
+      )}
+    </div>
+  ) : (
+    <div className="text-[14px] text-zinc-500">
+      {selectedOptions?.length ? (
+        <ul className="list-inside list-disc">
+          {selectedOptions.map((option) => (
+            <li key={option.formQuestionOptionID}>{option.optionText}</li>
+          ))}
+        </ul>
+      ) : (
+        'No answer provided'
       )}
     </div>
   )

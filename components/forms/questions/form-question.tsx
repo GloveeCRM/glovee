@@ -24,9 +24,10 @@ import SelectQuestion from './select-question/select-question'
 interface FormQuestionProps {
   question: FormQuestionType
   viewOnly?: boolean
+  mode: 'edit' | 'view'
 }
 
-export default function FormQuestion({ question, viewOnly = false }: FormQuestionProps) {
+export default function FormQuestion({ question, viewOnly = false, mode }: FormQuestionProps) {
   return (
     <div className="flex flex-col gap-[10px] p-[4px] text-[14px]">
       <div className="flex justify-between">
@@ -52,27 +53,29 @@ export default function FormQuestion({ question, viewOnly = false }: FormQuestio
             </Popover>
           )}
         </div>
-        <div className="">
-          <IoCheckmarkCircle
-            className={`h-[20px] w-[20px] ${question?.answer?.isAcceptable ? 'text-g-700' : 'text-n-400'}`}
-          />
-        </div>
+        {mode === 'edit' && (
+          <div className="">
+            <IoCheckmarkCircle
+              className={`h-[20px] w-[20px] ${question?.answer?.isAcceptable ? 'text-g-700' : 'text-n-400'}`}
+            />
+          </div>
+        )}
       </div>
       <div>
         {isTextQuestionType(question) ? (
-          <TextQuestion formQuestion={question} />
+          <TextQuestion formQuestion={question} mode={mode} />
         ) : isTextareaQuestionType(question) ? (
-          <TextareaQuestion formQuestion={question} />
+          <TextareaQuestion formQuestion={question} mode={mode} />
         ) : isSelectQuestionType(question) ? (
-          <SelectQuestion formQuestion={question} />
+          <SelectQuestion formQuestion={question} mode={mode} />
         ) : isDateQuestionType(question) ? (
-          <DateQuestion formQuestion={question} />
+          <DateQuestion formQuestion={question} mode={mode} />
         ) : isRadioQuestionType(question) ? (
-          <RadioQuestion formQuestion={question} />
+          <RadioQuestion formQuestion={question} mode={mode} />
         ) : isCheckboxQuestionType(question) ? (
-          <CheckboxQuestion formQuestion={question} />
+          <CheckboxQuestion formQuestion={question} mode={mode} />
         ) : isFileQuestionType(question) ? (
-          <FileQuestion formQuestion={question} />
+          <FileQuestion formQuestion={question} mode={mode} />
         ) : null}
       </div>
     </div>

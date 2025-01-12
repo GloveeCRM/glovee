@@ -20,13 +20,9 @@ export default function AdminApplicationFormLayout({
   const { applicationID, applicationFormID } = params
 
   return (
-    <ApplicationFormContextProvider applicationFormID={applicationFormID}>
+    <ApplicationFormContextProvider applicationFormID={applicationFormID} mode="view">
       <div className="flex">
-        <ApplicationFormSidebar
-          applicationID={applicationID}
-          applicationFormID={applicationFormID}
-          showProgressIndicator={false}
-        />
+        <ApplicationFormSidebar applicationID={applicationID} showProgressIndicator={false} />
         <div className="h-svh min-w-0 flex-1 overflow-y-scroll">{children}</div>
       </div>
     </ApplicationFormContextProvider>

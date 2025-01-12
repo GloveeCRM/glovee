@@ -10,13 +10,15 @@ import { LuDownload, LuFileText } from 'react-icons/lu'
 
 import { FormAnswerFileType, FormQuestionType } from '@/lib/types/form'
 import useAnswer from '@/hooks/form/use-answer'
+import AnswerFile from './answer-file'
 
 interface FileQuestionProps {
   formQuestion: FormQuestionType
+  mode: 'edit' | 'view'
   readOnly?: boolean
 }
 
-export default function FileQuestion({ formQuestion, readOnly }: FileQuestionProps) {
+export default function FileQuestion({ formQuestion, mode, readOnly }: FileQuestionProps) {
   const { message, updateAnswer, uploadAnswerFile } = useAnswer(formQuestion.formQuestionID)
 
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -59,41 +61,20 @@ export default function FileQuestion({ formQuestion, readOnly }: FileQuestionPro
     }
   }
 
-  return (
+  return mode === 'edit' ? (
     <div className="relative">
       {formQuestion.answer?.answerFiles && formQuestion.answer?.answerFiles.length > 0 ? (
         formQuestion.answer?.answerFiles.map((file) => (
-          <div
+          <AnswerFile
             key={file.fileID}
-            className="flex w-full items-center justify-between gap-[2px] rounded-[3px] border border-n-400 px-[8px] py-[10px]"
-          >
-            <div className="flex items-center gap-[6px] text-n-600">
-              <div className="w-fit rounded-full bg-n-300/70 p-[8px]">
-                <LuFileText className="h-[26px] w-[26px]" />
-              </div>
-              <span className="line-clamp-1">{file.file?.name}</span>
-            </div>
-            <div className="flex items-center gap-[6px]">
-              <div>
-                <Link href={file.file?.url || ''} target="_blank">
-                  <span className="flex items-center gap-[4px] rounded-full bg-n-200 px-[8px] py-[2px] text-n-600 transition duration-75 hover:bg-n-300 hover:text-n-800">
-                    <LuDownload className="h-[16px] w-[16px]" />
-                    <span>Download</span>
-                  </span>
-                </Link>
-              </div>
-              <div
-                className="cursor-pointer rounded-full p-[6px] transition duration-75 hover:bg-red-100"
-                onClick={() => handleFileDelete(file.fileID || 0)}
-              >
-                <BiTrash className="h-[22px] w-[22px] text-red-500" />
-              </div>
-            </div>
-          </div>
+            file={file.file!}
+            mode="edit"
+            onDelete={() => handleFileDelete(file.fileID || 0)}
+          />
         ))
       ) : (
         <div
-          className={`flex w-full cursor-pointer flex-col items-center gap-[1px] rounded-[3px] border border-n-400 p-[11px] text-n-450 ${!readOnly && 'hover:text-n-500` transition duration-150 hover:border-n-500'}`}
+          className={`flex w-full cursor-pointer flex-col items-center rounded-md border border-zinc-400 p-[11px] text-zinc-500 ${!readOnly && 'hover:text-n-500` transition duration-150 hover:border-n-500'}`}
           onClick={handleClickUploadFile}
         >
           <FiUpload className="h-[18px] w-[18px]" />
@@ -129,6 +110,16 @@ export default function FileQuestion({ formQuestion, readOnly }: FileQuestionPro
           )}
           <span>{message}</span>
         </div>
+      )}
+    </div>
+  ) : (
+    <div className="">
+      {formQuestion.answer?.answerFiles && formQuestion.answer?.answerFiles.length > 0 ? (
+        formQuestion.answer?.answerFiles.map((file) => (
+          <AnswerFile key={file.fileID} file={file.file!} mode="view" onDelete={() => {}} />
+        ))
+      ) : (
+        <div className="text-[14px] text-zinc-500">No answer provided</div>
       )}
     </div>
   )

@@ -20,7 +20,7 @@ export default async function AdminApplicationInfoTopbar({
 
   return (
     <div className="flex w-full items-center justify-between gap-[8px]">
-      <span className="text-[14px]">{application.applicationName}</span>
+      <span className="text-[14px] font-semibold">{application.applicationName}</span>
       <AdminApplicationClientCard client={application.owner} />
     </div>
   )

@@ -11,9 +11,10 @@ import DependsOnQuestionSet from './depends-on/depends-on-question-set'
 
 interface FormQuestionSetProps {
   formQuestionSet: FormQuestionSetType
+  mode: 'edit' | 'view'
 }
 
-export default function FormQuestionSet({ formQuestionSet }: FormQuestionSetProps) {
+export default function FormQuestionSet({ formQuestionSet, mode }: FormQuestionSetProps) {
   const isStatic = isStaticQuestionSetType(formQuestionSet)
   const isRepeatable = isRepeatableQuestionSetType(formQuestionSet)
   const isConditional = isConditionalQuestionSetType(formQuestionSet)
@@ -21,11 +22,11 @@ export default function FormQuestionSet({ formQuestionSet }: FormQuestionSetProp
   return (
     <div className="w-full">
       {isStatic ? (
-        <FlatQuestionSet formQuestionSet={formQuestionSet} />
+        <FlatQuestionSet formQuestionSet={formQuestionSet} mode={mode} />
       ) : isRepeatable ? (
-        <LoopQuestionSet formQuestionSet={formQuestionSet} />
+        <LoopQuestionSet formQuestionSet={formQuestionSet} mode={mode} />
       ) : isConditional ? (
-        <DependsOnQuestionSet formQuestionSet={formQuestionSet} />
+        <DependsOnQuestionSet formQuestionSet={formQuestionSet} mode={mode} />
       ) : null}
     </div>
   )

@@ -4,6 +4,8 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 import {
+  ApplicationFormStatusTypes,
+  ApplicationFormType,
   FormAnswerType,
   FormCategoryType,
   FormQuestionSetType,
@@ -11,12 +13,15 @@ import {
   FormSectionType,
 } from '@/lib/types/form'
 import {
+  fetchApplicationForm,
   fetchApplicationFormCategoriesAndSections,
   fetchApplicationFormSectionQuestionSetsAndQuestions,
 } from '@/lib/data/form'
 
 type ApplicationFormContextType = {
   applicationFormID: number
+  mode: 'view' | 'edit'
+  applicationForm: ApplicationFormType | null
   formCategories: FormCategoryType[]
   formSections: FormSectionType[]
   selectedFormCategoryID: number
@@ -36,6 +41,8 @@ type ApplicationFormContextType = {
 
 const applicationFormContextDefaultValues: ApplicationFormContextType = {
   applicationFormID: 0,
+  mode: 'view',
+  applicationForm: null,
   formCategories: [],
   formSections: [],
   selectedFormCategoryID: 0,
@@ -60,12 +67,15 @@ const ApplicationFormContext = createContext<ApplicationFormContextType>(
 interface ApplicationFormContextProviderProps {
   applicationFormID: number
   children: React.ReactNode
+  mode: 'view' | 'edit'
 }
 
 export default function ApplicationFormContextProvider({
   applicationFormID,
   children,
+  mode,
 }: ApplicationFormContextProviderProps) {
+  const [applicationForm, setApplicationForm] = useState<ApplicationFormType | null>(null)
   const [formCategories, setFormCategories] = useState<FormCategoryType[]>([])
   const [formSections, setFormSections] = useState<FormSectionType[]>([])
   const [selectedFormSectionQuestionSets, setSelectedFormSectionQuestionSets] = useState<
@@ -109,6 +119,15 @@ export default function ApplicationFormContextProvider({
   }
 
   useEffect(() => {
+    async function fetchAndSetApplicationForm() {
+      const { applicationForm } = await fetchApplicationForm({ applicationFormID })
+      setApplicationForm(applicationForm || null)
+    }
+
+    fetchAndSetApplicationForm()
+  }, [applicationFormID])
+
+  useEffect(() => {
     async function fetchAndSetFormCategoriesAndSections() {
       const { formCategories, formSections } = await fetchApplicationFormCategoriesAndSections({
         applicationFormID,
@@ -143,6 +162,9 @@ export default function ApplicationFormContextProvider({
       const { formQuestionSets, formQuestions } =
         await fetchApplicationFormSectionQuestionSetsAndQuestions({
           formSectionID: selectedFormSectionID,
+          includeAnswers:
+            mode !== 'view' ||
+            applicationForm?.status !== ApplicationFormStatusTypes.PENDING_CLIENT_SUBMISSION,
         })
       setSelectedFormSectionQuestionSets(formQuestionSets || [])
       setSelectedFormSectionQuestions(formQuestions || [])
@@ -177,6 +199,8 @@ export default function ApplicationFormContextProvider({
 
   const value = {
     applicationFormID,
+    mode,
+    applicationForm,
     formCategories,
     formSections,
     selectedFormCategoryID,

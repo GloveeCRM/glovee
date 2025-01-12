@@ -8,11 +8,13 @@ import { useApplicationFormContext } from '@/contexts/application-form-context'
 interface DependsOnQuestionSetProps {
   formQuestionSet: FormQuestionSetType
   viewOnly?: boolean
+  mode: 'edit' | 'view'
 }
 
 export default function DependsOnQuestionSet({
   formQuestionSet,
   viewOnly = false,
+  mode,
 }: DependsOnQuestionSetProps) {
   const { formQuestionSetQuestions, formQuestionSetChildFormQuestionSets } =
     useApplicationFormContext()
@@ -27,13 +29,18 @@ export default function DependsOnQuestionSet({
 
   return (
     <div className="flex flex-col gap-[12px]">
-      <FormQuestion key={question?.formQuestionID} question={question} viewOnly={viewOnly} />
+      <FormQuestion
+        key={question?.formQuestionID}
+        question={question}
+        viewOnly={viewOnly}
+        mode={mode}
+      />
       {questionSetsToDisplay && questionSetsToDisplay.length > 0 && (
         <>
-          <Separator className="bg-n-400" />
+          {mode === 'edit' && <Separator className="bg-n-400" />}
           <div className="flex flex-col gap-[16px]">
             {questionSetsToDisplay.map((qs) => (
-              <FormQuestionSet key={qs.formQuestionSetID} formQuestionSet={qs} />
+              <FormQuestionSet key={qs.formQuestionSetID} formQuestionSet={qs} mode={mode} />
             ))}
           </div>
         </>

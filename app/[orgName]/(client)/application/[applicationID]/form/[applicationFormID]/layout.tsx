@@ -30,7 +30,7 @@ export default async function ApplicationLayout({
   // }
 
   return (
-    <ApplicationFormContextProvider applicationFormID={applicationFormID}>
+    <ApplicationFormContextProvider applicationFormID={applicationFormID} mode="edit">
       <div id="client-form-layout" className="flex overflow-hidden">
         <ClientFormSidebar applicationID={applicationID} type="in-progress" />
         <div className="h-screen flex-1">{children}</div>

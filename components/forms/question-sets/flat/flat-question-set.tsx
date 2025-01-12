@@ -5,15 +5,17 @@ import { useApplicationFormContext } from '@/contexts/application-form-context'
 
 import FormQuestion from '../../questions/form-question'
 
-interface FlatQuestionSetViewProps {
+interface FlatQuestionSetProps {
   formQuestionSet: FormQuestionSetType
   viewOnly?: boolean
+  mode: 'edit' | 'view'
 }
 
-export default function FlatQuestionSetView({
+export default function FlatQuestionSet({
   formQuestionSet,
   viewOnly = false,
-}: FlatQuestionSetViewProps) {
+  mode,
+}: FlatQuestionSetProps) {
   const { formQuestionSetQuestions } = useApplicationFormContext()
   const questionSetQuestions = formQuestionSetQuestions(formQuestionSet.formQuestionSetID)
 
@@ -22,7 +24,7 @@ export default function FlatQuestionSetView({
       {questionSetQuestions &&
         questionSetQuestions.length > 0 &&
         questionSetQuestions.map((q) => (
-          <FormQuestion key={q.formQuestionID} question={q} viewOnly={viewOnly} />
+          <FormQuestion key={q.formQuestionID} question={q} viewOnly={viewOnly} mode={mode} />
         ))}
     </div>
   )

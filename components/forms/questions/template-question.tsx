@@ -187,19 +187,19 @@ export default function TemplateQuestion({ formQuestion }: TemplateQuestionProps
         </DropdownMenu>
       </div>
       {isTextQuestionType(formQuestion) ? (
-        <TextQuestion formQuestion={formQuestion} readOnly={true} />
+        <TextQuestion formQuestion={formQuestion} readOnly={true} mode="edit" />
       ) : isTextareaQuestionType(formQuestion) ? (
-        <TextareaQuestion formQuestion={formQuestion} readOnly={true} />
+        <TextareaQuestion formQuestion={formQuestion} readOnly={true} mode="edit" />
       ) : isSelectQuestionType(formQuestion) ? (
-        <SelectQuestion formQuestion={formQuestion} readOnly={true} />
+        <SelectQuestion formQuestion={formQuestion} readOnly={true} mode="edit" />
       ) : isDateQuestionType(formQuestion) ? (
-        <DateQuestion formQuestion={formQuestion} readOnly={true} />
+        <DateQuestion formQuestion={formQuestion} readOnly={true} mode="edit" />
       ) : isRadioQuestionType(formQuestion) ? (
-        <RadioQuestion formQuestion={formQuestion} readOnly={true} />
+        <RadioQuestion formQuestion={formQuestion} readOnly={true} mode="edit" />
       ) : isCheckboxQuestionType(formQuestion) ? (
-        <CheckboxQuestion formQuestion={formQuestion} readOnly={true} />
+        <CheckboxQuestion formQuestion={formQuestion} readOnly={true} mode="edit" />
       ) : isFileQuestionType(formQuestion) ? (
-        <FileQuestion formQuestion={formQuestion} readOnly={true} />
+        <FileQuestion formQuestion={formQuestion} readOnly={true} mode="edit" />
       ) : null}
     </div>
   )

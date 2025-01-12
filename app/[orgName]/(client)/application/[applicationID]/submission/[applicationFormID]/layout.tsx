@@ -32,7 +32,7 @@ export default async function SubmissionLayout({
   // }
 
   return (
-    <ApplicationFormContextProvider applicationFormID={applicationFormID}>
+    <ApplicationFormContextProvider applicationFormID={applicationFormID} mode="view">
       <div id="client-submission-layout" className="flex overflow-hidden">
         <ClientFormSidebar applicationID={applicationID} type="submitted" />
         <div className="h-screen flex-1">{children}</div>

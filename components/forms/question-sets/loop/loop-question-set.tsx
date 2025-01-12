@@ -12,11 +12,13 @@ import FormQuestionSet from '../form-question-set'
 
 interface LoopQuestionSetProps {
   formQuestionSet: FormQuestionSetType
+  mode: 'edit' | 'view'
   viewOnly?: boolean
 }
 
 export default function LoopQuestionSet({
   formQuestionSet,
+  mode,
   viewOnly = false,
 }: LoopQuestionSetProps) {
   const { formQuestionSetChildFormQuestionSets } = useApplicationFormContext()
@@ -35,8 +37,8 @@ export default function LoopQuestionSet({
             {childQuestionSets.map((qs) => (
               <div key={qs.formQuestionSetID}>
                 <div className="flex gap-[6px]">
-                  <FormQuestionSet key={qs.formQuestionSetID} formQuestionSet={qs} />
-                  {qs.formQuestionSetPosition !== 1 && (
+                  <FormQuestionSet key={qs.formQuestionSetID} formQuestionSet={qs} mode={mode} />
+                  {mode === 'edit' && qs.formQuestionSetPosition !== 1 && (
                     <div
                       className="flex cursor-pointer items-center rounded bg-red-500/30 p-[4px] text-red-700 transition duration-150 hover:bg-red-500/50 hover:text-red-900"
                       onClick={() => handleDeleteQuestionSet(qs.formQuestionSetID)}
@@ -48,8 +50,12 @@ export default function LoopQuestionSet({
               </div>
             ))}
           </div>
-          <Separator className="bg-n-400" />
-          <RepeatQuestionSet formQuestionSetID={childQuestionSets[0].formQuestionSetID || 0} />
+          {mode === 'edit' && (
+            <>
+              <Separator className="bg-n-400" />
+              <RepeatQuestionSet formQuestionSetID={childQuestionSets[0].formQuestionSetID || 0} />
+            </>
+          )}
         </div>
       ) : (
         <div className="text-[14px] text-r-700">No question sets</div>

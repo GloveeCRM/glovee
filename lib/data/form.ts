@@ -162,6 +162,30 @@ export async function fetchApplicationForms({
   return { applicationForms: data, error }
 }
 
+interface FetchApplicationFormProps {
+  applicationFormID: number
+}
+
+interface FetchApplicationFormResponse {
+  applicationForm?: ApplicationFormType
+  error?: string
+}
+
+export async function fetchApplicationForm({
+  applicationFormID,
+}: FetchApplicationFormProps): Promise<FetchApplicationFormResponse> {
+  const queryParams = new URLSearchParams()
+  queryParams.append('application_form_id', applicationFormID.toString())
+
+  const { data, error } = await apiRequest<{ applicationForm: ApplicationFormType }>({
+    path: `rpc/application_form?${queryParams.toString()}`,
+    method: 'GET',
+    authRequired: true,
+  })
+
+  return { applicationForm: data?.applicationForm, error }
+}
+
 interface FetchApplicationFormCategoriesAndSectionsProps {
   applicationFormID: number
 }
@@ -192,6 +216,7 @@ export async function fetchApplicationFormCategoriesAndSections({
 
 interface FetchApplicationFormSectionQuestionSetsAndQuestionsProps {
   formSectionID: number
+  includeAnswers?: boolean
 }
 
 interface FetchApplicationFormSectionQuestionSetsAndQuestionsResponse {
@@ -202,10 +227,11 @@ interface FetchApplicationFormSectionQuestionSetsAndQuestionsResponse {
 
 export async function fetchApplicationFormSectionQuestionSetsAndQuestions({
   formSectionID,
+  includeAnswers = false,
 }: FetchApplicationFormSectionQuestionSetsAndQuestionsProps): Promise<FetchApplicationFormSectionQuestionSetsAndQuestionsResponse> {
   const queryParams = new URLSearchParams()
   queryParams.append('form_section_id', formSectionID.toString())
-  queryParams.append('include_answers', 'true')
+  queryParams.append('include_answers', includeAnswers.toString())
 
   const { data, error } = await apiRequest<{
     formQuestionSets: FormQuestionSetType[]

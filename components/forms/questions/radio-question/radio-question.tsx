@@ -8,10 +8,11 @@ import useAnswer from '@/hooks/form/use-answer'
 
 interface RadioQuestionProps {
   formQuestion: FormQuestionType
+  mode: 'edit' | 'view'
   readOnly?: boolean
 }
 
-export default function RadioQuestion({ formQuestion, readOnly }: RadioQuestionProps) {
+export default function RadioQuestion({ formQuestion, mode, readOnly }: RadioQuestionProps) {
   const { message, updateAnswer } = useAnswer(formQuestion.formQuestionID)
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const selectedOptionID = Number(e.target.value) || 0
@@ -23,8 +24,13 @@ export default function RadioQuestion({ formQuestion, readOnly }: RadioQuestionP
 
   const inline = formQuestion.formQuestionSettings.displayType === FormQuestionDisplayTypes.INLINE
   const options = formQuestion.formQuestionOptions
+  const selectedOptions = options?.filter((option) =>
+    formQuestion.answer?.answerOptions?.some(
+      (answerOption) => answerOption.formQuestionOptionID === option.formQuestionOptionID
+    )
+  )
 
-  return (
+  return mode === 'edit' ? (
     <div className="relative">
       <div className={`flex ${inline ? 'gap-[18px]' : 'flex-col gap-[4px]'}`}>
         {options?.map((option) => (
@@ -65,6 +71,18 @@ export default function RadioQuestion({ formQuestion, readOnly }: RadioQuestionP
           )}
           <span>{message}</span>
         </div>
+      )}
+    </div>
+  ) : (
+    <div className="text-[14px] text-zinc-500">
+      {selectedOptions?.length ? (
+        <ul className="list-inside list-disc">
+          {selectedOptions.map((option) => (
+            <li key={option.formQuestionOptionID}>{option.optionText}</li>
+          ))}
+        </ul>
+      ) : (
+        'No answer provided'
       )}
     </div>
   )

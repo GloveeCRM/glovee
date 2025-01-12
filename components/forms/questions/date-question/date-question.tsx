@@ -8,13 +8,15 @@ import { FormAnswerType, FormQuestionType } from '@/lib/types/form'
 import { MONTHS } from '@/lib/constants/date'
 import { compareDates, daysInMonth } from '@/lib/functions/date'
 import useAnswer from '@/hooks/form/use-answer'
+import { formatDateToShortMonthDayYearTime } from '@/lib/utils/date'
 
 interface DateQuestionProps {
   formQuestion: FormQuestionType
+  mode: 'edit' | 'view'
   readOnly?: boolean
 }
 
-export default function DateQuestion({ formQuestion, readOnly }: DateQuestionProps) {
+export default function DateQuestion({ formQuestion, mode, readOnly }: DateQuestionProps) {
   const { message, updateAnswer } = useAnswer(formQuestion.formQuestionID)
 
   const initialDate = formQuestion.answer?.answerDate
@@ -83,7 +85,7 @@ export default function DateQuestion({ formQuestion, readOnly }: DateQuestionPro
     Number(selectedDate.month) - 1 || 0
   )
 
-  return (
+  return mode === 'edit' ? (
     <div className="relative flex gap-[2%]">
       <div className="flex w-full flex-col">
         <label htmlFor="day" className="text-[12px] text-n-500">
@@ -191,6 +193,16 @@ export default function DateQuestion({ formQuestion, readOnly }: DateQuestionPro
           <span className="text-[12px]">{message}</span>
         </div>
       )}
+    </div>
+  ) : (
+    <div className="text-[14px] text-zinc-500">
+      {formQuestion.answer?.answerDate
+        ? formatDateToShortMonthDayYearTime({
+            date: formQuestion.answer.answerDate,
+            format: 'long',
+            includeTime: false,
+          })
+        : 'No answer provided'}
     </div>
   )
 }
