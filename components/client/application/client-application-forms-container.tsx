@@ -1,13 +1,13 @@
 import { fetchApplicationForms } from '@/lib/data/form'
 import ClientFormSummaryCard from '../client-form-summary-card'
 
-interface ClientApplicationFormsWrapperProps {
+interface ClientApplicationFormsContainerProps {
   applicationID: number
 }
 
-export default async function ClientApplicationFormsWrapper({
+export default async function ClientApplicationFormsContainer({
   applicationID,
-}: ClientApplicationFormsWrapperProps) {
+}: ClientApplicationFormsContainerProps) {
   const { applicationForms } = await fetchApplicationForms({ applicationID })
 
   const hasForms = applicationForms && applicationForms?.length > 0

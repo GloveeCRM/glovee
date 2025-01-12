@@ -12,7 +12,7 @@ export default function ClientLayout({ children, params }: ClientLayoutProps) {
   return (
     <div id="client" className="flex overflow-hidden">
       <ClientDashboardSidebar orgName={orgName} collapsed={false} />
-      <div className="max-h-screen flex-1 overflow-y-auto p-[8px]">{children}</div>
+      <div className="h-screen flex-1 overflow-y-auto p-[8px]">{children}</div>
     </div>
   )
 }
