@@ -1,4 +1,5 @@
 import ClientSidebar from '@/components/client/client-sidebar'
+import ClientDashboardSidebar from '@/components/client/dashboard/sidebar/client-dashboard-sidebar'
 
 interface ClientLayoutProps {
   params: { orgName: string }
@@ -10,7 +11,7 @@ export default function ClientLayout({ children, params }: ClientLayoutProps) {
 
   return (
     <div id="client" className="flex overflow-hidden">
-      <ClientSidebar orgName={orgName} />
+      <ClientDashboardSidebar orgName={orgName} collapsed={false} />
       <div className="max-h-screen flex-1 overflow-y-auto p-[8px]">{children}</div>
     </div>
   )

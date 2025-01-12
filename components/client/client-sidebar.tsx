@@ -1,5 +1,5 @@
 import NavLinks from './client-nav-links'
-import OrgInfoCard from '../admin/dashboard/sidebar/org-info-card'
+import OrgInfoCard from '../common/org-info-card'
 import LoggedInUserCard from './dashboard/sidebar/logged-in-user-card'
 
 interface DashboardSidebarProps {
