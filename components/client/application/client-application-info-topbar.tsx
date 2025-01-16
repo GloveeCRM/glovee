@@ -16,8 +16,6 @@ export default async function ClientApplicationInfoTopbar({
   if (!applications || applications.length === 0) return null
   const application = applications[0]
 
-  await new Promise((resolve) => setTimeout(resolve, 2000))
-
   return (
     <div className="flex w-full items-center justify-between gap-[8px]">
       <span className="text-[14px] font-semibold">{application.applicationName}</span>
