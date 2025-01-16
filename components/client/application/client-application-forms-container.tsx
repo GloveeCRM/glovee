@@ -1,5 +1,5 @@
 import { fetchApplicationForms } from '@/lib/data/form'
-import ClientFormSummaryCard from '../client-form-summary-card'
+import ClientApplicationFormSummaryCard from './client-application-form-summary-card'
 
 interface ClientApplicationFormsContainerProps {
   applicationID: number
@@ -17,11 +17,12 @@ export default async function ClientApplicationFormsContainer({
       No forms are assigned to you yet
     </div>
   ) : (
-    <div className="mt-[16px] flex flex-col gap-[16px]">
+    <div className="flex flex-col gap-[16px] px-[8px]">
       {applicationForms.map((applicationForm) => (
-        <div className="px-[8px]" key={applicationForm.formID}>
-          <ClientFormSummaryCard applicationForm={applicationForm} />
-        </div>
+        <ClientApplicationFormSummaryCard
+          key={applicationForm.applicationFormID}
+          applicationForm={applicationForm}
+        />
       ))}
     </div>
   )

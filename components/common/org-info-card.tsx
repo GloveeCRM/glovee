@@ -20,7 +20,7 @@ export default async function OrgInfoCard({ orgName, collapsed }: OrgInfoCardPro
     >
       <Image
         src={organization?.logoURL || DEFAULT_ORG_LOGO_URL}
-        alt="Organization Logo"
+        alt=""
         width={65}
         height={65}
         className={`rounded-full ${imageSize}`}

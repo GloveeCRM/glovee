@@ -1,4 +1,5 @@
 import ClientApplicationFormsContainer from '@/components/client/application/client-application-forms-container'
+import { Suspense } from 'react'
 
 interface ClientApplicationFormsPageParams {
   applicationID: number
@@ -13,5 +14,9 @@ export default async function ClientApplicationFormsPage({
 }: ClientApplicationFormsPageProps) {
   const { applicationID } = params
 
-  return <ClientApplicationFormsContainer applicationID={applicationID} />
+  return (
+    // <Suspense fallback={<ClientApplicationFormsContainerSkeleton />}>
+    <ClientApplicationFormsContainer applicationID={applicationID} />
+    // </Suspense>
+  )
 }

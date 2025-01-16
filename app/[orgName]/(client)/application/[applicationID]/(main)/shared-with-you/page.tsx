@@ -1,6 +1,6 @@
 import { fetchApplicationFilesByAdmin } from '@/lib/data/application'
 
-import ApplicationAdminFilesContainer from '@/components/application/application-admin-files-container'
+import ClientApplicationAdminFilesContainer from '@/components/client/application/client-application-admin-files-container'
 import { Suspense } from 'react'
 import ApplicationFilesContainerSkeleton from '@/components/skeleton/admin/application-files-container-skeleton'
 
@@ -17,7 +17,7 @@ export default async function SharedWithYouPage({ params }: SharedWithYouPagePro
 
   return (
     <Suspense fallback={<ApplicationFilesContainerSkeleton />}>
-      <ApplicationAdminFilesContainer applicationID={applicationID} />
+      <ClientApplicationAdminFilesContainer applicationID={applicationID} />
     </Suspense>
   )
 }

@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 
-import ApplicationClientFilesContainer from '@/components/application/application-client-files-container'
+import ClientApplicationClientFilesContainer from '@/components/client/application/client-application-client-files-container'
 import ApplicationFilesContainerSkeleton from '@/components/skeleton/admin/application-files-container-skeleton'
 import SendApplicationFileButton from '@/components/application/send-application-file-button'
 
@@ -16,12 +16,12 @@ export default async function YouSharedPage({ params }: YouSharedPageProps) {
   const { applicationID } = params
 
   return (
-    <div>
+    <div className="flex h-full flex-1 flex-col gap-[12px]">
       <div className="flex justify-end">
         <SendApplicationFileButton applicationID={applicationID} />
       </div>
       <Suspense fallback={<ApplicationFilesContainerSkeleton />}>
-        <ApplicationClientFilesContainer applicationID={applicationID} />
+        <ClientApplicationClientFilesContainer applicationID={applicationID} />
       </Suspense>
     </div>
   )

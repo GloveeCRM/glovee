@@ -3,15 +3,15 @@ import { FaCloudArrowUp } from 'react-icons/fa6'
 import { FileType } from '@/lib/types/file'
 import { fetchApplicationFilesByAdmin } from '@/lib/data/application'
 
-import ApplicationFile from './application-file'
+import ApplicationFile from '../../application/application-file'
 
-interface ApplicationAdminFilesContainerProps {
+interface ClientApplicationAdminFilesContainerProps {
   applicationID: number
 }
 
-export default async function ApplicationAdminFilesContainer({
+export default async function ClientApplicationAdminFilesContainer({
   applicationID,
-}: ApplicationAdminFilesContainerProps) {
+}: ClientApplicationAdminFilesContainerProps) {
   const { files, error } = await fetchApplicationFilesByAdmin({ applicationID })
   if (error) {
     console.error(error)
@@ -21,7 +21,7 @@ export default async function ApplicationAdminFilesContainer({
     return (
       <div className="flex h-full flex-1 flex-col items-center justify-center gap-[24px]">
         <span className="text-center text-[18px] text-zinc-500">
-          You have not uploaded any files yet
+          You have not received any files yet
         </span>
         <FaCloudArrowUp className="h-[300px] w-[300px] text-zinc-700/10" />
       </div>

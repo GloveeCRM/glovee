@@ -1,18 +1,18 @@
-import { FaClipboardList } from 'react-icons/fa6'
+import { FaCloudArrowUp } from 'react-icons/fa6'
 
 import { FileType } from '@/lib/types/file'
-import { fetchApplicationFilesByClient } from '@/lib/data/application'
+import { fetchApplicationFilesByAdmin } from '@/lib/data/application'
 
-import ApplicationFile from './application-file'
+import ApplicationFile from '../../application/application-file'
 
-interface ApplicationClientFilesContainerProps {
+interface AdminApplicationAdminFilesContainerProps {
   applicationID: number
 }
 
-export default async function ApplicationClientFilesContainer({
+export default async function AdminApplicationAdminFilesContainer({
   applicationID,
-}: ApplicationClientFilesContainerProps) {
-  const { files, error } = await fetchApplicationFilesByClient({ applicationID })
+}: AdminApplicationAdminFilesContainerProps) {
+  const { files, error } = await fetchApplicationFilesByAdmin({ applicationID })
   if (error) {
     console.error(error)
   }
@@ -21,9 +21,9 @@ export default async function ApplicationClientFilesContainer({
     return (
       <div className="flex h-full flex-1 flex-col items-center justify-center gap-[24px]">
         <span className="text-center text-[18px] text-zinc-500">
-          Client has not uploaded any files yet
+          You have not uploaded any files yet
         </span>
-        <FaClipboardList className="h-[300px] w-[300px] text-zinc-700/10" />
+        <FaCloudArrowUp className="h-[300px] w-[300px] text-zinc-700/10" />
       </div>
     )
   }
@@ -50,7 +50,7 @@ export default async function ApplicationClientFilesContainer({
     <div className="flex flex-col gap-[36px]">
       {sortedGroupedFiles.map((date) => (
         <div key={date} className="flex flex-col gap-[16px]">
-          <div className="">{date}</div>
+          <div>{date}</div>
           <div className="flex flex-col gap-[12px] px-[8px]">
             {groupedFiles[date].map((file) => (
               <ApplicationFile key={file.fileID} file={file} />
