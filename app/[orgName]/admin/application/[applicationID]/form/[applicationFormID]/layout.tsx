@@ -22,7 +22,10 @@ export default function AdminApplicationFormLayout({
   return (
     <ApplicationFormContextProvider applicationFormID={applicationFormID} mode="view">
       <div className="flex">
-        <ApplicationFormSidebar applicationID={applicationID} showProgressIndicator={false} />
+        <ApplicationFormSidebar
+          showProgressIndicator={false}
+          backURL={`/admin/application/${applicationID}/forms`}
+        />
         <div className="h-svh min-w-0 flex-1 overflow-y-scroll">{children}</div>
       </div>
     </ApplicationFormContextProvider>

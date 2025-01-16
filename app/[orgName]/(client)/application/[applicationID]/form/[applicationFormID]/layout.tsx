@@ -3,12 +3,13 @@ import { redirect } from 'next/navigation'
 import { ApplicationFormStatusTypes } from '@/lib/types/form'
 import { searchForms } from '@/lib/data/form'
 import ApplicationFormContextProvider from '@/contexts/application-form-context'
-import ClientFormSidebar from '@/components/client/client-form-sidebar'
+import ApplicationFormSidebar from '@/components/application/application-form-sidebar'
 
 interface ApplicationLayoutParams {
   applicationID: number
   applicationFormID: number
 }
+
 interface ApplicationLayoutProps {
   children: React.ReactNode
   params: ApplicationLayoutParams
@@ -32,8 +33,11 @@ export default async function ApplicationLayout({
   return (
     <ApplicationFormContextProvider applicationFormID={applicationFormID} mode="edit">
       <div id="client-form-layout" className="flex overflow-hidden">
-        <ClientFormSidebar applicationID={applicationID} type="in-progress" />
-        <div className="h-screen flex-1">{children}</div>
+        <ApplicationFormSidebar
+          showProgressIndicator={true}
+          backURL={`/application/${applicationID}/forms`}
+        />
+        <div className="h-svh flex-1">{children}</div>
       </div>
     </ApplicationFormContextProvider>
   )

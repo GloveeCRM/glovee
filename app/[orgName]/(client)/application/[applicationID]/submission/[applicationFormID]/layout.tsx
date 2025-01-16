@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation'
 
 import { ApplicationFormStatusTypes } from '@/lib/types/form'
 import ApplicationFormContextProvider from '@/contexts/application-form-context'
-import ClientFormSidebar from '@/components/client/client-form-sidebar'
+import ApplicationFormSidebar from '@/components/application/application-form-sidebar'
 
 interface SubmissionLayoutProps {
   children: React.ReactNode
@@ -34,7 +34,10 @@ export default async function SubmissionLayout({
   return (
     <ApplicationFormContextProvider applicationFormID={applicationFormID} mode="view">
       <div id="client-submission-layout" className="flex overflow-hidden">
-        <ClientFormSidebar applicationID={applicationID} type="submitted" />
+        <ApplicationFormSidebar
+          showProgressIndicator={false}
+          backURL={`/application/${applicationID}/forms`}
+        />
         <div className="h-screen flex-1">{children}</div>
       </div>
     </ApplicationFormContextProvider>

@@ -29,7 +29,7 @@ export default function ClientApplicationFormSummaryCard({
       </div>
       <div className="flex justify-end gap-[8px]">
         <Link
-          href={`/admin/application/${applicationForm.applicationID}/form/${applicationForm.applicationFormID}`}
+          href={`/application/${applicationForm.applicationID}/form/${applicationForm.applicationFormID}`}
           className="flex items-center gap-[4px] rounded-md bg-teal-100 px-[8px] py-[2px] text-teal-900 hover:bg-teal-200"
         >
           <HiOutlineEye className="h-[18px] w-[18px]" />

@@ -13,7 +13,9 @@ export default async function ClientApplicationsContainer() {
 
   return !hasApplications ? (
     <div className="flex h-full flex-col items-center justify-center">
-      <span className="text-center text-[18px] text-zinc-500">No templates found</span>
+      <span className="text-center text-[18px] text-zinc-500">
+        No applications are assigned to you yet
+      </span>
       <IoFolder className="h-[300px] w-[300px] text-zinc-700/10" />
     </div>
   ) : (
