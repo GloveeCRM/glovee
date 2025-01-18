@@ -32,7 +32,7 @@ export default function FormQuestion({ question, viewOnly = false, mode }: FormQ
     <div className="flex flex-col gap-[10px] p-[4px] text-[14px]">
       <div className="flex justify-between">
         <div className="relative w-[calc(100%-50px)]">
-          <span>{question?.formQuestionPrompt}</span>
+          <span className="font-medium">{question?.formQuestionPrompt}</span>
           {question?.formQuestionSettings?.isRequired && (
             <span className="absolute mt-[-6px] text-[24px] text-[red]">*</span>
           )}

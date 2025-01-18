@@ -151,14 +151,14 @@ export default function TemplateQuestion({ formQuestion }: TemplateQuestionProps
         {isEditing ? (
           <textarea
             ref={questionPromptInputRef}
-            className="mb-[8px] ml-[-3px] mr-[8px] block w-full resize-none overflow-hidden rounded-sm border-[2px] border-dashed border-b-300 bg-n-100 px-[2px] pb-[2px] pt-[1px] focus:border-[1px] focus:border-b-500 focus:outline-none"
+            className="mb-[8px] ml-[-3px] mr-[8px] block w-full resize-none overflow-hidden rounded-sm border-[2px] border-dashed border-b-300 bg-n-100 px-[2px] pb-[2px] pt-[1px] font-medium focus:border-[1px] focus:border-b-500 focus:outline-none"
             defaultValue={formQuestion.formQuestionPrompt}
             onChange={handlePromptChange}
             onKeyDown={handleKeyDown}
           />
         ) : (
           <div className="group/prompt mb-[10px] mr-[8px] mt-[2px] flex w-full gap-[8px]">
-            <div>{formQuestion.formQuestionPrompt}</div>
+            <div className="font-medium">{formQuestion.formQuestionPrompt}</div>
             <div
               onClick={handleClickEditPrompt}
               className="cursor-pointer opacity-0 transition duration-75 group-hover/prompt:opacity-100"

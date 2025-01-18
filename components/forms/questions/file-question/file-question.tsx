@@ -1,15 +1,13 @@
 'use client'
 
-import Link from 'next/link'
 import { useRef } from 'react'
 import { ImSpinner2 } from 'react-icons/im'
-import { BiTrash } from 'react-icons/bi'
 import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
 import { FiUpload } from 'react-icons/fi'
-import { LuDownload, LuFileText } from 'react-icons/lu'
 
 import { FormAnswerFileType, FormQuestionType } from '@/lib/types/form'
 import useAnswer from '@/hooks/form/use-answer'
+
 import AnswerFile from './answer-file'
 
 interface FileQuestionProps {
@@ -74,7 +72,7 @@ export default function FileQuestion({ formQuestion, mode, readOnly }: FileQuest
         ))
       ) : (
         <div
-          className={`flex w-full cursor-pointer flex-col items-center rounded-md border border-zinc-400 p-[11px] text-zinc-500 ${!readOnly && 'hover:text-n-500` transition duration-150 hover:border-n-500'}`}
+          className={`flex w-full flex-col items-center rounded-md border border-zinc-400 p-[11px] text-zinc-500 ${!readOnly && 'cursor-pointer transition duration-150 hover:border-n-500 hover:text-zinc-600'}`}
           onClick={handleClickUploadFile}
         >
           <FiUpload className="h-[18px] w-[18px]" />

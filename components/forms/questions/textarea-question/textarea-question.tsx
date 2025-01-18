@@ -33,7 +33,7 @@ export default function TextareaQuestion({
           rows={3}
           defaultValue={formQuestion.answer?.answerText || ''}
           onChange={handleChange}
-          className="w-full rounded-[3px] border border-n-400 px-[8px] py-[4px] text-[14px] placeholder:font-light placeholder:text-n-450 focus-visible:border-n-600 focus-visible:outline-none disabled:bg-transparent"
+          className="w-full rounded-[3px] border border-n-400 bg-inherit px-[8px] py-[4px] text-[14px] placeholder:font-light placeholder:text-n-450 focus-visible:border-n-600 focus-visible:outline-none"
         />
         {message.length !== 0 && (
           <div
