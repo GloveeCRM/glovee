@@ -13,6 +13,7 @@ import {
   FormQuestionDefaultOptionType,
   ApplicationFormType,
   FormAnswerType,
+  ApplicationFormStatusTypes,
 } from '@/lib/types/form'
 import { GLOVEE_API_URL } from '@/lib/constants/api'
 import { getSession } from '@/lib/auth/session'
@@ -588,6 +589,31 @@ export async function deleteApplicationFormQuestionSet({
   })
 
   return { formQuestionSets: data?.formQuestionSets, formQuestions: data?.formQuestions, error }
+}
+
+interface UpdateApplicationFormStatusProps {
+  applicationFormID: number
+  status: ApplicationFormStatusTypes
+}
+
+interface UpdateApplicationFormStatusResponse {
+  status?: ApplicationFormStatusTypes
+  error?: string
+}
+
+export async function updateApplicationFormStatus({
+  applicationFormID,
+  status,
+}: UpdateApplicationFormStatusProps): Promise<UpdateApplicationFormStatusResponse> {
+  const { data, error } = await apiRequest<{ status: ApplicationFormStatusTypes }>({
+    path: 'rpc/update_application_form_status',
+    method: 'POST',
+    data: { applicationFormID, status },
+    authRequired: true,
+  })
+
+  revalidatePath(`/application`)
+  return { status: data?.status, error }
 }
 
 // interface CreateNewFormProps {

@@ -2,10 +2,13 @@ import Link from 'next/link'
 import { HiOutlineEye } from 'react-icons/hi2'
 
 import { dictionary } from '@/lib/constants/dictionary'
-import { ApplicationFormType, FormCategoryType } from '@/lib/types/form'
+import { ApplicationFormStatusTypes, ApplicationFormType, FormCategoryType } from '@/lib/types/form'
 
 import { Separator } from '@/components/ui/separator'
+import { TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { Tooltip } from '@/components/ui/tooltip'
 import ProgressIndicatorRing from '@/components/ui/progress-indicator-ring'
+import ClientSubmitApplicationFormButton from './client-submit-application-form-button'
 
 interface ClientApplicationFormSummaryCardProps {
   applicationForm: ApplicationFormType
@@ -29,12 +32,29 @@ export default function ClientApplicationFormSummaryCard({
       </div>
       <div className="flex justify-end gap-[8px]">
         <Link
-          href={`/application/${applicationForm.applicationID}/form/${applicationForm.applicationFormID}`}
+          href={`/application/${applicationForm.applicationID}/${applicationForm.status === ApplicationFormStatusTypes.CLIENT_SUBMITTED ? 'submission' : 'form'}/${applicationForm.applicationFormID}`}
           className="flex items-center gap-[4px] rounded-md bg-teal-100 px-[8px] py-[2px] text-teal-900 hover:bg-teal-200"
         >
           <HiOutlineEye className="h-[18px] w-[18px]" />
           <span className="text-[12px]">View</span>
         </Link>
+        {applicationForm.status === ApplicationFormStatusTypes.PENDING_CLIENT_SUBMISSION && (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <ClientSubmitApplicationFormButton
+                  applicationFormID={applicationForm.applicationFormID}
+                  disabled={applicationForm.form.completionRate !== 1}
+                />
+              </TooltipTrigger>
+              {applicationForm.form.completionRate !== 1 && (
+                <TooltipContent>
+                  <p>You must complete all of the required questions before submitting the form.</p>
+                </TooltipContent>
+              )}
+            </Tooltip>
+          </TooltipProvider>
+        )}
       </div>
     </div>
   )

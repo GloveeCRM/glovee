@@ -1,35 +1,32 @@
 import { redirect } from 'next/navigation'
 
 import { ApplicationFormStatusTypes } from '@/lib/types/form'
+import { fetchApplicationForm } from '@/lib/data/form'
 import ApplicationFormContextProvider from '@/contexts/application-form-context'
+
 import ApplicationFormSidebar from '@/components/application/application-form-sidebar'
+
+interface SubmissionLayoutParams {
+  applicationID: number
+  applicationFormID: number
+}
 
 interface SubmissionLayoutProps {
   children: React.ReactNode
-  params: {
-    applicationID: string
-    applicationFormID: string
-  }
+  params: SubmissionLayoutParams
 }
 
 export default async function SubmissionLayout({
   children,
   params,
 }: Readonly<SubmissionLayoutProps>) {
-  const applicationFormID = parseInt(params.applicationFormID)
-  const applicationID = parseInt(params.applicationID)
+  const { applicationID, applicationFormID } = params
 
-  // const { forms } = await searchForms({
-  //   filters: { userID, formID, includeCategories: true, includeSections: true },
-  // })
-  // const form = forms?.[0]
-  // const categories = form?.categories || []
+  const { applicationForm } = await fetchApplicationForm({ applicationFormID })
 
-  // if (form?.status === FormStatusTypes.CREATED) {
-  //   redirect(`/application/${applicationID}/form/${formID}`)
-  // } else if (form?.status !== FormStatusTypes.SUBMITTED) {
-  //   redirect(`/application/${applicationID}/forms`)
-  // }
+  if (applicationForm?.status !== ApplicationFormStatusTypes.CLIENT_SUBMITTED) {
+    redirect(`/application/${applicationID}/form/${applicationFormID}`)
+  }
 
   return (
     <ApplicationFormContextProvider applicationFormID={applicationFormID} mode="view">
@@ -38,7 +35,7 @@ export default async function SubmissionLayout({
           showProgressIndicator={false}
           backURL={`/application/${applicationID}/forms`}
         />
-        <div className="h-screen flex-1">{children}</div>
+        <div className="h-svh min-w-0 flex-1 overflow-y-scroll">{children}</div>
       </div>
     </ApplicationFormContextProvider>
   )

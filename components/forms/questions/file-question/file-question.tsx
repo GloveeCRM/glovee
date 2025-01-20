@@ -90,7 +90,7 @@ export default function FileQuestion({ formQuestion, mode, readOnly }: FileQuest
 
       {message.length !== 0 && (
         <div
-          className={`absolute right-[1px] top-[1px] flex h-[32px] items-center gap-[2px] rounded bg-white px-[4px]
+          className={`absolute right-[1px] top-[1px] flex h-[32px] items-center gap-[2px] rounded bg-sand-400 px-[4px]
             ${
               message === 'Failed to save changes!' || message === 'Failed to upload file!'
                 ? 'text-red-600'

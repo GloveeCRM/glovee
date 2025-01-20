@@ -55,7 +55,7 @@ export default function SelectQuestion({ formQuestion, mode, readOnly }: SelectQ
       </select>
       {message.length !== 0 && (
         <div
-          className={`absolute right-[1px] top-[1px] flex h-[32px] items-center gap-[2px] rounded bg-white px-[4px] ${message === 'Failed to save changes!' ? 'text-red-600' : 'text-g-700'}`}
+          className={`absolute right-[1px] top-[1px] flex h-[32px] items-center gap-[2px] rounded bg-sand-400 px-[4px] ${message === 'Failed to save changes!' ? 'text-red-600' : 'text-g-700'}`}
         >
           {message === 'Saving' ? (
             <ImSpinner2 className="h-[14px] w-[14px] animate-spin" />

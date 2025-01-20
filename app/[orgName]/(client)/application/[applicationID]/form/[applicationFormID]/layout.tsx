@@ -1,34 +1,30 @@
 import { redirect } from 'next/navigation'
 
 import { ApplicationFormStatusTypes } from '@/lib/types/form'
-import { searchForms } from '@/lib/data/form'
+import { fetchApplicationForm } from '@/lib/data/form'
 import ApplicationFormContextProvider from '@/contexts/application-form-context'
+
 import ApplicationFormSidebar from '@/components/application/application-form-sidebar'
 
-interface ApplicationLayoutParams {
+interface ApplicationFormLayoutParams {
   applicationID: number
   applicationFormID: number
 }
 
-interface ApplicationLayoutProps {
+interface ApplicationFormLayoutProps {
   children: React.ReactNode
-  params: ApplicationLayoutParams
+  params: ApplicationFormLayoutParams
 }
 
-export default async function ApplicationLayout({
+export default async function ApplicationFormLayout({
   children,
   params: { applicationFormID, applicationID },
-}: Readonly<ApplicationLayoutProps>) {
-  // const { forms } = await searchForms({
-  //   filters: { userID, applicationFormID, includeCategories: true, includeSections: true },
-  // })
-  // const form = forms?.[0]
+}: Readonly<ApplicationFormLayoutProps>) {
+  const { applicationForm } = await fetchApplicationForm({ applicationFormID })
 
-  // if (form?.status === FormStatusTypes.SUBMITTED) {
-  //   redirect(`/application/${applicationID}/submission/${formID}`)
-  // } else if (form?.status !== FormStatusTypes.CREATED) {
-  //   redirect(`/application/${applicationID}/forms`)
-  // }
+  if (applicationForm?.status === ApplicationFormStatusTypes.CLIENT_SUBMITTED) {
+    redirect(`/application/${applicationID}/submission/${applicationFormID}`)
+  }
 
   return (
     <ApplicationFormContextProvider applicationFormID={applicationFormID} mode="edit">

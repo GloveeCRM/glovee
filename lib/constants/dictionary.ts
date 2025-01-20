@@ -7,6 +7,7 @@ const translations = {
   pending_client_revision: 'Pending Client Revision',
   new_form_added: 'added a new form',
   new_file_added: 'added a new file',
+  application_form_status_updated: 'updated form status to:',
 }
 
 export const dictionary = (translation_code: string) => {

@@ -47,7 +47,7 @@ export default async function ApplicationUpdate({ update }: ApplicationUpdatePro
           <span className="font-light text-zinc-600">{dictionary(update.title)} </span>
         </div>
         {update.description && (
-          <div className="text-[12px] text-zinc-500">{update.description}</div>
+          <div className="text-[12px] text-zinc-500">{dictionary(update.description)}</div>
         )}
         <div className="flex justify-between text-[12px] text-zinc-500">
           <span>{formatDateToShortMonthDayYearTime({ date: update.createdAt })}</span>
