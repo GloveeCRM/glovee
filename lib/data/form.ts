@@ -306,7 +306,7 @@ export async function searchForms({
     return { forms: null, totalCount: 0 }
   }
 
-  const orgName = await getCurrentOrgName()
+  const orgName = getCurrentOrgName()
 
   const queryParams = new URLSearchParams()
   queryParams.append('user_id', filters.userID?.toString() || '')
@@ -359,7 +359,7 @@ export async function fetchFormQuestionSets({
     return []
   }
 
-  const orgName = await getCurrentOrgName()
+  const orgName = getCurrentOrgName()
 
   const queryParams = new URLSearchParams()
   queryParams.append('user_id', filters.userID?.toString() || '')
@@ -402,7 +402,7 @@ export async function fetchFormAnswerFileUploadIntent(
       return null
     }
 
-    const orgName = await getCurrentOrgName()
+    const orgName = getCurrentOrgName()
 
     const queryParams = new URLSearchParams()
     queryParams.append('user_id', userID.toString() || '')

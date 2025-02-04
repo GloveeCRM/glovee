@@ -28,7 +28,7 @@ interface NewPasswordFormProps {
 
 export default function NewPasswordForm({ resetPasswordToken }: NewPasswordFormProps) {
   const defaultFormValues = {
-    password: '',
+    newPassword: '',
   }
 
   const form = useForm<z.infer<typeof NewPasswordSchema>>({
@@ -37,20 +37,20 @@ export default function NewPasswordForm({ resetPasswordToken }: NewPasswordFormP
   })
 
   function handleForgotPassword(values: z.infer<typeof NewPasswordSchema>) {
-    const { password } = values
+    const { newPassword } = values
 
-    resetPassword({ resetPasswordToken, password }).then((res) => {
-      if (res.success) {
-        form.setError('root.success', {
-          message: res.success,
-        })
-        setTimeout(() => {
-          window.location.href = res.data?.redirectLink
-        }, 1000)
-      } else {
+    resetPassword({ resetPasswordToken, newPassword }).then((res) => {
+      if (res.error) {
         form.setError('root.error', {
           message: res.error,
         })
+      } else {
+        form.setError('root.success', {
+          message: 'Password reset successful',
+        })
+        setTimeout(() => {
+          window.location.href = '/login'
+        }, 1000)
       }
     })
   }
@@ -71,7 +71,7 @@ export default function NewPasswordForm({ resetPasswordToken }: NewPasswordFormP
         <form onSubmit={form.handleSubmit(handleForgotPassword)}>
           <FormField
             control={form.control}
-            name="password"
+            name="newPassword"
             render={({ field }) => (
               <FormItem className="mb-[20px] mt-[12px]">
                 <FormLabel>Password</FormLabel>

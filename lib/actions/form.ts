@@ -939,7 +939,7 @@ export async function updateFormSections({
     return { error: 'Unauthorized' }
   }
 
-  const orgName = await getCurrentOrgName()
+  const orgName = getCurrentOrgName()
 
   const queryParams = new URLSearchParams()
   queryParams.append('user_id', userID?.toString() || '')
@@ -994,7 +994,7 @@ export async function deleteFormSections({
     return { error: 'Unauthorized' }
   }
 
-  const orgName = await getCurrentOrgName()
+  const orgName = getCurrentOrgName()
 
   const queryParams = new URLSearchParams()
   queryParams.append('user_id', userID?.toString() || '')

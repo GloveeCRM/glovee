@@ -94,7 +94,7 @@ export async function fetchProfilePictureUploadURL({
   fileName,
   mimeType,
 }: FetchProfilePictureUploadURLProps): Promise<FetchProfilePictureUploadURLResponse> {
-  const orgName = await getCurrentOrgName()
+  const orgName = getCurrentOrgName()
 
   const queryParams = new URLSearchParams()
   queryParams.append('org_name', orgName || '')

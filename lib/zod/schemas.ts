@@ -43,7 +43,7 @@ export const CreateFormTemplateSchema = z.object({
 })
 
 export const NewPasswordSchema = z.object({
-  password: z
+  newPassword: z
     .string()
     .min(1, {
       message: 'Password is required',

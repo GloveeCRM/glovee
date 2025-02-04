@@ -34,7 +34,7 @@ interface LoginResponse {
 }
 
 export async function login({ email, password }: LoginProps): Promise<LoginResponse> {
-  const orgName = await getCurrentOrgName()
+  const orgName = getCurrentOrgName()
 
   const { data, error } = await apiRequest<{ accessToken: string; refreshToken: string }>({
     path: 'rpc/login',
@@ -96,7 +96,7 @@ export async function register({
   firstName,
   lastName,
 }: RegisterProps): Promise<RegisterResponse> {
-  const orgName = await getCurrentOrgName()
+  const orgName = getCurrentOrgName()
 
   const { data, error } = await apiRequest<{ user: UserType }>({
     path: 'rpc/register_client',
@@ -167,90 +167,101 @@ export async function logout() {
   return await removeSession()
 }
 
-// TODO: Update forgot password logic
 interface ForgotPasswordProps {
   email: string
 }
 
 interface ForgotPasswordResponse {
-  success?: string
   error?: string
 }
 
 export async function forgotPassword({
   email,
 }: ForgotPasswordProps): Promise<ForgotPasswordResponse> {
-  const orgName = await getCurrentOrgName()
+  const orgName = getCurrentOrgName()
 
-  const body = {
-    email,
-  }
-  const bodySnakeCase = keysCamelCaseToSnakeCase(body)
+  const { error } = await apiRequest<{}>({
+    path: 'rpc/forgot_password',
+    method: 'POST',
+    data: {
+      email,
+      orgName,
+    },
+  })
 
-  try {
-    const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/forgot-password`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(bodySnakeCase),
-    })
-
-    const data = await response.json()
-    const camelCaseData = keysSnakeCaseToCamelCase(data)
-
-    if (camelCaseData.status === 'error') {
-      return { error: camelCaseData.error }
-    } else {
-      return { success: camelCaseData.data.message }
-    }
-  } catch (error) {
-    return { error: 'Something went wrong!' }
-  }
+  return { error }
 }
 
-// TODO: Update reset password logic
-interface ResetPasswordInputDTO {
+interface ResetPasswordProps {
   resetPasswordToken: string
-  password: string
+  newPassword: string
 }
 
-interface ResetPasswordOutputDTO {
-  success?: string
+interface ResetPasswordResponse {
   error?: string
-  data?: Record<string, any>
 }
 
 export async function resetPassword({
   resetPasswordToken,
-  password,
-}: ResetPasswordInputDTO): Promise<ResetPasswordOutputDTO> {
-  const orgName = await getCurrentOrgName()
+  newPassword,
+}: ResetPasswordProps): Promise<ResetPasswordResponse> {
+  const orgName = getCurrentOrgName()
 
-  const body = {
-    resetPasswordToken,
-    newPassword: password,
-  }
-  const bodySnakeCase = keysCamelCaseToSnakeCase(body)
+  const { error } = await apiRequest<{}>({
+    path: 'rpc/set_new_password',
+    method: 'POST',
+    data: {
+      orgName,
+      resetPasswordToken,
+      newPassword,
+    },
+  })
 
-  try {
-    const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/reset-password`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(bodySnakeCase),
-    })
-
-    const data = await response.json()
-    const camelCaseData = keysSnakeCaseToCamelCase(data)
-
-    if (camelCaseData.status === 'error') {
-      return { error: camelCaseData.error }
-    } else {
-      return { success: camelCaseData.data.message, data: { redirectLink: '/login' } }
-    }
-  } catch (error) {
-    return { error: 'Something went wrong!' }
-  }
+  return { error }
 }
+
+// TODO: Update reset password logic
+// interface ResetPasswordInputDTO {
+//   resetPasswordToken: string
+//   password: string
+// }
+
+// interface ResetPasswordOutputDTO {
+//   success?: string
+//   error?: string
+//   data?: Record<string, any>
+// }
+
+// export async function resetPassword({
+//   resetPasswordToken,
+//   password,
+// }: ResetPasswordInputDTO): Promise<ResetPasswordOutputDTO> {
+//   const orgName = await getCurrentOrgName()
+
+//   const body = {
+//     resetPasswordToken,
+//     newPassword: password,
+//   }
+//   const bodySnakeCase = keysCamelCaseToSnakeCase(body)
+
+//   try {
+//     const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/user/reset-password`, {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify(bodySnakeCase),
+//     })
+
+//     const data = await response.json()
+//     const camelCaseData = keysSnakeCaseToCamelCase(data)
+
+//     if (camelCaseData.status === 'error') {
+//       return { error: camelCaseData.error }
+//     } else {
+//       return { success: camelCaseData.data.message, data: { redirectLink: '/login' } }
+//     }
+//   } catch (error) {
+//     return { error: 'Something went wrong!' }
+//   }
+// }

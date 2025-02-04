@@ -24,8 +24,6 @@ import { Separator } from '@/components//ui/separator'
 import { Callout } from '@/components/ui/callout'
 
 export default function ForgotPasswordForm() {
-  const { orgName } = useOrgContext()
-
   const defaultFormValues = {
     email: '',
   }
@@ -39,13 +37,13 @@ export default function ForgotPasswordForm() {
     const { email } = values
 
     forgotPassword({ email }).then((res) => {
-      if (res.success) {
-        form.setError('root.success', {
-          message: res.success,
-        })
-      } else {
+      if (res.error) {
         form.setError('root.error', {
           message: res.error,
+        })
+      } else {
+        form.setError('root.success', {
+          message: 'Password reset email sent',
         })
       }
     })
@@ -98,7 +96,7 @@ export default function ForgotPasswordForm() {
           )}
 
           <Button type="submit" variant="default" fullWidth={true}>
-            Reset Password
+            Send Reset Link
           </Button>
         </form>
       </Form>

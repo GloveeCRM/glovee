@@ -40,7 +40,7 @@ export async function searchTemplates({
     return { formTemplates: null, totalCount: 0 }
   }
 
-  const orgName = await getCurrentOrgName()
+  const orgName = getCurrentOrgName()
 
   const queryParams = new URLSearchParams()
   queryParams.append('form_template_id', filters.formTemplateID?.toString() || '')

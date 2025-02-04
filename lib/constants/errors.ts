@@ -26,6 +26,7 @@ const errors = {
   email_already_in_use: 'This email is already taken',
   application_not_found: 'Application not found',
   missing_application_name: 'Application name is required',
+  reset_password_token_not_found: 'Reset password token not found',
 }
 
 export const errorMessages = (error_code: string) => {

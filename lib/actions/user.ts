@@ -22,7 +22,7 @@ export async function createClient({
   lastName,
   email,
 }: CreateClientProps): Promise<CreateClientResponse> {
-  const orgName = await getCurrentOrgName()
+  const orgName = getCurrentOrgName()
 
   const { data, error } = await apiRequest<{ user: UserType }>({
     path: 'rpc/create_client',
