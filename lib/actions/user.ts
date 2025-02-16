@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache'
 
 import { UserStatusTypes, UserType } from '@/lib/types/user'
 import { getCurrentOrgName } from '@/lib/utils/server'
-import { apiRequest } from '../utils/http'
+import { httpRequest } from '@/lib/utils/http'
 
 interface CreateClientProps {
   firstName: string
@@ -24,7 +24,7 @@ export async function createClient({
 }: CreateClientProps): Promise<CreateClientResponse> {
   const orgName = getCurrentOrgName()
 
-  const { data, error } = await apiRequest<{ user: UserType }>({
+  const { data, error } = await httpRequest<{ user: UserType }>({
     path: 'rpc/create_client',
     method: 'POST',
     data: {
@@ -54,7 +54,7 @@ export async function updateUserStatus({
   userID,
   status,
 }: UpdateUserStatusProps): Promise<UpdateUserStatusResponse> {
-  const { data, error } = await apiRequest<{ status: UserStatusTypes }>({
+  const { data, error } = await httpRequest<{ status: UserStatusTypes }>({
     path: 'rpc/update_user_status',
     method: 'POST',
     data: { userID, status },
@@ -85,7 +85,7 @@ export async function updateUserProfile({
   email,
   profilePictureFileID,
 }: UpdateUserProfileProps): Promise<UpdateUserProfileResponse> {
-  const { data, error } = await apiRequest<{ user: UserType }>({
+  const { data, error } = await httpRequest<{ user: UserType }>({
     path: 'rpc/update_user',
     method: 'POST',
     data: { userID, firstName, lastName, email, profilePictureFileID },
@@ -118,7 +118,7 @@ export async function updateUserProfilePicture({
   size,
   metadata,
 }: UpdateUserProfilePictureProps): Promise<UpdateUserProfilePictureResponse> {
-  const { data, error } = await apiRequest<{ url: string }>({
+  const { data, error } = await httpRequest<{ url: string }>({
     path: 'rpc/create_user_profile_picture',
     method: 'POST',
     data: { userID, objectKey, fileName, mimeType, size, metadata },

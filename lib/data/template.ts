@@ -1,7 +1,7 @@
 'use server'
 
 import { FormTemplateType } from '@/lib/types/template'
-import { GLOVEE_API_URL } from '@/lib/constants/api'
+import { GLOVEE_POSTGREST_URL } from '@/lib/constants/api'
 import { getSession } from '@/lib/auth/session'
 import { getCurrentOrgName } from '../utils/server'
 import { keysSnakeCaseToCamelCase } from '../utils/json'
@@ -52,7 +52,7 @@ export async function searchTemplates({
 
   try {
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/template/search?${queryParams.toString()}`,
+      `${GLOVEE_POSTGREST_URL}/v1/${orgName}/template/search?${queryParams.toString()}`,
       {
         method: 'GET',
         headers: {
@@ -87,7 +87,7 @@ export async function fetchTemplateById(
 
   try {
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/template/admin/information/${id}`,
+      `${GLOVEE_POSTGREST_URL}/v1/${orgName}/template/admin/information/${id}`,
       {
         method: 'GET',
         headers: {
@@ -120,7 +120,7 @@ export async function fetchFullTemplateById(
 
   try {
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/template/admin/full-template/${id}`,
+      `${GLOVEE_POSTGREST_URL}/v1/${orgName}/template/admin/full-template/${id}`,
       {
         method: 'GET',
         headers: {

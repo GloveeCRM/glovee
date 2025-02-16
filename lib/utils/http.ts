@@ -1,31 +1,33 @@
-import { GLOVEE_API_URL } from '@/lib/constants/api'
+import { GLOVEE_POSTGREST_URL } from '@/lib/constants/api'
 import { keysCamelCaseToSnakeCase, keysSnakeCaseToCamelCase } from './json'
 import { errorMessages } from '../constants/errors'
 import { getSession } from '../auth/session'
 
-interface ApiRequestProps {
+interface HTTPRequestProps {
   path: string
+  baseURL?: string
   method?: string
   data?: Record<string, any>
   authRequired?: boolean
   headers?: Record<string, string>
 }
 
-interface ApiRequestResponse<T = any> {
+interface HTTPRequestResponse<T = any> {
   data?: T
   error?: string
   headers?: Headers
 }
 
 // TODO: Add error translation at this level
-export async function apiRequest<T = any>({
+export async function httpRequest<T = any>({
   path,
+  baseURL = GLOVEE_POSTGREST_URL,
   method = 'GET',
   data = {},
   authRequired = false,
   headers = {},
-}: ApiRequestProps): Promise<ApiRequestResponse<T>> {
-  const url = new URL(`${GLOVEE_API_URL}/${path}`)
+}: HTTPRequestProps): Promise<HTTPRequestResponse<T>> {
+  const url = new URL(`${baseURL}/${path}`)
   const options: RequestInit = {
     method,
     headers: {

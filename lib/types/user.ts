@@ -1,3 +1,5 @@
+import { FileType } from './file'
+
 export type UserType = {
   userID: number
   organizationID: number
@@ -6,7 +8,7 @@ export type UserType = {
   lastName: string
   role: string
   status: UserStatusTypes
-  profilePictureFileID?: string
+  profilePictureFile?: FileType
   profilePictureURL?: string
   createdAt: string
   updatedAt: string

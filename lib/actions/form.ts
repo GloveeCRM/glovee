@@ -11,14 +11,13 @@ import {
   FormQuestionSettingsType,
   FormQuestionOptionType,
   FormQuestionDefaultOptionType,
-  ApplicationFormType,
   FormAnswerType,
   ApplicationFormStatusTypes,
 } from '@/lib/types/form'
-import { GLOVEE_API_URL } from '@/lib/constants/api'
+import { GLOVEE_POSTGREST_URL } from '@/lib/constants/api'
 import { getSession } from '@/lib/auth/session'
 import { getCurrentOrgName } from '@/lib/utils/server'
-import { apiRequest } from '@/lib/utils/http'
+import { httpRequest } from '@/lib/utils/http'
 import { keysCamelCaseToSnakeCase, keysSnakeCaseToCamelCase } from '@/lib/utils/json'
 
 interface CreateFormTemplateProps {
@@ -35,7 +34,7 @@ export async function createFormTemplate({
   formName,
   formDescription,
 }: CreateFormTemplateProps): Promise<CreateFormTemplateResponse> {
-  const { data, error } = await apiRequest<{ formTemplate: FormTemplateType }>({
+  const { data, error } = await httpRequest<{ formTemplate: FormTemplateType }>({
     path: 'rpc/create_form_template',
     method: 'POST',
     data: { formName, formDescription },
@@ -58,7 +57,7 @@ interface UpdateFormTemplateResponse {
 export async function updateFormTemplate({
   formTemplate,
 }: UpdateFormTemplateProps): Promise<UpdateFormTemplateResponse> {
-  const { data, error } = await apiRequest<{ formTemplate: FormTemplateType }>({
+  const { data, error } = await httpRequest<{ formTemplate: FormTemplateType }>({
     path: 'rpc/update_form_template',
     method: 'POST',
     data: {
@@ -83,7 +82,7 @@ interface DeleteFormTemplateResponse {
 export async function deleteFormTemplate({
   formTemplateID,
 }: DeleteFormTemplateProps): Promise<DeleteFormTemplateResponse> {
-  const { error } = await apiRequest<{ success: boolean }>({
+  const { error } = await httpRequest<{ success: boolean }>({
     path: 'rpc/delete_form_template',
     method: 'POST',
     data: { formTemplateID },
@@ -110,7 +109,7 @@ export async function createFormTemplateCategory({
   categoryName,
   categoryPosition,
 }: CreateFormTemplateCategoryProps): Promise<CreateFormTemplateCategoryResponse> {
-  const { data, error } = await apiRequest<{ formCategory: FormCategoryType }>({
+  const { data, error } = await httpRequest<{ formCategory: FormCategoryType }>({
     path: 'rpc/create_form_template_category',
     method: 'POST',
     data: { formTemplateID, categoryName, categoryPosition },
@@ -133,7 +132,7 @@ interface UpdateFormTemplateCategoriesResponse {
 export async function updateFormTemplateCategories({
   formCategories,
 }: UpdateFormTemplateCategoriesProps): Promise<UpdateFormTemplateCategoriesResponse> {
-  const { data, error } = await apiRequest<{ formCategories: FormCategoryType[] }>({
+  const { data, error } = await httpRequest<{ formCategories: FormCategoryType[] }>({
     path: 'rpc/update_form_template_categories',
     method: 'POST',
     data: {
@@ -157,7 +156,7 @@ interface DeleteFormTemplateCategoryResponse {
 export async function deleteFormTemplateCategory({
   formCategoryID,
 }: DeleteFormTemplateCategoryProps): Promise<DeleteFormTemplateCategoryResponse> {
-  const { data, error } = await apiRequest<{ formCategories: FormCategoryType[] }>({
+  const { data, error } = await httpRequest<{ formCategories: FormCategoryType[] }>({
     path: 'rpc/delete_form_template_category',
     method: 'POST',
     data: { formCategoryID },
@@ -183,7 +182,7 @@ export async function createFormSection({
   sectionName,
   sectionPosition,
 }: CreateFormSectionProps): Promise<CreateFormSectionResponse> {
-  const { data, error } = await apiRequest<{ formSection: FormSectionType }>({
+  const { data, error } = await httpRequest<{ formSection: FormSectionType }>({
     path: 'rpc/create_form_section',
     method: 'POST',
     data: { formCategoryID, sectionName, sectionPosition },
@@ -205,7 +204,7 @@ interface UpdateFormTemplateSectionsResponse {
 export async function updateFormTemplateSections({
   formSections,
 }: UpdateFormTemplateSectionsProps): Promise<UpdateFormTemplateSectionsResponse> {
-  const { data, error } = await apiRequest<{ formSections: FormSectionType[] }>({
+  const { data, error } = await httpRequest<{ formSections: FormSectionType[] }>({
     path: 'rpc/update_form_template_sections',
     method: 'POST',
     data: { formSections },
@@ -227,7 +226,7 @@ interface DeleteFormTemplateSectionResponse {
 export async function deleteFormTemplateSection({
   formSectionID,
 }: DeleteFormTemplateSectionProps): Promise<DeleteFormTemplateSectionResponse> {
-  const { data, error } = await apiRequest<{ formSections: FormSectionType[] }>({
+  const { data, error } = await httpRequest<{ formSections: FormSectionType[] }>({
     path: 'rpc/delete_form_template_section',
     method: 'POST',
     data: { formSectionID },
@@ -250,7 +249,7 @@ interface CreateFormTemplateQuestionSetResponse {
 export async function createFormTemplateQuestionSet({
   formQuestionSet,
 }: CreateFormTemplateQuestionSetProps): Promise<CreateFormTemplateQuestionSetResponse> {
-  const { data, error } = await apiRequest<{
+  const { data, error } = await httpRequest<{
     formQuestionSets: FormQuestionSetType[]
     formQuestions: FormQuestionType[]
   }>({
@@ -281,7 +280,7 @@ interface DeleteFormTemplateQuestionSetResponse {
 export async function deleteFormTemplateQuestionSet({
   formQuestionSetID,
 }: DeleteFormTemplateQuestionSetProps): Promise<DeleteFormTemplateQuestionSetResponse> {
-  const { data, error } = await apiRequest<{ formQuestionSets: FormQuestionSetType[] }>({
+  const { data, error } = await httpRequest<{ formQuestionSets: FormQuestionSetType[] }>({
     path: 'rpc/delete_form_template_question_set',
     method: 'POST',
     data: { formQuestionSetID },
@@ -303,7 +302,7 @@ interface CreateFormTemplateQuestionResponse {
 export async function createFormTemplateQuestion({
   formQuestion,
 }: CreateFormTemplateQuestionProps): Promise<CreateFormTemplateQuestionResponse> {
-  const { data, error } = await apiRequest<{ formQuestions: FormQuestionType[] }>({
+  const { data, error } = await httpRequest<{ formQuestions: FormQuestionType[] }>({
     path: 'rpc/create_form_template_question',
     method: 'POST',
     data: {
@@ -332,7 +331,7 @@ interface DeleteFormTemplateQuestionResponse {
 export async function deleteFormTemplateQuestion({
   formQuestionID,
 }: DeleteFormTemplateQuestionProps): Promise<DeleteFormTemplateQuestionResponse> {
-  const { data, error } = await apiRequest<{ formQuestions: FormQuestionType[] }>({
+  const { data, error } = await httpRequest<{ formQuestions: FormQuestionType[] }>({
     path: 'rpc/delete_form_template_question',
     method: 'POST',
     data: { formQuestionID },
@@ -354,7 +353,7 @@ interface UpdateFormTemplateQuestionResponse {
 export async function updateFormTemplateQuestion({
   updatedFormQuestion,
 }: UpdateFormTemplateQuestionProps): Promise<UpdateFormTemplateQuestionResponse> {
-  const { data, error } = await apiRequest<{ formQuestions: FormQuestionType[] }>({
+  const { data, error } = await httpRequest<{ formQuestions: FormQuestionType[] }>({
     path: 'rpc/update_form_template_question',
     method: 'POST',
     data: { updatedFormQuestion },
@@ -376,7 +375,7 @@ interface UpdateFormTemplateQuestionSettingsResponse {
 export async function updateFormTemplateQuestionSettings({
   updatedFormQuestionSettings,
 }: UpdateFormTemplateQuestionSettingsProps): Promise<UpdateFormTemplateQuestionSettingsResponse> {
-  const { data, error } = await apiRequest<{
+  const { data, error } = await httpRequest<{
     formQuestionSettings: FormQuestionSettingsType
   }>({
     path: 'rpc/update_form_template_question_settings',
@@ -400,7 +399,7 @@ interface CreateFormTemplateQuestionOptionResponse {
 export async function createFormTemplateQuestionOption({
   formQuestionOption,
 }: CreateFormTemplateQuestionOptionProps): Promise<CreateFormTemplateQuestionOptionResponse> {
-  const { data, error } = await apiRequest<{ formQuestionOptions: FormQuestionOptionType[] }>({
+  const { data, error } = await httpRequest<{ formQuestionOptions: FormQuestionOptionType[] }>({
     path: 'rpc/create_form_template_question_option',
     method: 'POST',
     data: { formQuestionOption },
@@ -422,7 +421,7 @@ interface UpdateFormTemplateQuestionOptionResponse {
 export async function updateFormTemplateQuestionOption({
   updatedFormQuestionOption,
 }: UpdateFormTemplateQuestionOptionProps): Promise<UpdateFormTemplateQuestionOptionResponse> {
-  const { data, error } = await apiRequest<{ formQuestionOptions: FormQuestionOptionType[] }>({
+  const { data, error } = await httpRequest<{ formQuestionOptions: FormQuestionOptionType[] }>({
     path: 'rpc/update_form_template_question_option',
     method: 'POST',
     data: { updatedFormQuestionOption },
@@ -444,7 +443,7 @@ interface DeleteFormTemplateQuestionOptionResponse {
 export async function deleteFormTemplateQuestionOption({
   formQuestionOptionID,
 }: DeleteFormTemplateQuestionOptionProps): Promise<DeleteFormTemplateQuestionOptionResponse> {
-  const { data, error } = await apiRequest<{ formQuestionOptions: FormQuestionOptionType[] }>({
+  const { data, error } = await httpRequest<{ formQuestionOptions: FormQuestionOptionType[] }>({
     path: 'rpc/delete_form_template_question_option',
     method: 'POST',
     data: { formQuestionOptionID },
@@ -468,7 +467,7 @@ export async function updateFormTemplateQuestionDefaultOptions({
   formQuestionID,
   updatedFormQuestionDefaultOptions,
 }: UpdateFormTemplateQuestionDefaultOptionsProps): Promise<UpdateFormTemplateQuestionDefaultOptionsResponse> {
-  const { data, error } = await apiRequest<{
+  const { data, error } = await httpRequest<{
     formQuestionDefaultOptions: FormQuestionDefaultOptionType[]
   }>({
     path: 'rpc/update_form_template_question_default_options',
@@ -496,7 +495,7 @@ export async function createApplicationForm({
   formTemplateID,
   formName,
 }: CreateApplicationFormProps): Promise<CreateApplicationFormResponse> {
-  const { data, error } = await apiRequest<{ applicationFormID: number }>({
+  const { data, error } = await httpRequest<{ applicationFormID: number }>({
     path: 'rpc/create_application_form',
     method: 'POST',
     data: {
@@ -523,7 +522,7 @@ interface UpsertFormAnswerResponse {
 export async function upsertFormAnswer({
   formAnswer,
 }: UpsertFormAnswerProps): Promise<UpsertFormAnswerResponse> {
-  const { data, error } = await apiRequest<{ formAnswer: FormAnswerType }>({
+  const { data, error } = await httpRequest<{ formAnswer: FormAnswerType }>({
     path: 'rpc/upsert_form_answer',
     method: 'POST',
     data: {
@@ -552,7 +551,7 @@ interface RepeatApplicationFormQuestionSetResponse {
 export async function repeatApplicationFormQuestionSet({
   formQuestionSetID,
 }: RepeatApplicationFormQuestionSetProps): Promise<RepeatApplicationFormQuestionSetResponse> {
-  const { data, error } = await apiRequest<{
+  const { data, error } = await httpRequest<{
     formQuestionSets: FormQuestionSetType[]
     formQuestions: FormQuestionType[]
   }>({
@@ -578,7 +577,7 @@ interface DeleteApplicationFormQuestionSetResponse {
 export async function deleteApplicationFormQuestionSet({
   formQuestionSetID,
 }: DeleteApplicationFormQuestionSetProps): Promise<DeleteApplicationFormQuestionSetResponse> {
-  const { data, error } = await apiRequest<{
+  const { data, error } = await httpRequest<{
     formQuestionSets: FormQuestionSetType[]
     formQuestions: FormQuestionType[]
   }>({
@@ -605,7 +604,7 @@ export async function updateApplicationFormStatus({
   applicationFormID,
   status,
 }: UpdateApplicationFormStatusProps): Promise<UpdateApplicationFormStatusResponse> {
-  const { data, error } = await apiRequest<{ status: ApplicationFormStatusTypes }>({
+  const { data, error } = await httpRequest<{ status: ApplicationFormStatusTypes }>({
     path: 'rpc/update_application_form_status',
     method: 'POST',
     data: { applicationFormID, status },
@@ -615,309 +614,6 @@ export async function updateApplicationFormStatus({
   revalidatePath(`/application`)
   return { status: data?.status, error }
 }
-
-// interface CreateNewFormProps {
-//   ownerID: number
-//   role: string
-//   templateID: number
-// }
-
-// interface CreateNewFormResponse {
-//   success?: string
-//   error?: string
-// }
-
-// export async function createNewForm({
-//   ownerID,
-//   role,
-//   templateID,
-// }: CreateNewFormProps): Promise<CreateNewFormResponse> {
-//   const accessToken = await getSession()
-//   if (!accessToken) {
-//     return { error: 'Unauthorized' }
-//   }
-
-//   const orgName = await getCurrentOrgName()
-
-//   const body = {
-//     ownerID,
-//     templateID: templateID || null,
-//     role,
-//   }
-//   const bodySnakeCase = keysCamelCaseToSnakeCase(body)
-
-//   try {
-//     const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/form/create`, {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//         Authorization: `Bearer ${accessToken}`,
-//       },
-//       body: JSON.stringify(bodySnakeCase),
-//     })
-
-//     const data = await response.json()
-
-//     if (data.status === 'error') {
-//       return { error: data.error }
-//     } else {
-//       revalidatePath('/admin/applications')
-//       return { success: 'Application created!' }
-//     }
-//   } catch (error) {
-//     return { error: 'Failed to create application!' }
-//   }
-// }
-
-// export async function setFormStatus(
-//   formID: number,
-//   status: FormStatusTypes,
-//   userID: number
-// ): Promise<{ success?: string; error?: string }> {
-//   try {
-//     const accessToken = await getSession()
-//     if (!accessToken) {
-//       return { error: 'Unauthorized' }
-//     }
-
-//     const orgName = await getCurrentOrgName()
-
-//     const queryParams = new URLSearchParams()
-//     queryParams.append('user_id', userID?.toString() || '')
-
-//     const body = {
-//       formID,
-//       status,
-//     }
-//     const bodySnakeCase = keysCamelCaseToSnakeCase(body)
-
-//     const response = await fetch(`${GLOVEE_API_URL}/v1/${orgName}/form/set-status?${queryParams}`, {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//         Authorization: `Bearer ${accessToken}`,
-//       },
-//       body: JSON.stringify(bodySnakeCase),
-//     })
-
-//     const data = await response.json()
-
-//     if (data.status === 'error') {
-//       return { error: data.error }
-//     } else {
-//       revalidatePath('/admin/applications')
-//       return { success: 'Application submitted!' }
-//     }
-//   } catch (error) {
-//     return { error: 'Failed to submit form!' }
-//   }
-// }
-
-// interface SaveAnswerProps {
-//   userID: number
-//   questionID: number
-//   text?: string
-//   optionIDs?: number[]
-//   date?: string
-//   files?: FileType[]
-// }
-
-// export async function saveAnswer({
-//   userID,
-//   questionID,
-//   text,
-//   optionIDs,
-//   date,
-//   files,
-// }: SaveAnswerProps): Promise<{ success?: string; error?: string; data?: any }> {
-//   const accessToken = await getSession()
-//   if (!accessToken) {
-//     return { error: 'Unauthorized' }
-//   }
-
-//   const orgName = await getCurrentOrgName()
-
-//   const body = {
-//     questionID,
-//     answer: {
-//       questionID,
-//       text,
-//       files,
-//       optionIDs,
-//       date,
-//     },
-//   }
-//   const bodySnakeCase = keysCamelCaseToSnakeCase(body)
-
-//   const queryParams = new URLSearchParams()
-//   queryParams.append('user_id', userID?.toString() || '')
-
-//   try {
-//     const response = await fetch(
-//       `${GLOVEE_API_URL}/v1/${orgName}/form/question/answer?${queryParams}`,
-//       {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json',
-//           Authorization: `Bearer ${accessToken}`,
-//         },
-//         body: JSON.stringify(bodySnakeCase),
-//       }
-//     )
-
-//     const data = await response.json()
-//     const camelData = keysSnakeCaseToCamelCase(data)
-//     if (data.status === 'error') {
-//       return { error: camelData.error }
-//     } else {
-//       revalidatePath('/application')
-//       return { success: 'Answer saved!', data: camelData.data }
-//     }
-//   } catch (error) {
-//     return { error: 'Failed to save answer!' }
-//   }
-// }
-
-// export async function createQuestionSetAndQuestions(
-//   userID: number,
-//   questionSet: FormQuestionSetType
-// ): Promise<{ success?: string; error?: string }> {
-//   const accessToken = await getSession()
-//   if (!accessToken) {
-//     return { error: 'Unauthorized' }
-//   }
-
-//   const orgName = await getCurrentOrgName()
-
-//   const queryParams = new URLSearchParams()
-//   queryParams.append('user_id', userID?.toString() || '')
-
-//   const body = { questionSet }
-//   const bodySnakeCase = keysCamelCaseToSnakeCase(body)
-//   console.log('bodySnakeCase', JSON.stringify(bodySnakeCase, null, 2))
-//   try {
-//     const response = await fetch(
-//       `${GLOVEE_API_URL}/v1/${orgName}/form/question-set/create?${queryParams}`,
-//       {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json',
-//           Authorization: `Bearer ${accessToken}`,
-//         },
-//         body: JSON.stringify(bodySnakeCase),
-//       }
-//     )
-
-//     const data = await response.json()
-//     const camelData = keysSnakeCaseToCamelCase(data)
-//     console.log('camelData', JSON.stringify(camelData, null, 2))
-//     if (data.status === 'error') {
-//       return { error: camelData.error }
-//     } else {
-//       revalidatePath('/application')
-//       return { success: 'Question set created!' }
-//     }
-//   } catch (error) {
-//     console.error('error', error)
-//     return { error: 'Failed to create question set!' }
-//   }
-// }
-
-// export async function deleteQuestionSet(
-//   userID: number,
-//   questionSetID: number
-// ): Promise<{ success?: string; error?: string }> {
-//   const accessToken = await getSession()
-//   if (!accessToken) {
-//     return { error: 'Unauthorized' }
-//   }
-
-//   const orgName = await getCurrentOrgName()
-
-//   const queryParams = new URLSearchParams()
-//   queryParams.append('user_id', userID?.toString() || '')
-//   queryParams.append('question_set_id', questionSetID?.toString() || '')
-
-//   try {
-//     const response = await fetch(
-//       `${GLOVEE_API_URL}/v1/${orgName}/form/question-set/delete?${queryParams}`,
-//       {
-//         method: 'DELETE',
-//         headers: {
-//           'Content-Type': 'application/json',
-//           Authorization: `Bearer ${accessToken}`,
-//         },
-//       }
-//     )
-
-//     const data = await response.json()
-
-//     if (data.status === 'error') {
-//       return { error: data.error }
-//     } else {
-//       revalidatePath('/application')
-//       return { success: 'Question set deleted!' }
-//     }
-//   } catch (error) {
-//     return { error: 'Failed to delete question set!' }
-//   }
-// }
-
-// interface CreateFormCategoryInputDTO {
-//   userID: number
-//   formCategory: Partial<FormCategoryType>
-// }
-
-// type CreateFormCategoryOutputDTO = {
-//   error?: string
-//   success?: string
-//   formCategory?: FormCategoryType
-// }
-
-// export async function createFormCategory({
-//   userID,
-//   formCategory,
-// }: CreateFormCategoryInputDTO): Promise<CreateFormCategoryOutputDTO> {
-//   const accessToken = await getSession()
-//   if (!accessToken) {
-//     return { error: 'Unauthorized' }
-//   }
-
-//   const orgName = await getCurrentOrgName()
-
-//   const queryParams = new URLSearchParams()
-//   queryParams.append('user_id', userID?.toString() || '')
-
-//   const body = {
-//     formCategory,
-//   }
-//   const bodySnakeCase = keysCamelCaseToSnakeCase(body)
-
-//   try {
-//     const response = await fetch(
-//       `${GLOVEE_API_URL}/v1/${orgName}/form/category/create?${queryParams}`,
-//       {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json',
-//           Authorization: `Bearer ${accessToken}`,
-//         },
-//         body: JSON.stringify(bodySnakeCase),
-//       }
-//     )
-
-//     const data = await response.json()
-//     const camelData = keysSnakeCaseToCamelCase(data)
-//     if (data.status === 'error') {
-//       return { error: camelData.error }
-//     } else {
-//       revalidatePath('/admin/template')
-//       return { success: 'Form category created!', formCategory: camelData.data }
-//     }
-//   } catch (error) {
-//     return { error: 'Failed to create form category!' }
-//   }
-// }
 
 interface UpdateFormSectionInputDTO {
   userID: number
@@ -951,7 +647,7 @@ export async function updateFormSections({
 
   try {
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/form/section/update?${queryParams}`,
+      `${GLOVEE_POSTGREST_URL}/v1/${orgName}/form/section/update?${queryParams}`,
       {
         method: 'PUT',
         headers: {
@@ -1006,7 +702,7 @@ export async function deleteFormSections({
 
   try {
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/form/section/delete?${queryParams}`,
+      `${GLOVEE_POSTGREST_URL}/v1/${orgName}/form/section/delete?${queryParams}`,
       {
         method: 'DELETE',
         headers: {

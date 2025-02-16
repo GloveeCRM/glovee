@@ -5,8 +5,5 @@ services:
       dockerfile: Dockerfile
     ports:
       - 3001:3000
-    environment:
-      NEXT_PUBLIC_GLOVEE_API_URL: ${GLOVEE_API_URL}
-      NEXT_PUBLIC_ACCESS_TOKEN_SECRET: ${ACCESS_TOKEN_SECRET}
-      NEXT_PUBLIC_REFRESH_TOKEN_SECRET: ${REFRESH_TOKEN_SECRET}
-      NEXT_PUBLIC_S3_CA_CENTRAL_1_HOST: ${S3_CA_CENTRAL_1_HOST}
+    env_file:
+      - .env.prod

@@ -2,9 +2,9 @@
 
 import { cookies } from 'next/headers'
 
-import { parseJWT } from './jwt'
-import { accessTokenSecret, refreshTokenSecret } from '../constants/jwt'
-import { keysSnakeCaseToCamelCase } from '../utils/json'
+import { accessTokenSecret, refreshTokenSecret } from '@/lib/constants/jwt'
+import { keysSnakeCaseToCamelCase } from '@/lib/utils/json'
+import { parseJWT } from '@/lib/auth/jwt'
 
 export async function setSession(token: string) {
   const payload = await parseJWT(token, accessTokenSecret)
@@ -38,7 +38,7 @@ export async function getSessionPayload() {
 
 export async function getSessionUserID(): Promise<number> {
   const payload = await getSessionPayload()
-  return payload?.user?.id || 0
+  return payload?.user?.userID || 0
 }
 
 export async function removeSession() {

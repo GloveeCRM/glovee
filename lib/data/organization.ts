@@ -1,6 +1,5 @@
 import { OrganizationType } from '@/lib/types/organization'
-import { apiRequest } from '../utils/http'
-import { errorMessages } from '../constants/errors'
+import { httpRequest } from '@/lib/utils/http'
 
 interface FetchOrganizationProfileProps {
   orgName: string
@@ -14,7 +13,7 @@ interface FetchOrganizationProfileResponse {
 export async function fetchOrganizationProfile({
   orgName,
 }: FetchOrganizationProfileProps): Promise<FetchOrganizationProfileResponse> {
-  const { data: organizations, error } = await apiRequest<OrganizationType[]>({
+  const { data: organizations, error } = await httpRequest<OrganizationType[]>({
     path: `organizations?org_name=eq.${orgName}&limit=1`,
     method: 'GET',
     authRequired: false,

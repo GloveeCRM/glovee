@@ -2,8 +2,9 @@
 
 import { UserType } from '@/lib/types/user'
 import { getCurrentOrgName } from '../utils/server'
-import { apiRequest, extractTotalCountFromHeaders } from '../utils/http'
+import { httpRequest, extractTotalCountFromHeaders } from '../utils/http'
 import { errorMessages } from '../constants/errors'
+import { fetchPresignedURL } from './s3'
 
 interface SearchClientsFilters {
   userID?: number
@@ -52,7 +53,7 @@ export async function searchClients({
     data: clients,
     error,
     headers,
-  } = await apiRequest<UserType[]>({
+  } = await httpRequest<UserType[]>({
     path: `clients?${queryParams.toString()}`,
     method: 'GET',
     headers: {
@@ -68,8 +69,26 @@ export async function searchClients({
   }
 
   if (clients && clients.length > 0) {
+    // Fetch presigned URLs for profile pictures
+    const processedClients = await Promise.all(
+      clients.map(async (client) => {
+        if (client.profilePictureFile?.fileID) {
+          const { url } = await fetchPresignedURL({
+            fileID: client.profilePictureFile?.fileID,
+            operation: 'GET',
+            expiresIn: 60 * 60 * 2, // 2 hours
+          })
+          return {
+            ...client,
+            profilePictureURL: url,
+          }
+        }
+        return client
+      })
+    )
+
     return {
-      clients,
+      clients: processedClients,
       totalCount: totalCount || 0,
     }
   } else {
@@ -101,7 +120,7 @@ export async function fetchProfilePictureUploadURL({
   queryParams.append('user_id', userID.toString())
   queryParams.append('file_name', fileName)
   queryParams.append('mime_type', mimeType)
-  const { data, error } = await apiRequest<{ url: string; objectKey: string }>({
+  const { data, error } = await httpRequest<{ url: string; objectKey: string }>({
     path: `rpc/profile_picture_upload_url?${queryParams.toString()}`,
     method: 'GET',
     authRequired: true,
@@ -116,7 +135,7 @@ interface FetchCurrentUserProfileResponse {
 }
 
 export async function fetchCurrentUserProfile(): Promise<FetchCurrentUserProfileResponse> {
-  const { data, error } = await apiRequest<{ user: UserType }>({
+  const { data, error } = await httpRequest<{ user: UserType }>({
     path: 'rpc/auth_user_profile',
     method: 'GET',
     authRequired: true,

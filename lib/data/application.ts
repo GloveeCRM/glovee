@@ -1,8 +1,8 @@
 'use server'
 
-import { ApplicationType, ApplicationUpdateType } from '../types/application'
-import { FileType } from '../types/file'
-import { apiRequest, extractTotalCountFromHeaders } from '../utils/http'
+import { ApplicationType, ApplicationUpdateType } from '@/lib/types/application'
+import { FileType } from '@/lib/types/file'
+import { httpRequest, extractTotalCountFromHeaders } from '@/lib/utils/http'
 
 interface SearchApplicationsFilters {
   applicationID?: number
@@ -66,7 +66,7 @@ export async function searchApplications({
     queryParams.append('offset', offset?.toString() || '')
   }
 
-  const { data, error, headers } = await apiRequest<ApplicationType[]>({
+  const { data, error, headers } = await httpRequest<ApplicationType[]>({
     path: `applications?${queryParams.toString()}`,
     method: 'GET',
     headers: {
@@ -106,7 +106,7 @@ export async function fetchApplicationFileUploadURL({
   queryParams.append('file_name', fileName)
   queryParams.append('mime_type', mimeType)
 
-  const { data, error } = await apiRequest<{ url: string; objectKey: string }>({
+  const { data, error } = await httpRequest<{ url: string; objectKey: string }>({
     path: `rpc/application_file_upload_url?${queryParams.toString()}`,
     method: 'GET',
     authRequired: true,
@@ -130,7 +130,7 @@ export async function fetchApplicationFilesByClient({
   const queryParams = new URLSearchParams()
   queryParams.append('application_id', applicationID.toString())
 
-  const { data, error } = await apiRequest<{ applicationFiles: FileType[] }>({
+  const { data, error } = await httpRequest<{ applicationFiles: FileType[] }>({
     path: `rpc/application_files_by_client?${queryParams.toString()}`,
     method: 'GET',
     authRequired: true,
@@ -154,7 +154,7 @@ export async function fetchApplicationFilesByAdmin({
   const queryParams = new URLSearchParams()
   queryParams.append('application_id', applicationID.toString())
 
-  const { data, error } = await apiRequest<{ applicationFiles: FileType[] }>({
+  const { data, error } = await httpRequest<{ applicationFiles: FileType[] }>({
     path: `rpc/application_files_by_admin?${queryParams.toString()}`,
     method: 'GET',
     authRequired: true,
@@ -178,7 +178,7 @@ export async function fetchApplicationUpdates({
   const queryParams = new URLSearchParams()
   queryParams.append('application_id', applicationID.toString())
 
-  const { data, error } = await apiRequest<{ applicationUpdates: ApplicationUpdateType[] }>({
+  const { data, error } = await httpRequest<{ applicationUpdates: ApplicationUpdateType[] }>({
     path: `rpc/application_updates?${queryParams.toString()}`,
     method: 'GET',
     authRequired: true,

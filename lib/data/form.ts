@@ -10,10 +10,10 @@ import {
   FormType,
 } from '@/lib/types/form'
 import { FileType } from '@/lib/types/file'
-import { GLOVEE_API_URL } from '@/lib/constants/api'
+import { GLOVEE_POSTGREST_URL } from '@/lib/constants/api'
 import { getSession } from '@/lib/auth/session'
 import { getCurrentOrgName } from '@/lib/utils/server'
-import { apiRequest, extractTotalCountFromHeaders } from '@/lib/utils/http'
+import { httpRequest, extractTotalCountFromHeaders } from '@/lib/utils/http'
 import { keysCamelCaseToSnakeCase, keysSnakeCaseToCamelCase } from '@/lib/utils/json'
 
 interface SearchFormTemplatesFilters {
@@ -64,7 +64,7 @@ export async function searchFormTemplates({
     queryParams.append('offset', offset?.toString() || '')
   }
 
-  const { data, error, headers } = await apiRequest<FormTemplateType[]>({
+  const { data, error, headers } = await httpRequest<FormTemplateType[]>({
     path: `form_templates?${queryParams.toString()}`,
     method: 'GET',
     authRequired: true,
@@ -92,7 +92,7 @@ export async function fetchFormTemplateWithCategoriesAndSections({
   const queryParams = new URLSearchParams()
   queryParams.append('form_template_id', formTemplateID.toString())
 
-  const { data, error } = await apiRequest<{
+  const { data, error } = await httpRequest<{
     formTemplate: FormTemplateType
     formCategories: FormCategoryType[]
     formSections: FormSectionType[]
@@ -126,7 +126,7 @@ export async function fetchFormTemplateSectionQuestionSetsAndQuestions({
   const queryParams = new URLSearchParams()
   queryParams.append('form_section_id', formSectionID.toString())
 
-  const { data, error } = await apiRequest<{
+  const { data, error } = await httpRequest<{
     formQuestionSets: FormQuestionSetType[]
     formQuestions: FormQuestionType[]
   }>({
@@ -153,7 +153,7 @@ export async function fetchApplicationForms({
   const queryParams = new URLSearchParams()
   queryParams.append('application_id', applicationID.toString())
 
-  const { data, error } = await apiRequest<ApplicationFormType[]>({
+  const { data, error } = await httpRequest<ApplicationFormType[]>({
     path: `rpc/application_forms?${queryParams.toString()}`,
     method: 'GET',
     authRequired: true,
@@ -177,7 +177,7 @@ export async function fetchApplicationForm({
   const queryParams = new URLSearchParams()
   queryParams.append('application_form_id', applicationFormID.toString())
 
-  const { data, error } = await apiRequest<{ applicationForm: ApplicationFormType }>({
+  const { data, error } = await httpRequest<{ applicationForm: ApplicationFormType }>({
     path: `rpc/application_form?${queryParams.toString()}`,
     method: 'GET',
     authRequired: true,
@@ -202,7 +202,7 @@ export async function fetchApplicationFormCategoriesAndSections({
   const queryParams = new URLSearchParams()
   queryParams.append('application_form_id', applicationFormID.toString())
 
-  const { data, error } = await apiRequest<{
+  const { data, error } = await httpRequest<{
     formCategories: FormCategoryType[]
     formSections: FormSectionType[]
   }>({
@@ -233,7 +233,7 @@ export async function fetchApplicationFormSectionQuestionSetsAndQuestions({
   queryParams.append('form_section_id', formSectionID.toString())
   queryParams.append('include_answers', includeAnswers.toString())
 
-  const { data, error } = await apiRequest<{
+  const { data, error } = await httpRequest<{
     formQuestionSets: FormQuestionSetType[]
     formQuestions: FormQuestionType[]
   }>({
@@ -267,7 +267,7 @@ export async function fetchFormAnswerFileUploadURL({
   queryParams.append('file_name', fileName)
   queryParams.append('mime_type', mimeType)
 
-  const { data, error } = await apiRequest<FetchFormAnswerFileUploadURLResponse>({
+  const { data, error } = await httpRequest<FetchFormAnswerFileUploadURLResponse>({
     path: `rpc/form_answer_file_upload_url?${queryParams.toString()}`,
     method: 'GET',
     authRequired: true,
@@ -320,7 +320,7 @@ export async function searchForms({
 
   try {
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/form/search?${queryParams.toString()}`,
+      `${GLOVEE_POSTGREST_URL}/v1/${orgName}/form/search?${queryParams.toString()}`,
       {
         method: 'GET',
         headers: {
@@ -369,7 +369,7 @@ export async function fetchFormQuestionSets({
 
   try {
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/form/question-sets?${queryParams.toString()}`,
+      `${GLOVEE_POSTGREST_URL}/v1/${orgName}/form/question-sets?${queryParams.toString()}`,
       {
         method: 'GET',
         headers: {
@@ -415,7 +415,7 @@ export async function fetchFormAnswerFileUploadIntent(
     const bodySnakeCase = keysCamelCaseToSnakeCase(body)
 
     const response = await fetch(
-      `${GLOVEE_API_URL}/v1/${orgName}/form/question/answer/file-upload-intent?${queryParams.toString()}`,
+      `${GLOVEE_POSTGREST_URL}/v1/${orgName}/form/question/answer/file-upload-intent?${queryParams.toString()}`,
       {
         method: 'POST',
         headers: {

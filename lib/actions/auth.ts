@@ -1,11 +1,9 @@
 'use server'
 
 import { UserRoleTypes, UserType } from '@/lib/types/user'
-import { GLOVEE_API_URL } from '@/lib/constants/api'
 import {
   DEFAULT_ORG_ADMIN_LOGIN_REDIRECT,
   DEFAULT_ORG_CLIENT_LOGIN_REDIRECT,
-  DEFAULT_ORG_MANAGEMENT_LOGIN_REDIRECT,
 } from '@/lib/constants/routes'
 
 import {
@@ -16,10 +14,9 @@ import {
   setRefreshToken,
   setSession,
 } from '@/lib/auth/session'
-import { keysCamelCaseToSnakeCase, keysSnakeCaseToCamelCase } from '../utils/json'
-import { getCurrentOrgName } from '../utils/server'
-import { apiRequest } from '../utils/http'
-import { errorMessages } from '../constants/errors'
+import { getCurrentOrgName } from '@/lib/utils/server'
+import { httpRequest } from '@/lib/utils/http'
+import { errorMessages } from '@/lib/constants/errors'
 
 interface LoginProps {
   email: string
@@ -36,7 +33,7 @@ interface LoginResponse {
 export async function login({ email, password }: LoginProps): Promise<LoginResponse> {
   const orgName = getCurrentOrgName()
 
-  const { data, error } = await apiRequest<{ accessToken: string; refreshToken: string }>({
+  const { data, error } = await httpRequest<{ accessToken: string; refreshToken: string }>({
     path: 'rpc/login',
     method: 'POST',
     data: {
@@ -98,7 +95,7 @@ export async function register({
 }: RegisterProps): Promise<RegisterResponse> {
   const orgName = getCurrentOrgName()
 
-  const { data, error } = await apiRequest<{ user: UserType }>({
+  const { data, error } = await httpRequest<{ user: UserType }>({
     path: 'rpc/register_client',
     method: 'POST',
     data: {
@@ -139,7 +136,7 @@ export async function refreshTokens(): Promise<RefreshTokensResponse> {
     return { error: errorMessages('token_not_found') }
   }
 
-  const { data, error } = await apiRequest<{ accessToken: string; refreshToken: string }>({
+  const { data, error } = await httpRequest<{ accessToken: string; refreshToken: string }>({
     path: 'rpc/refresh_tokens',
     method: 'POST',
     data: {
@@ -180,7 +177,7 @@ export async function forgotPassword({
 }: ForgotPasswordProps): Promise<ForgotPasswordResponse> {
   const orgName = getCurrentOrgName()
 
-  const { error } = await apiRequest<{}>({
+  const { error } = await httpRequest<{}>({
     path: 'rpc/forgot_password',
     method: 'POST',
     data: {
@@ -207,7 +204,7 @@ export async function resetPassword({
 }: ResetPasswordProps): Promise<ResetPasswordResponse> {
   const orgName = getCurrentOrgName()
 
-  const { error } = await apiRequest<{}>({
+  const { error } = await httpRequest<{}>({
     path: 'rpc/set_new_password',
     method: 'POST',
     data: {

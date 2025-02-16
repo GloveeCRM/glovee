@@ -1,8 +1,9 @@
 'use server'
 
-import { apiRequest } from '../utils/http'
-import { ApplicationType } from '../types/application'
 import { revalidatePath } from 'next/cache'
+
+import { ApplicationType } from '@/lib/types/application'
+import { httpRequest } from '@/lib/utils/http'
 
 interface CreateApplicationProps {
   userID: number
@@ -18,7 +19,7 @@ export async function createApplication({
   userID,
   applicationName,
 }: CreateApplicationProps): Promise<CreateApplicationResponse> {
-  const { data, error } = await apiRequest<{ application: ApplicationType }>({
+  const { data, error } = await httpRequest<{ application: ApplicationType }>({
     path: 'rpc/create_application',
     method: 'POST',
     data: { userID, applicationName },
@@ -51,7 +52,7 @@ export async function createApplicationFile({
   metadata,
 }: CreateApplicationFileProps): Promise<CreateApplicationFileResponse> {
   // TODO: Update this to return the application file object
-  const { error } = await apiRequest<{ applicationFile: any }>({
+  const { error } = await httpRequest<{ applicationFile: any }>({
     path: 'rpc/create_application_file',
     method: 'POST',
     data: { applicationID, objectKey, fileName, mimeType, size, metadata },
