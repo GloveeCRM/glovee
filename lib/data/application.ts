@@ -189,7 +189,20 @@ export async function fetchApplicationFilesByAdmin({
     authRequired: true,
   })
 
-  return { files: data?.applicationFiles, error }
+  const files = data?.applicationFiles
+
+  if (files) {
+    for (const file of files) {
+      const { url } = await fetchPresignedURL({
+        fileID: file.fileID,
+        operation: 'GET',
+        expiresIn: 60 * 60 * 2, // 2 hours
+      })
+      file.url = url
+    }
+  }
+
+  return { files, error }
 }
 
 interface FetchApplicationUpdatesProps {
