@@ -138,14 +138,16 @@ export async function fetchCurrentUserProfile(): Promise<FetchCurrentUserProfile
     authRequired: true,
   })
 
-  if (data?.user.profilePictureFile?.fileID) {
+  const user = data?.user
+
+  if (user?.profilePictureFile?.fileID) {
     const { url } = await fetchPresignedURL({
-      fileID: data?.user.profilePictureFile?.fileID,
+      fileID: user.profilePictureFile?.fileID,
       operation: 'GET',
       expiresIn: 60 * 60 * 2, // 2 hours
     })
-    data.user.profilePictureFile.url = url
+    user.profilePictureFile.url = url
   }
 
-  return { user: data?.user, error }
+  return { user, error }
 }

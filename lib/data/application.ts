@@ -82,7 +82,22 @@ export async function searchApplications({
     return { error, totalCount: totalCount || 0 }
   }
 
-  return { applications: data, totalCount: totalCount || 0 }
+  const applications = data
+
+  if (applications) {
+    for (const application of applications) {
+      if (application.owner.profilePictureFile?.fileID) {
+        const { url } = await fetchPresignedURL({
+          fileID: application.owner.profilePictureFile.fileID,
+          operation: 'GET',
+          expiresIn: 60 * 60 * 2, // 2 hours
+        })
+        application.owner.profilePictureFile.url = url
+      }
+    }
+  }
+
+  return { applications, totalCount: totalCount || 0 }
 }
 
 interface FetchApplicationFileUploadURLProps {
@@ -137,7 +152,20 @@ export async function fetchApplicationFilesByClient({
     authRequired: true,
   })
 
-  return { files: data?.applicationFiles, error }
+  const files = data?.applicationFiles
+
+  if (files) {
+    for (const file of files) {
+      const { url } = await fetchPresignedURL({
+        fileID: file.fileID,
+        operation: 'GET',
+        expiresIn: 60 * 60 * 2, // 2 hours
+      })
+      file.url = url
+    }
+  }
+
+  return { files, error }
 }
 
 interface FetchApplicationFilesByAdminProps {

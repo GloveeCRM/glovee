@@ -2,7 +2,7 @@
  * An array of routes that are accessible to the public.
  * These routes do not require authentication.
  */
-export const PUBLIC_ROUTES = ['/', '/email-verification', '/create-new-organization']
+export const PUBLIC_ROUTES = ['/', '/email-verification', '/create-new-organization', '/404']
 
 /**
  * An array of routes that are used for authentication.
