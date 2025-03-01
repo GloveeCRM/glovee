@@ -101,7 +101,7 @@ export default function EditClientProfileDialogContent({
         <div className="absolute z-0 h-[75px] w-full rounded-t-lg bg-zinc-800/20" />
         <div className="z-10 flex flex-col gap-[14px] px-[18px] pt-[24px]">
           <ClientProfilePicture
-            url={client.profilePictureURL || DEFAULT_MALE_CLIENT_LOGO_URL}
+            url={client.profilePictureFile?.url || DEFAULT_MALE_CLIENT_LOGO_URL}
             clientID={client.userID}
             editable={true}
           />

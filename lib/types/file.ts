@@ -11,7 +11,7 @@ export type FileType = {
   createdAt: string
   updatedAt: string
   createdBy: string
-  url: string
+  url?: string
 }
 
 export type FileMetadataType = {

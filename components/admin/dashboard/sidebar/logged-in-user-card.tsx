@@ -20,7 +20,7 @@ export default async function LoggedInUserCard({ collapsed }: Readonly<LoggedInU
         <div className="flex cursor-pointer items-center justify-between gap-[8px]">
           <div className="flex items-center gap-[8px]">
             <Image
-              src={user?.profilePictureURL || DEFAULT_MALE_CLIENT_LOGO_URL}
+              src={user?.profilePictureFile?.url || DEFAULT_MALE_CLIENT_LOGO_URL}
               alt="User Profile Picture"
               width={40}
               height={40}

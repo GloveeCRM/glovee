@@ -21,7 +21,7 @@ export default async function AdminApplicationClientCard({
             {client.firstName} {client.lastName}
           </div>
           <Image
-            src={client.profilePictureURL || DEFAULT_MALE_CLIENT_LOGO_URL}
+            src={client.profilePictureFile?.url || DEFAULT_MALE_CLIENT_LOGO_URL}
             alt="User Profile Picture"
             width={30}
             height={30}

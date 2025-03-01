@@ -3,6 +3,7 @@
 import { ApplicationType, ApplicationUpdateType } from '@/lib/types/application'
 import { FileType } from '@/lib/types/file'
 import { httpRequest, extractTotalCountFromHeaders } from '@/lib/utils/http'
+import { fetchPresignedURL } from './s3'
 
 interface SearchApplicationsFilters {
   applicationID?: number
@@ -184,5 +185,33 @@ export async function fetchApplicationUpdates({
     authRequired: true,
   })
 
-  return { updates: data?.applicationUpdates, error }
+  const applicationUpdates = data?.applicationUpdates
+
+  if (applicationUpdates) {
+    for (const update of applicationUpdates) {
+      if (update.createdBy.profilePictureFile?.fileID) {
+        const { url } = await fetchPresignedURL({
+          fileID: update.createdBy.profilePictureFile.fileID,
+          operation: 'GET',
+          expiresIn: 60 * 60 * 2, // 2 hours
+        })
+        update.createdBy.profilePictureFile.url = url
+      }
+
+      if (update.files) {
+        for (const file of update.files) {
+          if (file.fileID) {
+            const { url } = await fetchPresignedURL({
+              fileID: file.fileID,
+              operation: 'GET',
+              expiresIn: 60 * 60 * 2, // 2 hours
+            })
+            file.url = url
+          }
+        }
+      }
+    }
+  }
+
+  return { updates: applicationUpdates, error }
 }

@@ -46,7 +46,7 @@ export default async function ClientsTable({ searchQuery, currentPage = 1 }: Cli
                 <td className="py-[6px]">
                   <div className="flex items-center gap-[12px]">
                     <Image
-                      src={client.profilePictureURL || DEFAULT_MALE_CLIENT_LOGO_URL}
+                      src={client.profilePictureFile?.url || DEFAULT_MALE_CLIENT_LOGO_URL}
                       alt=""
                       width={40}
                       height={40}

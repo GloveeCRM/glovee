@@ -132,7 +132,7 @@ export default function AddApplicationDialogContent({
                     <FormLabel>Client</FormLabel>
                     <div className="flex items-center gap-[8px] p-[4px] text-[14px] text-gray-700">
                       <Image
-                        src={client?.profilePictureURL || DEFAULT_MALE_CLIENT_LOGO_URL}
+                        src={client?.profilePictureFile?.url || DEFAULT_MALE_CLIENT_LOGO_URL}
                         alt=""
                         width={30}
                         height={30}
@@ -160,8 +160,8 @@ export default function AddApplicationDialogContent({
                           <div className="flex items-center gap-[8px]">
                             <Image
                               src={
-                                clients?.find((c) => c.userID === field.value)?.profilePictureURL ||
-                                DEFAULT_MALE_CLIENT_LOGO_URL
+                                clients?.find((c) => c.userID === field.value)?.profilePictureFile
+                                  ?.url || DEFAULT_MALE_CLIENT_LOGO_URL
                               }
                               alt=""
                               className="h-[29px] w-[29px] rounded-full"
@@ -209,7 +209,8 @@ export default function AddApplicationDialogContent({
                                     <div className="flex items-center gap-[8px]">
                                       <Image
                                         src={
-                                          client.profilePictureURL || DEFAULT_MALE_CLIENT_LOGO_URL
+                                          client.profilePictureFile?.url ||
+                                          DEFAULT_MALE_CLIENT_LOGO_URL
                                         }
                                         alt=""
                                         className="h-[25px] w-[25px] rounded-full"

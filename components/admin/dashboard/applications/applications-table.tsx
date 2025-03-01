@@ -57,7 +57,9 @@ export default async function ApplicationsTable({
                 <td className="py-[8px]">
                   <div className="flex items-center gap-[12px]">
                     <Image
-                      src={application.owner.profilePictureURL || DEFAULT_MALE_CLIENT_LOGO_URL}
+                      src={
+                        application.owner.profilePictureFile?.url || DEFAULT_MALE_CLIENT_LOGO_URL
+                      }
                       alt=""
                       width={30}
                       height={30}

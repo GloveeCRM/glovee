@@ -22,7 +22,7 @@ export default function ClientProfileCard({ client }: ClientProfileCardProps) {
     <div className="group/client-profile-card flex justify-between rounded-md bg-zinc-800 p-[14px] text-white">
       <div className="flex w-full gap-[16px]">
         <ClientProfilePicture
-          url={client.profilePictureURL || DEFAULT_MALE_CLIENT_LOGO_URL}
+          url={client.profilePictureFile?.url || DEFAULT_MALE_CLIENT_LOGO_URL}
           clientID={client.userID}
           editable={isEditing}
         />
@@ -32,7 +32,7 @@ export default function ClientProfileCard({ client }: ClientProfileCardProps) {
               {client.firstName} {client.lastName}
             </span>
             {client.status == UserStatusTypes.INACTIVE ? (
-              <div className="bg-coral-900 w-fit flex-shrink-0 rounded-full px-[8px] py-[1px] text-[10px]">
+              <div className="w-fit flex-shrink-0 rounded-full bg-coral-900 px-[8px] py-[1px] text-[10px]">
                 Not Active
               </div>
             ) : (

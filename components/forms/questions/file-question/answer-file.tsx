@@ -26,7 +26,7 @@ export default function AnswerFile({ file, mode, onDelete }: AnswerFileProps) {
       </div>
       <div className="flex items-center gap-[8px]">
         <Link
-          href={file.url}
+          href={file.url || '/404'}
           target="_blank"
           className="flex items-center gap-[4px] rounded-full bg-sand-450 p-[10px] text-sand-900 hover:text-zinc-700"
         >

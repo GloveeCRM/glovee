@@ -1,3 +1,4 @@
+import { FileType } from './file'
 import { UserType } from './user'
 
 export type ApplicationType = {
@@ -14,6 +15,7 @@ export type ApplicationUpdateType = {
   applicationID: number
   title: string
   description: string
+  files?: FileType[]
   createdBy: UserType
   createdAt: string
 }

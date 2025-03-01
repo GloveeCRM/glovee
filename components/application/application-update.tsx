@@ -35,7 +35,7 @@ export default async function ApplicationUpdate({ update }: ApplicationUpdatePro
   return (
     <div className="flex gap-[8px] rounded-md border border-sand-500 bg-white p-[8px] shadow-sm">
       <Image
-        src={update.createdBy.profilePictureURL || DEFAULT_MALE_CLIENT_LOGO_URL}
+        src={update.createdBy.profilePictureFile?.url || DEFAULT_MALE_CLIENT_LOGO_URL}
         alt=""
         width={30}
         height={30}

@@ -9,7 +9,6 @@ export type UserType = {
   role: string
   status: UserStatusTypes
   profilePictureFile?: FileType
-  profilePictureURL?: string
   createdAt: string
   updatedAt: string
 }

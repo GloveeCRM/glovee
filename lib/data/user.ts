@@ -78,10 +78,7 @@ export async function searchClients({
             operation: 'GET',
             expiresIn: 60 * 60 * 2, // 2 hours
           })
-          return {
-            ...client,
-            profilePictureURL: url,
-          }
+          client.profilePictureFile.url = url
         }
         return client
       })
@@ -147,7 +144,7 @@ export async function fetchCurrentUserProfile(): Promise<FetchCurrentUserProfile
       operation: 'GET',
       expiresIn: 60 * 60 * 2, // 2 hours
     })
-    data.user.profilePictureURL = url
+    data.user.profilePictureFile.url = url
   }
 
   return { user: data?.user, error }

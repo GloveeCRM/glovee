@@ -22,9 +22,9 @@ export default function ApplicationFile({ file }: ApplicationFileProps) {
         </div>
       </div>
       <Link
-        href={file.url}
+        href={file.url || '/404'}
         target="_blank"
-        className="bg-sand-450 text-sand-900 flex items-center gap-[4px] rounded-full p-[10px] hover:text-zinc-700"
+        className="flex items-center gap-[4px] rounded-full bg-sand-450 p-[10px] text-sand-900 hover:text-zinc-700"
       >
         <FaDownload className="h-[20px] w-[20px]" />
       </Link>
