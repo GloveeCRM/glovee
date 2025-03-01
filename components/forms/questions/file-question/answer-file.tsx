@@ -1,8 +1,11 @@
+'use client'
+
 import Link from 'next/link'
+import { BiTrash } from 'react-icons/bi'
+import { FaDownload, FaFile } from 'react-icons/fa6'
 
 import { FileType } from '@/lib/types/file'
-import { FaDownload, FaFile } from 'react-icons/fa6'
-import { BiTrash } from 'react-icons/bi'
+import useFile from '@/hooks/file/use-file'
 
 interface AnswerFileProps {
   file: FileType
@@ -11,6 +14,8 @@ interface AnswerFileProps {
 }
 
 export default function AnswerFile({ file, mode, onDelete }: AnswerFileProps) {
+  const { fileWithUrl } = useFile({ file })
+
   return (
     <div className="flex items-center justify-between gap-[12px] rounded-md border border-sand-500 bg-white p-[10px] text-[14px] shadow-sm">
       <div className="flex items-center gap-[12px]">
@@ -26,7 +31,7 @@ export default function AnswerFile({ file, mode, onDelete }: AnswerFileProps) {
       </div>
       <div className="flex items-center gap-[8px]">
         <Link
-          href={file.url || '/404'}
+          href={fileWithUrl.url || '/404'}
           target="_blank"
           className="flex items-center gap-[4px] rounded-full bg-sand-450 p-[10px] text-sand-900 hover:text-zinc-700"
         >
