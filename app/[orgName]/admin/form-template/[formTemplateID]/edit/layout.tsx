@@ -3,7 +3,7 @@ import TemplateEditSidebar from '@/components/admin/template/edit/template-edit-
 import TemplateEditToolbar from '@/components/admin/template/edit/template-edit-toolbar'
 
 interface TemplateEditLayoutParams {
-  formTemplateID: number
+  formTemplateID: string
 }
 
 interface TemplateEditLayoutProps {
@@ -13,10 +13,11 @@ interface TemplateEditLayoutProps {
 
 export default function TemplateEditLayout({ params, children }: TemplateEditLayoutProps) {
   const { formTemplateID } = params
+  const formTemplateIDNumeric = Number(formTemplateID)
 
   return (
     <div id="template-edit-layout" className="flex">
-      <FormTemplateEditProvider formTemplateID={formTemplateID}>
+      <FormTemplateEditProvider formTemplateID={formTemplateIDNumeric}>
         <TemplateEditSidebar />
         <div className="h-svh w-full min-w-0 overflow-y-scroll bg-zinc-200">{children}</div>
         <TemplateEditToolbar />

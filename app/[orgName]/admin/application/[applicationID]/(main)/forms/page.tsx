@@ -5,7 +5,7 @@ import AdminApplicationFormsContainer from '@/components/admin/application/admin
 import AdminApplicationFormsContainerSkeleton from '@/components/skeleton/admin/admin-application-forms-container-skeleton'
 
 interface AdminApplicationFormsPageParams {
-  applicationID: number
+  applicationID: string
 }
 
 interface AdminApplicationFormsPageProps {
@@ -16,14 +16,15 @@ export default async function AdminApplicationFormsPage({
   params,
 }: AdminApplicationFormsPageProps) {
   const { applicationID } = params
+  const applicationIDNumeric = Number(applicationID)
 
   return (
     <div className="flex flex-1 flex-col gap-[20px]">
       <div className="flex justify-end">
-        <AddApplicationFormButton applicationID={applicationID} />
+        <AddApplicationFormButton applicationID={applicationIDNumeric} />
       </div>
       <Suspense fallback={<AdminApplicationFormsContainerSkeleton />}>
-        <AdminApplicationFormsContainer applicationID={applicationID} />
+        <AdminApplicationFormsContainer applicationID={applicationIDNumeric} />
       </Suspense>
     </div>
   )

@@ -1,5 +1,5 @@
 interface AdminSubmittedFormPageParams {
-  formID: number
+  formID: string
 }
 
 interface AdminSubmittedFormPageProps {
@@ -7,6 +7,8 @@ interface AdminSubmittedFormPageProps {
 }
 
 export default function AdminSubmittedFormPage({ params }: AdminSubmittedFormPageProps) {
-  const formID = params.formID
-  return <div>Form ID: {formID}</div>
+  const { formID } = params
+  const formIDNumeric = Number(formID)
+
+  return <div>Form ID: {formIDNumeric}</div>
 }

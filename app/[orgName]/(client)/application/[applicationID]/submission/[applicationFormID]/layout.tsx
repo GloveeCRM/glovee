@@ -7,8 +7,8 @@ import ApplicationFormContextProvider from '@/contexts/application-form-context'
 import ApplicationFormSidebar from '@/components/application/application-form-sidebar'
 
 interface SubmissionLayoutParams {
-  applicationID: number
-  applicationFormID: number
+  applicationID: string
+  applicationFormID: string
 }
 
 interface SubmissionLayoutProps {
@@ -21,19 +21,23 @@ export default async function SubmissionLayout({
   params,
 }: Readonly<SubmissionLayoutProps>) {
   const { applicationID, applicationFormID } = params
+  const applicationIDNumeric = Number(applicationID)
+  const applicationFormIDNumeric = Number(applicationFormID)
 
-  const { applicationForm } = await fetchApplicationForm({ applicationFormID })
+  const { applicationForm } = await fetchApplicationForm({
+    applicationFormID: applicationFormIDNumeric,
+  })
 
   if (applicationForm?.status !== ApplicationFormStatusTypes.CLIENT_SUBMITTED) {
-    redirect(`/application/${applicationID}/form/${applicationFormID}`)
+    redirect(`/application/${applicationIDNumeric}/form/${applicationFormIDNumeric}`)
   }
 
   return (
-    <ApplicationFormContextProvider applicationFormID={applicationFormID} mode="view">
+    <ApplicationFormContextProvider applicationFormID={applicationFormIDNumeric} mode="view">
       <div id="client-submission-layout" className="flex overflow-hidden">
         <ApplicationFormSidebar
           showProgressIndicator={false}
-          backURL={`/application/${applicationID}/forms`}
+          backURL={`/application/${applicationIDNumeric}/forms`}
         />
         <div className="h-svh min-w-0 flex-1 overflow-y-scroll">{children}</div>
       </div>

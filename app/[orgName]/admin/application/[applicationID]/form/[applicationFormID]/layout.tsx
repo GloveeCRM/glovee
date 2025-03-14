@@ -4,8 +4,8 @@ import ApplicationFormContextProvider from '@/contexts/application-form-context'
 import ApplicationFormSidebar from '@/components/application/application-form-sidebar'
 
 interface AdminApplicationFormLayoutParams {
-  applicationID: number
-  applicationFormID: number
+  applicationID: string
+  applicationFormID: string
 }
 
 interface AdminApplicationFormLayoutProps {
@@ -18,13 +18,15 @@ export default function AdminApplicationFormLayout({
   params,
 }: AdminApplicationFormLayoutProps) {
   const { applicationID, applicationFormID } = params
+  const applicationIDNumeric = Number(applicationID)
+  const applicationFormIDNumeric = Number(applicationFormID)
 
   return (
-    <ApplicationFormContextProvider applicationFormID={applicationFormID} mode="view">
+    <ApplicationFormContextProvider applicationFormID={applicationFormIDNumeric} mode="view">
       <div className="flex">
         <ApplicationFormSidebar
           showProgressIndicator={false}
-          backURL={`/admin/application/${applicationID}/forms`}
+          backURL={`/admin/application/${applicationIDNumeric}/forms`}
         />
         <div className="h-svh min-w-0 flex-1 overflow-y-scroll">{children}</div>
       </div>

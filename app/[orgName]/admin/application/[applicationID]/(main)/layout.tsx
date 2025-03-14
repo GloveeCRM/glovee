@@ -6,7 +6,7 @@ import ApplicationUpdatesContainer from '@/components/application/application-up
 import ApplicationUpdatesContainerSkeleton from '@/components/skeleton/admin/application-updates-container-skeleton'
 
 interface ApplicationLayoutParams {
-  applicationID: number
+  applicationID: string
   orgName: string
 }
 
@@ -17,16 +17,17 @@ interface ApplicationLayoutProps {
 
 export default function ApplicationLayout({ children, params }: Readonly<ApplicationLayoutProps>) {
   const { applicationID, orgName } = params
+  const applicationIDNumeric = Number(applicationID)
 
   return (
     <div id="admin-application-layout" className="flex">
       <AdminDashboardSidebar orgName={orgName} collapsed={true} />
       <div className="flex flex-1 flex-col">
-        <AdminApplicationTopbar applicationID={applicationID} />
+        <AdminApplicationTopbar applicationID={applicationIDNumeric} />
         <div className="flex h-[calc(100vh-100px)] overflow-hidden">
           <div className="flex-1 overflow-y-auto p-[8px]">{children}</div>
           <Suspense fallback={<ApplicationUpdatesContainerSkeleton />}>
-            <ApplicationUpdatesContainer applicationID={applicationID} />
+            <ApplicationUpdatesContainer applicationID={applicationIDNumeric} />
           </Suspense>
         </div>
       </div>

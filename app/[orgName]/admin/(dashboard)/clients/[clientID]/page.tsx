@@ -9,7 +9,7 @@ import AddApplicationButton from '@/components/admin/dashboard/applications/add-
 import ClientApplicationsTableSkeleton from '@/components/skeleton/admin/client-applications-table-skeleton'
 
 interface ClientPageParams {
-  clientID: number
+  clientID: string
 }
 
 interface ClientPageProps {
@@ -18,9 +18,10 @@ interface ClientPageProps {
 
 export default async function ClientPage({ params }: ClientPageProps) {
   const { clientID } = params
+  const clientIDNumeric = Number(clientID)
 
   const { clients } = await searchClients({
-    filters: { userID: clientID },
+    filters: { userID: clientIDNumeric },
     limit: 1,
   })
 
@@ -37,7 +38,7 @@ export default async function ClientPage({ params }: ClientPageProps) {
         <AddApplicationButton client={client} />
       </div>
       <Suspense fallback={<ClientApplicationsTableSkeleton />}>
-        <ClientApplicationsTable clientID={clientID} />
+        <ClientApplicationsTable clientID={clientIDNumeric} />
       </Suspense>
     </div>
   )

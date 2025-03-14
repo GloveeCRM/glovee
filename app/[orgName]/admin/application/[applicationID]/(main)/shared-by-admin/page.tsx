@@ -5,7 +5,7 @@ import AdminApplicationAdminFilesContainer from '@/components/admin/application/
 import ApplicationFilesContainerSkeleton from '@/components/skeleton/admin/application-files-container-skeleton'
 
 interface SharedByAdminPageParams {
-  applicationID: number
+  applicationID: string
 }
 
 interface SharedByAdminPageProps {
@@ -14,14 +14,15 @@ interface SharedByAdminPageProps {
 
 export default async function SharedByAdminPage({ params }: SharedByAdminPageProps) {
   const { applicationID } = params
+  const applicationIDNumeric = Number(applicationID)
 
   return (
     <div className="flex h-full flex-1 flex-col gap-[12px]">
       <div className="flex justify-end">
-        <SendApplicationFileButton applicationID={applicationID} />
+        <SendApplicationFileButton applicationID={applicationIDNumeric} />
       </div>
       <Suspense fallback={<ApplicationFilesContainerSkeleton />}>
-        <AdminApplicationAdminFilesContainer applicationID={applicationID} />
+        <AdminApplicationAdminFilesContainer applicationID={applicationIDNumeric} />
       </Suspense>
     </div>
   )

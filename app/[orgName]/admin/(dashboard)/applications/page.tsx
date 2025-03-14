@@ -6,7 +6,7 @@ import ApplicationsTableSkeleton from '@/components/skeleton/admin/applications-
 
 interface ApplicationsPageSearchParams {
   query?: string
-  page?: number
+  page?: string
 }
 
 interface ApplicationsPageProps {
@@ -15,7 +15,7 @@ interface ApplicationsPageProps {
 
 export default function ApplicationsPage({ searchParams }: ApplicationsPageProps) {
   const query = searchParams.query?.trim() || ''
-  const currentPage = searchParams.page || 1
+  const currentPage = Number(searchParams.page) || 1
 
   const searchKey = `applications-${query}-${currentPage}`
 

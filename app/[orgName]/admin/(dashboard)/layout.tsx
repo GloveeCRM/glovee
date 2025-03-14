@@ -1,12 +1,16 @@
 import AdminDashboardSidebar from '@/components/admin/dashboard/sidebar/admin-dashboard-sidebar'
 
+interface AdminLayoutParams {
+  orgName: string
+}
+
 interface AdminLayoutProps {
-  params: { orgName: string }
+  params: AdminLayoutParams
   children: React.ReactNode
 }
 
 export default function AdminLayout({ children, params }: AdminLayoutProps) {
-  const orgName = params.orgName
+  const { orgName } = params
 
   return (
     <div id="dashboard" className="flex h-screen overflow-hidden">

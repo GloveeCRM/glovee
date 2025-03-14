@@ -6,7 +6,7 @@ import ClientsTableSkeleton from '@/components/skeleton/admin/clients-table-skel
 
 interface ClientsPageSearchParams {
   query?: string
-  page?: number
+  page?: string
 }
 
 interface ClientsPageProps {
@@ -15,7 +15,7 @@ interface ClientsPageProps {
 
 export default async function ClientsPage({ searchParams }: ClientsPageProps) {
   const query = searchParams.query?.trim() || ''
-  const currentPage = searchParams.page || 1
+  const currentPage = Number(searchParams.page) || 1
 
   const searchKey = `clients-${query}-${currentPage}`
 

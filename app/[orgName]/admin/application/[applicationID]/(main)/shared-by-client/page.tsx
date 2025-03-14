@@ -4,7 +4,7 @@ import AdminApplicationClientFilesContainer from '@/components/admin/application
 import ApplicationFilesContainerSkeleton from '@/components/skeleton/admin/application-files-container-skeleton'
 
 interface SharedByClientPageParams {
-  applicationID: number
+  applicationID: string
 }
 
 interface SharedByClientPageProps {
@@ -13,11 +13,12 @@ interface SharedByClientPageProps {
 
 export default async function SharedByClientPage({ params }: SharedByClientPageProps) {
   const { applicationID } = params
+  const applicationIDNumeric = Number(applicationID)
 
   return (
     <div className="h-full flex-1">
       <Suspense fallback={<ApplicationFilesContainerSkeleton />}>
-        <AdminApplicationClientFilesContainer applicationID={applicationID} />
+        <AdminApplicationClientFilesContainer applicationID={applicationIDNumeric} />
       </Suspense>
     </div>
   )
