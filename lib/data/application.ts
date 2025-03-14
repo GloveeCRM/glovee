@@ -85,15 +85,18 @@ export async function searchApplications({
   const applications = data
 
   if (applications) {
-    for (const application of applications) {
-      if (application.owner.profilePictureFile?.fileID) {
-        const { url } = await fetchPresignedGetURL({
-          fileID: application.owner.profilePictureFile.fileID,
-          expiresIn: 60 * 60 * 2, // 2 hours
-        })
-        application.owner.profilePictureFile.url = url
-      }
-    }
+    await Promise.all(
+      applications.map(async (application) => {
+        if (application.owner.profilePictureFile?.fileID) {
+          const { url } = await fetchPresignedGetURL({
+            fileID: application.owner.profilePictureFile.fileID,
+            expiresIn: 60 * 60 * 2, // 2 hours
+          })
+          const profilePictureFile = application.owner.profilePictureFile as { url?: string }
+          profilePictureFile.url = url
+        }
+      })
+    )
   }
 
   return { applications, totalCount: totalCount || 0 }
