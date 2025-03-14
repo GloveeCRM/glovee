@@ -2,12 +2,12 @@
 
 import { useRef, useState } from 'react'
 import Image from 'next/image'
+import { ImSpinner2 } from 'react-icons/im'
+import { BsFillCameraFill } from 'react-icons/bs'
 
 import { uploadFileToS3 } from '@/lib/utils/s3'
-import { fetchProfilePictureUploadURL } from '@/lib/data/user'
 import { updateUserProfilePicture } from '@/lib/actions/user'
-import { BsFillCameraFill } from 'react-icons/bs'
-import { ImSpinner2 } from 'react-icons/im'
+import { fetchPresignedPutURL } from '@/lib/data/s3'
 
 interface ClientProfilePictureProps {
   url: string
@@ -35,10 +35,12 @@ export default function ClientProfilePicture({
       url,
       objectKey,
       error: uploadURLDataError,
-    } = await fetchProfilePictureUploadURL({
-      userID: clientID,
+    } = await fetchPresignedPutURL({
       fileName: file.name,
       mimeType: file.type,
+      purpose: 'profile_picture',
+      expiresIn: 3600,
+      parentEntityID: clientID,
     })
 
     if (uploadURLDataError) {

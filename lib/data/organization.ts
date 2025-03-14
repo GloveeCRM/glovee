@@ -1,6 +1,6 @@
 import { OrganizationType } from '@/lib/types/organization'
 import { httpRequest } from '@/lib/utils/http'
-import { fetchPresignedURL } from './s3'
+import { fetchPresignedGetURL } from './s3'
 
 interface FetchOrganizationProfileProps {
   orgName: string
@@ -23,9 +23,8 @@ export async function fetchOrganizationProfile({
   const organization = organizations?.[0]
 
   if (organization?.logoFile?.fileID) {
-    const { url } = await fetchPresignedURL({
+    const { url } = await fetchPresignedGetURL({
       fileID: organization.logoFile.fileID,
-      operation: 'GET',
       expiresIn: 60 * 60 * 2, // 2 hours
     })
     organization.logoFile.url = url

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 
 import { FileType } from '@/lib/types/file'
-import { fetchPresignedURL } from '@/lib/data/s3'
+import { fetchPresignedGetURL } from '@/lib/data/s3'
 
 interface UseFileProps {
   file: FileType
@@ -18,9 +18,8 @@ export default function useFile({
 
   useEffect(() => {
     async function fetchFile() {
-      const { url } = await fetchPresignedURL({
+      const { url } = await fetchPresignedGetURL({
         fileID: file.fileID,
-        operation: 'GET',
         expiresIn,
       })
       setFileWithUrl({ ...file, url })

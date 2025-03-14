@@ -3,7 +3,7 @@
 import { ApplicationType, ApplicationUpdateType } from '@/lib/types/application'
 import { FileType } from '@/lib/types/file'
 import { httpRequest, extractTotalCountFromHeaders } from '@/lib/utils/http'
-import { fetchPresignedURL } from './s3'
+import { fetchPresignedGetURL } from './s3'
 
 interface SearchApplicationsFilters {
   applicationID?: number
@@ -87,9 +87,8 @@ export async function searchApplications({
   if (applications) {
     for (const application of applications) {
       if (application.owner.profilePictureFile?.fileID) {
-        const { url } = await fetchPresignedURL({
+        const { url } = await fetchPresignedGetURL({
           fileID: application.owner.profilePictureFile.fileID,
-          operation: 'GET',
           expiresIn: 60 * 60 * 2, // 2 hours
         })
         application.owner.profilePictureFile.url = url
@@ -98,37 +97,6 @@ export async function searchApplications({
   }
 
   return { applications, totalCount: totalCount || 0 }
-}
-
-interface FetchApplicationFileUploadURLProps {
-  applicationID: number
-  fileName: string
-  mimeType: string
-}
-
-interface FetchApplicationFileUploadURLResponse {
-  url?: string
-  objectKey?: string
-  error?: string
-}
-
-export async function fetchApplicationFileUploadURL({
-  applicationID,
-  fileName,
-  mimeType,
-}: FetchApplicationFileUploadURLProps): Promise<FetchApplicationFileUploadURLResponse> {
-  const queryParams = new URLSearchParams()
-  queryParams.append('application_id', applicationID.toString())
-  queryParams.append('file_name', fileName)
-  queryParams.append('mime_type', mimeType)
-
-  const { data, error } = await httpRequest<{ url: string; objectKey: string }>({
-    path: `rpc/application_file_upload_url?${queryParams.toString()}`,
-    method: 'GET',
-    authRequired: true,
-  })
-
-  return { url: data?.url, objectKey: data?.objectKey, error }
 }
 
 interface FetchApplicationFilesByClientProps {
@@ -156,9 +124,8 @@ export async function fetchApplicationFilesByClient({
 
   if (files) {
     for (const file of files) {
-      const { url } = await fetchPresignedURL({
+      const { url } = await fetchPresignedGetURL({
         fileID: file.fileID,
-        operation: 'GET',
         expiresIn: 60 * 60 * 2, // 2 hours
       })
       file.url = url
@@ -193,9 +160,8 @@ export async function fetchApplicationFilesByAdmin({
 
   if (files) {
     for (const file of files) {
-      const { url } = await fetchPresignedURL({
+      const { url } = await fetchPresignedGetURL({
         fileID: file.fileID,
-        operation: 'GET',
         expiresIn: 60 * 60 * 2, // 2 hours
       })
       file.url = url
@@ -229,28 +195,44 @@ export async function fetchApplicationUpdates({
   const applicationUpdates = data?.applicationUpdates
 
   if (applicationUpdates) {
+    // Flatten all promises into a single array
+    const allFilePromises: Promise<void>[] = []
+
+    // Process all updates in one loop
     for (const update of applicationUpdates) {
+      // Handle profile picture
       if (update.createdBy.profilePictureFile?.fileID) {
-        const { url } = await fetchPresignedURL({
-          fileID: update.createdBy.profilePictureFile.fileID,
-          operation: 'GET',
-          expiresIn: 60 * 60 * 2, // 2 hours
-        })
-        update.createdBy.profilePictureFile.url = url
+        allFilePromises.push(
+          fetchPresignedGetURL({
+            fileID: update.createdBy.profilePictureFile.fileID,
+            expiresIn: 60 * 60 * 2, // 2 hours
+          }).then(({ url }) => {
+            const profilePictureFile = update.createdBy.profilePictureFile as { url?: string }
+            profilePictureFile.url = url
+          })
+        )
       }
 
-      if (update.files) {
-        for (const file of update.files) {
+      // Handle update files
+      if (update.files?.length) {
+        update.files.forEach((file) => {
           if (file.fileID) {
-            const { url } = await fetchPresignedURL({
-              fileID: file.fileID,
-              operation: 'GET',
-              expiresIn: 60 * 60 * 2, // 2 hours
-            })
-            file.url = url
+            allFilePromises.push(
+              fetchPresignedGetURL({
+                fileID: file.fileID,
+                expiresIn: 60 * 60 * 2, // 2 hours
+              }).then(({ url }) => {
+                file.url = url
+              })
+            )
           }
-        }
+        })
       }
+    }
+
+    // Wait for all promises to complete
+    if (allFilePromises.length > 0) {
+      await Promise.all(allFilePromises)
     }
   }
 

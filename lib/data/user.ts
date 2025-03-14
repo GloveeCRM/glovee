@@ -4,7 +4,7 @@ import { UserType } from '@/lib/types/user'
 import { getCurrentOrgName } from '../utils/server'
 import { httpRequest, extractTotalCountFromHeaders } from '../utils/http'
 import { errorMessages } from '../constants/errors'
-import { fetchPresignedURL } from './s3'
+import { fetchPresignedGetURL } from './s3'
 
 interface SearchClientsFilters {
   userID?: number
@@ -73,9 +73,8 @@ export async function searchClients({
     const processedClients = await Promise.all(
       clients.map(async (client) => {
         if (client.profilePictureFile?.fileID) {
-          const { url } = await fetchPresignedURL({
+          const { url } = await fetchPresignedGetURL({
             fileID: client.profilePictureFile?.fileID,
-            operation: 'GET',
             expiresIn: 60 * 60 * 2, // 2 hours
           })
           client.profilePictureFile.url = url
@@ -93,39 +92,6 @@ export async function searchClients({
   }
 }
 
-interface FetchProfilePictureUploadURLProps {
-  userID: number
-  fileName: string
-  mimeType: string
-}
-
-interface FetchProfilePictureUploadURLResponse {
-  url?: string
-  objectKey?: string
-  error?: string
-}
-
-export async function fetchProfilePictureUploadURL({
-  userID,
-  fileName,
-  mimeType,
-}: FetchProfilePictureUploadURLProps): Promise<FetchProfilePictureUploadURLResponse> {
-  const orgName = getCurrentOrgName()
-
-  const queryParams = new URLSearchParams()
-  queryParams.append('org_name', orgName || '')
-  queryParams.append('user_id', userID.toString())
-  queryParams.append('file_name', fileName)
-  queryParams.append('mime_type', mimeType)
-  const { data, error } = await httpRequest<{ url: string; objectKey: string }>({
-    path: `rpc/profile_picture_upload_url?${queryParams.toString()}`,
-    method: 'GET',
-    authRequired: true,
-  })
-
-  return { url: data?.url, objectKey: data?.objectKey, error }
-}
-
 interface FetchCurrentUserProfileResponse {
   user?: UserType
   error?: string
@@ -141,9 +107,8 @@ export async function fetchCurrentUserProfile(): Promise<FetchCurrentUserProfile
   const user = data?.user
 
   if (user?.profilePictureFile?.fileID) {
-    const { url } = await fetchPresignedURL({
+    const { url } = await fetchPresignedGetURL({
       fileID: user.profilePictureFile?.fileID,
-      operation: 'GET',
       expiresIn: 60 * 60 * 2, // 2 hours
     })
     user.profilePictureFile.url = url

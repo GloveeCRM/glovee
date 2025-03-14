@@ -5,8 +5,8 @@ import { useState } from 'react'
 import { FileType } from '@/lib/types/file'
 import { FormAnswerType } from '@/lib/types/form'
 import { uploadFileToS3 } from '@/lib/utils/s3'
-import { fetchFormAnswerFileUploadURL } from '@/lib/data/form'
 import { upsertFormAnswer } from '@/lib/actions/form'
+import { fetchPresignedPutURL } from '@/lib/data/s3'
 import { useApplicationFormContext } from '@/contexts/application-form-context'
 
 export default function useAnswer(formQuestionID: number) {
@@ -30,11 +30,13 @@ export default function useAnswer(formQuestionID: number) {
   async function uploadAnswerFile(file: globalThis.File) {
     setMessage('Uploading')
 
-    const { url, objectKey, error } = await fetchFormAnswerFileUploadURL({
-      formQuestionID,
+    const { url, objectKey } = await fetchPresignedPutURL({
       fileName: file.name,
       mimeType: file.type,
+      purpose: 'form_answer_file',
+      expiresIn: 3600,
     })
+
     if (!url) {
       setMessage('Failed to upload file!')
       setTimeout(() => {

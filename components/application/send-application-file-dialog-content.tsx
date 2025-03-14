@@ -11,7 +11,6 @@ import { FaFile, FaFileArrowUp } from 'react-icons/fa6'
 import { SendApplicationFileSchema } from '@/lib/zod/schemas'
 import { uploadFileToS3 } from '@/lib/utils/s3'
 import { extractFileNameParts } from '@/lib/utils/file'
-import { fetchApplicationFileUploadURL } from '@/lib/data/application'
 import { createApplicationFile } from '@/lib/actions/application'
 
 import { DialogClose, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
@@ -24,6 +23,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Callout } from '@/components/ui/callout'
+import { fetchPresignedPutURL } from '@/lib/data/s3'
 
 interface SendApplicationFileDialogContentProps {
   applicationID: number
@@ -107,10 +107,12 @@ export default function SendApplicationFileDialogContent({
       url,
       objectKey,
       error: uploadURLDataError,
-    } = await fetchApplicationFileUploadURL({
-      applicationID,
+    } = await fetchPresignedPutURL({
       fileName: fileName + '.' + file.type.split('/')[1],
       mimeType: file.type,
+      purpose: 'application_file',
+      parentEntityID: applicationID,
+      expiresIn: 3600,
     })
 
     if (uploadURLDataError) {

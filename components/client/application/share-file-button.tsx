@@ -4,9 +4,9 @@ import { useRef } from 'react'
 
 import { uploadFileToS3 } from '@/lib/utils/s3'
 import { createApplicationFile } from '@/lib/actions/application'
-import { fetchApplicationFileUploadURL } from '@/lib/data/application'
 
 import { Button } from '@/components/ui/button'
+import { fetchPresignedPutURL } from '@/lib/data/s3'
 
 interface ShareFileButtonProps {
   applicationID: number
@@ -25,10 +25,12 @@ export default function ShareFileButton({ applicationID }: ShareFileButtonProps)
       url,
       objectKey,
       error: uploadURLDataError,
-    } = await fetchApplicationFileUploadURL({
-      applicationID,
+    } = await fetchPresignedPutURL({
       fileName: file.name,
       mimeType: file.type,
+      purpose: 'application_file',
+      expiresIn: 3600,
+      parentEntityID: applicationID,
     })
 
     if (uploadURLDataError) {
