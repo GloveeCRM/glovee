@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { UserRoleTypes } from './lib/types/user'
+
+import { UserRoleTypes } from '@/lib/types/user'
 import {
   DEFAULT_ORG_ADMIN_LOGIN_REDIRECT,
   AUTH_ROUTES,
@@ -7,8 +8,9 @@ import {
   DEFAULT_ORG_CLIENT_LOGIN_REDIRECT,
   ADMIN_ROUTES_PREFIX,
 } from '@/lib/constants/routes'
-import { getCurrentOrgName } from './lib/utils/server'
-import { getSessionPayload } from './lib/auth/session'
+import { KNOWN_ORGANIZATION_NAMES } from '@/lib/constants/organizations'
+import { getCurrentOrgName } from '@/lib/utils/server'
+import { getSessionPayload } from '@/lib/auth/session'
 
 export async function middleware(request: NextRequest) {
   const session = await getSessionPayload()
@@ -16,7 +18,9 @@ export async function middleware(request: NextRequest) {
   const role = session?.user?.role
   const { nextUrl } = request
   const orgName = getCurrentOrgName()
+  const isKnownOrg = KNOWN_ORGANIZATION_NAMES.includes(orgName || '')
 
+  const isOrgNotFoundRoute = nextUrl.pathname.startsWith('/org-not-found')
   const isApiAuthRoute = nextUrl.pathname.startsWith('/api/auth')
   const isPublicRoute = PUBLIC_ROUTES.includes(nextUrl.pathname)
   const isAuthRoute = AUTH_ROUTES.includes(nextUrl.pathname)
@@ -24,6 +28,13 @@ export async function middleware(request: NextRequest) {
 
   const isOrgAdminOrOrgOwner = role === UserRoleTypes.ORG_ADMIN || role === UserRoleTypes.ORG_OWNER
   const isOrgClient = role === UserRoleTypes.ORG_CLIENT
+
+  if (!isKnownOrg) {
+    if (isOrgNotFoundRoute) {
+      return NextResponse.next()
+    }
+    return NextResponse.redirect(new URL('/org-not-found', nextUrl))
+  }
 
   if (isApiAuthRoute) {
     const searchParams = request.nextUrl.searchParams.toString()
