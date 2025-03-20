@@ -1,4 +1,4 @@
-import { Children } from 'react'
+import AuthOrganizationInfoSkeleton from '@/components/skeleton/auth/auth-organization-info-skeleton'
 
 interface IconSkeletonProps {
   className?: string
@@ -121,27 +121,6 @@ function SquareSkeleton({ className, size }: SquareSkeletonProps) {
   return <div className={`${className} ${sizeClass} items-center justify-center rounded`}></div>
 }
 
-export function LoginFormSkeleton() {
-  return (
-    <div className="w-full max-w-[420px] animate-pulse rounded-md bg-n-100 px-[20px] py-[30px] shadow-sm">
-      <FormHeadingSkeleton />
-      <TextInputQuestionSkeleton size="sm" className="mb-[26px]" />
-      <TextInputQuestionSkeleton className="mb-[36px]" />
-      <ButtonSkeleton className="mx-auto mb-[16px] bg-n-300" size="full">
-        <TitleSkeleton size="sm" className="bg-n-400" />
-      </ButtonSkeleton>
-      <ButtonSkeleton className="mx-auto mb-[36px] bg-n-300" size="full">
-        <IconSkeleton size="sm" className="bg-n-200" />
-      </ButtonSkeleton>
-      <TitleSkeleton size="md" className="mb-[26px] bg-n-400" />
-      <div className="flex justify-center gap-[8px]">
-        <TitleSkeleton className="bg-n-300" />
-        <TitleSkeleton size="sm" className="bg-n-400" />
-      </div>
-    </div>
-  )
-}
-
 export function SignUpFormSkeleton() {
   return (
     <div className="w-full max-w-[420px] animate-pulse rounded-md bg-n-100 px-[20px] py-[30px] shadow-sm">
@@ -159,28 +138,6 @@ export function SignUpFormSkeleton() {
         <TitleSkeleton className="bg-n-300" />
         <TitleSkeleton size="sm" className="bg-n-400" />
       </div>
-    </div>
-  )
-}
-
-export function ResetPasswordFormSkeleton() {
-  return (
-    <div className="w-full max-w-[420px] animate-pulse rounded-md bg-n-100 px-[20px] py-[30px] shadow-sm">
-      <FormHeadingSkeleton />
-      <TextInputQuestionSkeleton size="sm" className="mb-[16px]" />
-      <ButtonSkeleton className="mx-auto mb-[30px] bg-n-300" size="full">
-        <TitleSkeleton size="sm" className="bg-n-400" />
-      </ButtonSkeleton>
-      <TitleSkeleton size="sm" className="bg-n-300" />
-    </div>
-  )
-}
-
-export function OrgInfoCardSkeleton() {
-  return (
-    <div className="flex animate-pulse items-center gap-[8px] rounded-md bg-n-600 p-[6px]">
-      <LogoSkeleton className="bg-n-500" size="md" />
-      <TitleSkeleton size="sm" className="bg-n-500" />
     </div>
   )
 }

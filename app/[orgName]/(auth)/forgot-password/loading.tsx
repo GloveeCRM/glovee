@@ -1,5 +1,5 @@
-import { ResetPasswordFormSkeleton } from '@/components/skeletons'
+import ForgotPasswordFormSkeleton from '@/components/skeleton/auth/forgot-password-form-skeleton'
 
-export default function ResetPasswordLoadingPage() {
-  return <ResetPasswordFormSkeleton />
+export default function ForgotPasswordLoadingPage() {
+  return <ForgotPasswordFormSkeleton />
 }

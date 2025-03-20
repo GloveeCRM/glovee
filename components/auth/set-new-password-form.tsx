@@ -7,8 +7,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { FaRegCheckCircle } from 'react-icons/fa'
 import { BiMessageSquareError } from 'react-icons/bi'
 
-import { login } from '@/lib/actions/auth'
-import { LoginSchema } from '@/lib/zod/schemas'
+import { resetPassword } from '@/lib/actions/auth'
+import { NewPasswordSchema } from '@/lib/zod/schemas'
 
 import AuthOrganizationInfo from '@/components/auth/auth-organization-info'
 import {
@@ -18,69 +18,64 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
+} from '@/components//ui/form'
 import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
+import { Button } from '@/components//ui/button'
+import { Separator } from '@/components//ui/separator'
 import { Callout } from '@/components/ui/callout'
 
-export default function LoginForm() {
+interface SetNewPasswordFormProps {
+  resetPasswordToken: string
+}
+
+export default function SetNewPasswordForm({ resetPasswordToken }: SetNewPasswordFormProps) {
   const defaultFormValues = {
-    email: '',
-    password: '',
+    newPassword: '',
   }
 
-  const form = useForm<z.infer<typeof LoginSchema>>({
-    resolver: zodResolver(LoginSchema),
+  const form = useForm<z.infer<typeof NewPasswordSchema>>({
+    resolver: zodResolver(NewPasswordSchema),
     defaultValues: defaultFormValues,
   })
 
-  async function handleLogin(values: z.infer<typeof LoginSchema>) {
-    const { email, password } = values
-    const { redirectLink, error } = await login({ email, password })
-    if (!error) {
-      form.setError('root.success', {
-        message: 'Login successful!',
-      })
-      setTimeout(() => {
-        window.location.href = redirectLink || '/'
-      }, 500)
-    } else {
-      form.setError('root.error', {
-        message: error,
-      })
-    }
+  function handleForgotPassword(values: z.infer<typeof NewPasswordSchema>) {
+    const { newPassword } = values
+
+    resetPassword({ resetPasswordToken, newPassword }).then((res) => {
+      if (res.error) {
+        form.setError('root.error', {
+          message: res.error,
+        })
+      } else {
+        form.setError('root.success', {
+          message: 'Password reset successful',
+        })
+        setTimeout(() => {
+          window.location.href = '/login'
+        }, 1000)
+      }
+    })
   }
 
   return (
     <div
-      id="login-form"
+      id="forgot-password-form"
       className="flex w-full max-w-[420px] flex-col gap-[24px] rounded-md border border-sand-500 bg-white p-[20px] shadow-sm"
     >
       <AuthOrganizationInfo />
       <div className="flex w-full flex-col gap-[4px]">
-        <h1 id="login-form-title" className="mb-[8px] text-center text-xl font-bold text-n-700">
-          Login
+        <h1
+          id="forgot-password-form-title"
+          className="mb-[8px] text-center text-xl font-bold text-n-700"
+        >
+          New Password
         </h1>
-        <Separator className="mb-[16px] bg-sand-500" />
+        <Separator className="mb-[16px] bg-n-300" />
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleLogin)} className="flex flex-col gap-[2px]">
+          <form onSubmit={form.handleSubmit(handleForgotPassword)}>
             <FormField
               control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input type="email" placeholder="example@gmail.com" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
+              name="newPassword"
               render={({ field }) => (
                 <FormItem className="mb-[20px] mt-[12px]">
                   <FormLabel>Password</FormLabel>
@@ -111,28 +106,16 @@ export default function LoginForm() {
             )}
 
             <Button type="submit" variant="default" fullWidth={true}>
-              Login
+              Set New Password
             </Button>
           </form>
         </Form>
-        <p id="forgot-password" className="mt-[8px]">
-          <Link
-            href="/forgot-password"
-            className="cursor-pointer text-[14px] text-blue-500 hover:underline"
-          >
-            Forgot password?
+
+        <p id="back-to-login-page" className="mt-[16px]">
+          <Link href="/login" className="cursor-pointer text-[14px] text-blue-500 hover:underline">
+            Back to login
           </Link>
         </p>
-
-        <div
-          id="do-not-have-an-account"
-          className="mt-[16px] flex justify-center gap-[5px] text-[13px]"
-        >
-          <span>Do not have a account?</span>
-          <Link href="/signup" className="cursor-pointer text-blue-500 hover:underline">
-            Sign Up
-          </Link>
-        </div>
       </div>
     </div>
   )

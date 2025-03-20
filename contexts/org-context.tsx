@@ -9,12 +9,14 @@ type OrgContextType = {
   orgName: string
   organization: OrganizationType | null
   setOrganization: (organization: OrganizationType | null) => void
+  isLoading: boolean
 }
 
 const orgContextDefaultValues: OrgContextType = {
   orgName: '',
   organization: null,
   setOrganization: () => {},
+  isLoading: false,
 }
 
 const OrgContext = createContext<OrgContextType>(orgContextDefaultValues)
@@ -26,13 +28,16 @@ interface OrgProviderProps {
 
 export default function OrgProvider({ orgName, children }: OrgProviderProps) {
   const [organization, setOrganization] = useState<OrganizationType | null>(null)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   useEffect(() => {
     async function fetchAndSetOrganization() {
+      setIsLoading(true)
       const { organization } = await fetchOrganizationProfile({ orgName })
       if (organization) {
         setOrganization(organization)
       }
+      setIsLoading(false)
     }
 
     fetchAndSetOrganization()
@@ -42,6 +47,7 @@ export default function OrgProvider({ orgName, children }: OrgProviderProps) {
     orgName,
     organization,
     setOrganization,
+    isLoading,
   }
   return <OrgContext.Provider value={value}>{children}</OrgContext.Provider>
 }

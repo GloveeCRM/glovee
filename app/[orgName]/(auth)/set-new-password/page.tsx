@@ -1,17 +1,17 @@
 import { notFound } from 'next/navigation'
 
-import NewPasswordForm from '@/components/auth/new-password-form'
+import SetNewPasswordForm from '@/components/auth/set-new-password-form'
 
-interface NewPasswordPageProps {
+interface SetNewPasswordPageProps {
   searchParams: { resetPasswordToken?: string }
 }
 
-export default function NewPasswordPage({ searchParams }: NewPasswordPageProps) {
+export default async function SetNewPasswordPage({ searchParams }: SetNewPasswordPageProps) {
   const resetPasswordToken = searchParams.resetPasswordToken
 
   if (!resetPasswordToken) {
     return notFound()
   }
 
-  return <NewPasswordForm resetPasswordToken={resetPasswordToken} />
+  return <SetNewPasswordForm resetPasswordToken={resetPasswordToken} />
 }
