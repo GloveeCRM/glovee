@@ -1,5 +1,5 @@
-import ForgotPasswordForm from '@/components/auth/forgot-password-form'
+import ForgotPasswordCard from '@/components/auth/forgot-password-card'
 
 export default async function ForgotPasswordPage() {
-  return <ForgotPasswordForm />
+  return <ForgotPasswordCard />
 }

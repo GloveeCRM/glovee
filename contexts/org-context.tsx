@@ -16,7 +16,7 @@ const orgContextDefaultValues: OrgContextType = {
   orgName: '',
   organization: null,
   setOrganization: () => {},
-  isLoading: false,
+  isLoading: true,
 }
 
 const OrgContext = createContext<OrgContextType>(orgContextDefaultValues)
@@ -28,7 +28,7 @@ interface OrgProviderProps {
 
 export default function OrgProvider({ orgName, children }: OrgProviderProps) {
   const [organization, setOrganization] = useState<OrganizationType | null>(null)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
 
   useEffect(() => {
     async function fetchAndSetOrganization() {
