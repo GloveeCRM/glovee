@@ -30,9 +30,6 @@ export default function OrgProvider({ orgName, children }: OrgProviderProps) {
   const [organization, setOrganization] = useState<OrganizationType | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  console.log('orgName', orgName)
-  console.log('organization', organization)
-
   useEffect(() => {
     async function fetchAndSetOrganization() {
       setIsLoading(true)
