@@ -14,8 +14,6 @@ export default function AuthOrganizationInfo() {
     return <AuthOrganizationInfoSkeleton />
   }
 
-  console.log('organization', organization)
-
   return (
     <div className="flex flex-col items-center">
       <Image

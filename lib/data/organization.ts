@@ -21,6 +21,7 @@ export async function fetchOrganizationProfile({
   })
 
   const organization = organizations?.[0]
+  console.log('organization1', organization)
 
   if (organization?.logoFile?.fileID) {
     const { url } = await fetchPresignedGetURL({
@@ -29,6 +30,8 @@ export async function fetchOrganizationProfile({
     })
     organization.logoFile.url = url
   }
+
+  console.log('organization2', organization)
 
   return { organization, error }
 }
