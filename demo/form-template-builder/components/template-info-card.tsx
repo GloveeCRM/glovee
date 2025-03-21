@@ -1,9 +1,7 @@
 'use client'
 
-import { FormTemplateType } from '@/lib/types/form'
-
-import { TemplateInfoCardSkeleton } from '@/components/skeletons'
-import TemplateInfoCardTitle from '@/components/admin/template/edit/template-info-card-title'
+import { FormTemplateInfoCardSkeleton } from '@/components/skeletons'
+import FormTemplateInfoCardTitle from '@/components/admin/template/edit/template-info-card-title'
 import { useFormTemplateEditContext } from '@/demo/form-template-builder/contexts/form-template-edit-context'
 
 interface TemplateInfoCardProps {
@@ -14,16 +12,13 @@ export default function TemplateInfoCard({ editable = false }: TemplateInfoCardP
   const { formTemplate } = useFormTemplateEditContext()
 
   if (!formTemplate) {
-    return <TemplateInfoCardSkeleton />
+    return <FormTemplateInfoCardSkeleton />
   }
   console
 
   return (
-    <div className="rounded bg-n-600">
-      <TemplateInfoCardTitle
-        title={formTemplate.form.formName || 'Untitled Template'}
-        editable={editable}
-      />
+    <div className="rounded bg-neutral-700">
+      <FormTemplateInfoCardTitle title={formTemplate.form.formName || 'Untitled Template'} />
     </div>
   )
 }

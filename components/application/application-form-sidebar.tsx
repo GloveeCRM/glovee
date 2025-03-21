@@ -16,7 +16,7 @@ export default function ApplicationFormSidebar({
 }: ApplicationFormSidebarProps) {
   return (
     <div
-      id="client-form-sidebar"
+      id="application-form-sidebar"
       className="sticky top-0 flex h-screen w-[240px] flex-shrink-0 flex-col gap-[16px] bg-zinc-800 px-[8px] text-white"
     >
       <div id="application-form-sidebar-header" className="flex flex-col gap-[8px]">

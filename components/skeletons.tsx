@@ -175,7 +175,7 @@ export function TemplateCardWrapperSkeleton() {
   )
 }
 
-export function TemplateInfoCardSkeleton() {
+export function FormTemplateInfoCardSkeleton() {
   return (
     <div className="flex animate-pulse flex-col gap-[5px] rounded bg-n-600 p-[8px]">
       <TitleSkeleton size="sm" className="bg-n-400" />

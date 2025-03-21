@@ -8,12 +8,10 @@ import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
 
 interface TemplateInfoCardDescriptionProps {
   description: string
-  editable?: boolean
 }
 
 export default function TemplateInfoCardDescription({
   description,
-  editable = false,
 }: TemplateInfoCardDescriptionProps) {
   const [isExpanded, setIsExpanded] = useState<boolean>(false)
   const [isEditing, setIsEditing] = useState<boolean>(false)
@@ -80,39 +78,42 @@ export default function TemplateInfoCardDescription({
   }, [isEditing, description, handleSave])
 
   return (
-    <div className="group relative text-[11px] text-zinc-200">
-      {isEditing ? (
-        <textarea
-          ref={descriptionInputRef}
-          className="mb-[6px] ml-[4px] mt-[3px] block w-[calc(100%-8px)] resize-none overflow-hidden rounded border-[1px] border-n-500 bg-n-700/70 px-[3px] pb-[2px] focus:border-[1px] focus:border-n-500 focus:outline-none"
-          defaultValue={description}
-          onChange={adjustTextareaHeight}
-          onKeyDown={handleKeyDown}
-        />
-      ) : (
-        <>
-          <p
-            className={`mb-[7px] ml-[8px] mt-[4px] w-[calc(100%-14px)] ${description.length <= 129 && 'mb-[6px]'} ${!isExpanded ? 'line-clamp-3' : ''}`}
-          >
-            {description || 'No description'}
-          </p>
-          {description.length > 129 && (
-            <button
-              className="mb-[6px] ml-[7px] text-[11px] text-white underline"
-              onClick={() => setIsExpanded(!isExpanded)}
+    <div className="flex flex-col gap-[2px] text-[12px]">
+      <span className="text-zinc-300">Form Template Description</span>
+      <div className="group relative text-white">
+        {isEditing ? (
+          <textarea
+            ref={descriptionInputRef}
+            className="mb-[6px] block w-[calc(100%-8px)] resize-none overflow-hidden rounded border-[1px] border-n-500 bg-n-700/70 px-[3px] pb-[2px] focus:border-[1px] focus:border-n-500 focus:outline-none"
+            defaultValue={description}
+            onChange={adjustTextareaHeight}
+            onKeyDown={handleKeyDown}
+          />
+        ) : (
+          <>
+            <p
+              className={`mb-[7px] mt-[1px] w-[calc(100%-14px)] ${description.length <= 129 && 'mb-[6px]'} ${!isExpanded ? 'line-clamp-3' : ''}`}
             >
-              {isExpanded ? 'Show less' : 'Show more'}
-            </button>
-          )}
-        </>
-      )}
+              {description || 'No description'}
+            </p>
+            {description.length > 129 && (
+              <button
+                className="mb-[6px] text-[11px] text-white underline"
+                onClick={() => setIsExpanded(!isExpanded)}
+              >
+                {isExpanded ? 'Show less' : 'Show more'}
+              </button>
+            )}
+          </>
+        )}
 
-      {editable && !isEditing && (
-        <MdOutlineModeEdit
-          onClick={handleClickEdit}
-          className="absolute right-0 top-0 h-[22px] w-[22px] cursor-pointer rounded bg-zinc-700 p-[2px] text-zinc-200 opacity-0 transition-opacity duration-100 hover:text-white group-hover:opacity-100"
-        />
-      )}
+        {!isEditing && (
+          <MdOutlineModeEdit
+            onClick={handleClickEdit}
+            className="absolute right-0 top-0 h-[22px] w-[22px] cursor-pointer rounded bg-zinc-700 p-[2px] text-zinc-200 opacity-0 transition-opacity duration-100 hover:text-white group-hover:opacity-100"
+          />
+        )}
+      </div>
     </div>
   )
 }

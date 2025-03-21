@@ -6,15 +6,11 @@ import { MdOutlineModeEdit } from 'react-icons/md'
 import useTemplateActions from '@/hooks/form-template/use-template-actions'
 import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
 
-interface TemplateInfoCardTitleProps {
+interface FormTemplateInfoCardTitleProps {
   title: string
-  editable?: boolean
 }
 
-export default function TemplateInfoCardTitle({
-  title,
-  editable = false,
-}: TemplateInfoCardTitleProps) {
+export default function FormTemplateInfoCardTitle({ title }: FormTemplateInfoCardTitleProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false)
 
   const titleInputRef = useRef<HTMLTextAreaElement>(null)
@@ -78,27 +74,28 @@ export default function TemplateInfoCardTitle({
   }, [isEditing, titleInputRef, handleSave])
 
   return (
-    <div className="group relative text-[14px] text-white">
-      {isEditing ? (
-        <textarea
-          defaultValue={title}
-          className="ml-[4px] mt-[5px] block w-[calc(100%-8px)] resize-none overflow-hidden rounded border border-zinc-600 bg-zinc-800/70 px-[3px] pb-[2px] text-white focus:border-zinc-500 focus:outline-none"
-          ref={titleInputRef}
-          onChange={adjustTextareaHeight}
-          onKeyDown={handleKeyDown}
-        />
-      ) : (
-        <p className="mb-[1px] ml-[8px] mt-[6px] w-[calc(100%-16px)]">
-          {title || 'Untitled Template'}
-        </p>
-      )}
+    <div className="flex flex-col gap-[2px] text-[12px]">
+      <span className="text-zinc-300">Form Template Name</span>
+      <div className="group relative text-white">
+        {isEditing ? (
+          <textarea
+            defaultValue={title}
+            className="block w-[calc(100%-8px)] resize-none overflow-hidden rounded border border-zinc-600 bg-zinc-800/70 px-[4px] pt-[1px] text-white focus:border-zinc-500 focus:outline-none"
+            ref={titleInputRef}
+            onChange={adjustTextareaHeight}
+            onKeyDown={handleKeyDown}
+          />
+        ) : (
+          <p className="mb-[1px] mt-[1px] w-[calc(100%-16px)]">{title}</p>
+        )}
 
-      {editable && !isEditing && (
-        <MdOutlineModeEdit
-          onClick={handleClickEdit}
-          className="absolute right-0 top-0 h-[22px] w-[22px] cursor-pointer rounded bg-zinc-700 p-[2px] text-zinc-200 opacity-0 transition-opacity duration-100 hover:text-white group-hover:opacity-100"
-        />
-      )}
+        {!isEditing && (
+          <MdOutlineModeEdit
+            onClick={handleClickEdit}
+            className="absolute right-0 top-0 h-[22px] w-[22px] cursor-pointer rounded bg-zinc-700 p-[2px] text-zinc-200 opacity-0 transition-opacity duration-100 hover:text-white group-hover:opacity-100"
+          />
+        )}
+      </div>
     </div>
   )
 }
