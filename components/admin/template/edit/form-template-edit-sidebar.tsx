@@ -3,7 +3,7 @@ import { IoChevronBackOutline } from 'react-icons/io5'
 
 import { Separator } from '@/components/ui/separator'
 import EditableFormTemplateInfoCard from './editable-form-template-info-card'
-import TemplateEditSidebarCategoryWrapper from './template-edit-sidebar-category-wrapper'
+import FormTemplateEditSidebarCategoryWrapper from './form-template-edit-sidebar-category-wrapper'
 
 export default function FormTemplateEditSidebar() {
   return (
@@ -19,8 +19,8 @@ export default function FormTemplateEditSidebar() {
         <EditableFormTemplateInfoCard />
       </div>
       <Separator className="bg-zinc-700" />
-      <div id="sidebar-categories" className="">
-        <TemplateEditSidebarCategoryWrapper />
+      <div id="sidebar-categories">
+        <FormTemplateEditSidebarCategoryWrapper />
       </div>
     </div>
   )

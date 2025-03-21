@@ -10,7 +10,7 @@ import { TemplateEditSidebarCategoryWrapperSkeleton } from '@/components/skeleto
 import TemplateEditSidebarCategory from './template-edit-sidebar-category'
 import AddCategoryButton from './add-category-button'
 
-export default function TemplateEditSidebarCategoryWrapper() {
+export default function FormTemplateEditSidebarCategoryWrapper() {
   const { formCategories, selectedFormCategoryID } = useFormTemplateEditContext()
 
   if (!formCategories) {
@@ -18,7 +18,7 @@ export default function TemplateEditSidebarCategoryWrapper() {
   }
 
   return (
-    <div id="template-edit-sidebar-category-wrapper">
+    <div id="form-template-edit-sidebar-category-wrapper">
       <div className="flex flex-col gap-[4px]">
         {formCategories?.map((category: FormCategoryType) => (
           <Fragment key={category.formCategoryID}>

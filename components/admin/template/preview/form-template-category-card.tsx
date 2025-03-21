@@ -3,25 +3,23 @@
 import { IoChevronDown, IoChevronForward } from 'react-icons/io5'
 
 import { FormCategoryType, FormSectionType } from '@/lib/types/form'
-import { useApplicationFormContext } from '@/contexts/application-form-context'
+import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
 
 import ProgressIndicatorRing from '@/components/ui/progress-indicator-ring'
-import ApplicationFormSectionCard from './application-form-section-card'
+import FormTemplatePreviewSectionCard from '@/components/admin/template/preview/form-template-preview-section-card'
 
-interface ApplicationFormCategoryCardProps {
+interface FormTemplatePreviewCategoryCardProps {
   formCategory: FormCategoryType
-  showProgressIndicator: boolean
   isExpanded: boolean
   onClick: (categoryId: number) => void
 }
 
-export default function ApplicationFormCategoryCard({
+export default function FormTemplatePreviewCategoryCard({
   formCategory,
-  showProgressIndicator,
   isExpanded,
   onClick,
-}: ApplicationFormCategoryCardProps) {
-  const { selectedFormCategorySections } = useApplicationFormContext()
+}: FormTemplatePreviewCategoryCardProps) {
+  const { selectedFormCategorySections } = useFormTemplateEditContext()
 
   return (
     <div
@@ -29,15 +27,14 @@ export default function ApplicationFormCategoryCard({
       onClick={() => onClick(formCategory.formCategoryID)}
     >
       <div className="flex gap-[4px]">
-        {showProgressIndicator && (
-          <ProgressIndicatorRing
-            completionRate={formCategory.completionRate || 0}
-            baseCircleColor="text-n-500"
-            progressCircleColor="text-n-300"
-            completeGreen
-            completeCheck
-          />
-        )}
+        <ProgressIndicatorRing
+          completionRate={0}
+          baseCircleColor="text-n-500"
+          progressCircleColor="text-n-300"
+          completeGreen
+          completeCheck
+        />
+
         <div className="flex w-full items-center justify-between py-[6px] text-[14px]">
           <div className={`${isExpanded && 'text-n-100'} w-full`}>{formCategory.categoryName}</div>
           <div>
@@ -50,12 +47,8 @@ export default function ApplicationFormCategoryCard({
         </div>
       </div>
       {isExpanded &&
-        selectedFormCategorySections.map((section: FormSectionType) => (
-          <ApplicationFormSectionCard
-            key={section.formSectionID}
-            formSection={section}
-            showProgressIndicator={showProgressIndicator}
-          />
+        selectedFormCategorySections?.map((section: FormSectionType) => (
+          <FormTemplatePreviewSectionCard key={section.formSectionID} formSection={section} />
         ))}
     </div>
   )
