@@ -1,5 +1,11 @@
 import LoginCard from '@/components/auth/login-card'
 
-export default async function LoginPage() {
-  return <LoginCard />
+interface LoginPageProps {
+  params: {
+    orgName: string
+  }
+}
+
+export default function LoginPage({ params }: LoginPageProps) {
+  return <LoginCard orgName={params.orgName} />
 }

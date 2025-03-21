@@ -1,31 +1,28 @@
-'use client'
-
 import Image from 'next/image'
 
 import { DEFAULT_ORG_LOGO_URL } from '@/lib/constants/images'
-import { useOrgContext } from '@/contexts/org-context'
+import { fetchOrganizationProfile } from '@/lib/data/organization'
 
-import AuthOrganizationInfoSkeleton from '@/components/skeleton/auth/auth-organization-info-skeleton'
+interface AuthOrganizationInfoProps {
+  orgName: string
+}
 
-export default function AuthOrganizationInfo() {
-  const { organization, isLoading } = useOrgContext()
+export default async function AuthOrganizationInfo({ orgName }: AuthOrganizationInfoProps) {
+  const { organization } = await fetchOrganizationProfile({ orgName })
 
-  if (isLoading) {
-    return <AuthOrganizationInfoSkeleton />
-  }
+  const logoUrl = organization?.logoFile?.url || DEFAULT_ORG_LOGO_URL
+  const organizationName = organization?.name || 'Something went wrong'
 
   return (
     <div className="flex flex-col items-center">
       <Image
-        src={organization?.logoFile?.url || DEFAULT_ORG_LOGO_URL}
-        alt={`${organization?.name} logo`}
+        src={logoUrl}
+        alt=""
         width={64}
         height={64}
         className="h-[86px] w-[86px] rounded-xl border border-sand-500 shadow-sm"
       />
-      <h2 className="mt-[10px] text-center text-xl font-bold">
-        {organization?.name || 'Something went wrong'}
-      </h2>
+      <h2 className="mt-[10px] text-center text-xl font-bold">{organizationName}</h2>
     </div>
   )
 }

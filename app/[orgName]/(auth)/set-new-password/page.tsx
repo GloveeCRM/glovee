@@ -4,14 +4,21 @@ import SetNewPasswordCard from '@/components/auth/set-new-password-card'
 
 interface SetNewPasswordPageProps {
   searchParams: { resetPasswordToken?: string }
+  params: {
+    orgName: string
+  }
 }
 
-export default async function SetNewPasswordPage({ searchParams }: SetNewPasswordPageProps) {
-  const resetPasswordToken = searchParams.resetPasswordToken
+export default async function SetNewPasswordPage({
+  searchParams,
+  params,
+}: SetNewPasswordPageProps) {
+  const { orgName } = params
+  const { resetPasswordToken } = searchParams
 
   if (!resetPasswordToken) {
     return notFound()
   }
 
-  return <SetNewPasswordCard resetPasswordToken={resetPasswordToken} />
+  return <SetNewPasswordCard orgName={orgName} resetPasswordToken={resetPasswordToken} />
 }

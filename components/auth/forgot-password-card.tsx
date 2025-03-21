@@ -4,13 +4,17 @@ import AuthOrganizationInfo from '@/components/auth/auth-organization-info'
 import ForgotPasswordForm from '@/components/auth/forgot-password-form'
 import { Separator } from '@/components/ui/separator'
 
-export default function ForgotPasswordCard() {
+interface ForgotPasswordCardProps {
+  orgName: string
+}
+
+export default function ForgotPasswordCard({ orgName }: ForgotPasswordCardProps) {
   return (
     <div
       id="forgot-password-form"
       className="flex w-full max-w-[420px] flex-col gap-[24px] rounded-md border border-sand-500 bg-white p-[20px] shadow-sm"
     >
-      <AuthOrganizationInfo />
+      <AuthOrganizationInfo orgName={orgName} />
       <div className="flex w-full flex-col gap-[4px]">
         <h1
           id="forgot-password-form-title"

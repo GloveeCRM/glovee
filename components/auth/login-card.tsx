@@ -4,13 +4,17 @@ import LoginForm from '@/components/auth/login-form'
 import AuthOrganizationInfo from '@/components/auth/auth-organization-info'
 import { Separator } from '@/components/ui/separator'
 
-export default function LoginCard() {
+interface LoginCardProps {
+  orgName: string
+}
+
+export default function LoginCard({ orgName }: LoginCardProps) {
   return (
     <div
       id="login-form"
       className="flex w-full max-w-[420px] flex-col gap-[24px] rounded-md border border-sand-500 bg-white p-[20px] shadow-sm"
     >
-      <AuthOrganizationInfo />
+      <AuthOrganizationInfo orgName={orgName} />
       <div className="flex w-full flex-col gap-[4px]">
         <h1 id="login-form-title" className="mb-[8px] text-center text-xl font-bold text-n-700">
           Login

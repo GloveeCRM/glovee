@@ -5,16 +5,20 @@ import AuthOrganizationInfo from '@/components/auth/auth-organization-info'
 import { Separator } from '@/components/ui/separator'
 
 interface SetNewPasswordCardProps {
+  orgName: string
   resetPasswordToken: string
 }
 
-export default function SetNewPasswordCard({ resetPasswordToken }: SetNewPasswordCardProps) {
+export default function SetNewPasswordCard({
+  orgName,
+  resetPasswordToken,
+}: SetNewPasswordCardProps) {
   return (
     <div
       id="forgot-password-form"
       className="flex w-full max-w-[420px] flex-col gap-[24px] rounded-md border border-sand-500 bg-white p-[20px] shadow-sm"
     >
-      <AuthOrganizationInfo />
+      <AuthOrganizationInfo orgName={orgName} />
       <div className="flex w-full flex-col gap-[4px]">
         <h1
           id="forgot-password-form-title"
