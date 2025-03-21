@@ -8,7 +8,7 @@ import { useOrgContext } from '@/contexts/org-context'
 import AuthOrganizationInfoSkeleton from '@/components/skeleton/auth/auth-organization-info-skeleton'
 
 export default function AuthOrganizationInfo() {
-  const { isLoading, organization } = useOrgContext()
+  const { organization, isLoading } = useOrgContext()
 
   if (isLoading) {
     return <AuthOrganizationInfoSkeleton />

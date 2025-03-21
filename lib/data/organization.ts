@@ -1,6 +1,8 @@
+'use server'
+
 import { OrganizationType } from '@/lib/types/organization'
 import { httpRequest } from '@/lib/utils/http'
-import { fetchPresignedGetURL } from './s3'
+import { fetchPresignedGetURL } from '@/lib/data/s3'
 
 interface FetchOrganizationProfileProps {
   orgName: string

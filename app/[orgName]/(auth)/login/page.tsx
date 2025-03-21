@@ -1,5 +1,5 @@
-import LoginForm from '@/components/auth/login-form'
+import LoginCard from '@/components/auth/login-card'
 
 export default async function LoginPage() {
-  return <LoginForm />
+  return <LoginCard />
 }
