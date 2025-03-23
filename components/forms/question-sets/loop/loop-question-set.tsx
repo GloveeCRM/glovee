@@ -4,11 +4,11 @@ import { FiPlus } from 'react-icons/fi'
 import { BiTrash } from 'react-icons/bi'
 
 import { FormQuestionSetType } from '@/lib/types/form'
-import { useApplicationFormContext } from '@/contexts/application-form-context'
+import { useFormContext } from '@/contexts/form-context'
 import useFormActions from '@/hooks/form/use-form-actions'
 
+import FormQuestionSet from '@/components/forms/question-sets/form-question-set'
 import { Separator } from '@/components/ui/separator'
-import FormQuestionSet from '../form-question-set'
 
 interface LoopQuestionSetProps {
   formQuestionSet: FormQuestionSetType
@@ -21,7 +21,7 @@ export default function LoopQuestionSet({
   mode,
   viewOnly = false,
 }: LoopQuestionSetProps) {
-  const { formQuestionSetChildFormQuestionSets } = useApplicationFormContext()
+  const { formQuestionSetChildFormQuestionSets } = useFormContext()
   const childQuestionSets = formQuestionSetChildFormQuestionSets(formQuestionSet.formQuestionSetID)
   const { deleteFormQuestionSet } = useFormActions()
 

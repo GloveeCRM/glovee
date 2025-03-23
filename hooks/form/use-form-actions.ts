@@ -4,7 +4,7 @@ import {
   deleteApplicationFormQuestionSet,
   repeatApplicationFormQuestionSet,
 } from '@/lib/actions/form'
-import { useApplicationFormContext } from '@/contexts/application-form-context'
+import { useFormContext } from '@/contexts/form-context'
 
 interface RepeatFormQuestionSetProps {
   formQuestionSetID: number
@@ -23,8 +23,7 @@ interface DeleteFormQuestionSetResponse {
 }
 
 export default function useFormActions() {
-  const { setSelectedFormSectionQuestionSets, setSelectedFormSectionQuestions } =
-    useApplicationFormContext()
+  const { setSelectedFormSectionQuestionSets, setSelectedFormSectionQuestions } = useFormContext()
 
   async function repeatFormQuestionSet({
     formQuestionSetID,

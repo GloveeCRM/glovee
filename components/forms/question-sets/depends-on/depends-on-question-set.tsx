@@ -1,9 +1,8 @@
 import { FormQuestionSetType, FormQuestionType } from '@/lib/types/form'
-import { RadioQuestionType } from '@/lib/types/qusetion'
 import FormQuestion from '../../questions/form-question'
 import FormQuestionSet from '../form-question-set'
 import { Separator } from '@/components/ui/separator'
-import { useApplicationFormContext } from '@/contexts/application-form-context'
+import { useFormContext } from '@/contexts/form-context'
 
 interface DependsOnQuestionSetProps {
   formQuestionSet: FormQuestionSetType
@@ -16,8 +15,7 @@ export default function DependsOnQuestionSet({
   viewOnly = false,
   mode,
 }: DependsOnQuestionSetProps) {
-  const { formQuestionSetQuestions, formQuestionSetChildFormQuestionSets } =
-    useApplicationFormContext()
+  const { formQuestionSetQuestions, formQuestionSetChildFormQuestionSets } = useFormContext()
   const questionSetQuestions = formQuestionSetQuestions(formQuestionSet.formQuestionSetID)
   const childQuestionSets = formQuestionSetChildFormQuestionSets(formQuestionSet.formQuestionSetID)
 

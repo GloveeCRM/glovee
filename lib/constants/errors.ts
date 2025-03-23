@@ -27,6 +27,7 @@ const errors = {
   application_not_found: 'Application not found',
   missing_application_name: 'Application name is required',
   reset_password_token_not_found: 'Reset password token not found',
+  application_form_not_found: 'Application form not found',
 }
 
 export const errorMessages = (error_code: string) => {

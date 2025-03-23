@@ -3,7 +3,7 @@
 import { FaRegCircleCheck, FaRegCircle } from 'react-icons/fa6'
 
 import { FormSectionType } from '@/lib/types/form'
-import { useApplicationFormContext } from '@/contexts/application-form-context'
+import { useFormContext } from '@/contexts/form-context'
 
 interface ApplicationFormSectionCardProps {
   formSection: FormSectionType
@@ -14,7 +14,7 @@ export default function ApplicationFormSectionCard({
   formSection,
   showProgressIndicator,
 }: ApplicationFormSectionCardProps) {
-  const { selectedFormSectionID, setSelectedFormSectionID } = useApplicationFormContext()
+  const { selectedFormSectionID, setSelectedFormSectionID } = useFormContext()
 
   const handleClickSection = (formSectionID: number) => {
     if (selectedFormSectionID !== formSectionID) {

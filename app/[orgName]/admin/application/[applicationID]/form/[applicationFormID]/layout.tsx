@@ -1,6 +1,9 @@
 import { ReactNode } from 'react'
 
-import ApplicationFormContextProvider from '@/contexts/application-form-context'
+import { ApplicationFormStatusTypes } from '@/lib/types/form'
+import { fetchApplicationForm } from '@/lib/data/form'
+import FormContextProvider from '@/contexts/form-context'
+
 import ApplicationFormSidebar from '@/components/application/application-form-sidebar'
 
 interface AdminApplicationFormLayoutParams {
@@ -13,7 +16,7 @@ interface AdminApplicationFormLayoutProps {
   params: AdminApplicationFormLayoutParams
 }
 
-export default function AdminApplicationFormLayout({
+export default async function AdminApplicationFormLayout({
   children,
   params,
 }: AdminApplicationFormLayoutProps) {
@@ -21,8 +24,18 @@ export default function AdminApplicationFormLayout({
   const applicationIDNumeric = Number(applicationID)
   const applicationFormIDNumeric = Number(applicationFormID)
 
+  const { applicationForm } = await fetchApplicationForm({
+    applicationFormID: applicationFormIDNumeric,
+  })
+
   return (
-    <ApplicationFormContextProvider applicationFormID={applicationFormIDNumeric} mode="view">
+    <FormContextProvider
+      formID={applicationForm?.formID || 0}
+      mode="view"
+      includeAnswers={
+        applicationForm?.status !== ApplicationFormStatusTypes.PENDING_CLIENT_SUBMISSION
+      }
+    >
       <div className="flex">
         <ApplicationFormSidebar
           showProgressIndicator={false}
@@ -30,6 +43,6 @@ export default function AdminApplicationFormLayout({
         />
         <div className="h-svh min-w-0 flex-1 overflow-y-scroll">{children}</div>
       </div>
-    </ApplicationFormContextProvider>
+    </FormContextProvider>
   )
 }

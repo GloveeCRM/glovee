@@ -3,10 +3,10 @@
 import { Fragment } from 'react'
 
 import { FormCategoryType } from '@/lib/types/form'
-import { useApplicationFormContext } from '@/contexts/application-form-context'
+import { useFormContext } from '@/contexts/form-context'
 
+import ApplicationFormCategoryCard from '@/components/application/application-form-category-card'
 import { Separator } from '@/components/ui/separator'
-import ApplicationFormCategoryCard from './application-form-category-card'
 
 interface ApplicationFormCategoriesContainerProps {
   showProgressIndicator: boolean
@@ -15,8 +15,7 @@ interface ApplicationFormCategoriesContainerProps {
 export default function ApplicationFormCategoriesContainer({
   showProgressIndicator,
 }: ApplicationFormCategoriesContainerProps) {
-  const { formCategories, selectedFormCategoryID, setSelectedFormCategoryID } =
-    useApplicationFormContext()
+  const { formCategories, selectedFormCategoryID, setSelectedFormCategoryID } = useFormContext()
 
   function handleClickCategory(formCategoryID: number) {
     setSelectedFormCategoryID(formCategoryID)

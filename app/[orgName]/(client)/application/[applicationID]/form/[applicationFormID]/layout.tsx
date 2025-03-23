@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation'
 
 import { ApplicationFormStatusTypes } from '@/lib/types/form'
 import { fetchApplicationForm } from '@/lib/data/form'
-import ApplicationFormContextProvider from '@/contexts/application-form-context'
+import FormContextProvider from '@/contexts/form-context'
 
 import ApplicationFormSidebar from '@/components/application/application-form-sidebar'
 
@@ -33,7 +33,7 @@ export default async function ApplicationFormLayout({
   }
 
   return (
-    <ApplicationFormContextProvider applicationFormID={applicationFormIDNumeric} mode="edit">
+    <FormContextProvider formID={applicationForm?.formID || 0} mode="edit" includeAnswers={true}>
       <div id="client-form-layout" className="flex overflow-hidden">
         <ApplicationFormSidebar
           showProgressIndicator={true}
@@ -41,6 +41,6 @@ export default async function ApplicationFormLayout({
         />
         <div className="h-svh flex-1">{children}</div>
       </div>
-    </ApplicationFormContextProvider>
+    </FormContextProvider>
   )
 }

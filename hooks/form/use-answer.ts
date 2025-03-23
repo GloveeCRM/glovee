@@ -7,10 +7,10 @@ import { FormAnswerType } from '@/lib/types/form'
 import { uploadFileToS3 } from '@/lib/utils/s3'
 import { upsertFormAnswer } from '@/lib/actions/form'
 import { fetchPresignedPutURL } from '@/lib/data/s3'
-import { useApplicationFormContext } from '@/contexts/application-form-context'
+import { useFormContext } from '@/contexts/form-context'
 
 export default function useAnswer(formQuestionID: number) {
-  const { setFormQuestionAnswer } = useApplicationFormContext()
+  const { setFormQuestionAnswer } = useFormContext()
   const [message, setMessage] = useState<string>('')
 
   async function updateAnswer(newAnswer: Partial<FormAnswerType>) {

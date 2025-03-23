@@ -3,10 +3,10 @@
 import { IoChevronDown, IoChevronForward } from 'react-icons/io5'
 
 import { FormCategoryType, FormSectionType } from '@/lib/types/form'
-import { useApplicationFormContext } from '@/contexts/application-form-context'
+import { useFormContext } from '@/contexts/form-context'
 
 import ProgressIndicatorRing from '@/components/ui/progress-indicator-ring'
-import ApplicationFormSectionCard from './application-form-section-card'
+import ApplicationFormSectionCard from '@/components/application/application-form-section-card'
 
 interface ApplicationFormCategoryCardProps {
   formCategory: FormCategoryType
@@ -21,7 +21,7 @@ export default function ApplicationFormCategoryCard({
   isExpanded,
   onClick,
 }: ApplicationFormCategoryCardProps) {
-  const { selectedFormCategorySections } = useApplicationFormContext()
+  const { selectedFormCategorySections } = useFormContext()
 
   return (
     <div

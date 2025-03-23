@@ -18,6 +18,7 @@ import {
   FormTemplateType,
 } from '@/lib/types/form'
 import {
+  fetchFormSectionQuestionSetsAndQuestions,
   fetchFormTemplateSectionQuestionSetsAndQuestions,
   fetchFormTemplateWithCategoriesAndSections,
 } from '@/lib/data/form'
@@ -162,10 +163,9 @@ export default function FormTemplateEditProvider({
   // Fetch the question sets for the selected section
   useEffect(() => {
     async function fetchAndSetFormTemplateSectionQuestionSetsAndQuestions() {
-      const { formQuestionSets, formQuestions } =
-        await fetchFormTemplateSectionQuestionSetsAndQuestions({
-          formSectionID: selectedFormSectionID,
-        })
+      const { formQuestionSets, formQuestions } = await fetchFormSectionQuestionSetsAndQuestions({
+        formSectionID: selectedFormSectionID,
+      })
       setSelectedFormSectionQuestionSets(formQuestionSets || [])
       setSelectedFormSectionQuestions(formQuestions || [])
     }

@@ -177,13 +177,62 @@ export async function fetchApplicationForm({
   const queryParams = new URLSearchParams()
   queryParams.append('application_form_id', applicationFormID.toString())
 
-  const { data, error } = await httpRequest<{ applicationForm: ApplicationFormType }>({
+  const { data, error } = await httpRequest<{
+    applicationForm: ApplicationFormType
+  }>({
     path: `rpc/application_form?${queryParams.toString()}`,
     method: 'GET',
     authRequired: true,
   })
 
-  return { applicationForm: data?.applicationForm, error }
+  return {
+    applicationForm: data?.applicationForm,
+    error,
+  }
+}
+
+interface FetchFormContentProps {
+  formID: number
+  includeFormCategories?: boolean
+  includeFormSections?: boolean
+  includeCompletionRates?: boolean
+}
+
+interface FetchFormContentResponse {
+  form?: FormType
+  formCategories?: FormCategoryType[]
+  formSections?: FormSectionType[]
+  error?: string
+}
+
+export async function fetchFormContent({
+  formID,
+  includeFormCategories = false,
+  includeFormSections = false,
+  includeCompletionRates = false,
+}: FetchFormContentProps): Promise<FetchFormContentResponse> {
+  const queryParams = new URLSearchParams()
+  queryParams.append('form_id', formID.toString())
+  queryParams.append('include_form_categories', includeFormCategories.toString())
+  queryParams.append('include_form_sections', includeFormSections.toString())
+  queryParams.append('include_completion_rates', includeCompletionRates.toString())
+
+  const { data, error } = await httpRequest<{
+    form: FormType
+    formCategories: FormCategoryType[]
+    formSections: FormSectionType[]
+  }>({
+    path: `rpc/form_content?${queryParams.toString()}`,
+    method: 'GET',
+    authRequired: true,
+  })
+
+  return {
+    form: data?.form,
+    formCategories: data?.formCategories,
+    formSections: data?.formSections,
+    error,
+  }
 }
 
 interface FetchApplicationFormCategoriesAndSectionsProps {
@@ -214,21 +263,21 @@ export async function fetchApplicationFormCategoriesAndSections({
   return { formCategories: data?.formCategories, formSections: data?.formSections, error }
 }
 
-interface FetchApplicationFormSectionQuestionSetsAndQuestionsProps {
+interface FetchFormSectionQuestionSetsAndQuestionsProps {
   formSectionID: number
   includeAnswers?: boolean
 }
 
-interface FetchApplicationFormSectionQuestionSetsAndQuestionsResponse {
+interface FetchFormSectionQuestionSetsAndQuestionsResponse {
   formQuestionSets?: FormQuestionSetType[]
   formQuestions?: FormQuestionType[]
   error?: string
 }
 
-export async function fetchApplicationFormSectionQuestionSetsAndQuestions({
+export async function fetchFormSectionQuestionSetsAndQuestions({
   formSectionID,
   includeAnswers = false,
-}: FetchApplicationFormSectionQuestionSetsAndQuestionsProps): Promise<FetchApplicationFormSectionQuestionSetsAndQuestionsResponse> {
+}: FetchFormSectionQuestionSetsAndQuestionsProps): Promise<FetchFormSectionQuestionSetsAndQuestionsResponse> {
   const queryParams = new URLSearchParams()
   queryParams.append('form_section_id', formSectionID.toString())
   queryParams.append('include_answers', includeAnswers.toString())
@@ -237,7 +286,7 @@ export async function fetchApplicationFormSectionQuestionSetsAndQuestions({
     formQuestionSets: FormQuestionSetType[]
     formQuestions: FormQuestionType[]
   }>({
-    path: `rpc/application_form_section_question_sets_and_questions?${queryParams.toString()}`,
+    path: `rpc/form_section_question_sets_and_questions?${queryParams.toString()}`,
     method: 'GET',
     authRequired: true,
   })

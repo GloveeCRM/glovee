@@ -1,9 +1,9 @@
 'use client'
 
 import { FormQuestionSetType } from '@/lib/types/form'
-import { useApplicationFormContext } from '@/contexts/application-form-context'
+import { useFormContext } from '@/contexts/form-context'
 
-import FormQuestion from '../../questions/form-question'
+import FormQuestion from '@/components/forms/questions/form-question'
 
 interface FlatQuestionSetProps {
   formQuestionSet: FormQuestionSetType
@@ -16,7 +16,7 @@ export default function FlatQuestionSet({
   viewOnly = false,
   mode,
 }: FlatQuestionSetProps) {
-  const { formQuestionSetQuestions } = useApplicationFormContext()
+  const { formQuestionSetQuestions } = useFormContext()
   const questionSetQuestions = formQuestionSetQuestions(formQuestionSet.formQuestionSetID)
 
   return (
