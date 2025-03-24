@@ -509,19 +509,34 @@ export async function createApplicationForm({
   return { applicationFormID: data?.applicationFormID, error }
 }
 
+type FormCategoryAndSectionCompletionRates = {
+  formCategory: {
+    formCategoryID: number
+    completionRate: number
+  }
+  formSection: {
+    formSectionID: number
+    completionRate: number
+  }
+}
+
 interface UpsertFormAnswerProps {
   formAnswer: Partial<FormAnswerType>
 }
 
 interface UpsertFormAnswerResponse {
   formAnswer?: FormAnswerType
+  completionRates?: FormCategoryAndSectionCompletionRates
   error?: string
 }
 
 export async function upsertFormAnswer({
   formAnswer,
 }: UpsertFormAnswerProps): Promise<UpsertFormAnswerResponse> {
-  const { data, error } = await httpRequest<{ formAnswer: FormAnswerType }>({
+  const { data, error } = await httpRequest<{
+    formAnswer: FormAnswerType
+    completionRates: FormCategoryAndSectionCompletionRates
+  }>({
     path: 'rpc/upsert_form_answer',
     method: 'POST',
     data: {
@@ -534,7 +549,7 @@ export async function upsertFormAnswer({
     authRequired: true,
   })
 
-  return { formAnswer: data?.formAnswer, error }
+  return { formAnswer: data?.formAnswer, completionRates: data?.completionRates, error }
 }
 
 interface RepeatApplicationFormQuestionSetProps {
@@ -544,6 +559,7 @@ interface RepeatApplicationFormQuestionSetProps {
 interface RepeatApplicationFormQuestionSetResponse {
   formQuestionSets?: FormQuestionSetType[]
   formQuestions?: FormQuestionType[]
+  completionRates?: FormCategoryAndSectionCompletionRates
   error?: string
 }
 
@@ -553,6 +569,7 @@ export async function repeatApplicationFormQuestionSet({
   const { data, error } = await httpRequest<{
     formQuestionSets: FormQuestionSetType[]
     formQuestions: FormQuestionType[]
+    completionRates: FormCategoryAndSectionCompletionRates
   }>({
     path: 'rpc/repeat_application_form_question_set',
     method: 'POST',
@@ -560,7 +577,12 @@ export async function repeatApplicationFormQuestionSet({
     authRequired: true,
   })
 
-  return { formQuestionSets: data?.formQuestionSets, formQuestions: data?.formQuestions, error }
+  return {
+    formQuestionSets: data?.formQuestionSets,
+    formQuestions: data?.formQuestions,
+    completionRates: data?.completionRates,
+    error,
+  }
 }
 
 interface DeleteApplicationFormQuestionSetProps {
@@ -570,6 +592,7 @@ interface DeleteApplicationFormQuestionSetProps {
 interface DeleteApplicationFormQuestionSetResponse {
   formQuestionSets?: FormQuestionSetType[]
   formQuestions?: FormQuestionType[]
+  completionRates?: FormCategoryAndSectionCompletionRates
   error?: string
 }
 
@@ -579,6 +602,7 @@ export async function deleteApplicationFormQuestionSet({
   const { data, error } = await httpRequest<{
     formQuestionSets: FormQuestionSetType[]
     formQuestions: FormQuestionType[]
+    completionRates: FormCategoryAndSectionCompletionRates
   }>({
     path: 'rpc/delete_application_form_question_set',
     method: 'POST',
@@ -586,7 +610,12 @@ export async function deleteApplicationFormQuestionSet({
     authRequired: true,
   })
 
-  return { formQuestionSets: data?.formQuestionSets, formQuestions: data?.formQuestions, error }
+  return {
+    formQuestionSets: data?.formQuestionSets,
+    formQuestions: data?.formQuestions,
+    completionRates: data?.completionRates,
+    error,
+  }
 }
 
 interface UpdateApplicationFormStatusProps {

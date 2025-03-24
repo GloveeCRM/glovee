@@ -10,17 +10,29 @@ import { fetchPresignedPutURL } from '@/lib/data/s3'
 import { useFormContext } from '@/contexts/form-context'
 
 export default function useAnswer(formQuestionID: number) {
-  const { setFormQuestionAnswer } = useFormContext()
+  const { setFormQuestionAnswer, setFormCategoryCompletionRate, setFormSectionCompletionRate } =
+    useFormContext()
   const [message, setMessage] = useState<string>('')
 
   async function updateAnswer(newAnswer: Partial<FormAnswerType>) {
     setMessage('Saving')
     newAnswer.formQuestionID = formQuestionID
 
-    const { formAnswer, error } = await upsertFormAnswer({ formAnswer: newAnswer })
+    const { formAnswer, completionRates, error } = await upsertFormAnswer({ formAnswer: newAnswer })
     setMessage(!error ? 'Saved!' : 'Failed to save changes!')
 
     setFormQuestionAnswer(formQuestionID, formAnswer)
+
+    if (completionRates) {
+      setFormCategoryCompletionRate(
+        completionRates.formCategory.formCategoryID,
+        completionRates.formCategory.completionRate
+      )
+      setFormSectionCompletionRate(
+        completionRates.formSection.formSectionID,
+        completionRates.formSection.completionRate
+      )
+    }
 
     setTimeout(() => {
       setMessage('')

@@ -38,6 +38,8 @@ type FormContextType = {
   selectedFormSectionQuestions: FormQuestionType[]
   setSelectedFormSectionQuestions: (formQuestions: FormQuestionType[]) => void
   formQuestionSetQuestions: (formQuestionSetID: number) => FormQuestionType[]
+  setFormCategoryCompletionRate: (formCategoryID: number, completionRate: number) => void
+  setFormSectionCompletionRate: (formSectionID: number, completionRate: number) => void
   setFormQuestionAnswer: (formQuestionID: number, answer: FormAnswerType | undefined) => void
 }
 
@@ -67,6 +69,8 @@ const formContextDefaultValues: FormContextType = {
   setSelectedFormSectionQuestions: () => {},
   formQuestionSetQuestions: (formQuestionSetID: number) => [],
   setFormQuestionAnswer: (formQuestionID: number, answer: FormAnswerType | undefined) => {},
+  setFormCategoryCompletionRate: () => {},
+  setFormSectionCompletionRate: () => {},
 }
 
 const FormContext = createContext<FormContextType>(formContextDefaultValues)
@@ -213,6 +217,26 @@ export default function FormContextProvider({
     setSelectedFormSectionQuestions(updatedFormQuestions || [])
   }
 
+  const setFormCategoryCompletionRate = (formCategoryID: number, completionRate: number) => {
+    const updatedFormCategories = formCategories.map((formCategory) => {
+      if (formCategory.formCategoryID === formCategoryID) {
+        return { ...formCategory, completionRate }
+      }
+      return formCategory
+    })
+    setFormCategories(updatedFormCategories)
+  }
+
+  const setFormSectionCompletionRate = (formSectionID: number, completionRate: number) => {
+    const updatedFormSections = formSections.map((formSection) => {
+      if (formSection.formSectionID === formSectionID) {
+        return { ...formSection, completionRate }
+      }
+      return formSection
+    })
+    setFormSections(updatedFormSections)
+  }
+
   const value = {
     mode,
     form,
@@ -239,6 +263,8 @@ export default function FormContextProvider({
     setSelectedFormSectionQuestions,
     formQuestionSetQuestions,
     setFormQuestionAnswer,
+    setFormCategoryCompletionRate,
+    setFormSectionCompletionRate,
   }
 
   return <FormContext.Provider value={value}>{children}</FormContext.Provider>

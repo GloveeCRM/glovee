@@ -23,17 +23,33 @@ interface DeleteFormQuestionSetResponse {
 }
 
 export default function useFormActions() {
-  const { setSelectedFormSectionQuestionSets, setSelectedFormSectionQuestions } = useFormContext()
+  const {
+    setSelectedFormSectionQuestionSets,
+    setSelectedFormSectionQuestions,
+    setFormCategoryCompletionRate,
+    setFormSectionCompletionRate,
+  } = useFormContext()
 
   async function repeatFormQuestionSet({
     formQuestionSetID,
   }: RepeatFormQuestionSetProps): Promise<RepeatFormQuestionSetResponse> {
-    const { formQuestionSets, formQuestions, error } = await repeatApplicationFormQuestionSet({
-      formQuestionSetID,
-    })
+    const { formQuestionSets, formQuestions, completionRates, error } =
+      await repeatApplicationFormQuestionSet({
+        formQuestionSetID,
+      })
     if (!error) {
       setSelectedFormSectionQuestionSets(formQuestionSets || [])
       setSelectedFormSectionQuestions(formQuestions || [])
+      if (completionRates) {
+        setFormCategoryCompletionRate(
+          completionRates.formCategory.formCategoryID,
+          completionRates.formCategory.completionRate
+        )
+        setFormSectionCompletionRate(
+          completionRates.formSection.formSectionID,
+          completionRates.formSection.completionRate
+        )
+      }
     }
     return { error }
   }
@@ -41,12 +57,23 @@ export default function useFormActions() {
   async function deleteFormQuestionSet({
     formQuestionSetID,
   }: DeleteFormQuestionSetProps): Promise<DeleteFormQuestionSetResponse> {
-    const { formQuestionSets, formQuestions, error } = await deleteApplicationFormQuestionSet({
-      formQuestionSetID,
-    })
+    const { formQuestionSets, formQuestions, completionRates, error } =
+      await deleteApplicationFormQuestionSet({
+        formQuestionSetID,
+      })
     if (!error) {
       setSelectedFormSectionQuestionSets(formQuestionSets || [])
       setSelectedFormSectionQuestions(formQuestions || [])
+      if (completionRates) {
+        setFormCategoryCompletionRate(
+          completionRates.formCategory.formCategoryID,
+          completionRates.formCategory.completionRate
+        )
+        setFormSectionCompletionRate(
+          completionRates.formSection.formSectionID,
+          completionRates.formSection.completionRate
+        )
+      }
     }
     return { error }
   }
