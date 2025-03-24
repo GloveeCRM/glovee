@@ -3,20 +3,20 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { MdOutlineModeEdit } from 'react-icons/md'
 
-import useTemplateActions from '@/hooks/form-template/use-template-actions'
-import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+import useFormActions from '@/hooks/form-template/use-form-actions'
+import { useFormContext } from '@/contexts/form-context'
 
-interface TemplateInfoCardDescriptionProps {
-  description: string
+interface FormTemplateInfoCardDescriptionProps {
+  description?: string
 }
 
-export default function TemplateInfoCardDescription({
+export default function FormTemplateInfoCardDescription({
   description,
-}: TemplateInfoCardDescriptionProps) {
+}: FormTemplateInfoCardDescriptionProps) {
   const [isExpanded, setIsExpanded] = useState<boolean>(false)
   const [isEditing, setIsEditing] = useState<boolean>(false)
-  const { formTemplate } = useFormTemplateEditContext()
-  const { updateFormTemplate } = useTemplateActions()
+  const { form } = useFormContext()
+  const { updateForm } = useFormActions()
 
   const descriptionInputRef = useRef<HTMLTextAreaElement>(null)
 
@@ -27,16 +27,16 @@ export default function TemplateInfoCardDescription({
   const handleSave = useCallback(async () => {
     const newDescription = descriptionInputRef.current?.value || ''
     setIsEditing(false)
-    if (!formTemplate?.form) return
-    const { error } = await updateFormTemplate({
-      formTemplateToUpdate: {
-        form: { ...formTemplate.form, formDescription: newDescription },
+    if (!form) return
+    const { error } = await updateForm({
+      formToUpdate: {
+        formDescription: newDescription,
       },
     })
     if (error) {
       console.error(error)
     }
-  }, [updateFormTemplate, formTemplate?.form])
+  }, [updateForm, form])
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === 'Enter') {
@@ -92,11 +92,11 @@ export default function TemplateInfoCardDescription({
         ) : (
           <>
             <p
-              className={`mb-[7px] mt-[1px] w-[calc(100%-14px)] ${description.length <= 129 && 'mb-[6px]'} ${!isExpanded ? 'line-clamp-3' : ''}`}
+              className={`mb-[7px] mt-[1px] w-[calc(100%-14px)] ${description && description.length <= 129 && 'mb-[6px]'} ${!isExpanded ? 'line-clamp-3' : ''}`}
             >
               {description || 'No description'}
             </p>
-            {description.length > 129 && (
+            {description && description.length > 129 && (
               <button
                 className="mb-[6px] text-[11px] text-white underline"
                 onClick={() => setIsExpanded(!isExpanded)}

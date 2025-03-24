@@ -9,7 +9,7 @@ import {
   isTextQuestionType,
   isTextareaQuestionType,
 } from '@/lib/types/form'
-import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+import { useFormContext } from '@/contexts/form-context'
 import TextQuestionSettings from '@/components/forms/questions/text-question/text-question-settings'
 import TextareaQuestionSettings from '@/components/forms/questions/textarea-question/textarea-question-settings'
 import SelectQuestionSettings from '@/components/forms/questions/select-question/select-question-settings'
@@ -23,7 +23,7 @@ interface QuestionSettingsToolbarProps {
 }
 
 export default function QuestionSettingsToolbar({ formQuestionID }: QuestionSettingsToolbarProps) {
-  const { selectedFormQuestion } = useFormTemplateEditContext()
+  const { selectedFormQuestion } = useFormContext()
 
   return (
     <motion.div

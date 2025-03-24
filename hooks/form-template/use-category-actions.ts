@@ -6,9 +6,10 @@ import {
   deleteFormTemplateCategory,
   updateFormTemplateCategories,
 } from '@/lib/actions/form'
-import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+import { useFormContext } from '@/contexts/form-context'
 
 interface CreateFormCategoryProps {
+  formTemplateID: number
   newFormCategory: Partial<FormCategoryType>
 }
 
@@ -33,9 +34,10 @@ interface DeleteFormTemplateCategoryResponse {
 }
 
 export default function useFormCategoryActions() {
-  const { formCategories, setFormCategories, formTemplateID } = useFormTemplateEditContext()
+  const { formCategories, setFormCategories } = useFormContext()
 
   async function createFormCategory({
+    formTemplateID,
     newFormCategory,
   }: CreateFormCategoryProps): Promise<CreateFormCategoryResponse> {
     const { formCategory, error } = await createFormTemplateCategory({

@@ -5,8 +5,8 @@ import { FiEdit, FiMoreHorizontal } from 'react-icons/fi'
 import { BiTrash } from 'react-icons/bi'
 
 import { FormCategoryType } from '@/lib/types/form'
+import { useFormContext } from '@/contexts/form-context'
 import useFormCategoryActions from '@/hooks/form-template/use-category-actions'
-import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
 
 import {
   DropdownMenu,
@@ -31,22 +31,12 @@ export default function TemplateEditSidebarCategory({
 
   const categoryTitleInputRef = useRef<HTMLTextAreaElement>(null)
 
-  const {
-    formCategories,
-    selectedFormCategoryID,
-    setSelectedFormCategoryID,
-    formSections,
-    setSelectedFormSectionID,
-  } = useFormTemplateEditContext()
+  const { formCategories, selectedFormCategoryID, setSelectedFormCategoryID } = useFormContext()
   const { updateFormCategories, deleteFormCategory } = useFormCategoryActions()
 
   function handleClickCategory() {
     if (selectedFormCategoryID !== formCategory.formCategoryID) {
       setSelectedFormCategoryID(formCategory.formCategoryID)
-      const categorySections = formSections?.filter(
-        (formSection) => formSection.formCategoryID === formCategory.formCategoryID
-      )
-      setSelectedFormSectionID(categorySections?.[0]?.formSectionID || 0)
     }
   }
 
@@ -63,10 +53,6 @@ export default function TemplateEditSidebarCategory({
     }
     if (selectedFormCategoryID === formCategory.formCategoryID) {
       setSelectedFormCategoryID(formCategories?.[0]?.formCategoryID || 0)
-      const categorySections = formSections?.filter(
-        (section) => section.formCategoryID === formCategory.formCategoryID
-      )
-      setSelectedFormSectionID(categorySections?.[0]?.formSectionID || 0)
     }
   }
 
@@ -154,7 +140,7 @@ export default function TemplateEditSidebarCategory({
   }, [isEditing, categoryTitleInputRef, formCategories, updateFormCategories, formCategory])
 
   return (
-    <div className="text-zinc-350 text-[14px]">
+    <div className="text-[14px] text-zinc-350">
       {isEditing ? (
         <textarea
           ref={categoryTitleInputRef}
@@ -165,17 +151,17 @@ export default function TemplateEditSidebarCategory({
         />
       ) : (
         <div
-          className="group/category hover:bg-zinc-750 relative cursor-pointer rounded px-[6px] py-[6px] transition duration-75"
+          className="group/category relative cursor-pointer rounded px-[6px] py-[6px] transition duration-75 hover:bg-zinc-750"
           onClick={handleClickCategory}
         >
           <div
-            className={`${!isExpanded && 'text-zinc-350 truncate group-hover/category:w-[calc(100%-28px)] group-hover/category:truncate'} text-white`}
+            className={`${!isExpanded && 'truncate text-zinc-350 group-hover/category:w-[calc(100%-28px)] group-hover/category:truncate'} text-white`}
           >
             {formCategory.categoryName}
           </div>
           <DropdownMenu open={isOptionsMenuOpen} onOpenChange={handleOptionsDropdownMenuOpenChange}>
             <DropdownMenuTrigger
-              className={`bg-zinc-750 group-hover/category:bg-zinc-750 absolute right-0 top-0 rounded p-[6px] opacity-0 transition duration-75 focus:outline-none group-hover/category:opacity-100 ${isOptionsMenuOpen && 'opacity-100'}`}
+              className={`absolute right-0 top-0 rounded bg-zinc-750 p-[6px] opacity-0 transition duration-75 focus:outline-none group-hover/category:bg-zinc-750 group-hover/category:opacity-100 ${isOptionsMenuOpen && 'opacity-100'}`}
             >
               <FiMoreHorizontal className="h-[20px] w-[20px]" />
             </DropdownMenuTrigger>

@@ -1,13 +1,12 @@
 'use client'
 
-import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+import { useFormContext } from '@/contexts/form-context'
 import TemplateQuestionSet from '@/components/forms/question-sets/template-question-set'
 import EmptySectionDropzone from './empty-section-dropzone'
 import NonEmptySectionDropzone from './non-empty-section-dropzone'
 
 export default function QuestionsEditBoard() {
-  const { selectedFormSectionID, rootSelectedFormSectionQuestionSets } =
-    useFormTemplateEditContext()
+  const { selectedFormSectionID, rootSelectedFormSectionQuestionSets } = useFormContext()
 
   return (
     <>

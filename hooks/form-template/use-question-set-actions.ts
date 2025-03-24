@@ -2,7 +2,7 @@
 
 import { FormQuestionSetType } from '@/lib/types/form'
 import { createFormTemplateQuestionSet, deleteFormTemplateQuestionSet } from '@/lib/actions/form'
-import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+import { useFormContext } from '@/contexts/form-context'
 
 interface CreateFormQuestionSetProps {
   newFormQuestionSet: Partial<FormQuestionSetType>
@@ -21,8 +21,7 @@ interface DeleteFormQuestionSetResponse {
 }
 
 export default function useQuestionSetActions() {
-  const { setSelectedFormSectionQuestionSets, setSelectedFormSectionQuestions } =
-    useFormTemplateEditContext()
+  const { setSelectedFormSectionQuestionSets, setSelectedFormSectionQuestions } = useFormContext()
 
   async function createFormQuestionSet({
     newFormQuestionSet,

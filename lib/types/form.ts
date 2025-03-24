@@ -32,7 +32,7 @@ export type ApplicationFormType = {
 export type FormType = {
   formID: number
   formName: string
-  formDescription: string
+  formDescription?: string
   completionRate: number
   createdBy: UserType
   createdAt: string

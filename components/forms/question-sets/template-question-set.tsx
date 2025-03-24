@@ -10,7 +10,7 @@ import {
   isRepeatableQuestionSetType,
   isConditionalQuestionSetType,
 } from '@/lib/types/form'
-import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+import { useFormContext } from '@/contexts/form-context'
 import useQuestionSetActions from '@/hooks/form-template/use-question-set-actions'
 import {
   DropdownMenu,
@@ -29,7 +29,7 @@ interface TemplateQuestionSetProps {
 }
 
 export default function TemplateQuestionSet({ formQuestionSet }: TemplateQuestionSetProps) {
-  const { selectedFormQuestionSetID, setSelectedFormQuestionSetID } = useFormTemplateEditContext()
+  const { selectedFormQuestionSetID, setSelectedFormQuestionSetID } = useFormContext()
   const [isOptionsMenuOpen, setIsOptionsMenuOpen] = useState<boolean>(false)
   const { deleteFormQuestionSet } = useQuestionSetActions()
 

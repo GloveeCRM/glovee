@@ -1,5 +1,5 @@
 import { FormQuestionSetType } from '@/lib/types/form'
-import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+import { useFormContext } from '@/contexts/form-context'
 
 import NonEmptyQuestionSetDropzone from '../non-empty-question-set-dropzone'
 import TemplateQuestion from '../../questions/template-question'
@@ -10,7 +10,7 @@ interface FlatQuestionSetEditProps {
 }
 
 export default function FlatQuestionSetEdit({ questionSet }: FlatQuestionSetEditProps) {
-  const { formQuestionSetQuestions } = useFormTemplateEditContext()
+  const { formQuestionSetQuestions } = useFormContext()
   const qusetionSetQuestions = formQuestionSetQuestions(questionSet.formQuestionSetID)
 
   return (

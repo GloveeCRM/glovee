@@ -13,6 +13,7 @@ import {
   FormQuestionDefaultOptionType,
   FormAnswerType,
   ApplicationFormStatusTypes,
+  FormType,
 } from '@/lib/types/form'
 import { GLOVEE_POSTGREST_URL } from '@/lib/constants/api'
 import { getSession } from '@/lib/auth/session'
@@ -45,30 +46,28 @@ export async function createFormTemplate({
   return { formTemplate: data?.formTemplate, error }
 }
 
-interface UpdateFormTemplateProps {
-  formTemplate: Partial<FormTemplateType>
+interface UpdateFormProps {
+  form: Partial<FormType>
 }
 
-interface UpdateFormTemplateResponse {
-  formTemplate?: FormTemplateType
+interface UpdateFormResponse {
+  form?: FormType
   error?: string
 }
 
-export async function updateFormTemplate({
-  formTemplate,
-}: UpdateFormTemplateProps): Promise<UpdateFormTemplateResponse> {
-  const { data, error } = await httpRequest<{ formTemplate: FormTemplateType }>({
-    path: 'rpc/update_form_template',
+export async function updateForm({ form }: UpdateFormProps): Promise<UpdateFormResponse> {
+  const { data, error } = await httpRequest<{ form: FormType }>({
+    path: 'rpc/update_form',
     method: 'POST',
     data: {
-      formTemplateID: formTemplate.formTemplateID,
-      formName: formTemplate.form?.formName,
-      formDescription: formTemplate.form?.formDescription,
+      formID: form.formID,
+      formName: form.formName,
+      formDescription: form.formDescription,
     },
     authRequired: true,
   })
-  revalidatePath(`/admin/template/${formTemplate.formTemplateID}`)
-  return { formTemplate: data?.formTemplate, error }
+
+  return { form: data?.form, error }
 }
 
 interface DeleteFormTemplateProps {

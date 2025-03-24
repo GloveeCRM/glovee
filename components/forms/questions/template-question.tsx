@@ -14,7 +14,7 @@ import {
   isTextareaQuestionType,
   isFileQuestionType,
 } from '@/lib/types/form'
-import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+import { useFormContext } from '@/contexts/form-context'
 import useQuestionActions from '@/hooks/form-template/use-question-actions'
 
 import {
@@ -39,7 +39,7 @@ interface TemplateQuestionProps {
 export default function TemplateQuestion({ formQuestion }: TemplateQuestionProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false)
   const [isOptionsMenuOpen, setIsOptionsMenuOpen] = useState<boolean>(false)
-  const { selectedFormQuestionID, setSelectedFormQuestionID } = useFormTemplateEditContext()
+  const { selectedFormQuestionID, setSelectedFormQuestionID } = useFormContext()
   const { deleteFormQuestion, updateFormQuestion } = useQuestionActions()
 
   const questionRef = useRef<HTMLDivElement>(null)

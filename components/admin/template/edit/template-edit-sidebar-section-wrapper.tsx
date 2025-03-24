@@ -1,9 +1,9 @@
 'use client'
 
-import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+import { useFormContext } from '@/contexts/form-context'
 
-import TemplateEditSidebarSection from './template-edit-sidebar-section'
-import AddSectionButton from './add-section-button'
+import TemplateEditSidebarSection from '@/components/admin/template/edit/template-edit-sidebar-section'
+import AddSectionButton from '@/components/admin/template/edit/add-section-button'
 
 interface TemplateEditSidebarSectionWrapperProps {
   categoryID: number
@@ -12,7 +12,7 @@ interface TemplateEditSidebarSectionWrapperProps {
 export default function TemplateEditSidebarSectionWrapper({
   categoryID,
 }: TemplateEditSidebarSectionWrapperProps) {
-  const { selectedFormCategorySections, selectedFormSectionID } = useFormTemplateEditContext()
+  const { selectedFormCategorySections, selectedFormSectionID } = useFormContext()
 
   return (
     <div className="mt-[2px] flex flex-col gap-[1px]">
@@ -25,7 +25,7 @@ export default function TemplateEditSidebarSectionWrapper({
           />
         ))
       ) : (
-        <div className="text-zinc-350 py-[4px] pl-[24px] text-[12px]">No sections</div>
+        <div className="py-[4px] pl-[24px] text-[12px] text-zinc-350">No sections</div>
       )}
       <AddSectionButton formCategoryID={categoryID} />
     </div>

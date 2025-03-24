@@ -2,15 +2,15 @@
 
 import { FiPlus } from 'react-icons/fi'
 
+import { useFormContext } from '@/contexts/form-context'
 import useFormSectionActions from '@/hooks/form-template/use-section-actions'
-import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
 
 interface AddSectionButtonProps {
   formCategoryID: number
 }
 
 export default function AddSectionButton({ formCategoryID }: AddSectionButtonProps) {
-  const { selectedFormCategorySections } = useFormTemplateEditContext()
+  const { selectedFormCategorySections } = useFormContext()
   const { createFormSection } = useFormSectionActions()
 
   function handleClick() {

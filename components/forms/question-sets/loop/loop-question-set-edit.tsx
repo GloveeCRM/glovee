@@ -1,7 +1,7 @@
 import { FiPlus } from 'react-icons/fi'
 
 import { FormQuestionSetType } from '@/lib/types/form'
-import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+import { useFormContext } from '@/contexts/form-context'
 
 import NonEmptyQuestionSetDropzone from '../non-empty-question-set-dropzone'
 import EmptyQuestionSetDropzone from '../empty-question-set-dropzone'
@@ -12,7 +12,7 @@ interface LoopQuestionSetEditProps {
 }
 
 export default function LoopQuestionSetEdit({ formQuestionSet }: LoopQuestionSetEditProps) {
-  const { formQuestionSetChildFormQuestionSets } = useFormTemplateEditContext()
+  const { formQuestionSetChildFormQuestionSets } = useFormContext()
   const childQuestionSets = formQuestionSetChildFormQuestionSets(formQuestionSet.formQuestionSetID)
 
   return (

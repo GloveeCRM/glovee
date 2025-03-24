@@ -6,7 +6,7 @@ import {
   updateFormTemplateSections,
   deleteFormTemplateSection,
 } from '@/lib/actions/form'
-import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+import { useFormContext } from '@/contexts/form-context'
 
 interface CreateFormSectionProps {
   newFormSection: Partial<FormSectionType>
@@ -33,7 +33,7 @@ interface DeleteFormSectionResponse {
 }
 
 export default function useFormSectionActions() {
-  const { formSections, setFormSections } = useFormTemplateEditContext()
+  const { formSections, setFormSections } = useFormContext()
 
   async function createFormSection({
     newFormSection,

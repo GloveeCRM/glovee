@@ -2,15 +2,18 @@
 
 import { FiPlus } from 'react-icons/fi'
 
+import { useFormContext } from '@/contexts/form-context'
 import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
 import useFormCategoryActions from '@/hooks/form-template/use-category-actions'
 
 export default function AddCategoryButton() {
-  const { formCategories } = useFormTemplateEditContext()
+  const { formTemplateID } = useFormTemplateEditContext()
+  const { formCategories } = useFormContext()
   const { createFormCategory } = useFormCategoryActions()
 
   async function handleClick() {
     const { error } = await createFormCategory({
+      formTemplateID,
       newFormCategory: {
         categoryName: 'Untitled Category',
         categoryPosition: formCategories ? formCategories.length + 1 : 1,

@@ -1,12 +1,12 @@
 'use client'
 
-import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+import { useFormContext } from '@/contexts/form-context'
 import TemplateEditDefaultToolbar from './template-edit-default-toolbar'
 import QuestionSetSettingsToolbar from './question-set-settings-toolbar'
 import QuestionSettingsToolbar from './question-settings-toolbar'
 
 export default function TemplateEditToolbar() {
-  const { selectedFormQuestionSet, selectedFormQuestionID } = useFormTemplateEditContext()
+  const { selectedFormQuestionSet, selectedFormQuestionID } = useFormContext()
 
   return (
     <div

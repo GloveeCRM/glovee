@@ -16,7 +16,7 @@ import {
   updateFormTemplateQuestionOption,
   updateFormTemplateQuestionSettings,
 } from '@/lib/actions/form'
-import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+import { useFormContext } from '@/contexts/form-context'
 
 interface CreateFormQuestionProps {
   newFormQuestion: Partial<FormQuestionType>
@@ -84,8 +84,7 @@ interface UpdateFormQuestionDefaultOptionsResponse {
 }
 
 export default function useQuestionActions() {
-  const { selectedFormSectionQuestions, setSelectedFormSectionQuestions } =
-    useFormTemplateEditContext()
+  const { selectedFormSectionQuestions, setSelectedFormSectionQuestions } = useFormContext()
 
   async function createFormQuestion({
     newFormQuestion,

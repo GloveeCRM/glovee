@@ -3,8 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { MdOutlineModeEdit } from 'react-icons/md'
 
-import useTemplateActions from '@/hooks/form-template/use-template-actions'
-import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+import { useFormContext } from '@/contexts/form-context'
+import useFormActions from '@/hooks/form-template/use-form-actions'
 
 interface FormTemplateInfoCardTitleProps {
   title: string
@@ -15,8 +15,8 @@ export default function FormTemplateInfoCardTitle({ title }: FormTemplateInfoCar
 
   const titleInputRef = useRef<HTMLTextAreaElement>(null)
 
-  const { formTemplate } = useFormTemplateEditContext()
-  const { updateFormTemplate } = useTemplateActions()
+  const { form } = useFormContext()
+  const { updateForm } = useFormActions()
 
   function handleClickEdit() {
     setIsEditing(true)
@@ -25,14 +25,16 @@ export default function FormTemplateInfoCardTitle({ title }: FormTemplateInfoCar
   const handleSave = useCallback(async () => {
     const newTitle = titleInputRef.current?.value || 'Untitled Template'
     setIsEditing(false)
-    if (!formTemplate) return
-    const { error } = await updateFormTemplate({
-      formTemplateToUpdate: { form: { ...formTemplate.form, formName: newTitle } },
+    if (!form) return
+    const { error } = await updateForm({
+      formToUpdate: {
+        formName: newTitle,
+      },
     })
     if (error) {
       console.error(error)
     }
-  }, [updateFormTemplate, formTemplate])
+  }, [updateForm, form])
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === 'Enter') {

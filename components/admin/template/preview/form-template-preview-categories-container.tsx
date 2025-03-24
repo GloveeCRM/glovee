@@ -3,14 +3,13 @@
 import { Fragment } from 'react'
 
 import { FormCategoryType } from '@/lib/types/form'
-import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+import { useFormContext } from '@/contexts/form-context'
 
 import { Separator } from '@/components/ui/separator'
 import FormTemplatePreviewCategoryCard from './form-template-category-card'
 
 export default function FormTemplatePreviewCategoriesContainer() {
-  const { formCategories, selectedFormCategoryID, setSelectedFormCategoryID } =
-    useFormTemplateEditContext()
+  const { formCategories, selectedFormCategoryID, setSelectedFormCategoryID } = useFormContext()
 
   function handleClickCategory(formCategoryID: number) {
     setSelectedFormCategoryID(formCategoryID)

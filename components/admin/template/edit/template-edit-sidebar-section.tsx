@@ -5,7 +5,7 @@ import { FiEdit, FiMoreHorizontal } from 'react-icons/fi'
 import { BiTrash } from 'react-icons/bi'
 
 import { FormSectionType } from '@/lib/types/form'
-import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+import { useFormContext } from '@/contexts/form-context'
 import useFormSectionActions from '@/hooks/form-template/use-section-actions'
 
 import {
@@ -28,7 +28,7 @@ export default function TemplateEditSidebarSection({
   const [isEditing, setIsEditing] = useState<boolean>(false)
   const [isOptionsMenuOpen, setIsOptionsMenuOpen] = useState<boolean>(false)
 
-  const { setSelectedFormSectionID } = useFormTemplateEditContext()
+  const { setSelectedFormSectionID } = useFormContext()
   const { updateFormSections, deleteFormSection } = useFormSectionActions()
 
   const sectionInputRef = useRef<HTMLTextAreaElement>(null)
@@ -133,7 +133,7 @@ export default function TemplateEditSidebarSection({
 
   return (
     <div
-      className={`group/section hover:bg-zinc-750 relative cursor-pointer rounded text-[12px] transition duration-75 ${active && 'bg-zinc-750 text-white'} ${isEditing ? 'py-[5px]' : 'py-[6px]'}`}
+      className={`group/section relative cursor-pointer rounded text-[12px] transition duration-75 hover:bg-zinc-750 ${active && 'bg-zinc-750 text-white'} ${isEditing ? 'py-[5px]' : 'py-[6px]'}`}
       onClick={handleClickSection}
     >
       {isEditing ? (
@@ -153,7 +153,7 @@ export default function TemplateEditSidebarSection({
               onOpenChange={handleOptionsDropdownMenuOpenChange}
             >
               <DropdownMenuTrigger
-                className={`group-hover/section:bg-zinc-750 absolute right-0 top-0 rounded p-[5px] opacity-0 transition duration-75 group-hover/section:opacity-100 ${isOptionsMenuOpen && 'bg-zinc-750 opacity-100'} ${active && 'bg-zinc-750'}`}
+                className={`absolute right-0 top-0 rounded p-[5px] opacity-0 transition duration-75 group-hover/section:bg-zinc-750 group-hover/section:opacity-100 ${isOptionsMenuOpen && 'bg-zinc-750 opacity-100'} ${active && 'bg-zinc-750'}`}
               >
                 <FiMoreHorizontal className="h-[20px] w-[20px]" />
               </DropdownMenuTrigger>

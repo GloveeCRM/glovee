@@ -3,7 +3,7 @@
 import { useState } from 'react'
 
 import { FormQuestionSetType } from '@/lib/types/form'
-import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+import { useFormContext } from '@/contexts/form-context'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 import useQuestionSetActions from '@/hooks/form-template/use-question-set-actions'
 
@@ -19,7 +19,7 @@ export default function NonEmptySectionDropzone({
   isLastDropzone = false,
 }: NonEmptySectionDropzoneProps) {
   const [isDraggedOver, setIsDraggedOver] = useState<boolean>(false)
-  const { selectedFormSectionID } = useFormTemplateEditContext()
+  const { selectedFormSectionID } = useFormContext()
   const { draggedObject, setDraggedObject } = useDragAndDropContext()
   const { createFormQuestionSet } = useQuestionSetActions()
 

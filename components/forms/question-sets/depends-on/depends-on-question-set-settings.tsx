@@ -1,7 +1,7 @@
 'use client'
 
 import { FormQuestionSetType, isRadioQuestionType } from '@/lib/types/form'
-import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+import { useFormContext } from '@/contexts/form-context'
 
 import RadioQuestionSettings from '../../questions/radio-question/radio-question-settings'
 
@@ -12,7 +12,7 @@ interface DependsOnQuestionSetSettingsProps {
 export default function DependsOnQuestionSetSettings({
   formQuestionSet,
 }: DependsOnQuestionSetSettingsProps) {
-  const { formQuestionSetQuestions } = useFormTemplateEditContext()
+  const { formQuestionSetQuestions } = useFormContext()
 
   const formQuestionSetQuestion = formQuestionSetQuestions(formQuestionSet.formQuestionSetID)?.[0]
 

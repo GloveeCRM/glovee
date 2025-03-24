@@ -2,16 +2,14 @@
 
 import { useState } from 'react'
 
-import { FormQuestionSetType, FormQuestionSetTypes } from '@/lib/types/form'
-import { QuestionTypes, RadioQuestionType } from '@/lib/types/qusetion'
-import { generateRandomID } from '@/lib/utils/id'
+import { FormQuestionSetType } from '@/lib/types/form'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
-import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+import { useFormContext } from '@/contexts/form-context'
 import useQuestionSetActions from '@/hooks/form-template/use-question-set-actions'
 
 export default function EmptySectionDropzone() {
   const [isDraggedOver, setIsDraggedOver] = useState<boolean>(false)
-  const { selectedFormSectionID } = useFormTemplateEditContext()
+  const { selectedFormSectionID } = useFormContext()
   const { draggedObject, setDraggedObject } = useDragAndDropContext()
   const { createFormQuestionSet } = useQuestionSetActions()
 

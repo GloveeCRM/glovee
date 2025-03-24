@@ -3,15 +3,15 @@
 import { Fragment } from 'react'
 
 import { FormCategoryType } from '@/lib/types/form'
-import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+import { useFormContext } from '@/contexts/form-context'
 
 import { Separator } from '@/components/ui/separator'
 import { TemplateEditSidebarCategoryWrapperSkeleton } from '@/components/skeletons'
-import TemplateEditSidebarCategory from './template-edit-sidebar-category'
-import AddCategoryButton from './add-category-button'
+import TemplateEditSidebarCategory from '@/components/admin/template/edit/template-edit-sidebar-category'
+import AddCategoryButton from '@/components/admin/template/edit/add-category-button'
 
 export default function FormTemplateEditSidebarCategoryWrapper() {
-  const { formCategories, selectedFormCategoryID } = useFormTemplateEditContext()
+  const { formCategories, selectedFormCategoryID } = useFormContext()
 
   if (!formCategories) {
     return <TemplateEditSidebarCategoryWrapperSkeleton />

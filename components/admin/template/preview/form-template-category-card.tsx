@@ -3,7 +3,7 @@
 import { IoChevronDown, IoChevronForward } from 'react-icons/io5'
 
 import { FormCategoryType, FormSectionType } from '@/lib/types/form'
-import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+import { useFormContext } from '@/contexts/form-context'
 
 import ProgressIndicatorRing from '@/components/ui/progress-indicator-ring'
 import FormTemplatePreviewSectionCard from '@/components/admin/template/preview/form-template-preview-section-card'
@@ -19,7 +19,7 @@ export default function FormTemplatePreviewCategoryCard({
   isExpanded,
   onClick,
 }: FormTemplatePreviewCategoryCardProps) {
-  const { selectedFormCategorySections } = useFormTemplateEditContext()
+  const { selectedFormCategorySections } = useFormContext()
 
   return (
     <div

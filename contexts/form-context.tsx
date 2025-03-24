@@ -12,19 +12,27 @@ import {
   FormType,
 } from '@/lib/types/form'
 import { fetchFormSectionQuestionSetsAndQuestions, fetchFormContent } from '@/lib/data/form'
+
 type FormContextType = {
-  formID: number
   mode: 'view' | 'edit'
   form: FormType | null
+  setForm: (form: FormType | null) => void
   formCategories: FormCategoryType[]
+  setFormCategories: (formCategories: FormCategoryType[]) => void
   formSections: FormSectionType[]
+  setFormSections: (formSections: FormSectionType[]) => void
   selectedFormCategoryID: number
   setSelectedFormCategoryID: (formCategoryID: number) => void
   selectedFormSectionID: number
   setSelectedFormSectionID: (formSectionID: number) => void
   selectedFormCategorySections: FormSectionType[]
-  selectedFormSectionQuestionSets: FormQuestionSetType[]
   setSelectedFormSectionQuestionSets: (formQuestionSets: FormQuestionSetType[]) => void
+  selectedFormQuestionSetID: number
+  setSelectedFormQuestionSetID: (formQuestionSetID: number) => void
+  selectedFormQuestionID: number
+  setSelectedFormQuestionID: (formQuestionID: number) => void
+  selectedFormQuestionSet: FormQuestionSetType | undefined
+  selectedFormQuestion: FormQuestionType | undefined
   rootSelectedFormSectionQuestionSets: FormQuestionSetType[]
   formQuestionSetChildFormQuestionSets: (parentFormQuestionSetID: number) => FormQuestionSetType[]
   selectedFormSectionQuestions: FormQuestionType[]
@@ -34,18 +42,25 @@ type FormContextType = {
 }
 
 const formContextDefaultValues: FormContextType = {
-  formID: 0,
   mode: 'view',
   form: null,
+  setForm: () => {},
   formCategories: [],
+  setFormCategories: () => {},
   formSections: [],
+  setFormSections: () => {},
   selectedFormCategoryID: 0,
   setSelectedFormCategoryID: () => {},
   selectedFormSectionID: 0,
   setSelectedFormSectionID: () => {},
   selectedFormCategorySections: [],
-  selectedFormSectionQuestionSets: [],
   setSelectedFormSectionQuestionSets: () => {},
+  selectedFormQuestionSetID: 0,
+  setSelectedFormQuestionSetID: () => {},
+  selectedFormQuestionID: 0,
+  setSelectedFormQuestionID: () => {},
+  selectedFormQuestionSet: undefined,
+  selectedFormQuestion: undefined,
   rootSelectedFormSectionQuestionSets: [],
   formQuestionSetChildFormQuestionSets: (parentFormQuestionSetID: number) => [],
   selectedFormSectionQuestions: [],
@@ -78,15 +93,15 @@ export default function FormContextProvider({
   const [selectedFormSectionQuestions, setSelectedFormSectionQuestions] = useState<
     FormQuestionType[]
   >([])
+  const [selectedFormQuestionSetID, setSelectedFormQuestionSetID] = useState<number>(0)
+  const [selectedFormQuestionID, setSelectedFormQuestionID] = useState<number>(0)
 
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const { replace } = useRouter()
 
   const selectedFormSectionID = parseInt(searchParams.get('section') || '0')
-  const selectedFormCategoryID =
-    formSections.find((section) => section.formSectionID === selectedFormSectionID)
-      ?.formCategoryID || 0
+  const selectedFormCategoryID = parseInt(searchParams.get('category') || '0')
 
   const selectedFormCategorySections = useMemo(() => {
     return formSections
@@ -114,6 +129,18 @@ export default function FormContextProvider({
       .sort((a, b) => a.formQuestionPosition - b.formQuestionPosition)
   }
 
+  const selectedFormQuestionSet = useMemo(() => {
+    return selectedFormSectionQuestionSets?.find(
+      (questionSet) => questionSet.formQuestionSetID === selectedFormQuestionSetID
+    )
+  }, [selectedFormSectionQuestionSets, selectedFormQuestionSetID])
+
+  const selectedFormQuestion = useMemo(() => {
+    return selectedFormSectionQuestions?.find(
+      (question) => question.formQuestionID === selectedFormQuestionID
+    )
+  }, [selectedFormSectionQuestions, selectedFormQuestionID])
+
   useEffect(() => {
     async function fetchAndSetFormContent() {
       const { form, formCategories, formSections } = await fetchFormContent({
@@ -127,16 +154,17 @@ export default function FormContextProvider({
         (a, b) => a.categoryPosition - b.categoryPosition
       )
       setFormCategories(sortedFormCategories || [])
+      // TODO: Sort form sections by category first then by position
       const sortedFormSections = formSections?.sort((a, b) => a.sectionPosition - b.sectionPosition)
       setFormSections(sortedFormSections || [])
 
-      if (!selectedFormSectionID && formSections && formSections.length > 0) {
-        setSelectedFormSectionID(formSections[0].formSectionID)
+      if (!selectedFormCategoryID && formCategories && formCategories.length > 0) {
+        setSelectedFormCategoryID(formCategories[0].formCategoryID)
       }
     }
 
     fetchAndSetFormContent()
-  }, [formID, selectedFormSectionQuestions])
+  }, [formID])
 
   useEffect(() => {
     async function fetchAndSetFormSectionQuestionSetsAndQuestions() {
@@ -153,6 +181,15 @@ export default function FormContextProvider({
     }
   }, [selectedFormSectionID])
 
+  useEffect(() => {
+    if (selectedFormCategoryID && !selectedFormSectionID && formSections.length > 0) {
+      setSelectedFormSectionID(
+        formSections.find((section) => section.formCategoryID === selectedFormCategoryID)
+          ?.formSectionID || 0
+      )
+    }
+  }, [selectedFormCategoryID, selectedFormSectionID, formSections])
+
   function setSelectedFormSectionID(formSectionID: number) {
     const params = new URLSearchParams(searchParams)
     params.set('section', String(formSectionID))
@@ -160,9 +197,10 @@ export default function FormContextProvider({
   }
 
   function setSelectedFormCategoryID(formCategoryID: number) {
-    const firstSectionID =
-      formSections.find((section) => section.formCategoryID === formCategoryID)?.formSectionID || 0
-    setSelectedFormSectionID(firstSectionID)
+    const params = new URLSearchParams(searchParams)
+    params.set('category', String(formCategoryID))
+    params.delete('section')
+    replace(`${pathname}?${params.toString()}`)
   }
 
   function setFormQuestionAnswer(formQuestionID: number, answer: FormAnswerType | undefined) {
@@ -176,18 +214,25 @@ export default function FormContextProvider({
   }
 
   const value = {
-    formID,
     mode,
     form,
+    setForm,
     formCategories,
+    setFormCategories,
     formSections,
+    setFormSections,
     selectedFormCategoryID,
     setSelectedFormCategoryID,
     selectedFormSectionID,
     setSelectedFormSectionID,
     selectedFormCategorySections,
-    selectedFormSectionQuestionSets,
     setSelectedFormSectionQuestionSets,
+    selectedFormQuestionSetID,
+    setSelectedFormQuestionSetID,
+    selectedFormQuestionID,
+    setSelectedFormQuestionID,
+    selectedFormQuestionSet,
+    selectedFormQuestion,
     rootSelectedFormSectionQuestionSets,
     formQuestionSetChildFormQuestionSets,
     selectedFormSectionQuestions,

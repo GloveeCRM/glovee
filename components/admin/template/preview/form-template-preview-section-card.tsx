@@ -3,7 +3,7 @@
 import { FaRegCircleCheck, FaRegCircle } from 'react-icons/fa6'
 
 import { FormSectionType } from '@/lib/types/form'
-import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+import { useFormContext } from '@/contexts/form-context'
 
 interface FormTemplatePreviewSectionCardProps {
   formSection: FormSectionType
@@ -12,7 +12,7 @@ interface FormTemplatePreviewSectionCardProps {
 export default function FormTemplatePreviewSectionCard({
   formSection,
 }: FormTemplatePreviewSectionCardProps) {
-  const { selectedFormSectionID, setSelectedFormSectionID } = useFormTemplateEditContext()
+  const { selectedFormSectionID, setSelectedFormSectionID } = useFormContext()
 
   const handleClickSection = (formSectionID: number) => {
     if (selectedFormSectionID !== formSectionID) {

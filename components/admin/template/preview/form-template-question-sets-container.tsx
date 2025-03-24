@@ -1,11 +1,11 @@
 'use client'
 
-import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+import { useFormContext } from '@/contexts/form-context'
 
 import FormQuestionSet from '@/components/forms/question-sets/form-question-set'
 
 export default function FormTemplateQuestionSetsContainer() {
-  const { rootSelectedFormSectionQuestionSets } = useFormTemplateEditContext()
+  const { rootSelectedFormSectionQuestionSets } = useFormContext()
 
   return (
     <div className="flex h-full flex-col gap-[16px] overflow-y-scroll p-[8px]">
