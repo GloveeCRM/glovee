@@ -5,16 +5,19 @@ import { BiTrash } from 'react-icons/bi'
 import { FaDownload, FaFile } from 'react-icons/fa6'
 
 import { FileType } from '@/lib/types/file'
+import { FormQuestionModes } from '@/lib/types/form'
 import useFile from '@/hooks/file/use-file'
 
 interface AnswerFileProps {
   file: FileType
-  mode: 'view' | 'edit'
+  mode: FormQuestionModes
   onDelete: () => void
 }
 
 export default function AnswerFile({ file, mode, onDelete }: AnswerFileProps) {
   const { fileWithUrl } = useFile({ file })
+
+  const isInteractive = mode === FormQuestionModes.INTERACTIVE
 
   return (
     <div className="flex items-center justify-between gap-[12px] rounded-md border border-sand-500 bg-white p-[10px] text-[14px] shadow-sm">
@@ -37,7 +40,7 @@ export default function AnswerFile({ file, mode, onDelete }: AnswerFileProps) {
         >
           <FaDownload className="h-[20px] w-[20px]" />
         </Link>
-        {mode === 'edit' && (
+        {isInteractive && (
           <div
             className="flex cursor-pointer items-center gap-[4px] rounded-full bg-sand-450 p-[10px] text-sand-900 hover:bg-red-100 hover:text-red-700"
             onClick={onDelete}

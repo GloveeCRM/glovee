@@ -18,7 +18,6 @@ export default function FormTemplateQuestionSetsContainer() {
             <FormQuestionSet
               key={formQuestionSet.formQuestionSetID}
               formQuestionSet={formQuestionSet}
-              mode="view"
             />
           </div>
         ))

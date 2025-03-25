@@ -65,7 +65,7 @@ export default function FileQuestion({ formQuestion, mode }: FileQuestionProps) 
     <div className="">
       {formQuestion.answer?.answerFiles && formQuestion.answer?.answerFiles.length > 0 ? (
         formQuestion.answer?.answerFiles.map((file) => (
-          <AnswerFile key={file.fileID} file={file.file!} mode="view" onDelete={() => {}} />
+          <AnswerFile key={file.fileID} file={file.file!} mode={mode} onDelete={() => {}} />
         ))
       ) : (
         <div className="text-[14px] text-zinc-500">No answer provided</div>
@@ -78,7 +78,7 @@ export default function FileQuestion({ formQuestion, mode }: FileQuestionProps) 
           <AnswerFile
             key={file.fileID}
             file={file.file!}
-            mode="edit"
+            mode={mode}
             onDelete={() => handleFileDelete(file.fileID || 0)}
           />
         ))
