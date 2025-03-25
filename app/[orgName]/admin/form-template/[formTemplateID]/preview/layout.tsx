@@ -38,8 +38,8 @@ export default async function TemplatePreviewLayout({
         <FormContextProvider formID={formTemplate.formID} mode={FormQuestionModes.READ_ONLY}>
           <FormSidebar
             showProgressIndicator={false}
-            backURL={`/admin/form-template/${formTemplate.formTemplateID}/edit`}
-            backButtonText="Back to Edit"
+            backURL={`/admin/form-templates`}
+            backButtonText="Back"
           />
           <div className="h-svh flex-1">{children}</div>
         </FormContextProvider>
