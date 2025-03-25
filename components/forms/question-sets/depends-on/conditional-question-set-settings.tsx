@@ -3,24 +3,24 @@
 import { FormQuestionSetType, isRadioQuestionType } from '@/lib/types/form'
 import { useFormContext } from '@/contexts/form-context'
 
-import RadioQuestionSettings from '../../questions/radio-question/radio-question-settings'
+import RadioQuestionSettings from '@/components/forms/questions/radio-question/radio-question-settings'
 
-interface DependsOnQuestionSetSettingsProps {
+interface ConditionalQuestionSetSettingsProps {
   formQuestionSet: FormQuestionSetType
 }
 
-export default function DependsOnQuestionSetSettings({
+export default function ConditionalQuestionSetSettings({
   formQuestionSet,
-}: DependsOnQuestionSetSettingsProps) {
+}: ConditionalQuestionSetSettingsProps) {
   const { formQuestionSetQuestions } = useFormContext()
 
   const formQuestionSetQuestion = formQuestionSetQuestions(formQuestionSet.formQuestionSetID)?.[0]
 
   return (
-    <div className="">
+    <>
       {formQuestionSetQuestion && isRadioQuestionType(formQuestionSetQuestion) && (
         <RadioQuestionSettings formQuestion={formQuestionSetQuestion} />
       )}
-    </div>
+    </>
   )
 }

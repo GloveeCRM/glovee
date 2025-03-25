@@ -1,25 +1,26 @@
 import { redirect } from 'next/navigation'
 
-import { ApplicationFormStatusTypes } from '@/lib/types/form'
+import { ApplicationFormStatusTypes, FormQuestionModes } from '@/lib/types/form'
 import { fetchApplicationForm } from '@/lib/data/form'
 import FormContextProvider from '@/contexts/form-context'
+import ApplicationFormProvider from '@/contexts/application-form-context'
 
-import ApplicationFormSidebar from '@/components/application/application-form-sidebar'
+import FormSidebar from '@/components/application/form-sidebar'
 
-interface ApplicationFormLayoutParams {
+interface ClientApplicationFormLayoutParams {
   applicationID: string
   applicationFormID: string
 }
 
-interface ApplicationFormLayoutProps {
+interface ClientApplicationFormLayoutProps {
   children: React.ReactNode
-  params: ApplicationFormLayoutParams
+  params: ClientApplicationFormLayoutParams
 }
 
-export default async function ApplicationFormLayout({
+export default async function ClientApplicationFormLayout({
   children,
   params,
-}: Readonly<ApplicationFormLayoutProps>) {
+}: Readonly<ClientApplicationFormLayoutProps>) {
   const { applicationFormID, applicationID } = params
   const applicationIDNumeric = Number(applicationID)
   const applicationFormIDNumeric = Number(applicationFormID)
@@ -28,19 +29,30 @@ export default async function ApplicationFormLayout({
     applicationFormID: applicationFormIDNumeric,
   })
 
-  if (applicationForm?.status === ApplicationFormStatusTypes.CLIENT_SUBMITTED) {
+  if (!applicationForm) {
+    return <div>Application form not found</div>
+  }
+
+  if (applicationForm.status === ApplicationFormStatusTypes.CLIENT_SUBMITTED) {
     redirect(`/application/${applicationID}/submission/${applicationFormID}`)
   }
 
   return (
-    <FormContextProvider formID={applicationForm?.formID || 0} mode="edit" includeAnswers={true}>
-      <div id="client-form-layout" className="flex overflow-hidden">
-        <ApplicationFormSidebar
-          showProgressIndicator={true}
-          backURL={`/application/${applicationIDNumeric}/forms`}
-        />
-        <div className="h-svh flex-1">{children}</div>
-      </div>
-    </FormContextProvider>
+    <ApplicationFormProvider applicationForm={applicationForm}>
+      <FormContextProvider
+        formID={applicationForm?.formID || 0}
+        mode={FormQuestionModes.INTERACTIVE}
+        includeAnswers={true}
+      >
+        <div id="client-form-layout" className="flex overflow-hidden">
+          <FormSidebar
+            showProgressIndicator={true}
+            backURL={`/application/${applicationIDNumeric}/forms`}
+            backButtonText="Back to Application"
+          />
+          <div className="h-svh flex-1">{children}</div>
+        </div>
+      </FormContextProvider>
+    </ApplicationFormProvider>
   )
 }

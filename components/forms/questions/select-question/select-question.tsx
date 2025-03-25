@@ -3,16 +3,15 @@
 import { ImSpinner2 } from 'react-icons/im'
 import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
 
-import { FormQuestionType } from '@/lib/types/form'
+import { FormQuestionModes, FormQuestionType } from '@/lib/types/form'
 import useAnswer from '@/hooks/form/use-answer'
 
 interface SelectQuestionProps {
   formQuestion: FormQuestionType
-  mode: 'edit' | 'view'
-  readOnly?: boolean
+  mode: FormQuestionModes
 }
 
-export default function SelectQuestion({ formQuestion, mode, readOnly }: SelectQuestionProps) {
+export default function SelectQuestion({ formQuestion, mode }: SelectQuestionProps) {
   const { message, updateAnswer } = useAnswer(formQuestion.formQuestionID)
 
   function handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
@@ -30,7 +29,22 @@ export default function SelectQuestion({ formQuestion, mode, readOnly }: SelectQ
     )
   )
 
-  return mode === 'edit' ? (
+  const isAnswerOnly = mode === FormQuestionModes.ANSWER_ONLY
+  const isInteractive = mode === FormQuestionModes.INTERACTIVE
+
+  return isAnswerOnly ? (
+    <div className="text-[14px] text-zinc-500">
+      {selectedOptions?.length ? (
+        <ul className="list-inside list-disc">
+          {selectedOptions.map((option) => (
+            <li key={option.formQuestionOptionID}>{option.optionText}</li>
+          ))}
+        </ul>
+      ) : (
+        'No answer provided'
+      )}
+    </div>
+  ) : (
     <div className="relative">
       <select
         className="w-full rounded-[3px] border border-n-400 bg-transparent px-[6px] py-[8px] text-[14px] focus-visible:outline-none"
@@ -39,7 +53,7 @@ export default function SelectQuestion({ formQuestion, mode, readOnly }: SelectQ
           formQuestion.formQuestionDefaultOptions?.[0]?.formQuestionOptionID ||
           0
         }
-        disabled={readOnly}
+        disabled={!isInteractive}
         onChange={handleChange}
       >
         {showPlaceholder && (
@@ -68,18 +82,6 @@ export default function SelectQuestion({ formQuestion, mode, readOnly }: SelectQ
           )}
           <span>{message}</span>
         </div>
-      )}
-    </div>
-  ) : (
-    <div className="text-[14px] text-zinc-500">
-      {selectedOptions?.length ? (
-        <ul className="list-inside list-disc">
-          {selectedOptions.map((option) => (
-            <li key={option.formQuestionOptionID}>{option.optionText}</li>
-          ))}
-        </ul>
-      ) : (
-        'No answer provided'
       )}
     </div>
   )

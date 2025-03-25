@@ -3,16 +3,15 @@
 import { ImSpinner2 } from 'react-icons/im'
 import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
 
-import { FormQuestionType, FormQuestionDisplayTypes } from '@/lib/types/form'
+import { FormQuestionModes, FormQuestionType, FormQuestionDisplayTypes } from '@/lib/types/form'
 import useAnswer from '@/hooks/form/use-answer'
 
 interface CheckboxQuestionProps {
   formQuestion: FormQuestionType
-  mode: 'edit' | 'view'
-  readOnly?: boolean
+  mode: FormQuestionModes
 }
 
-export default function CheckboxQuestion({ formQuestion, mode, readOnly }: CheckboxQuestionProps) {
+export default function CheckboxQuestion({ formQuestion, mode }: CheckboxQuestionProps) {
   const { message, updateAnswer } = useAnswer(formQuestion.formQuestionID)
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -33,7 +32,22 @@ export default function CheckboxQuestion({ formQuestion, mode, readOnly }: Check
     )
   )
 
-  return mode === 'edit' ? (
+  const isAnswerOnly = mode === FormQuestionModes.ANSWER_ONLY
+  const isInteractive = mode === FormQuestionModes.INTERACTIVE
+
+  return isAnswerOnly ? (
+    <div className="text-[14px] text-zinc-500">
+      {selectedOptions?.length ? (
+        <ul className="list-inside list-disc">
+          {selectedOptions.map((option) => (
+            <li key={option.formQuestionOptionID}>{option.optionText}</li>
+          ))}
+        </ul>
+      ) : (
+        'No answer provided'
+      )}
+    </div>
+  ) : (
     <div className="relative">
       <div className={`flex ${inline ? 'gap-[18px]' : 'flex-col gap-[6px]'}`}>
         {options?.map((option) => (
@@ -50,7 +64,7 @@ export default function CheckboxQuestion({ formQuestion, mode, readOnly }: Check
                     answerOption.formQuestionOptionID === option.formQuestionOptionID
                 ) ?? false
               }
-              disabled={readOnly}
+              disabled={!isInteractive}
               className="h-[16px] w-[16px] accent-n-700"
             />
             <label htmlFor={String(option.formQuestionOptionID)} className="text-[14px] text-n-500">
@@ -72,18 +86,6 @@ export default function CheckboxQuestion({ formQuestion, mode, readOnly }: Check
           )}
           <span className="text-[12px]">{message}</span>
         </div>
-      )}
-    </div>
-  ) : (
-    <div className="text-[14px] text-zinc-500">
-      {selectedOptions?.length ? (
-        <ul className="list-inside list-disc">
-          {selectedOptions.map((option) => (
-            <li key={option.formQuestionOptionID}>{option.optionText}</li>
-          ))}
-        </ul>
-      ) : (
-        'No answer provided'
       )}
     </div>
   )

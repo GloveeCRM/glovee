@@ -3,7 +3,7 @@
 import { FormQuestionSetTypes } from '@/lib/types/form'
 import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 
-export default function FlatQuestionSetIcon() {
+export default function StaticQuestionSetIcon() {
   const { setDraggedObject } = useDragAndDropContext()
 
   function handleDragStart(e: React.DragEvent<HTMLDivElement>) {
@@ -23,7 +23,7 @@ export default function FlatQuestionSetIcon() {
       onDragStart={handleDragStart}
     >
       <div className="flex h-[54px] items-center justify-center rounded-sm bg-g-200">
-        <span className="text-[12px] font-medium">Flat</span>
+        <span className="text-[12px] font-medium">Static</span>
       </div>
     </div>
   )

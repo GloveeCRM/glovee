@@ -12,21 +12,23 @@ interface ApplicationFormCategoryCardProps {
   formCategory: FormCategoryType
   showProgressIndicator: boolean
   isExpanded: boolean
-  onClick: (categoryId: number) => void
 }
 
 export default function ApplicationFormCategoryCard({
   formCategory,
   showProgressIndicator,
   isExpanded,
-  onClick,
 }: ApplicationFormCategoryCardProps) {
-  const { selectedFormCategorySections } = useFormContext()
+  const { selectedFormCategorySections, setSelectedFormCategoryID } = useFormContext()
+
+  function handleClickCategory() {
+    setSelectedFormCategoryID(formCategory.formCategoryID)
+  }
 
   return (
     <div
       className={`cursor-pointer text-wrap rounded px-[4px] pb-[4px] text-[12px] text-n-400`}
-      onClick={() => onClick(formCategory.formCategoryID)}
+      onClick={handleClickCategory}
     >
       <div className="flex gap-[4px]">
         {showProgressIndicator && (

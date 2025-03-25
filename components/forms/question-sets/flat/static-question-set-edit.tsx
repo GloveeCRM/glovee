@@ -5,19 +5,19 @@ import NonEmptyQuestionSetDropzone from '../non-empty-question-set-dropzone'
 import TemplateQuestion from '../../questions/template-question'
 import EmptyQuestionSetDropzone from '../empty-question-set-dropzone'
 
-interface FlatQuestionSetEditProps {
+interface StaticQuestionSetEditProps {
   questionSet: FormQuestionSetType
 }
 
-export default function FlatQuestionSetEdit({ questionSet }: FlatQuestionSetEditProps) {
+export default function StaticQuestionSetEdit({ questionSet }: StaticQuestionSetEditProps) {
   const { formQuestionSetQuestions } = useFormContext()
-  const qusetionSetQuestions = formQuestionSetQuestions(questionSet.formQuestionSetID)
+  const questionSetQuestions = formQuestionSetQuestions(questionSet.formQuestionSetID)
 
   return (
     <div className="rounded bg-g-500 p-[8px] pt-[16px]">
-      {qusetionSetQuestions && qusetionSetQuestions.length > 0 ? (
+      {questionSetQuestions && questionSetQuestions.length > 0 ? (
         <div className="rounded bg-g-200/80 px-[6px] py-[2px]">
-          {qusetionSetQuestions.map((question) => (
+          {questionSetQuestions.map((question) => (
             <div key={question.formQuestionID}>
               {question.formQuestionPosition === 1 && (
                 <NonEmptyQuestionSetDropzone
@@ -30,7 +30,7 @@ export default function FlatQuestionSetEdit({ questionSet }: FlatQuestionSetEdit
               <NonEmptyQuestionSetDropzone
                 position={question.formQuestionPosition + 1}
                 questionSet={questionSet}
-                isLastDropzone={qusetionSetQuestions.length === question.formQuestionPosition}
+                isLastDropzone={questionSetQuestions.length === question.formQuestionPosition}
               />
             </div>
           ))}

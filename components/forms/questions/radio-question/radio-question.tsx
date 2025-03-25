@@ -3,16 +3,15 @@
 import { ImSpinner2 } from 'react-icons/im'
 import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
 
-import { FormQuestionDisplayTypes, FormQuestionType } from '@/lib/types/form'
+import { FormQuestionDisplayTypes, FormQuestionModes, FormQuestionType } from '@/lib/types/form'
 import useAnswer from '@/hooks/form/use-answer'
 
 interface RadioQuestionProps {
   formQuestion: FormQuestionType
-  mode: 'edit' | 'view'
-  readOnly?: boolean
+  mode: FormQuestionModes
 }
 
-export default function RadioQuestion({ formQuestion, mode, readOnly }: RadioQuestionProps) {
+export default function RadioQuestion({ formQuestion, mode }: RadioQuestionProps) {
   const { message, updateAnswer } = useAnswer(formQuestion.formQuestionID)
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const selectedOptionID = Number(e.target.value) || 0
@@ -30,7 +29,22 @@ export default function RadioQuestion({ formQuestion, mode, readOnly }: RadioQue
     )
   )
 
-  return mode === 'edit' ? (
+  const isAnswerOnly = mode === FormQuestionModes.ANSWER_ONLY
+  const isInteractive = mode === FormQuestionModes.INTERACTIVE
+
+  return isAnswerOnly ? (
+    <div className="text-[14px] text-zinc-500">
+      {selectedOptions?.length ? (
+        <ul className="list-inside list-disc">
+          {selectedOptions.map((option) => (
+            <li key={option.formQuestionOptionID}>{option.optionText}</li>
+          ))}
+        </ul>
+      ) : (
+        'No answer provided'
+      )}
+    </div>
+  ) : (
     <div className="relative">
       <div className={`flex ${inline ? 'gap-[18px]' : 'flex-col gap-[4px]'}`}>
         {options?.map((option) => (
@@ -47,7 +61,7 @@ export default function RadioQuestion({ formQuestion, mode, readOnly }: RadioQue
                 formQuestion.formQuestionDefaultOptions?.[0]?.formQuestionOptionID ===
                   option.formQuestionOptionID
               }
-              disabled={readOnly}
+              disabled={!isInteractive}
               className="h-[16px] w-[16px] accent-n-700"
             />
             <label htmlFor={String(option.formQuestionOptionID)} className="text-[14px]">
@@ -71,18 +85,6 @@ export default function RadioQuestion({ formQuestion, mode, readOnly }: RadioQue
           )}
           <span>{message}</span>
         </div>
-      )}
-    </div>
-  ) : (
-    <div className="text-[14px] text-zinc-500">
-      {selectedOptions?.length ? (
-        <ul className="list-inside list-disc">
-          {selectedOptions.map((option) => (
-            <li key={option.formQuestionOptionID}>{option.optionText}</li>
-          ))}
-        </ul>
-      ) : (
-        'No answer provided'
       )}
     </div>
   )

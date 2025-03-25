@@ -117,6 +117,12 @@ export type FormQuestionType = {
   answer?: FormAnswerType
 }
 
+export enum FormQuestionModes {
+  INTERACTIVE = 'interactive',
+  READ_ONLY = 'read_only',
+  ANSWER_ONLY = 'answer_only',
+}
+
 export enum FormQuestionDisplayTypes {
   BLOCK = 'block',
   INLINE = 'inline',

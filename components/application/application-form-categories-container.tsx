@@ -15,11 +15,7 @@ interface ApplicationFormCategoriesContainerProps {
 export default function ApplicationFormCategoriesContainer({
   showProgressIndicator,
 }: ApplicationFormCategoriesContainerProps) {
-  const { formCategories, selectedFormCategoryID, setSelectedFormCategoryID } = useFormContext()
-
-  function handleClickCategory(formCategoryID: number) {
-    setSelectedFormCategoryID(formCategoryID)
-  }
+  const { formCategories, selectedFormCategoryID } = useFormContext()
 
   return (
     <div className="flex h-full flex-col gap-[4px] overflow-y-auto">
@@ -29,7 +25,6 @@ export default function ApplicationFormCategoriesContainer({
             formCategory={formCategory}
             showProgressIndicator={showProgressIndicator}
             isExpanded={selectedFormCategoryID === formCategory.formCategoryID}
-            onClick={handleClickCategory}
           />
           <Separator className="bg-zinc-600" />
         </Fragment>

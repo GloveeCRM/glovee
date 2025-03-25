@@ -3,7 +3,7 @@
 import { FiPlus } from 'react-icons/fi'
 
 import { useFormContext } from '@/contexts/form-context'
-import { useFormTemplateEditContext } from '@/contexts/template-edit-context'
+import { useFormTemplateEditContext } from '@/contexts/form-template-edit-context'
 import useFormCategoryActions from '@/hooks/form-template/use-category-actions'
 
 export default function AddCategoryButton() {

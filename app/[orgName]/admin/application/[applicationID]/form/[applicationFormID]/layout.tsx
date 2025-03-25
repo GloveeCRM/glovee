@@ -1,10 +1,11 @@
 import { ReactNode } from 'react'
 
-import { ApplicationFormStatusTypes } from '@/lib/types/form'
+import { ApplicationFormStatusTypes, FormQuestionModes } from '@/lib/types/form'
 import { fetchApplicationForm } from '@/lib/data/form'
 import FormContextProvider from '@/contexts/form-context'
+import ApplicationFormProvider from '@/contexts/application-form-context'
 
-import ApplicationFormSidebar from '@/components/application/application-form-sidebar'
+import FormSidebar from '@/components/application/form-sidebar'
 
 interface AdminApplicationFormLayoutParams {
   applicationID: string
@@ -28,21 +29,28 @@ export default async function AdminApplicationFormLayout({
     applicationFormID: applicationFormIDNumeric,
   })
 
+  if (!applicationForm) {
+    return <div>Application form not found</div>
+  }
+
   return (
-    <FormContextProvider
-      formID={applicationForm?.formID || 0}
-      mode="view"
-      includeAnswers={
-        applicationForm?.status !== ApplicationFormStatusTypes.PENDING_CLIENT_SUBMISSION
-      }
-    >
-      <div className="flex">
-        <ApplicationFormSidebar
-          showProgressIndicator={false}
-          backURL={`/admin/application/${applicationIDNumeric}/forms`}
-        />
-        <div className="h-svh min-w-0 flex-1 overflow-y-scroll">{children}</div>
-      </div>
-    </FormContextProvider>
+    <ApplicationFormProvider applicationForm={applicationForm}>
+      <FormContextProvider
+        formID={applicationForm?.formID || 0}
+        mode={FormQuestionModes.ANSWER_ONLY}
+        includeAnswers={
+          applicationForm?.status !== ApplicationFormStatusTypes.PENDING_CLIENT_SUBMISSION
+        }
+      >
+        <div className="flex">
+          <FormSidebar
+            showProgressIndicator={false}
+            backURL={`/admin/application/${applicationIDNumeric}/forms`}
+            backButtonText="Back to Application"
+          />
+          <div className="h-svh min-w-0 flex-1 overflow-y-scroll">{children}</div>
+        </div>
+      </FormContextProvider>
+    </ApplicationFormProvider>
   )
 }

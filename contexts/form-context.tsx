@@ -6,6 +6,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import {
   FormAnswerType,
   FormCategoryType,
+  FormQuestionModes,
   FormQuestionSetType,
   FormQuestionType,
   FormSectionType,
@@ -14,7 +15,7 @@ import {
 import { fetchFormSectionQuestionSetsAndQuestions, fetchFormContent } from '@/lib/data/form'
 
 type FormContextType = {
-  mode: 'view' | 'edit'
+  mode: FormQuestionModes
   form: FormType | null
   setForm: (form: FormType | null) => void
   formCategories: FormCategoryType[]
@@ -44,7 +45,7 @@ type FormContextType = {
 }
 
 const formContextDefaultValues: FormContextType = {
-  mode: 'view',
+  mode: FormQuestionModes.ANSWER_ONLY,
   form: null,
   setForm: () => {},
   formCategories: [],
@@ -78,7 +79,7 @@ const FormContext = createContext<FormContextType>(formContextDefaultValues)
 interface FormContextProviderProps {
   formID: number
   children: React.ReactNode
-  mode: 'view' | 'edit'
+  mode: FormQuestionModes
   includeAnswers?: boolean
 }
 
@@ -151,7 +152,7 @@ export default function FormContextProvider({
         formID,
         includeFormCategories: true,
         includeFormSections: true,
-        includeCompletionRates: mode === 'edit' && includeAnswers,
+        includeCompletionRates: mode === FormQuestionModes.INTERACTIVE && includeAnswers,
       })
       setForm(form || null)
       const sortedFormCategories = formCategories?.sort(
@@ -202,9 +203,11 @@ export default function FormContextProvider({
 
   function setSelectedFormCategoryID(formCategoryID: number) {
     const params = new URLSearchParams(searchParams)
-    params.set('category', String(formCategoryID))
-    params.delete('section')
-    replace(`${pathname}?${params.toString()}`)
+    if (selectedFormCategoryID !== formCategoryID) {
+      params.set('category', String(formCategoryID))
+      params.delete('section')
+      replace(`${pathname}?${params.toString()}`)
+    }
   }
 
   function setFormQuestionAnswer(formQuestionID: number, answer: FormAnswerType | undefined) {

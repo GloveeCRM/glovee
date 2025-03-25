@@ -1,19 +1,21 @@
 import Link from 'next/link'
 import { IoChevronBackOutline } from 'react-icons/io5'
 
-import ApplicationFormCategoriesContainer from './application-form-categories-container'
-import ApplicationFormInfoCard from './application-form-info-card'
-import { Separator } from '../ui/separator'
+import ApplicationFormCategoriesContainer from '@/components/application/application-form-categories-container'
+import ApplicationFormInfoCard from '@/components/application/application-form-info-card'
+import { Separator } from '@/components/ui/separator'
 
-interface ApplicationFormSidebarProps {
+interface FormSidebarProps {
   showProgressIndicator: boolean
   backURL: string
+  backButtonText: string
 }
 
-export default function ApplicationFormSidebar({
+export default function FormSidebar({
   showProgressIndicator,
   backURL,
-}: ApplicationFormSidebarProps) {
+  backButtonText,
+}: FormSidebarProps) {
   return (
     <div
       id="application-form-sidebar"
@@ -22,7 +24,7 @@ export default function ApplicationFormSidebar({
       <div id="application-form-sidebar-header" className="flex flex-col gap-[8px]">
         <Link href={backURL} className="flex w-fit items-center gap-[4px] py-[8px]">
           <IoChevronBackOutline className="h-[20px] w-[20px]" />
-          <span className="text-[14px]">Back to Application</span>
+          <span className="text-[14px]">{backButtonText}</span>
         </Link>
         <div className="flex flex-col gap-[6px]">
           <ApplicationFormInfoCard />

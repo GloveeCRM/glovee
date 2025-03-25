@@ -4,27 +4,33 @@ import { useDebouncedCallback } from 'use-debounce'
 import { ImSpinner2 } from 'react-icons/im'
 import { IoMdCheckmarkCircle, IoIosCloseCircle } from 'react-icons/io'
 
-import { FormAnswerType, FormQuestionType } from '@/lib/types/form'
+import { FormQuestionModes, FormQuestionType } from '@/lib/types/form'
 import useAnswer from '@/hooks/form/use-answer'
 
 interface TextQuestionProps {
   formQuestion: FormQuestionType
-  mode: 'edit' | 'view'
-  readOnly?: boolean
+  mode: FormQuestionModes
 }
 
-export default function TextQuestion({ formQuestion, mode, readOnly = false }: TextQuestionProps) {
+export default function TextQuestion({ formQuestion, mode }: TextQuestionProps) {
   const { message, updateAnswer } = useAnswer(formQuestion.formQuestionID)
   const handleChange = useDebouncedCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     updateAnswer({ ...formQuestion.answer, answerText: e.target.value })
   }, 500)
 
-  return mode === 'edit' ? (
+  const isAnswerOnly = mode === FormQuestionModes.ANSWER_ONLY
+  const isInteractive = mode === FormQuestionModes.INTERACTIVE
+
+  return isAnswerOnly ? (
+    <div className="text-[14px] text-zinc-500">
+      {formQuestion.answer?.answerText || 'No answer provided'}
+    </div>
+  ) : (
     <div className="relative">
       <input
         type="text"
         placeholder={formQuestion.formQuestionSettings.placeholderText || ''}
-        disabled={readOnly}
+        disabled={!isInteractive}
         defaultValue={formQuestion.answer?.answerText || ''}
         onChange={handleChange}
         className={`w-full rounded-[3px] border border-n-400 bg-sand-400 px-[8px] py-[7px] text-[14px] placeholder:font-light placeholder:text-n-450 focus-visible:border-n-600 focus-visible:outline-none disabled:bg-transparent`}
@@ -45,10 +51,6 @@ export default function TextQuestion({ formQuestion, mode, readOnly = false }: T
           <span>{message}</span>
         </div>
       )}
-    </div>
-  ) : (
-    <div className="text-[14px] text-zinc-500">
-      {formQuestion.answer?.answerText || 'No answer provided'}
     </div>
   )
 }

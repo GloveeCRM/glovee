@@ -1,6 +1,9 @@
-import FormTemplatePreviewSidebar from '@/components/admin/template/preview/form-template-preview-sidebar'
-import FormTemplateEditProvider from '@/contexts/template-edit-context'
+import { FormQuestionModes } from '@/lib/types/form'
+import { searchFormTemplates } from '@/lib/data/form'
+import FormTemplateEditProvider from '@/contexts/form-template-edit-context'
+import FormContextProvider from '@/contexts/form-context'
 
+import FormSidebar from '@/components/application/form-sidebar'
 interface TemplatePreviewLayoutParams {
   formTemplateID: string
 }
@@ -17,11 +20,29 @@ export default async function TemplatePreviewLayout({
   const { formTemplateID } = params
   const formTemplateIDNumeric = Number(formTemplateID)
 
+  const { formTemplates } = await searchFormTemplates({
+    filters: {
+      formTemplateID: formTemplateIDNumeric,
+    },
+    limit: 1,
+  })
+  const formTemplate = formTemplates?.[0]
+
+  if (!formTemplate) {
+    return <div>Form template not found</div>
+  }
+
   return (
     <div id="form-template-preview-layout" className="flex">
-      <FormTemplateEditProvider formTemplateID={formTemplateIDNumeric}>
-        <FormTemplatePreviewSidebar formTemplateID={formTemplateIDNumeric} />
-        <div className="w-full p-[8px]">{children}</div>
+      <FormTemplateEditProvider formTemplate={formTemplate}>
+        <FormContextProvider formID={formTemplate.formID} mode={FormQuestionModes.READ_ONLY}>
+          <FormSidebar
+            showProgressIndicator={false}
+            backURL={`/admin/form-template/${formTemplate.formTemplateID}/edit`}
+            backButtonText="Back to Edit"
+          />
+          <div className="h-svh flex-1">{children}</div>
+        </FormContextProvider>
       </FormTemplateEditProvider>
     </div>
   )

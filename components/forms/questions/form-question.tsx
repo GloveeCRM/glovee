@@ -10,6 +10,7 @@ import {
   isRadioQuestionType,
   isSelectQuestionType,
   isTextareaQuestionType,
+  FormQuestionModes,
 } from '@/lib/types/form'
 
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
@@ -23,11 +24,10 @@ import SelectQuestion from './select-question/select-question'
 
 interface FormQuestionProps {
   question: FormQuestionType
-  viewOnly?: boolean
-  mode: 'edit' | 'view'
+  mode: FormQuestionModes
 }
 
-export default function FormQuestion({ question, viewOnly = false, mode }: FormQuestionProps) {
+export default function FormQuestion({ question, mode }: FormQuestionProps) {
   return (
     <div className="flex flex-col gap-[10px] p-[4px] text-[14px]">
       <div className="flex justify-between">
@@ -53,7 +53,7 @@ export default function FormQuestion({ question, viewOnly = false, mode }: FormQ
             </Popover>
           )}
         </div>
-        {mode === 'edit' && (
+        {mode === FormQuestionModes.INTERACTIVE && (
           <div className="">
             <IoCheckmarkCircle
               className={`h-[20px] w-[20px] ${question?.answer?.isAcceptable ? 'text-g-700' : 'text-n-400'}`}

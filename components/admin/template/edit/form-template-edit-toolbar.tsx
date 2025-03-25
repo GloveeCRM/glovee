@@ -1,11 +1,12 @@
 'use client'
 
 import { useFormContext } from '@/contexts/form-context'
-import TemplateEditDefaultToolbar from './template-edit-default-toolbar'
+
+import FormTemplateEditDefaultToolbar from './form-template-edit-default-toolbar'
 import QuestionSetSettingsToolbar from './question-set-settings-toolbar'
 import QuestionSettingsToolbar from './question-settings-toolbar'
 
-export default function TemplateEditToolbar() {
+export default function FormTemplateEditToolbar() {
   const { selectedFormQuestionSet, selectedFormQuestionID } = useFormContext()
 
   return (
@@ -18,7 +19,7 @@ export default function TemplateEditToolbar() {
       ) : selectedFormQuestionSet ? (
         <QuestionSetSettingsToolbar formQuestionSet={selectedFormQuestionSet} />
       ) : (
-        <TemplateEditDefaultToolbar />
+        <FormTemplateEditDefaultToolbar />
       )}
     </div>
   )

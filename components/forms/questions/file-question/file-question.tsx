@@ -5,18 +5,17 @@ import { ImSpinner2 } from 'react-icons/im'
 import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
 import { FiUpload } from 'react-icons/fi'
 
-import { FormAnswerFileType, FormQuestionType } from '@/lib/types/form'
+import { FormAnswerFileType, FormQuestionModes, FormQuestionType } from '@/lib/types/form'
 import useAnswer from '@/hooks/form/use-answer'
 
 import AnswerFile from './answer-file'
 
 interface FileQuestionProps {
   formQuestion: FormQuestionType
-  mode: 'edit' | 'view'
-  readOnly?: boolean
+  mode: FormQuestionModes
 }
 
-export default function FileQuestion({ formQuestion, mode, readOnly }: FileQuestionProps) {
+export default function FileQuestion({ formQuestion, mode }: FileQuestionProps) {
   const { message, updateAnswer, uploadAnswerFile } = useAnswer(formQuestion.formQuestionID)
 
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -59,7 +58,20 @@ export default function FileQuestion({ formQuestion, mode, readOnly }: FileQuest
     }
   }
 
-  return mode === 'edit' ? (
+  const isAnswerOnly = mode === FormQuestionModes.ANSWER_ONLY
+  const isInteractive = mode === FormQuestionModes.INTERACTIVE
+
+  return isAnswerOnly ? (
+    <div className="">
+      {formQuestion.answer?.answerFiles && formQuestion.answer?.answerFiles.length > 0 ? (
+        formQuestion.answer?.answerFiles.map((file) => (
+          <AnswerFile key={file.fileID} file={file.file!} mode="view" onDelete={() => {}} />
+        ))
+      ) : (
+        <div className="text-[14px] text-zinc-500">No answer provided</div>
+      )}
+    </div>
+  ) : (
     <div className="relative">
       {formQuestion.answer?.answerFiles && formQuestion.answer?.answerFiles.length > 0 ? (
         formQuestion.answer?.answerFiles.map((file) => (
@@ -72,7 +84,7 @@ export default function FileQuestion({ formQuestion, mode, readOnly }: FileQuest
         ))
       ) : (
         <div
-          className={`flex w-full flex-col items-center rounded-md border border-zinc-400 p-[11px] text-zinc-500 ${!readOnly && 'cursor-pointer transition duration-150 hover:border-n-500 hover:text-zinc-600'}`}
+          className={`flex w-full flex-col items-center rounded-md border border-zinc-400 p-[11px] text-zinc-500 ${isInteractive && 'cursor-pointer transition duration-150 hover:border-n-500 hover:text-zinc-600'}`}
           onClick={handleClickUploadFile}
         >
           <FiUpload className="h-[18px] w-[18px]" />
@@ -82,7 +94,7 @@ export default function FileQuestion({ formQuestion, mode, readOnly }: FileQuest
             ref={fileInputRef}
             onChange={handleFileChange}
             placeholder={formQuestion.formQuestionType}
-            disabled={readOnly}
+            disabled={!isInteractive}
             className="hidden"
           />
         </div>
@@ -108,16 +120,6 @@ export default function FileQuestion({ formQuestion, mode, readOnly }: FileQuest
           )}
           <span>{message}</span>
         </div>
-      )}
-    </div>
-  ) : (
-    <div className="">
-      {formQuestion.answer?.answerFiles && formQuestion.answer?.answerFiles.length > 0 ? (
-        formQuestion.answer?.answerFiles.map((file) => (
-          <AnswerFile key={file.fileID} file={file.file!} mode="view" onDelete={() => {}} />
-        ))
-      ) : (
-        <div className="text-[14px] text-zinc-500">No answer provided</div>
       )}
     </div>
   )

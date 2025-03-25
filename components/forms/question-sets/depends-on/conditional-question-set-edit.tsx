@@ -6,17 +6,18 @@ import { FiEdit2 } from 'react-icons/fi'
 import { FormQuestionSetType, FormQuestionType } from '@/lib/types/form'
 import { useFormContext } from '@/contexts/form-context'
 import useQuestionActions from '@/hooks/form-template/use-question-actions'
+
 import NonEmptyQuestionSetDropzone from '../non-empty-question-set-dropzone'
 import EmptyQuestionSetDropzone from '../empty-question-set-dropzone'
-import TemplateQuestionSet from '../template-question-set'
+import FormTemplateQuestionSet from '../form-template-question-set'
 
-interface DependsOnQuestionSetEditProps {
+interface ConditionalQuestionSetEditProps {
   formQuestionSet: FormQuestionSetType
 }
 
-export default function DependsOnQuestionSetEdit({
+export default function ConditionalQuestionSetEdit({
   formQuestionSet,
-}: DependsOnQuestionSetEditProps) {
+}: ConditionalQuestionSetEditProps) {
   const { formQuestionSetQuestions, formQuestionSetChildFormQuestionSets } = useFormContext()
   const formQuestionSetQuestion = formQuestionSetQuestions(formQuestionSet.formQuestionSetID)?.[0]
   const isInline = formQuestionSetQuestion?.formQuestionSettings.displayType === 'inline'
@@ -182,7 +183,7 @@ export default function DependsOnQuestionSetEdit({
                     isFirstDropzone={true}
                   />
                 )}
-                <TemplateQuestionSet formQuestionSet={qs} />
+                <FormTemplateQuestionSet formQuestionSet={qs} />
                 <NonEmptyQuestionSetDropzone
                   questionSet={formQuestionSet}
                   position={qs.formQuestionSetPosition + 1}

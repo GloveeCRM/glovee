@@ -4,7 +4,7 @@ import { useFormContext } from '@/contexts/form-context'
 
 import FormQuestionSet from '@/components/forms/question-sets/form-question-set'
 
-export default function ApplicationFormQuestionSetWrapper() {
+export default function FormQuestionSetsContainer() {
   const { rootSelectedFormSectionQuestionSets } = useFormContext()
 
   return (
@@ -18,7 +18,6 @@ export default function ApplicationFormQuestionSetWrapper() {
             <FormQuestionSet
               key={formQuestionSet.formQuestionSetID}
               formQuestionSet={formQuestionSet}
-              mode="edit"
             />
           </div>
         ))

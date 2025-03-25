@@ -20,15 +20,15 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
-import FlatQuestionSetEdit from './flat/flat-question-set-edit'
-import LoopQuestionSetEdit from './loop/loop-question-set-edit'
-import DependsOnQuestionSetEdit from './depends-on/depends-on-question-set-edit'
+import StaticQuestionSetEdit from './flat/static-question-set-edit'
+import RepeatableQuestionSetEdit from './repeatable/repeatable-question-set-edit'
+import ConditionalQuestionSetEdit from './depends-on/conditional-question-set-edit'
 
-interface TemplateQuestionSetProps {
+interface FormTemplateQuestionSetProps {
   formQuestionSet: FormQuestionSetType
 }
 
-export default function TemplateQuestionSet({ formQuestionSet }: TemplateQuestionSetProps) {
+export default function FormTemplateQuestionSet({ formQuestionSet }: FormTemplateQuestionSetProps) {
   const { selectedFormQuestionSetID, setSelectedFormQuestionSetID } = useFormContext()
   const [isOptionsMenuOpen, setIsOptionsMenuOpen] = useState<boolean>(false)
   const { deleteFormQuestionSet } = useQuestionSetActions()
@@ -106,11 +106,11 @@ export default function TemplateQuestionSet({ formQuestionSet }: TemplateQuestio
           </DropdownMenuContent>
         </DropdownMenu>
         {isStatic ? (
-          <FlatQuestionSetEdit questionSet={formQuestionSet} />
+          <StaticQuestionSetEdit questionSet={formQuestionSet} />
         ) : isRepeatable ? (
-          <LoopQuestionSetEdit formQuestionSet={formQuestionSet} />
+          <RepeatableQuestionSetEdit formQuestionSet={formQuestionSet} />
         ) : isConditional ? (
-          <DependsOnQuestionSetEdit formQuestionSet={formQuestionSet} />
+          <ConditionalQuestionSetEdit formQuestionSet={formQuestionSet} />
         ) : null}
       </div>
     </div>

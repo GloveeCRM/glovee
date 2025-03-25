@@ -1,5 +1,5 @@
-import ApplicationFormQuestionSetWrapper from '@/components/client/application-form/application-form-question-set-wrapper'
+import FormQuestionSetsContainer from '@/components/client/application-form/form-question-sets-container'
 
-export default async function ClientApplicationPage() {
-  return <ApplicationFormQuestionSetWrapper />
+export default function ClientApplicationFormPage() {
+  return <FormQuestionSetsContainer />
 }

@@ -4,19 +4,18 @@ import { useState } from 'react'
 import { ImSpinner2 } from 'react-icons/im'
 import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
 
-import { FormAnswerType, FormQuestionType } from '@/lib/types/form'
 import { MONTHS } from '@/lib/constants/date'
+import { FormQuestionModes, FormQuestionType } from '@/lib/types/form'
+import { formatDateToShortMonthDayYearTime } from '@/lib/utils/date'
 import { compareDates, daysInMonth } from '@/lib/functions/date'
 import useAnswer from '@/hooks/form/use-answer'
-import { formatDateToShortMonthDayYearTime } from '@/lib/utils/date'
 
 interface DateQuestionProps {
   formQuestion: FormQuestionType
-  mode: 'edit' | 'view'
-  readOnly?: boolean
+  mode: FormQuestionModes
 }
 
-export default function DateQuestion({ formQuestion, mode, readOnly }: DateQuestionProps) {
+export default function DateQuestion({ formQuestion, mode }: DateQuestionProps) {
   const { message, updateAnswer } = useAnswer(formQuestion.formQuestionID)
 
   const initialDate = formQuestion.answer?.answerDate
@@ -85,7 +84,20 @@ export default function DateQuestion({ formQuestion, mode, readOnly }: DateQuest
     Number(selectedDate.month) - 1 || 0
   )
 
-  return mode === 'edit' ? (
+  const isAnswerOnly = mode === FormQuestionModes.ANSWER_ONLY
+  const isInteractive = mode === FormQuestionModes.INTERACTIVE
+
+  return isAnswerOnly ? (
+    <div className="text-[14px] text-zinc-500">
+      {formQuestion.answer?.answerDate
+        ? formatDateToShortMonthDayYearTime({
+            date: formQuestion.answer.answerDate,
+            format: 'long',
+            includeTime: false,
+          })
+        : 'No answer provided'}
+    </div>
+  ) : (
     <div className="relative flex gap-[2%]">
       <div className="flex w-full flex-col">
         <label htmlFor="day" className="text-[12px] text-n-500">
@@ -95,7 +107,7 @@ export default function DateQuestion({ formQuestion, mode, readOnly }: DateQuest
           id="day"
           className="w-full rounded-[3px] border border-n-400 bg-transparent px-[6px] py-[8px] text-[14px] focus-visible:outline-none"
           placeholder={formQuestion.formQuestionType}
-          disabled={readOnly}
+          disabled={!isInteractive}
           value={selectedDate.day}
           onChange={handleDayChange}
         >
@@ -131,7 +143,7 @@ export default function DateQuestion({ formQuestion, mode, readOnly }: DateQuest
         <select
           id="month"
           className="w-full rounded-[3px] border border-n-400 bg-transparent px-[6px] py-[8px] text-[14px] focus-visible:outline-none"
-          disabled={readOnly}
+          disabled={!isInteractive}
           value={selectedDate.month}
           onChange={handleMonthChange}
         >
@@ -161,7 +173,7 @@ export default function DateQuestion({ formQuestion, mode, readOnly }: DateQuest
           id="year"
           className="w-full rounded-[3px] border border-n-400 bg-transparent px-[6px] py-[8px] text-[14px] focus-visible:outline-none"
           placeholder={formQuestion.formQuestionType}
-          disabled={readOnly}
+          disabled={!isInteractive}
           value={selectedDate.year}
           onChange={handleYearChange}
         >
@@ -193,16 +205,6 @@ export default function DateQuestion({ formQuestion, mode, readOnly }: DateQuest
           <span className="text-[12px]">{message}</span>
         </div>
       )}
-    </div>
-  ) : (
-    <div className="text-[14px] text-zinc-500">
-      {formQuestion.answer?.answerDate
-        ? formatDateToShortMonthDayYearTime({
-            date: formQuestion.answer.answerDate,
-            format: 'long',
-            includeTime: false,
-          })
-        : 'No answer provided'}
     </div>
   )
 }

@@ -1,9 +1,9 @@
 import { FiPlus } from 'react-icons/fi'
 
-import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 import { FormQuestionSetTypes } from '@/lib/types/form'
+import { useDragAndDropContext } from '@/contexts/drag-and-drop-context'
 
-export default function LoopQuestionSetIcon() {
+export default function RepeatableQuestionSetIcon() {
   const { setDraggedObject } = useDragAndDropContext()
 
   function handleDragStart(e: React.DragEvent<HTMLDivElement>) {
@@ -23,7 +23,7 @@ export default function LoopQuestionSetIcon() {
       onDragStart={handleDragStart}
     >
       <div className="flex h-[38px] items-center justify-center rounded-sm bg-r-200">
-        <span className="text-[12px] font-medium">Loop</span>
+        <span className="text-[12px] font-medium">Repeatable</span>
       </div>
       <div className="mt-[4px] flex items-center justify-center">
         <span>

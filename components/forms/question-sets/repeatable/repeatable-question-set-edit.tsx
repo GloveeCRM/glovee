@@ -5,13 +5,15 @@ import { useFormContext } from '@/contexts/form-context'
 
 import NonEmptyQuestionSetDropzone from '../non-empty-question-set-dropzone'
 import EmptyQuestionSetDropzone from '../empty-question-set-dropzone'
-import TemplateQuestionSet from '../template-question-set'
+import FormTemplateQuestionSet from '../form-template-question-set'
 
-interface LoopQuestionSetEditProps {
+interface RepeatableQuestionSetEditProps {
   formQuestionSet: FormQuestionSetType
 }
 
-export default function LoopQuestionSetEdit({ formQuestionSet }: LoopQuestionSetEditProps) {
+export default function RepeatableQuestionSetEdit({
+  formQuestionSet,
+}: RepeatableQuestionSetEditProps) {
   const { formQuestionSetChildFormQuestionSets } = useFormContext()
   const childQuestionSets = formQuestionSetChildFormQuestionSets(formQuestionSet.formQuestionSetID)
 
@@ -28,7 +30,7 @@ export default function LoopQuestionSetEdit({ formQuestionSet }: LoopQuestionSet
                   isFirstDropzone={true}
                 />
               )}
-              <TemplateQuestionSet
+              <FormTemplateQuestionSet
                 key={childQuestionSet.formQuestionSetID}
                 formQuestionSet={childQuestionSet}
               />
@@ -46,12 +48,12 @@ export default function LoopQuestionSetEdit({ formQuestionSet }: LoopQuestionSet
       ) : (
         <EmptyQuestionSetDropzone questionSet={formQuestionSet} />
       )}
-      <LoopQuestionSetEditFooter />
+      <RepeatableQuestionSetEditFooter />
     </div>
   )
 }
 
-function LoopQuestionSetEditFooter() {
+function RepeatableQuestionSetEditFooter() {
   return (
     <div className="mx-auto mt-[6px] flex w-fit items-center text-[14px] font-medium">
       <FiPlus className="h-[18px] w-[18px]" />

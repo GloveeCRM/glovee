@@ -13,6 +13,7 @@ import {
   isTextQuestionType,
   isTextareaQuestionType,
   isFileQuestionType,
+  FormQuestionModes,
 } from '@/lib/types/form'
 import { useFormContext } from '@/contexts/form-context'
 import useQuestionActions from '@/hooks/form-template/use-question-actions'
@@ -187,19 +188,19 @@ export default function TemplateQuestion({ formQuestion }: TemplateQuestionProps
         </DropdownMenu>
       </div>
       {isTextQuestionType(formQuestion) ? (
-        <TextQuestion formQuestion={formQuestion} readOnly={true} mode="edit" />
+        <TextQuestion formQuestion={formQuestion} mode={FormQuestionModes.READ_ONLY} />
       ) : isTextareaQuestionType(formQuestion) ? (
-        <TextareaQuestion formQuestion={formQuestion} readOnly={true} mode="edit" />
+        <TextareaQuestion formQuestion={formQuestion} mode={FormQuestionModes.READ_ONLY} />
       ) : isSelectQuestionType(formQuestion) ? (
-        <SelectQuestion formQuestion={formQuestion} readOnly={true} mode="edit" />
+        <SelectQuestion formQuestion={formQuestion} mode={FormQuestionModes.READ_ONLY} />
       ) : isDateQuestionType(formQuestion) ? (
-        <DateQuestion formQuestion={formQuestion} readOnly={true} mode="edit" />
+        <DateQuestion formQuestion={formQuestion} mode={FormQuestionModes.READ_ONLY} />
       ) : isRadioQuestionType(formQuestion) ? (
-        <RadioQuestion formQuestion={formQuestion} readOnly={true} mode="edit" />
+        <RadioQuestion formQuestion={formQuestion} mode={FormQuestionModes.READ_ONLY} />
       ) : isCheckboxQuestionType(formQuestion) ? (
-        <CheckboxQuestion formQuestion={formQuestion} readOnly={true} mode="edit" />
+        <CheckboxQuestion formQuestion={formQuestion} mode={FormQuestionModes.READ_ONLY} />
       ) : isFileQuestionType(formQuestion) ? (
-        <FileQuestion formQuestion={formQuestion} readOnly={true} mode="edit" />
+        <FileQuestion formQuestion={formQuestion} mode={FormQuestionModes.READ_ONLY} />
       ) : null}
     </div>
   )

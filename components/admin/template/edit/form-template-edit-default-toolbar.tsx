@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion'
 
-import FlatQuestionSetIcon from '@/components/forms/question-sets/flat/flat-question-set-icon'
-import DependsOnQuestionSetIcon from '@/components/forms/question-sets/depends-on/depends-on-question-set-icon'
-import LoopQuestionSetIcon from '@/components/forms/question-sets/loop/loop-question-set-icon'
+import StaticQuestionSetIcon from '@/components/forms/question-sets/flat/static-question-set-icon'
+import ConditionalQuestionSetIcon from '@/components/forms/question-sets/depends-on/conditional-question-set-icon'
+import RepeatableQuestionSetIcon from '@/components/forms/question-sets/repeatable/repeatable-question-set-icon'
 import CheckboxQuestionIcon from '@/components/forms/questions/checkbox-question/checkbox-question-icon'
 import TextQuestionIcon from '@/components/forms/questions/text-question/text-question-icon'
 import TextareaQuestionIcon from '@/components/forms/questions/textarea-question/textarea-question-icon'
@@ -11,7 +11,7 @@ import DateQuestionIcon from '@/components/forms/questions/date-question/date-qu
 import RadioQuestionIcon from '@/components/forms/questions/radio-question/radio-question-icon'
 import FileQuestionIcon from '@/components/forms/questions/file-question/file-question-icon'
 
-export default function TemplateEditDefaultToolbar() {
+export default function FormTemplateEditDefaultToolbar() {
   return (
     <motion.div
       className="mt-[14px]"
@@ -22,9 +22,9 @@ export default function TemplateEditDefaultToolbar() {
       <div>
         <h6 className="text-[14px]">Question Set Types</h6>
         <div className="mt-[8px] flex flex-col gap-[6px]">
-          <FlatQuestionSetIcon />
-          <DependsOnQuestionSetIcon />
-          <LoopQuestionSetIcon />
+          <StaticQuestionSetIcon />
+          <ConditionalQuestionSetIcon />
+          <RepeatableQuestionSetIcon />
         </div>
       </div>
       <div className="mt-[10px]">

@@ -7,7 +7,7 @@ import {
   isConditionalQuestionSetType,
 } from '@/lib/types/form'
 
-import DependsOnQuestionSetSettings from '@/components/forms/question-sets/depends-on/depends-on-question-set-settings'
+import ConditionalQuestionSetSettings from '@/components/forms/question-sets/depends-on/conditional-question-set-settings'
 
 interface QuestionSetSettingsToolbarProps {
   formQuestionSet: FormQuestionSetType
@@ -31,7 +31,7 @@ export default function QuestionSetSettingsToolbar({
           ) : isRepeatableQuestionSetType(formQuestionSet) ? (
             <div>loop</div>
           ) : isConditionalQuestionSetType(formQuestionSet) ? (
-            <DependsOnQuestionSetSettings formQuestionSet={formQuestionSet} />
+            <ConditionalQuestionSetSettings formQuestionSet={formQuestionSet} />
           ) : (
             <div>Settings for this question set type are not available</div>
           )}

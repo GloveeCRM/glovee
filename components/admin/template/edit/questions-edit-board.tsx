@@ -1,7 +1,8 @@
 'use client'
 
 import { useFormContext } from '@/contexts/form-context'
-import TemplateQuestionSet from '@/components/forms/question-sets/template-question-set'
+
+import FormTemplateQuestionSet from '@/components/forms/question-sets/form-template-question-set'
 import EmptySectionDropzone from './empty-section-dropzone'
 import NonEmptySectionDropzone from './non-empty-section-dropzone'
 
@@ -18,7 +19,7 @@ export default function QuestionsEditBoard() {
                 {formQuestionSet.formQuestionSetPosition === 1 && (
                   <NonEmptySectionDropzone position={1} isFirstDropzone={true} />
                 )}
-                <TemplateQuestionSet formQuestionSet={formQuestionSet} />
+                <FormTemplateQuestionSet formQuestionSet={formQuestionSet} />
                 <NonEmptySectionDropzone
                   position={formQuestionSet.formQuestionSetPosition + 1}
                   isLastDropzone={

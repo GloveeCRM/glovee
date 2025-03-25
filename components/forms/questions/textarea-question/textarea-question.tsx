@@ -4,32 +4,34 @@ import { useDebouncedCallback } from 'use-debounce'
 import { IoIosCloseCircle, IoMdCheckmarkCircle } from 'react-icons/io'
 import { ImSpinner2 } from 'react-icons/im'
 
-import { FormQuestionType } from '@/lib/types/form'
+import { FormQuestionModes, FormQuestionType } from '@/lib/types/form'
 import useAnswer from '@/hooks/form/use-answer'
 
 interface TextareaQuestionProps {
   formQuestion: FormQuestionType
-  mode: 'edit' | 'view'
-  readOnly?: boolean
+  mode: FormQuestionModes
 }
 
-export default function TextareaQuestion({
-  formQuestion,
-  mode,
-  readOnly = false,
-}: TextareaQuestionProps) {
+export default function TextareaQuestion({ formQuestion, mode }: TextareaQuestionProps) {
   const { message, updateAnswer } = useAnswer(formQuestion.formQuestionID)
 
   const handleChange = useDebouncedCallback(async (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     updateAnswer({ ...formQuestion.answer, answerText: e.target.value })
   }, 500)
 
-  return mode === 'edit' ? (
+  const isAnswerOnly = mode === FormQuestionModes.ANSWER_ONLY
+  const isInteractive = mode === FormQuestionModes.INTERACTIVE
+
+  return isAnswerOnly ? (
+    <div className="text-[14px] text-zinc-500">
+      {formQuestion.answer?.answerText || 'No answer provided'}
+    </div>
+  ) : (
     <div>
       <div className="relative">
         <textarea
           placeholder={formQuestion.formQuestionSettings.placeholderText || ''}
-          disabled={readOnly}
+          disabled={!isInteractive}
           rows={3}
           defaultValue={formQuestion.answer?.answerText || ''}
           onChange={handleChange}
@@ -68,10 +70,6 @@ export default function TextareaQuestion({
           ''
         )}
       </div>
-    </div>
-  ) : (
-    <div className="text-[14px] text-zinc-500">
-      {formQuestion.answer?.answerText || 'No answer provided'}
     </div>
   )
 }
