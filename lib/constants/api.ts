@@ -1,7 +1,7 @@
 /**
  * Glovee API URL
  */
-export const GLOVEE_POSTGREST_URL = process.env.NEXT_PUBLIC_GLOVEE_POSTGREST_URL
+export const GLOVEE_POSTGREST_URL = process.env.NEXT_PUBLIC_GLOVEE_API_URL
 
 /**
  * S3 Presigner URL
